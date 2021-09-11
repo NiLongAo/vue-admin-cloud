@@ -8,10 +8,10 @@
     v-show="getShow"
     @keypress.enter="handleLogin"
   >
-    <FormItem name="account" class="enter-x">
+    <FormItem name="loginAccount" class="enter-x">
       <Input
         size="large"
-        v-model:value="formData.account"
+        v-model:value="formData.loginAccount"
         :placeholder="t('sys.login.userName')"
         class="fix-auto-fill"
       />
@@ -119,7 +119,7 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'vben',
+    loginAccount: 'root',
     password: '123456',
   });
 
@@ -137,7 +137,7 @@
       const userInfo = await userStore.login(
         toRaw({
           password: data.password,
-          username: data.account,
+          loginAccount: data.loginAccount,
           mode: 'none', //不要默认的错误提示
         })
       );

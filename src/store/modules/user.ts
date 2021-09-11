@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
-import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
+import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, ABILITY_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
 import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
@@ -19,6 +19,7 @@ interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
   roleList: RoleEnum[];
+  abilityList: Array<string>;
   sessionTimeout?: boolean;
   lastUpdateTime: number;
 }
@@ -32,6 +33,8 @@ export const useUserStore = defineStore({
     token: undefined,
     // roleList
     roleList: [],
+    // roleList
+    abilityList: [],
     // Whether the login expired
     sessionTimeout: false,
     // Last fetch time
@@ -45,7 +48,12 @@ export const useUserStore = defineStore({
       return this.token || getAuthCache<string>(TOKEN_KEY);
     },
     getRoleList(): RoleEnum[] {
-      return this.roleList.length > 0 ? this.roleList : getAuthCache<RoleEnum[]>(ROLES_KEY);
+      return this.roleList && this.roleList.length > 0
+        ? this.roleList
+        : getAuthCache<RoleEnum[]>(ROLES_KEY);
+    },
+    getAbilityList(): Array<string> {
+      return this.abilityList && this.abilityList.length > 0 ? this.abilityList : [];
     },
     getSessionTimeout(): boolean {
       return !!this.sessionTimeout;
@@ -62,6 +70,10 @@ export const useUserStore = defineStore({
     setRoleList(roleList: RoleEnum[]) {
       this.roleList = roleList;
       setAuthCache(ROLES_KEY, roleList);
+    },
+    setAbilityList(abilityList: Array<string>) {
+      this.abilityList = abilityList;
+      setAuthCache(ABILITY_KEY, abilityList);
     },
     setUserInfo(info: UserInfo) {
       this.userInfo = info;
@@ -89,13 +101,11 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        const { token } = data;
-
+        const { access_token } = data;
         // save token
-        this.setToken(token);
+        this.setToken(access_token);
         // get user info
         const userInfo = await this.getUserInfoAction();
-
         const sessionTimeout = this.sessionTimeout;
         if (sessionTimeout) {
           this.setSessionTimeout(false);
@@ -118,8 +128,14 @@ export const useUserStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo> {
       const userInfo = await getUserInfo();
-      const { roles } = userInfo;
-      const roleList = roles.map((item) => item.value) as RoleEnum[];
+      const { roles, ability } = userInfo;
+      let roleList;
+      if (roles) {
+        roleList = roles.map((item) => item.value) as RoleEnum[];
+      }
+      if (ability) {
+        this.setAbilityList(ability);
+      }
       this.setUserInfo(userInfo);
       this.setRoleList(roleList);
       return userInfo;
