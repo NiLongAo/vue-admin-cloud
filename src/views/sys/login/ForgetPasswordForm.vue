@@ -2,10 +2,10 @@
   <template v-if="getShow">
     <LoginFormTitle class="enter-x" />
     <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
-      <FormItem name="account" class="enter-x">
+      <FormItem name="loginAccount" class="enter-x">
         <Input
           size="large"
-          v-model:value="formData.account"
+          v-model:value="formData.loginAccount"
           :placeholder="t('sys.login.userName')"
         />
       </FormItem>
@@ -49,7 +49,7 @@
   const loading = ref(false);
 
   const formData = reactive({
-    account: '',
+    loginAccount: '',
     mobile: '',
     sms: '',
   });

@@ -76,7 +76,7 @@ export function useFormRules(formData?: Recordable) {
       // register form rules
       case LoginStateEnum.REGISTER:
         return {
-          account: accountFormRule,
+          loginAccount: accountFormRule,
           password: passwordFormRule,
           confirmPassword: [
             { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
@@ -88,7 +88,7 @@ export function useFormRules(formData?: Recordable) {
       // reset password form rules
       case LoginStateEnum.RESET_PASSWORD:
         return {
-          account: accountFormRule,
+          loginAccount: accountFormRule,
           ...mobileRule,
         };
 
@@ -99,7 +99,7 @@ export function useFormRules(formData?: Recordable) {
       // login form rules
       default:
         return {
-          account: accountFormRule,
+          loginAccount: accountFormRule,
           password: passwordFormRule,
         };
     }

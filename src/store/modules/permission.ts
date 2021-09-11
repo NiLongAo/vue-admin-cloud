@@ -147,7 +147,6 @@ export const usePermissionStore = defineStore({
         }
         return;
       };
-
       switch (permissionMode) {
         case PermissionModeEnum.ROLE:
           routes = filter(asyncRoutes, routeFilter);
@@ -174,7 +173,6 @@ export const usePermissionStore = defineStore({
         //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
         case PermissionModeEnum.BACK:
           const { createMessage } = useMessage();
-
           createMessage.loading({
             content: t('sys.app.menuLoading'),
             duration: 1,
@@ -184,7 +182,10 @@ export const usePermissionStore = defineStore({
           // this function may only need to be executed once, and the actual project can be put at the right time by itself
           let routeList: AppRouteRecordRaw[] = [];
           try {
-            this.changePermissionCode();
+            // 权限代码已在用户信息中，从用户信息中获取
+            // this.changePermissionCode();
+            this.setPermCodeList(toRaw(userStore.getAbilityList) || []);
+
             routeList = (await getMenuList()) as AppRouteRecordRaw[];
           } catch (error) {
             console.error(error);
@@ -196,7 +197,6 @@ export const usePermissionStore = defineStore({
           //  Background routing to menu structure
           const backMenuList = transformRouteToMenu(routeList);
           this.setBackMenuList(backMenuList);
-
           // remove meta.ignoreRoute item
           routeList = filter(routeList, routeRemoveIgnoreFilter);
           routeList = routeList.filter(routeRemoveIgnoreFilter);
