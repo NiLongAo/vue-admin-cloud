@@ -228,7 +228,7 @@ export function useDataSource(
         ...(opt?.searchInfo ?? {}),
         ...sortInfo,
         ...filterInfo,
-        ...(opt?.sortInfo ?? {}),
+        sort:{...(opt?.sortInfo ?? {})} ?? {},
         ...(opt?.filterInfo ?? {}),
       };
       if (beforeFetch && isFunction(beforeFetch)) {

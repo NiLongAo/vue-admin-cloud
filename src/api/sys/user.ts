@@ -1,6 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
-
+import { LoginParams, LoginResultModel, GetUserInfoModel,UserPageResultModel,UserParams } from './model/userModel';
 import { ErrorMessageMode } from '/#/axios';
 
 enum Api {
@@ -8,6 +7,7 @@ enum Api {
   Logout = '/webapi/bean/user/logout',
   GetUserInfo = '/webapi/bean/user/login_info',
   GetPermCode = '/webapi/bean/user/getPermCode',
+  GetUserPage = '/webapi/bean/user/page',
 }
 
 /**
@@ -38,4 +38,15 @@ export function getPermCode() {
 
 export function doLogout() {
   return defHttp.get({ url: Api.Logout });
+}
+
+/**
+ * @description: 获取用户分页接口
+ */
+ export function getUserPage(params: UserParams) {
+    return defHttp.post<UserPageResultModel>({ 
+      url: Api.GetUserPage,
+      params 
+    }
+  );
 }

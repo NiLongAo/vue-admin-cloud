@@ -1,5 +1,5 @@
 export interface BasicPageParams {
-  page: number;
+  pageNumber: number;
   pageSize: number;
 }
 
