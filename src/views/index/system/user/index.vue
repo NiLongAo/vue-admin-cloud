@@ -1,30 +1,72 @@
 <template>
-  <BasicTable
-    @register="registerTable"
-    :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-  >
-  </BasicTable>
+  <div>
+    <BasicTable
+      @register="registerTable"
+      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys }"
+    >
+      <template #action="{ record }">
+        <TableAction
+          :actions="[
+            {
+              // label: '修改',
+              icon: 'mdi:file-edit-outline',
+              onClick: handleEdit.bind(null, record),
+            },
+            {
+              // label: '删除',
+              color: 'error',
+              icon: 'mdi:delete-outline',
+              popConfirm: {
+                title: '是否删除？',
+                confirm: handleDelete.bind(null, record),
+              },
+            },
+          ]"
+        />
+      </template>
+      <template #toolbar>
+        <a-button type="primary" @click="handleAdd">添加</a-button>
+      </template>
+    </BasicTable>
+    <Edit @register="registerEdit" />
+  </div>
 </template>
 <script lang="ts" setup>
-import { BasicTable, useTable,BasicColumn,FormProps } from '/@/components/Table';
-import { getUserPage } from '/@/api/sys/user';
-import { ref } from 'vue';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
+  import { getUserPage } from '/@/api/sys/user';
+  import { ref } from 'vue';
+  import { useDrawer } from '/@/components/Drawer';
+  import Edit from './Edit.vue';
   const checkedKeys = ref<Array<string | number>>([]);
-  const [registerTable] = useTable({
-      title: '用户列表',
-      api: getUserPage,
-      columns: getBasicColumns(),
-      formConfig: getFormConfig(),
-      useSearchForm: true,
-      showTableSetting: true,
-      tableSetting: { fullScreen: true },
-      showIndexColumn: false,
-      rowKey: 'userId',
-  });
+  const [registerEdit, { openDrawer: openEdit }] = useDrawer();
 
-  function onSelectChange(selectedRowKeys: (string | number)[]) {
-    console.log(selectedRowKeys);
-    checkedKeys.value = selectedRowKeys;
+  const [registerTable] = useTable({
+    title: '用户列表',
+    api: getUserPage,
+    columns: getBasicColumns(),
+    formConfig: getFormConfig(),
+    useSearchForm: true,
+    showTableSetting: true,
+    tableSetting: { fullScreen: true },
+    showIndexColumn: false,
+    rowKey: 'userId',
+    actionColumn: {
+      width: 160,
+      title: 'Action',
+      dataIndex: 'action',
+      slots: { customRender: 'action' },
+    },
+  });
+  function handleAdd() {
+    console.log('点击了添加');
+  }
+  function handleEdit(record: Recordable) {
+    openEdit(true, {
+      userId: record.userId,
+    });
+  }
+  function handleDelete(record: Recordable) {
+    console.log('点击了删除', record.userId);
   }
 
   function getFormConfig(): Partial<FormProps> {
@@ -44,7 +86,7 @@ import { ref } from 'vue';
     };
   }
 
- function getBasicColumns(): BasicColumn[] {
+  function getBasicColumns(): BasicColumn[] {
     return [
       {
         title: '用户编号',
@@ -52,50 +94,42 @@ import { ref } from 'vue';
         fixed: 'left',
         width: 200,
       },
-       {
-        title: '账号',
-        dataIndex: 'loginAccount',
-        fixed: 'left',
-        width: 200,
-      },
-       {
+      {
         title: '人员名称',
         dataIndex: 'userName',
         fixed: 'left',
         width: 200,
       },
-       {
+      {
+        title: '账号',
+        dataIndex: 'loginAccount',
+        width: 200,
+      },
+      {
         title: '昵称',
         dataIndex: 'nickName',
-        fixed: 'left',
         width: 200,
       },
-       {
+      {
         title: '身份证号',
         dataIndex: 'idCard',
-        fixed: 'left',
         width: 200,
       },
-       {
+      {
         title: '电话',
         dataIndex: 'phone',
-        fixed: 'left',
         width: 200,
       },
-       {
+      {
         title: '居住地址',
         dataIndex: 'address',
-        fixed: 'left',
         width: 200,
       },
-       {
+      {
         title: '登录时间',
         dataIndex: 'loginLastTime',
-        fixed: 'left',
         width: 200,
       },
-    ]
+    ];
   }
-
-
 </script>

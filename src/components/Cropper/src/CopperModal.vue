@@ -122,7 +122,7 @@
   import { isFunction } from '/@/utils/is';
   import { useI18n } from '/@/hooks/web/useI18n';
 
-  type apiFunParams = { file: Blob; name: string; filename: string };
+  type apiFunParams = { type: number; file: Blob; name: string; filename: string };
 
   const props = {
     circled: { type: Boolean, default: true },
@@ -185,7 +185,7 @@
           const blob = dataURLtoBlob(previewSource.value);
           try {
             setModalProps({ confirmLoading: true });
-            const result = await uploadApi({ name: 'file', file: blob, filename });
+            const result = await uploadApi({ type: 1, name: 'file', file: blob, filename });
             emit('uploadSuccess', { source: previewSource.value, data: result.data });
             closeModal();
           } finally {

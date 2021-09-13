@@ -44,13 +44,13 @@ export interface GetUserInfoModel {
 /**
  * 查询参数类型
  */
- export type UserParams = BasicPageParams;
+export type UserParams = BasicPageParams;
 
 /**
- * @description: 请求用户分页数据 
+ * @description: 请求用户分页数据
  */
 export type UserPageResultModel = BasicFetchResult<UserPageModel>;
- export interface UserPageModel {
+export interface UserPageModel {
   userId: string | number;
   loginAccount: string;
   userName: string;
@@ -59,4 +59,24 @@ export type UserPageResultModel = BasicFetchResult<UserPageModel>;
   phone: string;
   address: string;
   loginLastTime: string;
+}
+export interface UserInfoModel {
+  // 用户id
+  userId?: string | number;
+  // 头像
+  imageUrl: string;
+  // 用户名
+  userName: string;
+  //昵称
+  nickName?: string;
+  // 手机号
+  phone?: string;
+  // 男女
+  gender?: number;
+  // 身份证
+  idCard?: string;
+  // 地址
+  address?: string;
+  // 备注
+  memo?: string;
 }
