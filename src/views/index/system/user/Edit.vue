@@ -10,7 +10,12 @@
     <div>
       <BasicForm @register="registerForm">
         <template #imageUrl="{ model, field }">
-          <CropperAvatar :uploadApi="upload" width="80px" :value="model[field]" />
+          <CropperAvatar
+            :uploadApi="upload"
+            width="80px"
+            :value="model[field]"
+            @change="handleFileVal"
+          />
         </template>
       </BasicForm>
     </div>
@@ -126,6 +131,10 @@
       .catch((error) => {
         console.log('error', error);
       });
+  };
+  const handleFileVal = (data) => {
+    debugger;
+    setFieldsValue({ imageUrl: data });
   };
   const [register] = useDrawerInner(async (data) => {
     const userInfo = await UserInfoApi({ id: data.userId });
