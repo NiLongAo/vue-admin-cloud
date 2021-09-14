@@ -8,6 +8,11 @@
         <TableAction
           :actions="[
             {
+              icon: 'clarity:info-standard-line',
+              tooltip: '查看用户详情',
+              onClick: handleView.bind(null, record),
+            },
+            {
               // label: '修改',
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
@@ -28,7 +33,7 @@
         <a-button type="primary" @click="handleAdd">添加</a-button>
       </template>
     </BasicTable>
-    <Edit @register="registerEdit" />
+    <UserDrawer @register="register" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -36,11 +41,13 @@
   import { getUserPage } from '/@/api/sys/user';
   import { ref } from 'vue';
   import { useDrawer } from '/@/components/Drawer';
-  import Edit from './Edit.vue';
+  import { useGo } from '/@/hooks/web/usePage';
+  import UserDrawer from './UserDrawer.vue';
   const checkedKeys = ref<Array<string | number>>([]);
-  const [registerEdit, { openDrawer: openEdit }] = useDrawer();
+  const [register, { openDrawer }] = useDrawer();
+  const go = useGo();
 
-  const [registerTable] = useTable({
+  const [registerTable, { reload }] = useTable({
     title: '用户列表',
     api: getUserPage,
     columns: getBasicColumns(),
@@ -59,12 +66,24 @@
   });
   function handleAdd() {
     console.log('点击了添加');
+    openDrawer(true, {
+      isUpdate: false,
+    });
+  }
+  function handleView(record: Recordable) {
+    console.log('点击了查看', record.userId);
+    go('/system/user/user_detail/' + record.userId);
   }
   function handleEdit(record: Recordable) {
-    openEdit(true, {
+    openDrawer(true, {
+      isUpdate: true,
       userId: record.userId,
     });
   }
+  const handleSuccess = () => {
+    //刷新表单
+    reload();
+  };
   function handleDelete(record: Recordable) {
     console.log('点击了删除', record.userId);
   }
@@ -72,6 +91,7 @@
   function getFormConfig(): Partial<FormProps> {
     return {
       labelWidth: 100,
+      autoSubmitOnEnter: true,
       schemas: [
         {
           field: `userName`,
@@ -92,13 +112,13 @@
         title: '用户编号',
         dataIndex: 'userId',
         fixed: 'left',
-        width: 200,
+        width: 100,
       },
       {
         title: '人员名称',
         dataIndex: 'userName',
         fixed: 'left',
-        width: 200,
+        width: 100,
       },
       {
         title: '账号',

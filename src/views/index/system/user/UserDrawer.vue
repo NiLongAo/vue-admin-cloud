@@ -3,7 +3,7 @@
     v-bind="$attrs"
     @register="register"
     title="修改用户"
-    width="50%"
+    width="40%"
     showFooter
     @ok="handleOk"
   >
@@ -28,7 +28,9 @@
   import { CropperAvatar } from '/@/components/Cropper';
   import { UserInfoApi } from '/@/api/sys/user';
   import { uploadApi } from '/@/api/sys/upload';
-
+  import { ref, unref } from 'vue';
+  const isUpdate = ref(true);
+  const emit = defineEmits(['success', 'register']);
   const upload = uploadApi as any;
   const schemas: FormSchema[] = [
     {
@@ -45,7 +47,7 @@
       component: 'Input',
       label: '用户名',
       colProps: {
-        span: 12,
+        span: 24,
       },
       required: true,
     },
@@ -54,7 +56,7 @@
       component: 'Input',
       label: '昵称',
       colProps: {
-        span: 12,
+        span: 24,
       },
     },
     {
@@ -62,7 +64,7 @@
       component: 'Input',
       label: '手机号',
       colProps: {
-        span: 12,
+        span: 24,
       },
     },
     {
@@ -70,7 +72,7 @@
       component: 'RadioGroup',
       label: '性别',
       colProps: {
-        span: 12,
+        span: 24,
       },
       componentProps: {
         options: [
@@ -94,7 +96,7 @@
       component: 'Input',
       label: '身份证',
       colProps: {
-        span: 12,
+        span: 24,
       },
     },
     {
@@ -102,7 +104,7 @@
       component: 'Input',
       label: '地址',
       colProps: {
-        span: 12,
+        span: 24,
       },
     },
     {
@@ -114,7 +116,7 @@
       },
     },
   ];
-  const [registerForm, { setFieldsValue, validate }] = useForm({
+  const [registerForm, { setFieldsValue, validate, resetFields }] = useForm({
     labelWidth: 120,
     schemas: schemas,
     showActionButtonGroup: false,
@@ -124,22 +126,34 @@
   });
 
   const handleOk = async () => {
-    validate()
-      .then((data) => {
-        console.log('ok', data);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
+    try {
+      const values = await validate();
+      setDrawerProps({ confirmLoading: true });
+      if (unref(isUpdate)) {
+        //修改
+      } else {
+        //新增
+      }
+      console.log(values);
+      closeDrawer();
+      emit('success');
+    } finally {
+      setDrawerProps({ confirmLoading: false });
+    }
   };
+
   const handleFileVal = (data) => {
-    debugger;
     setFieldsValue({ imageUrl: data });
   };
-  const [register] = useDrawerInner(async (data) => {
-    const userInfo = await UserInfoApi({ id: data.userId });
-    setFieldsValue({
-      ...userInfo,
-    });
+  const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+    resetFields();
+    setDrawerProps({ confirmLoading: false });
+    isUpdate.value = data.isUpdate;
+    if (unref(isUpdate)) {
+      const userInfo = await UserInfoApi({ id: data.userId });
+      setFieldsValue({
+        ...userInfo,
+      });
+    }
   });
 </script>
