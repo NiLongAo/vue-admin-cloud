@@ -9,7 +9,7 @@
   >
     <div>
       <BasicForm @register="registerForm">
-        <template #imageUrl="{ model, field }">
+        <template #allImageUrl="{ model, field }">
           <CropperAvatar
             :uploadApi="upload"
             width="80px"
@@ -35,9 +35,19 @@
   const schemas: FormSchema[] = [
     {
       field: 'imageUrl',
+      show: false,
       component: 'Input',
       label: '图像',
       slot: 'imageUrl',
+      colProps: {
+        span: 24,
+      },
+    },
+    {
+      field: 'allImageUrl',
+      component: 'Input',
+      label: '图像',
+      slot: 'allImageUrl',
       colProps: {
         span: 24,
       },
@@ -143,7 +153,7 @@
   };
 
   const handleFileVal = (data) => {
-    setFieldsValue({ imageUrl: data });
+    setFieldsValue({ imageUrl: data.path, allImageUrl: data.fullPath });
   };
   const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     resetFields();
