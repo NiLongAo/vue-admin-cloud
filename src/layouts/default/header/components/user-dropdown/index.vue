@@ -51,7 +51,8 @@
   import headerImg from '/@/assets/images/header.jpg';
   import { propTypes } from '/@/utils/propTypes';
   import { openWindow } from '/@/utils';
-
+  import { useSystemStore } from '/@/store/modules/system';
+  import { SystemEnum } from '/@/enums/systemEnum';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
   type MenuEvent = 'logout' | 'doc' | 'lock';
@@ -73,10 +74,16 @@
       const { t } = useI18n();
       const { getShowDoc, getUseLockPage } = useHeaderSetting();
       const userStore = useUserStore();
-
+      const systemStore = useSystemStore();
       const getUserInfo = computed(() => {
-        const { realName = '', avatar, desc } = userStore.getUserInfo || {};
-        return { realName, avatar: avatar || headerImg, desc };
+        const { realName = '', imageUrl, desc } = userStore.getUserInfo || {};
+        return {
+          realName,
+          avatar: imageUrl
+            ? systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + imageUrl
+            : headerImg,
+          desc,
+        };
       });
 
       const [register, { openModal }] = useModal();

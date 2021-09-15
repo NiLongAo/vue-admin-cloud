@@ -62,7 +62,7 @@ export interface UserPageModel {
 }
 export interface UserInfoModel {
   // 用户id
-  userId?: string | number;
+  id?: string | number;
   // 头像
   imageUrl: string;
   // 用户名
@@ -79,4 +79,8 @@ export interface UserInfoModel {
   address?: string;
   // 备注
   memo?: string;
+  // 是否系统管理员
+  isAdmin?: number;
+  // 是否禁用
+  isEnabled?: number;
 }

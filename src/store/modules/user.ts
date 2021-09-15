@@ -14,6 +14,7 @@ import { router } from '/@/router';
 import { usePermissionStore } from '/@/store/modules/permission';
 import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { useSystemStore } from './system';
 
 interface UserState {
   userInfo: Nullable<UserInfo>;
@@ -127,6 +128,8 @@ export const useUserStore = defineStore({
       }
     },
     async getUserInfoAction(): Promise<UserInfo> {
+      const systemStore = useSystemStore();
+      systemStore.getSystemConfigAction(); //加载权限配置信息
       const userInfo = await getUserInfo();
       const { roles, ability } = userInfo;
       let roleList;
@@ -144,6 +147,7 @@ export const useUserStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
+      const systemStore = useSystemStore();
       try {
         await doLogout();
       } catch {
@@ -151,6 +155,7 @@ export const useUserStore = defineStore({
       }
       this.setToken(undefined);
       this.setSessionTimeout(false);
+      systemStore.setSystemConfigMap({}); //清空配置信息
       goLogin && router.push(PageEnum.BASE_LOGIN);
     },
 

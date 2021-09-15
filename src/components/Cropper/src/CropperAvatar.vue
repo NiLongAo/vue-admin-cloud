@@ -92,7 +92,6 @@
       );
 
       function handleUploadSuccess({ source, data }) {
-        debugger;
         sourceValue.value = data.data[0].fullPath;
         emit('change', data.data[0]);
         createMessage.success(t('component.cropper.uploadSuccess'));

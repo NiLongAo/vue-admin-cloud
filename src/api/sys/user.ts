@@ -10,12 +10,24 @@ import {
 import { ErrorMessageMode } from '/#/axios';
 
 enum Api {
+  //登录
   Login = '/webapi/bean/user/login',
+  //退出
   Logout = '/webapi/bean/user/logout',
+  //获取用户信息
   UserInfo = '/webapi/bean/user/info',
+  //获取当前登录用户信息
   GetUserInfo = '/webapi/bean/user/login_info',
+  //获取权限（废弃）
   GetPermCode = '/webapi/bean/user/getPermCode',
+  //获取用户列表信息
   GetUserPage = '/webapi/bean/user/page',
+  //新增用户
+  insert = '/webapi/bean/user/insert',
+  //修改用户
+  update = '/webapi/bean/user/update',
+  //删除用户
+  delete = '/webapi/bean/user/delete',
 }
 
 /**
@@ -60,4 +72,16 @@ export function getUserPage(params: UserParams) {
     url: Api.GetUserPage,
     params,
   });
+}
+
+export function doInsert(params: Recordable) {
+  return defHttp.post({ url: Api.insert, params });
+}
+
+export function doUpdate(params: Recordable) {
+  return defHttp.post({ url: Api.update, params });
+}
+
+export function doDelete(params: Recordable) {
+  return defHttp.post({ url: Api.delete, params });
 }

@@ -13,12 +13,10 @@
               onClick: handleView.bind(null, record),
             },
             {
-              // label: '修改',
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
-              // label: '删除',
               color: 'error',
               icon: 'mdi:delete-outline',
               popConfirm: {

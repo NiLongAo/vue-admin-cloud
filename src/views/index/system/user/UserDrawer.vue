@@ -9,11 +9,11 @@
   >
     <div>
       <BasicForm @register="registerForm">
-        <template #allImageUrl="{ model, field }">
+        <template #imageUrl="{ model, field }">
           <CropperAvatar
             :uploadApi="upload"
             width="80px"
-            :value="model[field]"
+            :value="model[field] ? staticPath + model[field] : ''"
             @change="handleFileVal"
           />
         </template>
@@ -26,28 +26,30 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { CropperAvatar } from '/@/components/Cropper';
-  import { UserInfoApi } from '/@/api/sys/user';
+  import { UserInfoApi, doInsert, doUpdate } from '/@/api/sys/user';
   import { uploadApi } from '/@/api/sys/upload';
+  import { useSystemStore } from '/@/store/modules/system';
+  import { SystemEnum } from '/@/enums/systemEnum';
   import { ref, unref } from 'vue';
   const isUpdate = ref(true);
   const emit = defineEmits(['success', 'register']);
   const upload = uploadApi as any;
+  const staticPath = ref({});
   const schemas: FormSchema[] = [
     {
-      field: 'imageUrl',
+      field: 'id',
       show: false,
       component: 'Input',
-      label: '图像',
-      slot: 'imageUrl',
+      label: '编号',
       colProps: {
         span: 24,
       },
     },
     {
-      field: 'allImageUrl',
+      field: 'imageUrl',
       component: 'Input',
       label: '图像',
-      slot: 'allImageUrl',
+      slot: 'imageUrl',
       colProps: {
         span: 24,
       },
@@ -110,6 +112,22 @@
       },
     },
     {
+      field: 'isAdmin',
+      component: 'Switch',
+      label: '是否系统管理员',
+      colProps: {
+        span: 24,
+      },
+    },
+    {
+      field: 'isEnabled',
+      component: 'Switch',
+      label: '是否禁止登录',
+      colProps: {
+        span: 24,
+      },
+    },
+    {
       field: 'address',
       component: 'Input',
       label: '地址',
@@ -134,17 +152,26 @@
       span: 24,
     },
   });
-
   const handleOk = async () => {
     try {
       const values = await validate();
-      setDrawerProps({ confirmLoading: true });
+      const { isAdmin, isEnabled } = values;
       if (unref(isUpdate)) {
         //修改
+        await doUpdate({
+          ...values,
+          isAdmin: isAdmin === true ? 1 : 0,
+          isEnabled: isEnabled === true ? 1 : 0,
+        });
       } else {
         //新增
+        await doInsert({
+          ...values,
+          isAdmin: isAdmin === true ? 1 : 0,
+          isEnabled: isEnabled === true ? 1 : 0,
+        });
       }
-      console.log(values);
+      setDrawerProps({ confirmLoading: true });
       closeDrawer();
       emit('success');
     } finally {
@@ -155,14 +182,20 @@
   const handleFileVal = (data) => {
     setFieldsValue({ imageUrl: data.path, allImageUrl: data.fullPath });
   };
+  //初始化页面
   const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+    const systemStore = useSystemStore();
+    staticPath.value = systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH];
     resetFields();
     setDrawerProps({ confirmLoading: false });
     isUpdate.value = data.isUpdate;
     if (unref(isUpdate)) {
       const userInfo = await UserInfoApi({ id: data.userId });
+      const { isAdmin, isEnabled } = userInfo;
       setFieldsValue({
         ...userInfo,
+        isAdmin: isAdmin === 0 ? false : true,
+        isEnabled: isEnabled === 0 ? false : true,
       });
     }
   });
