@@ -1,24 +1,11 @@
 <template>
   <PageWrapper
-    :title="`用户` + formData.userNameRef + `的资料`"
+    :title="`用户` + formData.userName + `的资料`"
     :content="formData.memoRef"
-    contentBackground
     @back="goBack"
   >
-    <template #footer>
-      <Tabs default-active-key="detail" v-model:activeKey="formData.currentKey">
-        <TabPane key="detail" tab="用户资料" />
-        <TabPane key="logs" tab="操作日志" />
-      </Tabs>
-    </template>
-    <div class="pt-4 m-4 desc-wrap">
-      <template v-if="formData.currentKey == 'detail'">
-        <div v-for="i in 10" :key="i">这是用户{{ formData.userNameRef }}资料Tab</div>
-      </template>
-      <template v-if="formData.currentKey == 'logs'">
-        <div v-for="i in 10" :key="i">这是用户{{ formData.userNameRef }}操作日志Tab</div>
-      </template>
-    </div>
+    <Description @register="basicRegister" />
+    <Description @register="setUpRegister" class="mt-4" />
   </PageWrapper>
 </template>
 <script lang="ts" setup>
@@ -27,24 +14,96 @@
   import { PageWrapper } from '/@/components/Page';
   import { useGo } from '/@/hooks/web/usePage';
   import { useTabs } from '/@/hooks/web/useTabs';
-  import { Tabs, TabPane } from 'ant-design-vue';
   import { UserInfoApi } from '/@/api/sys/user';
+  import { Description, DescItem, useDescription } from '/@/components/Description/index';
+  // import { UserInfoModel } from '/@/api/sys/model/userModel';
   const route = useRoute();
   const { setTitle } = useTabs();
 
   const formData = reactive({
     userId: route.params?.id,
-    userNameRef: '',
+    userName: '',
     memoRef: '',
-    currentKey: 'detail',
   });
 
   const initUserInfo = async () => {
-    const { userName, memo } = await UserInfoApi({ id: formData.userId });
-    formData.userNameRef = userName;
-    formData.memoRef = memo || '';
-    setTitle('详情：用户' + formData.userNameRef);
+    const { userName, nickName, phone, gender, idCard, address, memo, isAdmin, isEnabled } =
+      await UserInfoApi({ id: formData.userId });
+    formData.userName = userName;
+    //设置导航名称
+    setTitle('详情：用户' + userName);
+    //初始化基本详情信息
+    basicSetDescProps({
+      title: '基本信息',
+      data: { userName, nickName, phone, gender, idCard, address, memo },
+      column: 3,
+      schema: basicSchema,
+      collapseOptions: { canExpand: true, helpMessage: '用户基本信息' },
+    });
+    //初始化设置信息
+    setUpSetDescProps({
+      title: '用户设置',
+      data: { isAdmin, isEnabled },
+      column: 2,
+      layout: 'vertical',
+      schema: setUpSchema,
+      collapseOptions: { canExpand: true, helpMessage: '用户设置信息' },
+    });
   };
+
+  const basicSchema: DescItem[] = [
+    {
+      field: 'userName',
+      label: '用户名',
+    },
+    {
+      field: 'nickName',
+      label: '昵称',
+    },
+    {
+      field: 'phone',
+      label: '联系电话',
+    },
+    {
+      field: 'gender',
+      label: '性别',
+      render: (curVal) => {
+        return curVal === 1 ? '男' : curVal === 2 ? '女' : '保密';
+      },
+    },
+    {
+      field: 'idCard',
+      label: '身份证号',
+    },
+    {
+      field: 'address',
+      label: '地址',
+    },
+    {
+      field: 'memo',
+      label: '备注',
+    },
+  ];
+
+  const setUpSchema: DescItem[] = [
+    {
+      field: 'isAdmin',
+      label: '是否系统管理员',
+      render: (curVal) => {
+        return curVal === 1 ? '是' : '否';
+      },
+    },
+    {
+      field: 'isEnabled',
+      label: '是否禁用',
+      render: (curVal) => {
+        return curVal === 1 ? '是' : '否';
+      },
+    },
+  ];
+
+  const [basicRegister, { setDescProps: basicSetDescProps }] = useDescription({});
+  const [setUpRegister, { setDescProps: setUpSetDescProps }] = useDescription({});
 
   onMounted(() => {
     initUserInfo();
