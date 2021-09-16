@@ -21,6 +21,8 @@ export interface RequestOptions {
   ignoreCancelToken?: boolean;
   // Whether to send token in header
   withToken?: boolean;
+  //是否展示后台结果消息
+  isMessage?: boolean;
 }
 
 export interface Result<T = any> {

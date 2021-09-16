@@ -29,7 +29,7 @@ const transform: AxiosTransform = {
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n();
-    const { isTransformResponse, isReturnNativeResponse } = options;
+    const { isTransformResponse, isReturnNativeResponse, isMessage = true } = options;
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
       return res;
@@ -52,6 +52,9 @@ const transform: AxiosTransform = {
     // 这里逻辑可以根据项目进行修改
     const hasSuccess = resData && Reflect.has(resData, 'code') && code === ResultEnum.SUCCESS;
     if (hasSuccess) {
+      if (isMessage && message) {
+        createMessage.success(message);
+      }
       return dataData;
     }
 

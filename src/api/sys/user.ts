@@ -83,5 +83,5 @@ export function doUpdate(params: Recordable) {
 }
 
 export function doDelete(params: Recordable) {
-  return defHttp.post({ url: Api.delete, params });
+  return defHttp.get({ url: Api.delete, params });
 }

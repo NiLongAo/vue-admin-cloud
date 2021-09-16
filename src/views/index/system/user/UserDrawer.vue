@@ -28,6 +28,7 @@
   import { CropperAvatar } from '/@/components/Cropper';
   import { UserInfoApi, doInsert, doUpdate } from '/@/api/sys/user';
   import { uploadApi } from '/@/api/sys/upload';
+  import { isPhone, isIdCard } from '/@/utils/validate';
   import { useSystemStore } from '/@/store/modules/system';
   import { SystemEnum } from '/@/enums/systemEnum';
   import { ref, unref } from 'vue';
@@ -35,6 +36,7 @@
   const emit = defineEmits(['success', 'register']);
   const upload = uploadApi as any;
   const staticPath = ref({});
+  const systemStore = useSystemStore();
   const schemas: FormSchema[] = [
     {
       field: 'id',
@@ -78,6 +80,18 @@
       colProps: {
         span: 24,
       },
+      rules: [
+        {
+          required: true,
+          message: '手机号格式错误',
+          validator(_, value) {
+            if (!isPhone(value)) {
+              return Promise.reject('值不能为空');
+            }
+            return Promise.resolve();
+          },
+        },
+      ],
     },
     {
       field: 'gender',
@@ -97,7 +111,7 @@
             value: 2,
           },
           {
-            label: '未知',
+            label: '隐藏',
             value: 0,
           },
         ],
@@ -110,6 +124,18 @@
       colProps: {
         span: 24,
       },
+      rules: [
+        {
+          required: true,
+          message: '身份证格式错误',
+          validator(_, value) {
+            if (!isIdCard(value)) {
+              return Promise.reject('值不能为空');
+            }
+            return Promise.resolve();
+          },
+        },
+      ],
     },
     {
       field: 'isAdmin',
@@ -129,11 +155,15 @@
     },
     {
       field: 'address',
-      component: 'Input',
+      component: 'Cascader',
       label: '地址',
       colProps: {
         span: 24,
       },
+      componentProps: {
+        options: systemStore.getAreaList,
+      },
+      defaultValue: '',
     },
     {
       field: 'memo',
@@ -184,7 +214,6 @@
   };
   //初始化页面
   const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
-    const systemStore = useSystemStore();
     staticPath.value = systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH];
     resetFields();
     setDrawerProps({ confirmLoading: false });

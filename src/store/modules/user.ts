@@ -108,6 +108,9 @@ export const useUserStore = defineStore({
         // get user info
         const userInfo = await this.getUserInfoAction();
         const sessionTimeout = this.sessionTimeout;
+        const systemStore = useSystemStore();
+        systemStore.getSystemConfigAction(); //加载权限配置信息
+        systemStore.getAreaListAction(); //加载省市区配置信息
         if (sessionTimeout) {
           this.setSessionTimeout(false);
         } else if (goHome) {
@@ -128,8 +131,6 @@ export const useUserStore = defineStore({
       }
     },
     async getUserInfoAction(): Promise<UserInfo> {
-      const systemStore = useSystemStore();
-      systemStore.getSystemConfigAction(); //加载权限配置信息
       const userInfo = await getUserInfo();
       const { roles, ability } = userInfo;
       let roleList;

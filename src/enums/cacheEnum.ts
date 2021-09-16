@@ -31,6 +31,9 @@ export const APP_SESSION_CACHE_KEY = 'COMMON__SESSION__KEY__';
 // system info key
 export const SYSYTEM_KEY = 'SYSYTEM_KEY__';
 
+// area info key
+export const AREA_KEY = 'AREA_KEY__';
+
 export enum CacheTypeEnum {
   SESSION,
   LOCAL,

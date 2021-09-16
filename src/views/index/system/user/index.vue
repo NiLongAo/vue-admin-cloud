@@ -36,7 +36,7 @@
 </template>
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { getUserPage } from '/@/api/sys/user';
+  import { getUserPage, doDelete } from '/@/api/sys/user';
   import { ref } from 'vue';
   import { useDrawer } from '/@/components/Drawer';
   import { useGo } from '/@/hooks/web/usePage';
@@ -82,8 +82,11 @@
     //刷新表单
     reload();
   };
-  function handleDelete(record: Recordable) {
-    console.log('点击了删除', record.userId);
+  async function handleDelete(record: Recordable) {
+    //删除
+    await doDelete({ id: record.userId });
+    //刷新表单
+    reload();
   }
 
   function getFormConfig(): Partial<FormProps> {
