@@ -15,6 +15,13 @@
   import { useItemLabelWidth } from '../hooks/useLabelWidth';
   import { useI18n } from '/@/hooks/web/useI18n';
 
+  interface Option {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    children?: Option[];
+  }
+
   export default defineComponent({
     name: 'BasicFormItem',
     inheritAttrs: false,
@@ -218,6 +225,7 @@
           field,
           changeEvent = 'change',
           valueField,
+          showSearch = false,
         } = props.schema;
 
         const isCheck = component && ['Switch', 'Checkbox'].includes(component);
@@ -259,10 +267,19 @@
           [valueField || (isCheck ? 'checked' : 'value')]: props.formModel[field],
         };
 
+        const filter = (inputValue: string, path: Option[]) => {
+          return path.some(
+            (option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+          );
+        };
+
+        const search = showSearch ? { showSearch: { filter } } : {};
+
         const compAttr: Recordable = {
           ...propsData,
           ...on,
           ...bindValue,
+          ...search,
         };
 
         if (!renderComponentContent) {

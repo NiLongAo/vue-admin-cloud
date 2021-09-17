@@ -83,4 +83,10 @@ export interface UserInfoModel {
   isAdmin?: number;
   // 是否禁用
   isEnabled?: number;
+  // 省区编码
+  provinceId?: number;
+  // 市区编码
+  cityId?: number;
+  // 区域编码
+  areaId?: number;
 }

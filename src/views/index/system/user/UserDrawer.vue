@@ -32,6 +32,7 @@
   import { useSystemStore } from '/@/store/modules/system';
   import { SystemEnum } from '/@/enums/systemEnum';
   import { ref, unref } from 'vue';
+
   const isUpdate = ref(true);
   const emit = defineEmits(['success', 'register']);
   const upload = uploadApi as any;
@@ -154,7 +155,7 @@
       },
     },
     {
-      field: 'address',
+      field: 'areaList',
       component: 'Cascader',
       label: '地址',
       colProps: {
@@ -163,7 +164,8 @@
       componentProps: {
         options: systemStore.getAreaList,
       },
-      defaultValue: '',
+      defaultValue: [],
+      showSearch: true,
     },
     {
       field: 'memo',
@@ -184,14 +186,16 @@
   });
   const handleOk = async () => {
     try {
-      const values = await validate();
-      const { isAdmin, isEnabled } = values;
+      const { isAdmin, isEnabled, areaList, ...values } = await validate();
       if (unref(isUpdate)) {
         //修改
         await doUpdate({
           ...values,
           isAdmin: isAdmin === true ? 1 : 0,
           isEnabled: isEnabled === true ? 1 : 0,
+          provinceId: areaList[0],
+          cityId: areaList[1],
+          areaId: areaList[2],
         });
       } else {
         //新增
@@ -199,6 +203,9 @@
           ...values,
           isAdmin: isAdmin === true ? 1 : 0,
           isEnabled: isEnabled === true ? 1 : 0,
+          provinceId: areaList[0],
+          cityId: areaList[1],
+          areaId: [2],
         });
       }
       setDrawerProps({ confirmLoading: true });
@@ -219,12 +226,14 @@
     setDrawerProps({ confirmLoading: false });
     isUpdate.value = data.isUpdate;
     if (unref(isUpdate)) {
-      const userInfo = await UserInfoApi({ id: data.userId });
-      const { isAdmin, isEnabled } = userInfo;
+      const { isAdmin, isEnabled, provinceId, cityId, areaId, ...userInfo } = await UserInfoApi({
+        id: data.userId,
+      });
       setFieldsValue({
         ...userInfo,
         isAdmin: isAdmin === 0 ? false : true,
         isEnabled: isEnabled === 0 ? false : true,
+        areaList: [provinceId, cityId, areaId],
       });
     }
   });
