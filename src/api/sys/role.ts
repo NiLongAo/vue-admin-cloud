@@ -33,6 +33,6 @@ export function doRemove(params: Recordable) {
   return defHttp.get({ url: Api.remove, params });
 }
 
-export function doDetail(params: RoleModel) {
+export function doDetail(params: Recordable) {
   return defHttp.get({ url: Api.detail, params });
 }

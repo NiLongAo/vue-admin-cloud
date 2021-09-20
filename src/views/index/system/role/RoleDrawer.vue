@@ -76,9 +76,7 @@
     setDrawerProps({ confirmLoading: false });
     let id = data.id;
     if (id) {
-      const role = await doDetail({
-        id,
-      });
+      const role = await doDetail({ id: id });
       setFieldsValue({
         ...role,
       });
