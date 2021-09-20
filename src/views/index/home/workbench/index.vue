@@ -1,5 +1,5 @@
 <template>
-  <div>role_privilege</div>
+  <div>home</div>
 </template>
 
 <script>
