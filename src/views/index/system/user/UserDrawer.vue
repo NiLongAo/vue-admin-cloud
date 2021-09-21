@@ -163,9 +163,9 @@
       },
       componentProps: {
         options: systemStore.getAreaList,
+        showSearch: true,
       },
       defaultValue: [],
-      showSearch: true,
     },
     {
       field: 'memo',

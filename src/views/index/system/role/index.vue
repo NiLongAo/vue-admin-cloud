@@ -39,10 +39,11 @@
   const [register, { openDrawer }] = useDrawer();
 
   const [registerTable, { reload }] = useTable({
-    title: '用户列表',
+    title: '角色列表',
     api: getRolePage,
     columns: getBasicColumns(),
     formConfig: getFormConfig(),
+    bordered: true,
     useSearchForm: true,
     showTableSetting: true,
     tableSetting: { fullScreen: true },
@@ -69,7 +70,7 @@
   };
   async function handleDelete(record: Recordable) {
     //删除
-    await doRemove({ id: record.userId });
+    await doRemove({ id: record.id });
     //刷新表单
     reload();
   }

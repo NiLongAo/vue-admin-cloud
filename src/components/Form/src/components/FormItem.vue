@@ -225,7 +225,6 @@
           field,
           changeEvent = 'change',
           valueField,
-          showSearch = false,
         } = props.schema;
 
         const isCheck = component && ['Switch', 'Checkbox'].includes(component);
@@ -267,19 +266,10 @@
           [valueField || (isCheck ? 'checked' : 'value')]: props.formModel[field],
         };
 
-        const filter = (inputValue: string, path: Option[]) => {
-          return path.some(
-            (option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
-          );
-        };
-
-        const search = showSearch ? { showSearch: { filter } } : {};
-
         const compAttr: Recordable = {
           ...propsData,
           ...on,
           ...bindValue,
-          ...search,
         };
 
         if (!renderComponentContent) {

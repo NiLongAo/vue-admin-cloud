@@ -51,6 +51,7 @@
     columns: getBasicColumns(),
     formConfig: getFormConfig(),
     useSearchForm: true,
+    bordered: true,
     showTableSetting: true,
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
