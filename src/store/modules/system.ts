@@ -1,13 +1,15 @@
 import { getSystem, getAreaInfoList } from '/@/api/sys/system';
+import { doEnumCheck } from '/@/api/common/enum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { SYSYTEM_KEY, AREA_KEY } from '/@/enums/cacheEnum';
+import { SYSYTEM_KEY, AREA_KEY, ENUM_KEY } from '/@/enums/cacheEnum';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { AreaEntity } from '/@/api/sys/model/systemModel';
-
+import { EnumModel } from '/@/api/common/model/enumModel';
 interface SystemState {
   systemConfigMap: Recordable | undefined;
   areaList: Array<AreaEntity> | undefined;
+  enumMap: EnumModel | undefined;
 }
 
 export const useSystemStore = defineStore({
@@ -15,6 +17,7 @@ export const useSystemStore = defineStore({
   state: (): SystemState => ({
     systemConfigMap: undefined,
     areaList: undefined,
+    enumMap: undefined,
   }),
   getters: {
     getSystemConfigMap(): Recordable {
@@ -22,6 +25,9 @@ export const useSystemStore = defineStore({
     },
     getAreaList(): Array<AreaEntity> {
       return this.areaList || getAuthCache<Array<AreaEntity>>(AREA_KEY) || [];
+    },
+    getEnumMap(): EnumModel {
+      return this.enumMap || getAuthCache<EnumModel>(ENUM_KEY) || {};
     },
   },
   actions: {
@@ -32,6 +38,10 @@ export const useSystemStore = defineStore({
     setAreaList(areaList: Array<AreaEntity>) {
       this.areaList = areaList;
       setAuthCache(AREA_KEY, areaList);
+    },
+    setEnumMap(enumMap: EnumModel) {
+      this.enumMap = enumMap;
+      setAuthCache(ENUM_KEY, enumMap);
     },
     async getSystemConfigAction(): Promise<Recordable<any>> {
       const systemList = await getSystem();
@@ -46,6 +56,11 @@ export const useSystemStore = defineStore({
       const areaList = await getAreaInfoList();
       this.setAreaList(areaList);
       return areaList;
+    },
+    async getEnumMapAction(): Promise<EnumModel> {
+      const enumMap = await doEnumCheck();
+      this.setEnumMap(enumMap);
+      return enumMap;
     },
   },
 });
