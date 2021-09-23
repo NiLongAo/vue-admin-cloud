@@ -2,7 +2,7 @@
   <BasicDrawer
     v-bind="$attrs"
     @register="register"
-    title="修改部门"
+    title="修改职位"
     width="40%"
     showFooter
     @ok="handleOk"
@@ -16,7 +16,7 @@
 <script lang="ts" setup>
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doDepartmentDetail, doDepartmentSave, doDepartmentTree } from '/@/api/sys/department';
+  import { doPositionDetail, doPositionSave, doPositionTree } from '/@/api/sys/position';
 
   const emit = defineEmits(['success', 'register']);
   const schemas: FormSchema[] = [
@@ -32,13 +32,13 @@
     {
       field: 'parentId',
       component: 'TreeSelect',
-      label: '上级部门',
+      label: '上级职位',
       colProps: {
         span: 24,
       },
       componentProps: {
         replaceFields: {
-          title: 'departmentName',
+          title: 'positionName',
           key: 'id',
           value: 'id',
         },
@@ -47,9 +47,9 @@
       defaultValue: '',
     },
     {
-      field: 'departmentName',
+      field: 'positionName',
       component: 'Input',
-      label: '部门名称',
+      label: '职位名称',
       colProps: {
         span: 24,
       },
@@ -85,7 +85,7 @@
     try {
       const { isEnable, ...values } = await validate();
       //新增
-      await doDepartmentSave({
+      await doPositionSave({
         isEnable: isEnable === true ? 1 : 0,
         ...values,
       });
@@ -102,7 +102,7 @@
     resetFields();
     setDrawerProps({ confirmLoading: false });
     let id = data.id;
-    const treeData = await doDepartmentTree({ topName: '默认' });
+    const treeData = await doPositionTree({ topName: '默认' });
     //更新表单下拉数据
     updateSchema([
       {
@@ -111,7 +111,7 @@
       },
     ]);
     if (id) {
-      const { isEnable, parentId, ...department } = await doDepartmentDetail({ id: id });
+      const { isEnable, parentId, ...department } = await doPositionDetail({ id: id });
       debugger;
       setFieldsValue({
         parentId: parentId === null ? '' : parentId,

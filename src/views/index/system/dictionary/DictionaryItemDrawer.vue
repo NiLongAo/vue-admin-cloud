@@ -2,7 +2,7 @@
   <BasicDrawer
     v-bind="$attrs"
     @register="register"
-    title="修改部门"
+    title="编辑字典条目"
     width="40%"
     showFooter
     @ok="handleOk"
@@ -16,7 +16,7 @@
 <script lang="ts" setup>
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doDepartmentDetail, doDepartmentSave, doDepartmentTree } from '/@/api/sys/department';
+  import { doDictionaryItemSave, doDictionaryItemDetail } from '/@/api/sys/dictionary';
 
   const emit = defineEmits(['success', 'register']);
   const schemas: FormSchema[] = [
@@ -30,50 +30,43 @@
       },
     },
     {
-      field: 'parentId',
-      component: 'TreeSelect',
-      label: '上级部门',
+      field: 'typeId',
+      show: false,
+      component: 'Input',
+      label: '字典类型编号',
       colProps: {
         span: 24,
       },
-      componentProps: {
-        replaceFields: {
-          title: 'departmentName',
-          key: 'id',
-          value: 'id',
-        },
-        showSearch: true,
-      },
-      defaultValue: '',
     },
     {
-      field: 'departmentName',
+      field: 'name',
       component: 'Input',
-      label: '部门名称',
+      label: '字典条目名称',
       colProps: {
         span: 24,
       },
       required: true,
     },
     {
-      field: 'isEnable',
-      component: 'Switch',
-      label: '是否开启',
+      field: 'value',
+      component: 'Input',
+      label: '字典条目值',
       colProps: {
         span: 24,
       },
-      defaultValue: false,
+      required: true,
     },
     {
-      field: 'memo',
-      component: 'InputTextArea',
-      label: '备注',
+      field: 'sort',
+      component: 'Input',
+      label: '排序',
       colProps: {
         span: 24,
       },
+      required: true,
     },
   ];
-  const [registerForm, { setFieldsValue, validate, resetFields, updateSchema }] = useForm({
+  const [registerForm, { setFieldsValue, validate, resetFields }] = useForm({
     labelWidth: 120,
     schemas: schemas,
     showActionButtonGroup: false,
@@ -83,10 +76,11 @@
   });
   const handleOk = async () => {
     try {
-      const { isEnable, ...values } = await validate();
+      const { isEnable, sort, ...values } = await validate();
       //新增
-      await doDepartmentSave({
+      await doDictionaryItemSave({
         isEnable: isEnable === true ? 1 : 0,
+        num: sort,
         ...values,
       });
       setDrawerProps({ confirmLoading: true });
@@ -102,21 +96,17 @@
     resetFields();
     setDrawerProps({ confirmLoading: false });
     let id = data.id;
-    const treeData = await doDepartmentTree({ topName: '默认' });
+
     //更新表单下拉数据
-    updateSchema([
-      {
-        field: 'parentId',
-        componentProps: { treeData },
-      },
-    ]);
     if (id) {
-      const { isEnable, parentId, ...department } = await doDepartmentDetail({ id: id });
-      debugger;
+      const dictionaryType = await doDictionaryItemDetail({ id: id });
       setFieldsValue({
-        parentId: parentId === null ? '' : parentId,
-        isEnable: isEnable === 0 ? false : true,
-        ...department,
+        typeId: data.typeId,
+        ...dictionaryType,
+      });
+    } else {
+      setFieldsValue({
+        typeId: data.typeId,
       });
     }
   });
