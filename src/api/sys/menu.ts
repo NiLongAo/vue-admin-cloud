@@ -26,6 +26,8 @@ enum Api {
   menuRemove = '/webapi/bean/menu/remove',
   //获取下拉菜单树
   menuTree = '/webapi/bean/menu/tree',
+  //获取菜单权限树
+  menuPrivilegeTree = '/webapi/bean/menu/menu_privilege_tree',
 
   /**
    * 权限协议
@@ -52,6 +54,11 @@ export function doMenuPage(params: MenuParams) {
     params,
   });
 }
+//获取菜单权限树
+export function doMenuPrivilegeTree() {
+  return defHttp.get({ url: Api.menuPrivilegeTree });
+}
+
 //查询所有菜单
 export function doMenuAll() {
   return defHttp.get({ url: Api.menuAll });
