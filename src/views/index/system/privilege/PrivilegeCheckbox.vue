@@ -1,10 +1,13 @@
 <template>
   <div class="bg-white m-4 overflow-hidden px-10 py-10">
+    <div class="flex justify-end">
+      <a-button class="!ml-4" type="primary" @click="handleSave"> 保存 </a-button>
+    </div>
     <MyCheckBox :treeData="tree" @subset="handleSubsetChange" />
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, unref, defineProps, watch, onMounted } from 'vue';
+  import { ref, unref, defineProps, watch } from 'vue';
   import MyCheckBox, { CheckboxGroupEntity } from './MyCheckBox.vue';
 
   const props = defineProps({
@@ -63,35 +66,40 @@
       default: () => [],
     },
   });
-
+  const emit = defineEmits(['save']);
   const checkList = ref(props.checkedList);
   const dataTree = ref();
   const tree = ref(props.treeData);
-
+  const last = ref();
   const onInit = () => {
     //给子级添加父级Key
     //深度克隆
-    const data = JSON.parse(JSON.stringify(props.treeData));
+    const lastv = [] as string[];
+    const data = JSON.parse(JSON.stringify(props.treeData)) as CheckboxGroupEntity[];
     function addParentKey(data, parentKey) {
       data.forEach((ele) => {
-        const { children } = ele;
+        const { children, v } = ele;
         ele.parentId = parentKey;
+        ele.indeterminate = false;
+        ele.checked = false;
         if (children) {
           //如果唯一标识不是code可以自行改变
           addParentKey(children, ele.v);
+        } else {
+          lastv.push(v);
+          last.value = lastv;
         }
       });
     }
     addParentKey(data, null); //一开始为null,根节点没有父级
     dataTree.value = data;
+    tree.value = unref(dataTree);
   };
   //切换权限监控
   watch(
     () => props.checkedList,
     (checkedList) => {
       checkList.value = checkedList;
-      //重置
-      onInit();
       //递归循环
       checkList.value.forEach((obj) => {
         loops(dataTree.value, true, obj);
@@ -113,7 +121,6 @@
     const { flag, v } = val;
     await loops(dataTree.value, flag, v);
     tree.value = dataTree.value;
-    console.log(checkList.value);
   };
 
   //递归循环
@@ -216,6 +223,11 @@
   };
 
   //抛出选中数组方法
-  const handleCheck = () => unref(checkList);
-  defineExpose({ handleCheck });
+  const handleSave = () => {
+    //只要最下级元素
+    const resultArray = unref(checkList).filter((item) => unref(last).indexOf(item) > -1);
+    emit('save', resultArray);
+  };
+
+  defineExpose({ onInit });
 </script>

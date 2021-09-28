@@ -32,6 +32,7 @@
   import { doPositionTree } from '/@/api/sys/position';
   import { RadioGroup, RadioButton } from 'ant-design-vue';
 
+  const emit = defineEmits(['select', 'edit', 'remove']);
   const asyncExpandTreeRef = ref<Nullable<TreeActionType>>(null);
   const type = ref(1);
   const ketFields = ref();
@@ -41,6 +42,7 @@
   const positionData = ref<TreeItem[]>([]);
   const roleData = ref<TreeItem[]>([]);
   const treeData = ref<TreeItem[]>([]);
+  const defaultKey = ref();
 
   watch(
     () => type.value,
@@ -61,14 +63,18 @@
         getTitle.value = '角色信息';
         treeData.value = unref(roleData);
       }
+      if (unref(treeData) && unref(treeData).length > 0) {
+        defaultKey.value = [unref(treeData)[0][unref(ketFields)]];
+      }
       // 展开全部
       nextTick(() => {
-        unref(asyncExpandTreeRef)?.expandAll(true);
+        unref(asyncExpandTreeRef)?.checkAll(false);
+        unref(asyncExpandTreeRef)?.setSelectedKeys(unref(defaultKey));
+        emit('select', unref(type), unref(defaultKey)[0]);
       });
     }
   );
 
-  const emit = defineEmits(['select', 'edit', 'remove']);
   //初步加载
   const fetch = async () => {
     //部门信息
@@ -82,9 +88,14 @@
     titleFields.value = 'departmentName';
     getTitle.value = '部门信息';
     treeData.value = unref(departmentData);
+    if (unref(treeData) && unref(treeData).length > 0) {
+      defaultKey.value = [unref(treeData)[0][unref(ketFields)]];
+    }
     // 展开全部
     nextTick(() => {
       unref(asyncExpandTreeRef)?.expandAll(true);
+      unref(asyncExpandTreeRef)?.setSelectedKeys(unref(defaultKey));
+      emit('select', 1, unref(defaultKey)[0]);
     });
   };
 

@@ -6,6 +6,7 @@
       class="w-3/4 xl:w-4/5"
       :treeData="treeData"
       :checkedList="checkedList"
+      @save="handleSave"
     />
   </PageWrapper>
 </template>
@@ -13,11 +14,26 @@
   import { PageWrapper } from '/@/components/Page';
   import PrivilegeTree from './PrivilegeTree.vue';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
-  import { ref, onMounted } from 'vue';
+  import { ref, unref, onMounted } from 'vue';
   import { doMenuPrivilegeTree } from '/@/api/sys/menu';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import {
+    doDepartmentPrivilegeList,
+    doDepartmentPrivilegeSave,
+    doPositionPrivilegeList,
+    doPositionPrivilegeSave,
+    doRolePrivilegeList,
+    doRolePrivilegeSave,
+  } from '/@/api/sys/privilege';
 
+  const { createMessage } = useMessage();
+  const { error } = createMessage;
   const treeData = ref();
   const checkedList = ref();
+  const selectType = ref();
+  const selectId = ref();
+  const handleCheckRef = ref();
+
   //初始化
   onMounted(() => {
     getMenu();
@@ -33,14 +49,41 @@
   const getChecked = () => {};
 
   //点击字典类型事件
-  const handleSelect = (type = undefined, id = '') => {
-    console.log(type, id);
+  const handleSelect = async (type = undefined, id = '') => {
+    await handleCheckRef.value.onInit();
+    let checked = [];
+    if (!!id) {
+      selectType.value = type;
+      selectId.value = id;
+      if (~~type === 1) {
+        checked = await doDepartmentPrivilegeList({ departmentId: id });
+      } else if (~~type === 2) {
+        checked = await doPositionPrivilegeList({ positionId: id });
+      } else {
+        checked = await doRolePrivilegeList({ roleId: id });
+      }
+    }
+    checkedList.value = checked;
   };
 
-  //获取选中的元素
-  const handleTypeSuccess = () => {
-    //刷新字典类型树
-    let checkList = handleCheckRef.value.handleCheck();
-    console.log(checkList);
+  //保存选中的元素
+  const handleSave = async (checkIdList) => {
+    if (!unref(selectType)) {
+      error('请选择权限类型');
+      return;
+    }
+    if (unref(selectType) === 1) {
+      await doDepartmentPrivilegeSave({
+        departmentId: unref(selectId),
+        privilegeList: checkIdList,
+      });
+    } else if (unref(selectType) === 2) {
+      await doPositionPrivilegeSave({
+        positionId: unref(selectId),
+        privilegeList: checkIdList,
+      });
+    } else {
+      await doRolePrivilegeSave({ roleId: unref(selectId), privilegeList: checkIdList });
+    }
   };
 </script>
