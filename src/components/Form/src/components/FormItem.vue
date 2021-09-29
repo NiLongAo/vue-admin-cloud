@@ -15,13 +15,6 @@
   import { useItemLabelWidth } from '../hooks/useLabelWidth';
   import { useI18n } from '/@/hooks/web/useI18n';
 
-  interface Option {
-    value: string;
-    label: string;
-    disabled?: boolean;
-    children?: Option[];
-  }
-
   export default defineComponent({
     name: 'BasicFormItem',
     inheritAttrs: false,

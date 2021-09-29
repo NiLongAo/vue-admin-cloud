@@ -23,13 +23,21 @@
     </div>
   </BasicDrawer>
 </template>
-
+<script lang="ts">
+  import { Radio } from 'ant-design-vue';
+  import { defineComponent } from 'vue';
+  export default defineComponent({
+    components: {
+      RadioGroup: Radio.Group,
+      RadioButton: Radio.Button,
+    },
+  });
+</script>
 <script lang="ts" setup>
   import { ref, unref, computed, watch } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { menuSchemas, privilegeSchemas } from './menuDrawerData';
-  import { RadioGroup, RadioButton } from 'ant-design-vue';
   import {
     doMenuDetail,
     doMenuSave,

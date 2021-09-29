@@ -11,11 +11,11 @@ const { createMessage, createErrorModal } = useMessage();
 const error = createMessage.error!;
 const stp = projectSetting.sessionTimeoutProcessing;
 
-export function checkStatus(
+export async function checkStatus(
   status: number,
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message'
-): void {
+): Promise<void> {
   const { t } = useI18n();
   const userStore = useUserStoreWithOut();
   let errMessage = '';
@@ -33,7 +33,7 @@ export function checkStatus(
         userStore.setToken(undefined);
         userStore.setSessionTimeout(true);
       } else {
-        userStore.logout(true);
+        await userStore.logout(true);
       }
       break;
     case 403:

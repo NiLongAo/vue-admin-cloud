@@ -24,13 +24,22 @@
     />
   </div>
 </template>
+<script lang="ts">
+  import { Radio } from 'ant-design-vue';
+  import { defineComponent } from 'vue';
+  export default defineComponent({
+    components: {
+      RadioGroup: Radio.Group,
+      RadioButton: Radio.Button,
+    },
+  });
+</script>
 <script lang="ts" setup>
   import { onMounted, ref, unref, watch, nextTick } from 'vue';
   import { BasicTree, TreeItem, TreeActionType } from '/@/components/Tree';
   import { doAll } from '/@/api/sys/role';
   import { doDepartmentTree } from '/@/api/sys/department';
   import { doPositionTree } from '/@/api/sys/position';
-  import { RadioGroup, RadioButton } from 'ant-design-vue';
 
   const emit = defineEmits(['select', 'edit', 'remove']);
   const asyncExpandTreeRef = ref<Nullable<TreeActionType>>(null);
