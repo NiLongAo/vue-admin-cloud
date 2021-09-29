@@ -8,15 +8,18 @@
         <TableAction
           :actions="[
             {
+              ifShow: hasPermission('system.user:detail'),
               icon: 'clarity:info-standard-line',
               tooltip: '查看用户详情',
               onClick: handleView.bind(null, record),
             },
             {
+              ifShow: hasPermission('system.user:update'),
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
+              ifShow: hasPermission('system.user:delete'),
               color: 'error',
               icon: 'mdi:delete-outline',
               popConfirm: {
@@ -28,7 +31,9 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd">添加</a-button>
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.user:add')"
+          >添加</a-button
+        >
       </template>
     </BasicTable>
     <UserDrawer @register="register" @success="handleSuccess" />
@@ -39,10 +44,12 @@
   import { getUserPage, doDelete } from '/@/api/sys/user';
   import { ref } from 'vue';
   import { useDrawer } from '/@/components/Drawer';
+  import { usePermission } from '/@/hooks/web/usePermission';
   import { useGo } from '/@/hooks/web/usePage';
   import UserDrawer from './UserDrawer.vue';
   const checkedKeys = ref<Array<string | number>>([]);
   const [register, { openDrawer }] = useDrawer();
+  const { hasPermission } = usePermission();
   const go = useGo();
 
   const [registerTable, { reload }] = useTable({

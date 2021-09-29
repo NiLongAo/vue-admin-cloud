@@ -1,7 +1,14 @@
 <template>
   <div class="bg-white m-4 overflow-hidden px-10 py-10">
     <div class="flex justify-end">
-      <a-button class="!ml-4" type="primary" @click="handleSave"> 保存 </a-button>
+      <a-button
+        class="!ml-4"
+        type="primary"
+        @click="handleSave"
+        v-if="hasPermission('system.privilege:save')"
+      >
+        保存
+      </a-button>
     </div>
     <MyCheckBox :treeData="tree" @subset="handleSubsetChange" />
   </div>
@@ -9,7 +16,8 @@
 <script lang="ts" setup>
   import { ref, unref, defineProps, watch } from 'vue';
   import MyCheckBox, { CheckboxGroupEntity } from './MyCheckBox.vue';
-
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
   const props = defineProps({
     treeData: {
       type: Array as PropType<CheckboxGroupEntity[]>,

@@ -8,10 +8,12 @@
         <TableAction
           :actions="[
             {
+              ifShow: hasPermission('system.role:update'),
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
+              ifShow: hasPermission('system.role:delete'),
               color: 'error',
               icon: 'mdi:delete-outline',
               popConfirm: {
@@ -23,7 +25,9 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd">添加</a-button>
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.role:add')"
+          >添加</a-button
+        >
       </template>
     </BasicTable>
     <RoleDrawer @register="register" @success="handleSuccess" />
@@ -32,11 +36,13 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doRemove, getRolePage } from '/@/api/sys/role';
+  import { usePermission } from '/@/hooks/web/usePermission';
   import { ref } from 'vue';
   import { useDrawer } from '/@/components/Drawer';
   import RoleDrawer from './RoleDrawer.vue';
   const checkedKeys = ref<Array<string | number>>([]);
   const [register, { openDrawer }] = useDrawer();
+  const { hasPermission } = usePermission();
 
   const [registerTable, { reload }] = useTable({
     title: '角色列表',

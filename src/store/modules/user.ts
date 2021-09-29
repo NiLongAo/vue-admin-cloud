@@ -34,7 +34,7 @@ export const useUserStore = defineStore({
     token: undefined,
     // roleList
     roleList: [],
-    // roleList
+    // 权限集合
     abilityList: [],
     // Whether the login expired
     sessionTimeout: false,

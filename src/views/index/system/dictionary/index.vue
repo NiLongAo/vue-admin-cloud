@@ -9,18 +9,30 @@
     />
     <BasicTable @register="registerTable" class="w-3/4 xl:w-4/5" :searchInfo="searchInfo">
       <template #toolbar>
-        <a-button type="primary" @click="handleTypeCreate">新增类型</a-button>
-        <a-button type="primary" @click="handleCreate">新增条目</a-button>
+        <a-button
+          type="primary"
+          @click="handleTypeCreate"
+          v-if="hasPermission('system.dictionary:add_type')"
+          >新增类型</a-button
+        >
+        <a-button
+          type="primary"
+          @click="handleCreate"
+          v-if="hasPermission('system.dictionary:add_item')"
+          >新增条目</a-button
+        >
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
+              ifShow: hasPermission('system.dictionary:update_item'),
               icon: 'clarity:note-edit-line',
               //tooltip: '编辑',
               onClick: handleEdit.bind(null, record),
             },
             {
+              ifShow: hasPermission('system.dictionary:delete_item'),
               icon: 'ant-design:delete-outlined',
               color: 'error',
               //tooltip: '删除此账号',
@@ -52,6 +64,8 @@
     doDictionaryItemPage,
     doDictionaryItemRemove,
   } from '/@/api/sys/dictionary';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
 
   const TypeTreeRef = ref();
   const searchInfo = reactive<Recordable>({});

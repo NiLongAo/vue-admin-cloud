@@ -16,6 +16,8 @@
   import { onMounted, ref } from 'vue';
   import { BasicTree, TreeItem, ContextMenuItem } from '/@/components/Tree';
   import { doDictionaryTypeList } from '/@/api/sys/dictionary';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
 
   const treeData = ref<TreeItem[]>([]);
   const emit = defineEmits(['select', 'edit', 'remove']);
@@ -31,6 +33,7 @@
   const getRightMenuList = (node: any): ContextMenuItem[] => {
     return [
       {
+        disabled: !hasPermission('system.dictionary:update_type'),
         label: '编辑',
         handler: () => {
           emit('edit', node.eventKey);
@@ -38,6 +41,7 @@
         icon: 'bi:plus',
       },
       {
+        disabled: !hasPermission('system.dictionary:delete_type'),
         label: '删除',
         handler: () => {
           emit('remove', node.eventKey);

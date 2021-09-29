@@ -92,6 +92,7 @@ export const usePermissionStore = defineStore({
       this.backMenuList = [];
       this.lastBuildMenuTime = 0;
     },
+    //废弃
     async changePermissionCode() {
       const codeList = await getPermCode();
       this.setPermCodeList(codeList);

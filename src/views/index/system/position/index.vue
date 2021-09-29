@@ -9,10 +9,12 @@
         <TableAction
           :actions="[
             {
+              ifShow: hasPermission('system.position:update'),
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
+              ifShow: hasPermission('system.position:delete'),
               color: 'error',
               icon: 'mdi:delete-outline',
               popConfirm: {
@@ -24,7 +26,9 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd">添加</a-button>
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.position:add')"
+          >添加</a-button
+        >
       </template>
     </BasicTable>
     <PositionDrawer @register="register" @success="handleSuccess" />
@@ -38,6 +42,8 @@
   import { Tag } from 'ant-design-vue';
   import { useDrawer } from '/@/components/Drawer';
   import PositionDrawer from './PositionDrawer.vue';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
   const checkedKeys = ref<Array<string | number>>([]);
   const [register, { openDrawer }] = useDrawer();
 

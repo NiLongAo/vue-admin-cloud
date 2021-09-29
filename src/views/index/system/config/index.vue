@@ -8,6 +8,7 @@
         <TableAction
           :actions="[
             {
+              ifShow: hasPermission('system.config:update'),
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
@@ -24,6 +25,8 @@
   import { ref } from 'vue';
   import { useDrawer } from '/@/components/Drawer';
   import ConfigDrawer from './ConfigDrawer.vue';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
   const checkedKeys = ref<Array<string | number>>([]);
   const [register, { openDrawer }] = useDrawer();
 
