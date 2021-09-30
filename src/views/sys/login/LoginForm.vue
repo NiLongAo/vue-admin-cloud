@@ -96,10 +96,12 @@
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
-
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { AesEncryption } from '/@/utils/cipher';
+  import { SECRET_KEY, SECRET_IV } from '/@/enums/commonEnum';
+
   //import { onKeyStroke } from '@vueuse/core';
 
   const ACol = Col;
@@ -110,7 +112,7 @@
   const { notification, createErrorModal } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
-
+  const encryption = new AesEncryption({ key: SECRET_KEY, iv: SECRET_IV });
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
 
@@ -136,8 +138,8 @@
       loading.value = true;
       const userInfo = await userStore.login(
         toRaw({
-          password: data.password,
-          loginAccount: data.loginAccount,
+          loginAccount: encryption.encryptByAES(data.loginAccount),
+          password: encryption.encryptByAES(data.password),
           mode: 'none', //不要默认的错误提示
         })
       );

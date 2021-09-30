@@ -10,13 +10,16 @@
         保存
       </a-button>
     </div>
-    <MyCheckBox :treeData="tree" @subset="handleSubsetChange" />
+    <ScrollContainer>
+      <MyCheckBox :treeData="tree" @subset="handleSubsetChange" />
+    </ScrollContainer>
   </div>
 </template>
 <script lang="ts" setup>
   import { ref, unref, defineProps, watch } from 'vue';
   import MyCheckBox, { CheckboxGroupEntity } from './MyCheckBox.vue';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { ScrollContainer } from '/@/components/Container/index';
   const { hasPermission } = usePermission();
   const props = defineProps({
     treeData: {
