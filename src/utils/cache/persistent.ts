@@ -3,7 +3,7 @@ import type { ProjectConfig } from '/#/config';
 import type { RouteLocationNormalized } from 'vue-router';
 import { AreaEntity } from '/@/api/sys/model/systemModel';
 import { EnumModel } from '/@/api/common/model/enumModel';
-
+import { RememberLoing } from '/@/api/sys/model/userModel';
 import { createLocalStorage, createSessionStorage } from '/@/utils/cache';
 import { Memory } from './memory';
 import {
@@ -19,6 +19,7 @@ import {
   SYSYTEM_KEY,
   AREA_KEY,
   ENUM_KEY,
+  REMEMBER,
 } from '/@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '/@/settings/encryptionSetting';
 import { toRaw } from 'vue';
@@ -35,6 +36,7 @@ interface BasicStore {
   [MULTIPLE_TABS_KEY]: RouteLocationNormalized[];
   [AREA_KEY]: Array<AreaEntity>;
   [ENUM_KEY]: EnumModel;
+  [REMEMBER]: RememberLoing;
 }
 
 type LocalStore = BasicStore;

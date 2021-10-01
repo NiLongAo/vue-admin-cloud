@@ -90,3 +90,9 @@ export interface UserInfoModel {
   // 区域编码
   areaId?: number;
 }
+
+export interface RememberLoing {
+  rememberMe: boolean;
+  loginAccount: string;
+  password: string;
+}

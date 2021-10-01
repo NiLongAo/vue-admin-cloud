@@ -48,9 +48,6 @@
       <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
         {{ t('sys.login.loginButton') }}
       </Button>
-      <!-- <Button size="large" class="mt-4 enter-x" block @click="handleRegister">
-        {{ t('sys.login.registerButton') }}
-      </Button> -->
     </FormItem>
     <ARow class="enter-x">
       <ACol :md="8" :xs="24">
@@ -82,8 +79,7 @@
   </Form>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref, toRaw, unref, computed } from 'vue';
-
+  import { reactive, ref, toRaw, unref, computed, onMounted } from 'vue';
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
   import {
     GithubFilled,
@@ -101,6 +97,9 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { AesEncryption } from '/@/utils/cipher';
   import { SECRET_KEY, SECRET_IV } from '/@/enums/commonEnum';
+  import { RememberLoing } from '/@/api/sys/model/userModel';
+  import { getAuthCache, setAuthCache } from '/@/utils/auth';
+  import { REMEMBER } from '/@/enums/cacheEnum';
 
   //import { onKeyStroke } from '@vueuse/core';
 
@@ -115,14 +114,13 @@
   const encryption = new AesEncryption({ key: SECRET_KEY, iv: SECRET_IV });
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
-
   const formRef = ref();
   const loading = ref(false);
   const rememberMe = ref(false);
 
   const formData = reactive({
-    loginAccount: 'root',
-    password: '123456',
+    loginAccount: '',
+    password: '',
   });
 
   const { validForm } = useFormValid(formRef);
@@ -130,6 +128,20 @@
   //onKeyStroke('Enter', handleLogin);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
+
+  onMounted(() => {
+    init();
+  });
+
+  const init = () => {
+    const rememberLoing = getAuthCache<RememberLoing>(REMEMBER);
+    if (!!rememberLoing) {
+      const { rememberMe: rem, loginAccount: account, password: paswd } = rememberLoing;
+      rememberMe.value = rem;
+      formData.loginAccount = account;
+      formData.password = paswd;
+    }
+  };
 
   async function handleLogin() {
     const data = await validForm();
@@ -141,13 +153,19 @@
           loginAccount: encryption.encryptByAES(data.loginAccount),
           password: encryption.encryptByAES(data.password),
           mode: 'none', //不要默认的错误提示
-        })
+        }),
       );
       if (userInfo) {
         notification.success({
           message: t('sys.login.loginSuccessTitle'),
           description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.userName}`,
           duration: 3,
+        });
+        //存入缓存
+        setAuthCache(REMEMBER, {
+          rememberMe: unref(rememberMe),
+          loginAccount: unref(rememberMe) ? unref(formData.loginAccount) : '',
+          password: unref(rememberMe) ? unref(formData.password) : '',
         });
       }
     } catch (error) {

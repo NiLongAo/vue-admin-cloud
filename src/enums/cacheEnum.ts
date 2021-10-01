@@ -37,6 +37,9 @@ export const ENUM_KEY = 'ENUM_KEY__';
 // area info key
 export const AREA_KEY = 'AREA_KEY__';
 
+// 记住账号密码
+export const REMEMBER = 'REMEMBER__';
+
 export enum CacheTypeEnum {
   SESSION,
   LOCAL,
