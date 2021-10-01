@@ -37,7 +37,7 @@ export interface FormActionType {
   appendSchemaByField: (
     schema: FormSchema,
     prefixField: string | undefined,
-    first?: boolean | undefined
+    first?: boolean | undefined,
   ) => Promise<void>;
   validateFields: (nameList?: NamePath[]) => Promise<any>;
   validate: (nameList?: NamePath[]) => Promise<any>;
@@ -202,8 +202,6 @@ export interface FormSchema {
   dynamicDisabled?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);
 
   dynamicRules?: (renderCallbackParams: RenderCallbackParams) => Rule[];
-  //目前只支持 Cascader
-  showSearch?: boolean;
 }
 export interface HelpComponentProps {
   maxWidth: string;
