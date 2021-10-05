@@ -5,13 +5,18 @@ import {
   UserInfoModel,
   GetUserInfoModel,
   UserPageResultModel,
+  LoginMobileParams,
   UserParams,
 } from './model/userModel';
 import { ErrorMessageMode } from '/#/axios';
 
 enum Api {
-  //登录
+  //账号密码登录
   Login = '/webapi/bean/user/login',
+  //手机号登录
+  LoginMobile = '/webapi/bean/user/login_mobile',
+  //手机号登录
+  SmsSend = '/webapi/sms/sms_send/send',
   //退出
   Logout = '/webapi/bean/user/logout',
   //获取用户信息
@@ -41,7 +46,22 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     },
     {
       errorMessageMode: mode,
-    }
+    },
+  );
+}
+
+/**
+ * @description: user login api
+ */
+export function loginMobileApi(params: LoginMobileParams, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post<LoginResultModel>(
+    {
+      url: Api.LoginMobile,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
   );
 }
 

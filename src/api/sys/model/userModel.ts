@@ -7,6 +7,11 @@ export interface LoginParams {
   password: string;
 }
 
+export interface LoginMobileParams {
+  phone: string;
+  verificationCode: string;
+}
+
 export interface RoleInfo {
   roleName: string;
   value: string;
