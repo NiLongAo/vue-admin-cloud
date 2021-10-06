@@ -36,19 +36,19 @@
         >
       </template>
     </BasicTable>
-    <UserDrawer @register="register" @success="handleSuccess" />
+    <SettingUser :reload="reload" @register="registerModal" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { getUserPage, doDelete } from '/@/api/sys/user';
   import { ref } from 'vue';
-  import { useDrawer } from '/@/components/Drawer';
+  import { useModal } from '/@/components/Modal';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useGo } from '/@/hooks/web/usePage';
-  import UserDrawer from './UserDrawer.vue';
+  import SettingUser from './SettingUser.vue';
   const checkedKeys = ref<Array<string | number>>([]);
-  const [register, { openDrawer }] = useDrawer();
+  const [registerModal, { openModal }] = useModal();
   const { hasPermission } = usePermission();
   const go = useGo();
 
@@ -71,17 +71,13 @@
     },
   });
   function handleAdd() {
-    console.log('点击了添加');
-    openDrawer(true, {
-      isUpdate: false,
-    });
+    openModal(true, { isUpdate: false });
   }
   function handleView(record: Recordable) {
-    console.log('点击了查看', record.userId);
     go('/system/user/user_detail/' + record.userId);
   }
   function handleEdit(record: Recordable) {
-    openDrawer(true, {
+    openModal(true, {
       isUpdate: true,
       userId: record.userId,
     });
