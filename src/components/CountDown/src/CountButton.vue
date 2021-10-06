@@ -4,7 +4,7 @@
   </Button>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, watchEffect, computed, unref } from 'vue';
+  import { defineComponent, ref, watchEffect, watch, computed, unref } from 'vue';
   import { Button } from 'ant-design-vue';
   import { useCountdown } from './useCountdown';
   import { isFunction } from '/@/utils/is';
@@ -25,10 +25,10 @@
     props,
     setup(props) {
       const loading = ref(false);
-
-      const { currentCount, isStart, start, reset } = useCountdown(props.count);
+      const { currentCount, isStart, start, reset, restartCount } = useCountdown(
+        unref(props.count),
+      );
       const { t } = useI18n();
-
       const getButtonText = computed(() => {
         return !unref(isStart)
           ? t('component.countdown.normalText')
@@ -38,7 +38,12 @@
       watchEffect(() => {
         props.value === undefined && reset();
       });
-
+      watch(
+        () => props.count,
+        async (value) => {
+          restartCount(value);
+        },
+      );
       /**
        * @description: Judge whether there is an external function before execution, and decide whether to start after execution
        */

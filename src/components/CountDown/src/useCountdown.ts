@@ -43,9 +43,13 @@ export function useCountdown(count: number) {
     start();
   }
 
+  function restartCount(val) {
+    currentCount.value = val;
+  }
+
   tryOnUnmounted(() => {
     reset();
   });
 
-  return { start, reset, restart, clear, stop, currentCount, isStart };
+  return { start, reset, restart, clear, stop, restartCount, currentCount, isStart };
 }

@@ -15,7 +15,7 @@
           size="large"
           class="fix-auto-fill"
           v-model:value="formData.verificationCode"
-          :count="300"
+          :count="count"
           :sendCodeApi="SmsSend"
           :placeholder="t('sys.login.smsCode')"
         />
@@ -54,6 +54,7 @@
   const { prefixCls } = useDesign('login');
   const formRef = ref();
   const loading = ref(false);
+  const count = ref(300);
 
   const formData = reactive({
     phone: '',
@@ -69,10 +70,14 @@
       createMessage.error('手机号格式错误');
       return;
     }
-    await doSmsSendSave({
+    const data = await doSmsSendSave({
       type: SmsType.LOGIN_VERIFICATION_CODE,
       mobile: formData.phone,
     });
+    if (!!data && !!data.expire) {
+      count.value = data.expire;
+    }
+    return true;
   };
 
   async function handleLogin() {
