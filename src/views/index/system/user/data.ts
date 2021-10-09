@@ -12,7 +12,7 @@ export const settingUpdateList = [
   },
   {
     key: '2',
-    name: '安全设置',
+    name: '身份设置',
     component: 'SecureSetting',
   },
   {

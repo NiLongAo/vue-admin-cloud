@@ -23,13 +23,12 @@
 </template>
 <script lang="ts" setup>
   import { Button, Row, Col } from 'ant-design-vue';
-  import { computed, ref, watch, unref } from 'vue';
+  import { computed, ref, onMounted, onUpdated, unref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { CollapseContainer } from '/@/components/Container';
   import { CropperAvatar } from '/@/components/Cropper';
   import { UserInfoApi, doInsert, doUpdate } from '/@/api/sys/user';
   import { useSystemStore } from '/@/store/modules/system';
-  import { useMessage } from '/@/hooks/web/useMessage';
   import headerImg from '/@/assets/images/header.jpg';
   import { baseSetschemas } from './data';
   import { uploadApi } from '/@/api/sys/upload';
@@ -38,7 +37,6 @@
 
   const systemStore = useSystemStore();
   const staticPath = systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH];
-  const { createMessage } = useMessage();
   const image = ref();
   const id = ref();
   const upload = uploadApi as any;
@@ -59,28 +57,31 @@
     schemas: baseSetschemas,
     showActionButtonGroup: false,
   });
+  onMounted(async () => {
+    initModel();
+  });
+  onUpdated(async () => {
+    initModel();
+  });
 
-  watch(
-    () => props.userId,
-    async (value1) => {
-      resetFields();
-      id.value = value1;
-      if (!!props.userId) {
-        const { isAdmin, isEnabled, provinceId, cityId, areaId, imageUrl, ...userInfo } =
-          await UserInfoApi({
-            id: value1,
-          });
-        image.value = imageUrl;
-        setFieldsValue({
-          ...userInfo,
-          imageUrl: imageUrl,
-          isAdmin: isAdmin === 0 ? false : true,
-          isEnabled: isEnabled === 0 ? false : true,
-          areaList: [provinceId, cityId, areaId],
+  const initModel = async () => {
+    resetFields();
+    id.value = props.userId;
+    if (!!props.userId) {
+      const { isAdmin, isEnabled, provinceId, cityId, areaId, imageUrl, ...userInfo } =
+        await UserInfoApi({
+          id: props.userId,
         });
-      }
-    },
-  );
+      image.value = imageUrl;
+      setFieldsValue({
+        ...userInfo,
+        imageUrl: imageUrl,
+        isAdmin: isAdmin === 0 ? false : true,
+        isEnabled: isEnabled === 0 ? false : true,
+        areaList: [provinceId, cityId, areaId],
+      });
+    }
+  };
 
   const avatar = computed(() => {
     return !!unref(image) ? staticPath + image.value : headerImg;

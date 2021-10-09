@@ -16,8 +16,6 @@
   </div>
 </template>
 
-
-
 <script lang="ts" setup>
   import { ref, unref, computed } from 'vue';
   import { Tabs } from 'ant-design-vue';
@@ -54,10 +52,12 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import BaseSetting from './BaseSetting.vue';
+  import SecureSetting from './SecureSetting.vue';
 
   export default defineComponent({
     components: {
       TabPane: Tabs.TabPane,
+      SecureSetting,
       BaseSetting,
     },
   });

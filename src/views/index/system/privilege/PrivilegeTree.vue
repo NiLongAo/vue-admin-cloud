@@ -81,7 +81,7 @@
         unref(asyncExpandTreeRef)?.setSelectedKeys(unref(defaultKey));
         emit('select', unref(type), unref(defaultKey)[0]);
       });
-    }
+    },
   );
 
   //初步加载

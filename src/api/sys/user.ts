@@ -33,6 +33,18 @@ enum Api {
   update = '/webapi/bean/user/update',
   //删除用户
   delete = '/webapi/bean/user/delete',
+  //获取用户角色
+  GetUserRole = '/webapi/bean/user/user_connect_role',
+  //保存用户角色
+  SaveUserRole = '/webapi/bean/user/save_user_role',
+  //获取用户部门
+  GetUserDepartment = '/webapi/bean/user/user_connect_department',
+  //保存用户部门
+  SaveUserDepartment = '/webapi/bean/user/save_user_department',
+  //获取用户职位
+  GetUserPosition = '/webapi/bean/user/user_connect_position',
+  //保存用户职位
+  SaveUserPosition = '/webapi/bean/user/save_user_position',
 }
 
 /**
@@ -104,4 +116,28 @@ export function doUpdate(params: Recordable) {
 
 export function doDelete(params: Recordable) {
   return defHttp.get({ url: Api.delete, params });
+}
+
+export function GetUserRole(params: Recordable) {
+  return defHttp.get({ url: Api.GetUserRole, params });
+}
+
+export function SaveUserRole(params: Recordable) {
+  return defHttp.post({ url: Api.SaveUserRole, params });
+}
+
+export function GetUserDepartment(params: Recordable) {
+  return defHttp.get({ url: Api.GetUserDepartment, params });
+}
+
+export function SaveUserDepartment(params: Recordable) {
+  return defHttp.post({ url: Api.SaveUserDepartment, params });
+}
+
+export function GetUserPosition(params: Recordable) {
+  return defHttp.get({ url: Api.GetUserPosition, params });
+}
+
+export function SaveUserPosition(params: Recordable) {
+  return defHttp.post({ url: Api.SaveUserPosition, params });
 }
