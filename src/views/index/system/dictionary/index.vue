@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
+  <PageWrapper dense contentFullHeight contentClass="flex">
     <TypeTree
       ref="TypeTreeRef"
       class="w-1/4 xl:w-1/5"

@@ -112,7 +112,6 @@
     ]);
     if (id) {
       const { isEnable, parentId, ...department } = await doDepartmentDetail({ id: id });
-      debugger;
       setFieldsValue({
         parentId: parentId === null ? '' : parentId,
         isEnable: isEnable === 0 ? false : true,

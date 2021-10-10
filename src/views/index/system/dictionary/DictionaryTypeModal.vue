@@ -10,7 +10,7 @@
   import { doDictionaryTypeSave, doDictionaryTypeDetail } from '/@/api/sys/dictionary';
 
   const isUpdate = ref(true);
-  const emit = defineEmits(['success']);
+  const emit = defineEmits(['success', 'register']);
 
   const schemas: FormSchema[] = [
     {
