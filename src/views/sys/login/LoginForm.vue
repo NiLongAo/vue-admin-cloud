@@ -24,7 +24,24 @@
         :placeholder="t('sys.login.password')"
       />
     </FormItem>
-
+    <FormItem name="loginCode" class="enter-x">
+      <Input
+        size="large"
+        v-model:value="formData.loginCode"
+        placeholder="验证码"
+        class="fix-auto-fill"
+      >
+        <template #addonAfter>
+          <Image
+            :src="formData.images"
+            :preview="false"
+            width="120px"
+            height="40px"
+            @click="GetCode()"
+          />
+        </template>
+      </Input>
+    </FormItem>
     <ARow class="enter-x">
       <ACol :span="12">
         <FormItem>
@@ -80,7 +97,7 @@
 </template>
 <script lang="ts" setup>
   import { reactive, ref, toRaw, unref, computed, onMounted } from 'vue';
-  import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
+  import { Checkbox, Form, Input, Row, Col, Button, Divider, Image } from 'ant-design-vue';
   import {
     GithubFilled,
     WechatFilled,
@@ -89,7 +106,7 @@
     TwitterCircleFilled,
   } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
-
+  import { doGetCode } from '/@/api/sys/user';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useUserStore } from '/@/store/modules/user';
@@ -121,6 +138,8 @@
   const formData = reactive({
     loginAccount: '',
     password: '',
+    loginCode: '',
+    images: '',
   });
 
   const { validForm } = useFormValid(formRef);
@@ -131,6 +150,7 @@
 
   onMounted(() => {
     init();
+    GetCode();
   });
 
   const init = () => {
@@ -143,6 +163,11 @@
     }
   };
 
+  const GetCode = async () => {
+    const code = await doGetCode();
+    formData.images = code;
+  };
+
   async function handleLogin() {
     const data = await validForm();
     if (!data) return;
@@ -152,6 +177,7 @@
         toRaw({
           loginAccount: encryption.encryptByAES(data.loginAccount),
           password: encryption.encryptByAES(data.password),
+          verificationCode: data.loginCode,
           mode: 'none', //不要默认的错误提示
         }),
       );

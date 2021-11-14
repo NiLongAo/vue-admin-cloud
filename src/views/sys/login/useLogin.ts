@@ -62,6 +62,18 @@ export function useFormRules(formData?: Recordable) {
     };
   };
 
+  const validateCode = () => {
+    return async (_: RuleObject, value: string) => {
+      if (!value) {
+        return Promise.reject(t('sys.login.smsPlaceholder'));
+      }
+      if (value.length != 4) {
+        return Promise.reject('4位验证码');
+      }
+      return Promise.resolve();
+    };
+  };
+
   const getFormRules = computed((): { [k: string]: ValidationRule | ValidationRule[] } => {
     const accountFormRule = unref(getAccountFormRule);
     const passwordFormRule = unref(getPasswordFormRule);
@@ -101,6 +113,7 @@ export function useFormRules(formData?: Recordable) {
         return {
           loginAccount: accountFormRule,
           password: passwordFormRule,
+          loginCode: [{ validator: validateCode(), trigger: 'change' }],
         };
     }
   });

@@ -199,11 +199,16 @@
       }
     }
 
+    .ant-input-group-addon {
+      padding: 0px !important;
+      border: unset !important;
+    }
+
     input:not([type='checkbox']) {
       min-width: 360px;
 
       @media (max-width: @screen-xl) {
-        min-width: 320px;
+        min-width: 265px;
       }
 
       @media (max-width: @screen-lg) {
@@ -211,7 +216,7 @@
       }
 
       @media (max-width: @screen-md) {
-        min-width: 240px;
+        min-width: 165px;
       }
 
       @media (max-width: @screen-sm) {

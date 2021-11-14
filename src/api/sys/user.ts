@@ -45,6 +45,8 @@ enum Api {
   GetUserPosition = '/webapi/bean/user/user_connect_position',
   //保存用户职位
   SaveUserPosition = '/webapi/bean/user/save_user_position',
+  //生成验证码的接口
+  getCode = '/webapi/bean/user/getcode',
 }
 
 /**
@@ -140,4 +142,8 @@ export function GetUserPosition(params: Recordable) {
 
 export function SaveUserPosition(params: Recordable) {
   return defHttp.post({ url: Api.SaveUserPosition, params });
+}
+
+export function doGetCode() {
+  return defHttp.post({ url: Api.getCode });
 }
