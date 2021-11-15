@@ -88,7 +88,7 @@
       <div class="text-5xl mb-4 enter-x" v-show="!showDate">
         {{ hour }}:{{ minute }} <span class="text-3xl">{{ meridiem }}</span>
       </div>
-      <div class="text-2xl"> {{ year }}/{{ month }}/{{ day }} {{ week }} </div>
+      <div class="text-2xl">{{ year }}/{{ month }}/{{ day }} {{ week }}</div>
     </div>
   </div>
 </template>
@@ -210,7 +210,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgb(0 0 0 / 50%);
       backdrop-filter: blur(8px);
       justify-content: center;
       align-items: center;

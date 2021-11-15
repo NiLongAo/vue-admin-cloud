@@ -1,12 +1,23 @@
 <template>
   <div>
-    <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" :showOkBtn="false" width="1000px">
+    <BasicModal
+      v-bind="$attrs"
+      @register="registerModal"
+      :title="getTitle"
+      :showOkBtn="false"
+      width="1000px"
+    >
       <ScrollContainer>
         <div ref="wrapperRef" :class="prefixCls">
           <Tabs tab-position="left" :tabBarStyle="tabBarStyle">
             <template v-for="item in settingList" :key="item.key">
               <TabPane :tab="item.name">
-                <component :is="item.component" :userId="userId" :closeModal="closeModal" :reload = "reload" />
+                <component
+                  :is="item.component"
+                  :userId="userId"
+                  :closeModal="closeModal"
+                  :reload="reload"
+                />
               </TabPane>
             </template>
           </Tabs>
@@ -43,7 +54,7 @@
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
       userId.value = data?.userId;
-    }else{
+    } else {
       userId.value = undefined;
     }
   });
