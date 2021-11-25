@@ -9,6 +9,7 @@
   "scripts": {
     "bootstrap": "pnpm install",
     "serve": "npm run dev",
+    "fix-memory-limit": "cross-env LIMIT=8096 increase-memory-limit",
     "dev": "vite",
     "build": "cross-env NODE_ENV=production vite build && esno ./build/script/postBuild.ts",
     "build:test": "cross-env vite build --mode test && esno ./build/script/postBuild.ts",
@@ -141,7 +142,8 @@
     "vite-plugin-vue-setup-extend": "^0.1.0",
     "vite-plugin-windicss": "^1.5.1",
     "vue-eslint-parser": "^8.0.1",
-    "vue-tsc": "^0.29.3"
+    "vue-tsc": "^0.29.3",
+    "increase-memory-limit": "^1.0.6"
   },
   "resolutions": {
     "//": "Used to install imagemin dependencies, because imagemin may not be installed in China. If it is abroad, you can delete it",
