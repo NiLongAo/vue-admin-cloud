@@ -9,7 +9,7 @@
   "scripts": {
     "bootstrap": "pnpm install",
     "serve": "npm run dev",
-    "fix-memory-limit": "cross-env LIMIT=8096 increase-memory-limit",
+    "fix-memory-limit": "cross-env LIMIT=1024 increase-memory-limit",
     "dev": "vite",
     "build": "cross-env NODE_ENV=production vite build && esno ./build/script/postBuild.ts",
     "build:test": "cross-env vite build --mode test && esno ./build/script/postBuild.ts",
