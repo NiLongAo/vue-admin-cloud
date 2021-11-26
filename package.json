@@ -43,6 +43,8 @@
     "@zxcvbn-ts/core": "^1.0.0",
     "ant-design-vue": "2.2.8",
     "axios": "^0.24.0",
+    "bpmn-js": "^8.1.0",
+    "bpmn-js-properties-panel": "^0.39.0",
     "codemirror": "^5.63.3",
     "cropperjs": "^1.5.12",
     "crypto-js": "^4.1.1",

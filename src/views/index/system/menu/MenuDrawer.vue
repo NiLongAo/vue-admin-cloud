@@ -116,7 +116,7 @@
       } else {
         menuUpdate(unref(meunId));
       }
-    }
+    },
   );
 
   const menuUpdate = async (id) => {
