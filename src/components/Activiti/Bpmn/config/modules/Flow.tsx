@@ -4,9 +4,8 @@ import {
   DocumentGroupProperties,
   getElementTypeListenerProperties,
 } from '../common';
-
-import { ElInput, ElOption } from 'element-plus';
-import PrefixLabelSelect from '../../../components/prefix-label-select';
+import { Input,SelectOption } from 'ant-design-vue';
+import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
 
@@ -47,7 +46,7 @@ const BaseProperties = {
         default: (): JSX.Element => (
           <>
             {FLOW_TYPE_OPTIONS.map((item) => {
-              return <ElOption {...item} />;
+              return <SelectOption {...item} />;
             })}
           </>
         ),
@@ -84,7 +83,7 @@ const BaseProperties = {
       },
     },
     'conditionExpression.body': {
-      component: ElInput,
+      component: Input,
       placeholder: '条件表达式',
       vSlots: {
         prepend: (): JSX.Element => <div>条件表达式</div>,

@@ -3,7 +3,7 @@ import {
   ExtensionGroupProperties,
   DocumentGroupProperties,
 } from '../common';
-import { ElInput } from 'element-plus';
+import { Input } from 'ant-design-vue';
 
 const CommonGroupPropertiesArray = [
   CommonGroupProperties,
@@ -20,14 +20,14 @@ const BpmnGroupBaseProperties = {
   icon: 'el-icon-info',
   properties: {
     id: {
-      component: ElInput,
+      component: Input,
       placeholder: '节点ID',
       vSlots: {
         prepend: (): JSX.Element => <div>节点ID</div>,
       },
     },
     name: {
-      component: ElInput,
+      component: Input,
       // prefix: '节点名称',
       placeholder: '节点名称',
       vSlots: {

@@ -1,7 +1,8 @@
-import { Input,Textarea } from 'ant-design-vue';
-import { FieldDefine } from '/@/components/Activiti/dynamic-binder';
+import { ElFormItem, ElInput, ElOption, ElSelect } from 'element-plus';
+import { FieldDefine } from '@/components/dynamic-binder';
 import { PropertiesMap, GroupProperties } from './index';
-import SubList from '/@/components/Activiti/sublist/SubList.vue';
+import SubList from '../../sublist/SubList1';
+import { SubListState } from '/@/components/Activiti/sublist/type';
 import { ModdleElement } from '../type';
 import { BpmnStore } from '../store';
 
@@ -10,10 +11,10 @@ import { BpmnStore } from '../store';
  */
 const commonProperties: PropertiesMap<FieldDefine> = {
   id: {
-    component: Input,
+    component: ElInput,
     placeholder: '节点ID',
     vSlots: {
-      addonBefore: (): JSX.Element => <div>节点ID</div>,
+      prepend: (): JSX.Element => <div>节点ID</div>,
     },
     setValue(sourceObject: ModdleElement, key: string, value: string) {
       const isNotNull = value;
@@ -25,10 +26,11 @@ const commonProperties: PropertiesMap<FieldDefine> = {
     },
   },
   name: {
-    component: Input,
+    component: ElInput,
+    // prefix: '节点名称',
     placeholder: '节点名称',
     vSlots: {
-      addonBefore: (): JSX.Element => <div>节点名称</div>,
+      prepend: (): JSX.Element => <div>节点名称</div>,
     },
   },
 };
@@ -38,7 +40,7 @@ const commonProperties: PropertiesMap<FieldDefine> = {
  */
 export const CommonGroupProperties: GroupProperties = {
   name: '基础信息',
-  icon: 'ant-design:info-circle-filled',
+  icon: 'el-icon-info',
   properties: { ...commonProperties },
 };
 
@@ -51,9 +53,8 @@ export const DocumentGroupProperties: GroupProperties = {
   icon: 'el-icon-document',
   properties: {
     'documentation.text': {
-      component: Textarea,
+      component: ElInput,
       type: 'textarea',
-      allowClear:'allow-clear',
       getValue: (obj: { documentation: Array<Documentation> }): string => {
         return obj['documentation']?.[0]?.['text'];
       },
@@ -103,48 +104,79 @@ export const getElementTypeListenerProperties = function (options: {
   const eventOptions = options.eventOptions || EVENT_OPTIONS;
   return {
     name: options.name || '监听器',
-    icon: options.icon || 'ant-design:monitor-outlined',
+    icon: options.icon || 'el-icon-bell',
     properties: {
       'extensionElements.listeners': {
         component: SubList,
         columns: [
           {
-            dataIndex: 'index',
-            title: '序号',
+            type: 'index',
+            label: '序号',
             align: 'center',
-            editRow:false,
-            customRender: (_text,_record,index) => `${index+1}`,
           },
           {
-            title: '事件',
-            dataIndex: 'event',
+            prop: 'event',
+            label: '事件',
             align: 'center',
-            editRow: true,
-            editRule: true,
-            editComponent: 'Select',
-            editComponentProps: {
-              options: eventOptions,
+            formatter: (row: any, column: any): string => {
+              return eventOptions.filter((item) => item.value === row[column.property])[0].label;
+            },
+            editComponent: function (scope: any, state: SubListState<any>): JSX.Element {
+              return (
+                <ElFormItem
+                  size="mini"
+                  class="sublist-form-item"
+                  label={scope.column.name}
+                  prop={scope.column.property}
+                >
+                  <ElSelect v-model={state.editItem.event}>
+                    {eventOptions.map((option) => {
+                      return (
+                        <ElOption key={option.value} label={option.label} value={option.value} />
+                      );
+                    })}
+                  </ElSelect>
+                </ElFormItem>
+              );
             },
           },
           {
-            title: '执行类型',
-            dataIndex: 'type',
+            prop: 'type',
+            label: '执行类型',
             align: 'center',
-            editRow: true,
-            editRule: true,
-            editComponent: 'Select',
-            editComponentProps: {
-              options: TYPE_OPTIONS,
+            formatter: (row: any, column: any) => {
+              return TYPE_OPTIONS.filter((item) => item.value === row[column.property])[0].label;
+            },
+            editComponent: function (scope: any, state: SubListState<any>): JSX.Element {
+              return (
+                <ElFormItem
+                  size="mini"
+                  class="sublist-form-item"
+                  label={scope.column.name}
+                  prop={scope.column.property}
+                >
+                  <ElSelect v-model={state.editItem.type}>
+                    {TYPE_OPTIONS.map((option) => {
+                      return (
+                        <ElOption key={option.value} label={option.label} value={option.value} />
+                      );
+                    })}
+                  </ElSelect>
+                </ElFormItem>
+              );
             },
           },
           {
-            dataIndex: 'content',
-            title: '执行内容',
-            editRule: true,
+            prop: 'content',
+            label: '执行内容',
             align: 'center',
-            editRow:true
           },
         ],
+        rules: {
+          event: [{ required: true, message: '事件不能为空' }],
+          type: [{ required: true, message: '类型不能为空' }],
+          content: [{ required: true, message: '执行内容不能为空' }],
+        },
         getValue: (businessObject: ModdleElement): Array<any> => {
           const listenerTagName = taskTags.includes(businessObject.$type)
             ? 'activiti:TaskListener'
@@ -192,33 +224,31 @@ export const getElementTypeListenerProperties = function (options: {
  */
 export const ExtensionGroupProperties: GroupProperties = {
   name: '扩展属性',
-  icon: 'ant-design:file-add-outlined',
+  icon: 'el-icon-document-add',
   properties: {
     'extensionElements.properties': {
       component: SubList,
       columns: [
         {
-          dataIndex: 'index',
-          title: '序号',
+          type: 'index',
+          label: '序号',
           align: 'center',
-          editRow:false,
-          customRender: (_text,_record,index) => `${index+1}`,
         },
         {
-          dataIndex: 'name',
-          title: '属性名',
-          editRule: true,
+          prop: 'name',
+          label: '属性名',
           align: 'center',
-          editRow:true
         },
         {
-          dataIndex: 'value',
-          title: '属性值',
-          editRule: true,
+          prop: 'value',
+          label: '属性值',
           align: 'center',
-          editRow:true
         },
       ],
+      rules: {
+        name: [{ required: true, message: '属性名不能为空' }],
+        value: [{ required: true, message: '属性值不能为空' }],
+      },
       getValue: (businessObject: ModdleElement): Array<any> => {
         return businessObject?.extensionElements?.values
           ?.filter((item: PropertyElement) => item.$type === 'activiti:Properties')[0]
@@ -260,37 +290,36 @@ export const FormGroupProperties: GroupProperties = {
   icon: 'el-icon-edit',
   properties: {
     formKey: {
-      component: Input,
+      component: ElInput,
       placeholder: '表单key',
       vSlots: {
-        addonBefore: (): JSX.Element => <div>表单key</div>,
+        prepend: (): JSX.Element => <div>表单key</div>,
       },
     },
     'extensionElements.formProperty': {
       component: SubList,
       columns: [
         {
-          dataIndex: 'id',
-          title: '编码',
-          editRule: true,
+          prop: 'id',
+          label: '编码',
           align: 'center',
-          editRow:true
         },
         {
-          dataIndex: 'type',
-          title: '类型',
-          editRule: true,
+          prop: 'type',
+          label: '类型',
           align: 'center',
-          editRow:true
         },
         {
-          dataIndex: 'name',
-          title: '名称',
-          editRule: true,
+          prop: 'name',
+          label: '名称',
           align: 'center',
-          editRow:true
         },
       ],
+      rules: {
+        id: [{ required: true, message: '编码不能为空' }],
+        type: [{ required: true, message: '类型不能为空' }],
+        name: [{ required: true, message: '名称不能为空' }],
+      },
       getValue: (businessObject: ModdleElement): Array<FromPropertyElement> => {
         return businessObject?.extensionElements?.values
           ?.filter((item: FromPropertyElement) => item.$type === 'activiti:FormProperty')
@@ -316,3 +345,9 @@ export const FormGroupProperties: GroupProperties = {
     },
   },
 };
+
+// export const FormProperties: GroupProperties = {
+//   name: '表单属性',
+//   icon: 'el-icon-document-add',
+//   properties: {},
+// };

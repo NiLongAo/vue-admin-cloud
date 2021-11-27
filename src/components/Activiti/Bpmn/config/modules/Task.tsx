@@ -6,8 +6,8 @@ import {
   getElementTypeListenerProperties,
 } from '../common';
 import { GroupProperties } from '../index';
-import PrefixLabelSelect from '@/components/prefix-label-select';
-import { ElInput, ElOption } from 'element-plus';
+import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
+import { Input,SelectOption } from 'ant-design-vue';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
 
@@ -33,7 +33,7 @@ const USER_OPTIONS = [
 const UserOption: JSX.Element = (
   <>
     {USER_OPTIONS.map((item) => {
-      return <ElOption {...item} />;
+      return <SelectOption {...item} />;
     })}
   </>
 );
@@ -81,7 +81,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
      * 循环基数
      */
     loopCardinality: {
-      component: ElInput,
+      component: Input,
       placeholder: '循环基数',
       type: 'number',
       vSlots: {
@@ -118,8 +118,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
      * 4.nrOfActiveInstances 当前还没有完成的实例
      */
     completionCondition: {
-      component: ElInput,
-
+      component: Input,
       placeholder:
         '如：${nrOfCompletedInstances/nrOfInstances >= 0.25} 表示完成数大于等于4分1时任务完成',
       vSlots: {
@@ -160,7 +159,7 @@ const LOOP_OPTIONS = [
 const LoopOptions: JSX.Element = (
   <>
     {LOOP_OPTIONS.map((item) => {
-      return <ElOption {...item} />;
+      return <SelectOption {...item} />;
     })}
   </>
 );

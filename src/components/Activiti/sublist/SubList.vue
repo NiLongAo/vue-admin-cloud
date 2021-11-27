@@ -88,19 +88,20 @@
     isNew: false,
   });
 
-  const [registerTable, { insertTableDataRecord, deleteTableDataRecord, getDataSource }] = useTable(
-    {
-      ...props.tableProps,
-      dataSource: sublistState.data,
-      columns: props.columns,
-      actionColumn: {
-        width: 160,
-        title: '操作',
-        dataIndex: 'action',
-        slots: { customRender: 'action' },
-      },
+  const [
+    registerTable,
+    { insertTableDataRecord, deleteTableDataRecord, setTableData, getDataSource },
+  ] = useTable({
+    ...props.tableProps,
+    dataSource: sublistState.data,
+    columns: props.columns,
+    actionColumn: {
+      width: 160,
+      title: '操作',
+      dataIndex: 'action',
+      slots: { customRender: 'action' },
     },
-  );
+  });
 
   //重置状态
   const restoreState = () => {
@@ -120,10 +121,14 @@
    * 添加数据项并进行编辑
    */
   const addData = async (): Promise<void> => {
-    console.log(props.model);
-    await insertTableDataRecord(cloneDeep(props.model) as Recordable);
-    const recordList: EditRecordRow[] = getDataSource();
-    console.log(recordList);
+    debugger;
+    let recordList: EditRecordRow[] = getDataSource();
+    if (recordList.length === 0) {
+      await setTableData([cloneDeep(props.model) as Recordable]);
+    } else {
+      await insertTableDataRecord(cloneDeep(props.model) as Recordable);
+    }
+    recordList = getDataSource();
     const record = recordList[recordList.length - 1];
     currentEditKeyRef.value = record.key;
     await record.onEdit?.(true);

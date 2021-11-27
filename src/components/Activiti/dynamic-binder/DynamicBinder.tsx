@@ -1,5 +1,5 @@
 import { defineComponent, PropType, reactive, toRaw, watchEffect, watch } from 'vue';
-import ScriptHelper, { resolve } from '../../utils/script-helper';
+import ScriptHelper, { resolve } from '/@/components/Activiti/utils/script-helper';
 import { FieldDefine } from './index';
 
 /**
