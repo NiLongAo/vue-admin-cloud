@@ -94,11 +94,12 @@
   ] = useTable({
     ...props.tableProps,
     dataSource: sublistState.data,
+    scroll: { x: 0 },
     columns: props.columns,
     actionColumn: {
-      width: 160,
       title: '操作',
       dataIndex: 'action',
+      fixed: false,
       slots: { customRender: 'action' },
     },
   });
@@ -121,7 +122,6 @@
    * 添加数据项并进行编辑
    */
   const addData = async (): Promise<void> => {
-    debugger;
     let recordList: EditRecordRow[] = getDataSource();
     if (recordList.length === 0) {
       await setTableData([cloneDeep(props.model) as Recordable]);

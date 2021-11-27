@@ -2,6 +2,7 @@ import { defineComponent, ref, nextTick } from 'vue';
 import ButtonRender, { ButtonRenderProps } from '/@/components/Activiti/button-render';
 import { BpmnStore } from '/@/components/Activiti/Bpmn/store';
 import CodeMirror from 'codemirror';
+import { Drawer ,Input} from 'ant-design-vue';
 import 'codemirror/mode/xml/xml.js';
 import 'codemirror/addon/hint/xml-hint.js';
 import 'codemirror/lib/codemirror.css';
@@ -167,10 +168,10 @@ export default defineComponent({
     return (
       <div class="bpmn-actions">
         <ButtonRender {...buttonRenderProps} />
-        <el-drawer size="35%" direction="ltr" withHeader={false} v-model={this.previewActive}>
+        <Drawer size="35%" placement="left" v-model={this.previewActive}>
           <textarea id="xml-highlight-container" v-model={this.xml} />
-        </el-drawer>
-        <input
+        </Drawer>
+        <Input
           type="file"
           id="bpmn-upload-element"
           ref="refFile"

@@ -16,6 +16,7 @@ const commonProperties: PropertiesMap<FieldDefine> = {
       addonBefore: (): JSX.Element => <div>节点ID</div>,
     },
     setValue(sourceObject: ModdleElement, key: string, value: string) {
+      debugger;
       const isNotNull = value;
       const latestValue = value || ' ';
       const shape = BpmnStore.getShape();
@@ -112,8 +113,9 @@ export const getElementTypeListenerProperties = function (options: {
             dataIndex: 'index',
             title: '序号',
             align: 'center',
+            width: 50,
             editRow:false,
-            customRender: (_text,_record,index) => `${index+1}`,
+            customRender: ({index}) => `${index+1}`,
           },
           {
             title: '事件',
@@ -200,9 +202,10 @@ export const ExtensionGroupProperties: GroupProperties = {
         {
           dataIndex: 'index',
           title: '序号',
+          width: 50,
           align: 'center',
           editRow:false,
-          customRender: (_text,_record,index) => `${index+1}`,
+          customRender: ({index}) => `${index+1}`,
         },
         {
           dataIndex: 'name',

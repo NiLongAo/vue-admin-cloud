@@ -73,10 +73,10 @@ export default defineComponent({
             </div>
             <div class="bpmn-panel" v-show={!panelState.shrinkageOff}>
               <div class="title">{bpmnContext.getActiveElementName()}</div>
-              <Collapse class="bpmn-panel-collapse" expandIconPosition="right" v-model={panelState.elCollapses}>
+              <Collapse class="bpmn-panel-collapse" expandIconPosition="right" v-model:activeKey={panelState.elCollapses}>
                 {contextState.activeBindDefine.map((groupItem) => {
                   return (
-                    <CollapsePanel header={groupItem.name}  v-slots={getSlotObject(groupItem)} />
+                    <CollapsePanel key={groupItem.name}  v-slots={getSlotObject(groupItem)} />
                   );
                 })}
               </Collapse>

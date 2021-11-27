@@ -8,6 +8,7 @@
 </template>
 
 <script lang="ts" setup>
+  import '/@/components/Activiti/iconfont.js';
   import Modeler from '/@/components/Activiti/Modeler';
   import Panel from '/@/components/Activiti/panel';
   import BpmnActions from '/@/components/Activiti/bpmn-actions';
