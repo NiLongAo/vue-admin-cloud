@@ -13,11 +13,11 @@ const PrefixAutoComplete = defineComponent({
       default: () => '',
     },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:value'],
   setup(props, ctx) {
     const computedModelValue = computed({
       get: () => props.value,
-      set: (val) => ctx.emit('update:modelValue', val),
+      set: (val) => ctx.emit('update:value', val),
     });
     return () => (
       <div class="prefix-label-select-container">

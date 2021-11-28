@@ -51,7 +51,7 @@ export default defineComponent({
           <DynamicBinder
             {...{ onFieldChange: onFieldChange }}
             fieldDefine={groupItem.properties}
-            v-model={contextState.businessObject}
+            v-model:value={contextState.businessObject}
           />
         ),
       };

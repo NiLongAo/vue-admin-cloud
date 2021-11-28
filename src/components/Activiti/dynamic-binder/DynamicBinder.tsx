@@ -10,7 +10,7 @@ export default defineComponent({
   name: 'DynamicBinder',
   props: {
     //传进来的源对象，这里需要通过动态组件修改源对象的值进行数据动态绑定
-    modelValue: {
+     value: {
       type: Object as PropType<unknown>,
       default: () => Object.assign({}),
       required: true,
@@ -18,7 +18,7 @@ export default defineComponent({
     /**
      * 组件的需要绑定数据的定义
      */
-    fieldDefine: {
+    fieldDefine: {                                                     
       type: Object as PropType<FieldDefine>,
       default: () => ({}),
       required: true,
@@ -29,14 +29,14 @@ export default defineComponent({
       default: undefined,
     },
   },
-  emits: ['update:modelValue', 'fieldChange'],
+  emits: ['update:value', 'fieldChange'],
   setup(props, context) {
     const state = reactive({
       flatFieldDefine: flatObject(props.fieldDefine || {}, {}),
       handingModel: Object.assign({}),
     });
     watchEffect(() => {
-      state.handingModel = props.modelValue;
+      state.handingModel = props.value;
       state.flatFieldDefine = flatObject(props.fieldDefine, {});
     });
 
@@ -51,22 +51,20 @@ export default defineComponent({
         {Object.keys(state.flatFieldDefine).map((key) => {
           const define = state.flatFieldDefine[key];
 
-          if (define && predicate(define, toRaw(props.modelValue))) {
+          if (define && predicate(define, toRaw(props.value))) {
             const bindData = dataBindTransformer(key, define);
             //组件不能是代理对象，这里直接用目标对象
             const Component = toRaw(define.component);
-
             watch(
               () => bindData.value,
               () => {
                 // state.handingModel[bindData.bindKey] = bindData.value;
-                context.emit('update:modelValue', state.handingModel);
-
+                context.emit('update:value', state.handingModel);
                 //如果有setValue还是则直接使用独立的setValue
                 if (bindData.setValue) {
                   //setValue有返回值，值进行赋值后执行
                   const setValueCallBack = bindData.setValue(
-                    toRaw(props.modelValue),
+                    toRaw(props.value),
                     bindData.bindKey,
                     bindData.value,
                   );
@@ -82,7 +80,7 @@ export default defineComponent({
             return (
               <Component
                 {...bindData}
-                v-model={bindData.value}
+                v-model:value={bindData.value}
                 v-slots={bindData.vSlots}
                 class={`${Component.name}-${key} dynamic-binder-item`}
               />
@@ -134,17 +132,17 @@ function flatObject(source: FieldDefine, target: FieldDefine, prefix = ''): Fiel
  * 1.若属性为string,则使用脚本处理器执行，如 predicate='obj.a ===1' 则会传入当前对象进行判断；
  * 2.若属性为function，则直接传入目标对象直接执行
  * @param fieldDefine 断言的对象
- * @param modelValue 模式值
+ * @param value 模式值
  */
-function predicate(fieldDefine: FieldDefine, modelValue: unknown): boolean {
+function predicate(fieldDefine: FieldDefine, value: unknown): boolean {
   const bindDefinePredicate = fieldDefine.predicate;
   if (bindDefinePredicate) {
     if (typeof bindDefinePredicate === 'string') {
-      return ScriptHelper.executeEl(modelValue, bindDefinePredicate) as boolean;
+      return ScriptHelper.executeEl(value, bindDefinePredicate) as boolean;
     }
 
     if (typeof bindDefinePredicate === 'function') {
-      return bindDefinePredicate(modelValue);
+      return bindDefinePredicate(value);
     }
   }
   return true;

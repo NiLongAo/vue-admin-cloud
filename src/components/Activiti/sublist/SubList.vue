@@ -24,7 +24,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { cloneDeep } from 'lodash-es';
   const { createMessage: msg } = useMessage();
-  const emit = defineEmits(['update:modelValue']);
+  const emit = defineEmits(['update:value']);
   const currentEditKeyRef = ref('');
 
   //-------------------------------------------------
@@ -33,7 +33,7 @@
     /**
      * v-model
      */
-    modelValue: {
+    value: {
       type: Array,
       default: () => [],
       required: true,
@@ -83,7 +83,7 @@
   });
 
   const sublistState: SubListState<any> = reactive({
-    data: props.modelValue ? JSON.parse(JSON.stringify(props.modelValue)) : [],
+    data: props.value ? JSON.parse(JSON.stringify(props.value)) : [],
     editing: false,
     isNew: false,
   });
@@ -106,13 +106,13 @@
 
   //重置状态
   const restoreState = () => {
-    sublistState.data = props.modelValue ? JSON.parse(JSON.stringify(props.modelValue)) : [];
+    sublistState.data = props.value ? JSON.parse(JSON.stringify(props.value)) : [];
     sublistState.editing = false;
     sublistState.isNew = false;
   };
 
   watch(
-    () => props.modelValue,
+    () => props.value,
     () => {
       restoreState();
     },
@@ -157,7 +157,7 @@
     sublistState.isNew = false;
     sublistState.editing = false;
     deleteTableDataRecord(record.key);
-    emit('update:modelValue', sublistState.data);
+    emit('update:value', sublistState.data);
   }
 
   async function handleSave(record: EditRecordRow) {
@@ -166,10 +166,16 @@
     const valid = await record.onValid?.();
     if (valid) {
       try {
-        const data = cloneDeep(record.editValueRefs);
+        //当前提交数据，全部提交一次
+        //const data = cloneDeep(record.editValueRefs);
+        let recordList: EditRecordRow[] = getDataSource();
+        let data = [] as Recordable[];
+        recordList.map((attr: { editValueRefs: Recordable }) => {
+          data.push(attr.editValueRefs);
+        });
         console.log(data);
         //TODO 此处将数据提交给服务器保存
-        emit('update:modelValue', sublistState.data);
+        emit('update:value', data);
         // 保存之后提交编辑状态
         const pass = await record.onEdit?.(false, true);
         if (pass) {

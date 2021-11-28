@@ -159,7 +159,7 @@ const LOOP_OPTIONS = [
 const LoopOptions: JSX.Element = (
   <>
     {LOOP_OPTIONS.map((item) => {
-      return <SelectOption {...item} />;
+      return <SelectOption v-model:value={item.value} >{item.label}</SelectOption>;
     })}
   </>
 );

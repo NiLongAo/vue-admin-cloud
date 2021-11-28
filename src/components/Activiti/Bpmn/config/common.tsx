@@ -16,7 +16,6 @@ const commonProperties: PropertiesMap<FieldDefine> = {
       addonBefore: (): JSX.Element => <div>节点ID</div>,
     },
     setValue(sourceObject: ModdleElement, key: string, value: string) {
-      debugger;
       const isNotNull = value;
       const latestValue = value || ' ';
       const shape = BpmnStore.getShape();
@@ -167,6 +166,7 @@ export const getElementTypeListenerProperties = function (options: {
             });
         },
         setValue(businessObject: ModdleElement, key: string, value: []): void {
+          debugger
           const bpmnContext = BpmnStore;
           console.warn('activeBusinessObject', businessObject);
           const moddle = bpmnContext.getModeler().get('moddle');

@@ -49,3 +49,8 @@
   fill: currentColor;
   overflow: hidden;
 }
+/* stylelint-disable-next-line rule-empty-line-before */
+.ant-drawer-body {
+  height: 100%;
+  padding: 0;
+}

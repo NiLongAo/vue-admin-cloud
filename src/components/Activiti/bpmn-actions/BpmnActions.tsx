@@ -2,7 +2,7 @@ import { defineComponent, ref, nextTick } from 'vue';
 import ButtonRender, { ButtonRenderProps } from '/@/components/Activiti/button-render';
 import { BpmnStore } from '/@/components/Activiti/Bpmn/store';
 import CodeMirror from 'codemirror';
-import { Drawer ,Input} from 'ant-design-vue';
+import { Drawer ,Input } from 'ant-design-vue';
 import 'codemirror/mode/xml/xml.js';
 import 'codemirror/addon/hint/xml-hint.js';
 import 'codemirror/lib/codemirror.css';
@@ -117,58 +117,58 @@ export default defineComponent({
         {
           label: '预览',
           icon: 'icon-xianshi',
-          action: () => {
+          action: async () => {
             console.warn();
-            bpmnContext
+            await bpmnContext
               .getXML()
               .then((response) => {
-                this.xml = response.xml;
                 this.previewActive = true;
-
-                nextTick(() => {
-                  if (!coder) {
-                    coder = CodeMirror.fromTextArea(
-                      document.getElementById('xml-highlight-container') as HTMLTextAreaElement,
-                      {
-                        lineWrapping: true,
-                        mode: 'application/xml', // HMTL混合模式
-                        theme: 'material',
-                        lineNumbers: true,
-                        // lint: true,
-                        // theme: 'monokai', // 使用monokai模版
-                      },
-                    );
-                    coder.setSize('100%', '100%');
-                  } else {
-                    coder.setValue(this.xml);
-                  }
-                });
+                this.xml = response.xml;
               })
               .catch((err: unknown) => {
                 console.warn(err);
               });
+              await nextTick(() => {
+                if (!coder) {
+                  const html = document.getElementById('xml-highlight-container') as HTMLTextAreaElement;
+                  coder = CodeMirror.fromTextArea(
+                    html,
+                    {
+                      lineWrapping: true,
+                      readOnly: true,//只读
+                      mode: 'application/xml', // HMTL混合模式
+                      theme: 'material',
+                      lineNumbers: true
+                      // theme: 'monokai', // 使用monokai模版
+                    },
+                  );
+                  coder.setSize('100%', '100%');
+                } else {
+                  coder.setValue(this.xml);
+                }
+              });
           },
         },
-        // {
-        //   label: '撤销',
-        //   icon: 'icon-weibiaoti545',
-        //   action: () => {
-        //     bpmnContext.getModeler().get('commandStack').undo();
-        //   },
-        // },
-        // {
-        //   label: '恢复',
-        //   icon: 'icon-weibiaoti546',
-        //   action: () => {
-        //     bpmnContext.getModeler().get('commandStack').redo();
-        //   },
-        // },
+        {
+          label: '撤销',
+          icon: 'icon-weibiaoti545',
+          action: () => {
+            bpmnContext.getModeler().get('commandStack').undo();
+          },
+        },
+        {
+          label: '恢复',
+          icon: 'icon-weibiaoti546',
+          action: () => {
+            bpmnContext.getModeler().get('commandStack').redo();
+          },
+        },
       ],
     };
     return (
       <div class="bpmn-actions">
         <ButtonRender {...buttonRenderProps} />
-        <Drawer size="35%" placement="left" v-model={this.previewActive}>
+        <Drawer placement="left" v-model:visible={this.previewActive}  width="35%" height="100%" destroyOnClose={true} closable={false}>
           <textarea id="xml-highlight-container" v-model={this.xml} />
         </Drawer>
         <Input

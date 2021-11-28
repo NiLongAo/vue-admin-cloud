@@ -46,7 +46,7 @@ const BaseProperties = {
         default: (): JSX.Element => (
           <>
             {FLOW_TYPE_OPTIONS.map((item) => {
-              return <SelectOption {...item} />;
+              return <SelectOption value={item.value} >{item.label}</SelectOption>;
             })}
           </>
         ),
