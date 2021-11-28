@@ -1,4 +1,4 @@
-import { Input,Textarea } from 'ant-design-vue';
+import { Input } from 'ant-design-vue';
 import { FieldDefine } from '/@/components/Activiti/dynamic-binder';
 import { PropertiesMap, GroupProperties } from './index';
 import SubList from '/@/components/Activiti/sublist/SubList.vue';
@@ -51,7 +51,7 @@ export const DocumentGroupProperties: GroupProperties = {
   icon: 'el-icon-document',
   properties: {
     'documentation.text': {
-      component: Textarea,
+      component: Input.TextArea,
       type: 'textarea',
       allowClear:'allow-clear',
       getValue: (obj: { documentation: Array<Documentation> }): string => {
