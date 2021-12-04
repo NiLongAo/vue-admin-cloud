@@ -121,6 +121,9 @@ export const BpmnUserGroupProperties: GroupProperties = {
       vSlots: {
         default: (): JSX.Element => UserOption,
       },
+      predicate(businessObject: ModdleElement): boolean {
+        return businessObject.loopCharacteristics;
+      },
       getValue(businessObject: ModdleElement): string {
         const loopCharacteristics = businessObject.loopCharacteristics;
         if (!loopCharacteristics) {

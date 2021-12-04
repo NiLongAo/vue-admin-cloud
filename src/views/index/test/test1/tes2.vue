@@ -1,5 +1,4 @@
 <template>
-  <!-- <SubList :modelValue="sublistState.data" :columns="columns" :model="sublistState.model" /> -->
   <div class="app-containers">
     <Modeler />
     <Panel />
