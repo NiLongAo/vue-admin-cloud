@@ -7,6 +7,7 @@ import {
 } from '../common';
 import { GroupProperties } from '../index';
 import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
+import PrefixLabelNumBer from '/@/components/Activiti/prefix-label-number';
 import { Input,SelectOption } from 'ant-design-vue';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
@@ -33,7 +34,7 @@ const USER_OPTIONS = [
 const UserOption: JSX.Element = (
   <>
     {USER_OPTIONS.map((item) => {
-      return <SelectOption {...item} />;
+      return <SelectOption value={item.value} >{item.label}</SelectOption>;
     })}
   </>
 );
@@ -53,6 +54,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
       prefixTitle: '处理人',
       allowCreate: true,
       filterable: true,
+      showSearch:true,
       vSlots: {
         default: (): JSX.Element => UserOption,
       },
@@ -65,13 +67,13 @@ export const BpmnUserGroupProperties: GroupProperties = {
       prefixTitle: '候选人',
       filterable: true,
       multiple: true,
+      mode:"tags",
       allowCreate: true,
       vSlots: {
         default: (): JSX.Element => UserOption,
       },
       getValue(businessObject: ModdleElement): string {
         console.warn('businessObject', businessObject);
-
         return 'string' === typeof businessObject.candidateUsers
           ? businessObject.candidateUsers.split(',')
           : businessObject.candidateUsers;
@@ -81,12 +83,10 @@ export const BpmnUserGroupProperties: GroupProperties = {
      * 循环基数
      */
     loopCardinality: {
-      component: Input,
-      placeholder: '循环基数',
-      type: 'number',
-      vSlots: {
-        prepend: (): JSX.Element => <div>循环基数</div>,
-      },
+      component: PrefixLabelNumBer,
+      prefixTitle: '循环基数',
+      min:0,
+      precision:0,
       predicate(businessObject: ModdleElement): boolean {
         return businessObject.loopCharacteristics;
       },
@@ -98,12 +98,66 @@ export const BpmnUserGroupProperties: GroupProperties = {
         return loopCharacteristics.loopCardinality?.body;
       },
       setValue(businessObject: ModdleElement, key: string, value: string): void {
+        value = String(value);
         const bpmnContext = BpmnStore;
         const moddle = bpmnContext.getModeler().get('moddle');
         const loopCharacteristics = businessObject.loopCharacteristics;
         loopCharacteristics.loopCardinality = moddle.create('bpmn:FormalExpression', {
           body: value,
         });
+        bpmnContext.getModeling().updateProperties(bpmnContext.getShape(), {
+          loopCharacteristics: loopCharacteristics,
+        });
+      },
+    },
+    /*任务参与人 */
+    collection:{
+      component: PrefixLabelSelect,
+      prefixTitle: '任务参与人',
+      filterable: true,
+      multiple: true,
+      mode:"tags",
+      allowCreate: true,
+      vSlots: {
+        default: (): JSX.Element => UserOption,
+      },
+      getValue(businessObject: ModdleElement): string {
+        const loopCharacteristics = businessObject.loopCharacteristics;
+        if (!loopCharacteristics) {
+          return '';
+        }
+        return loopCharacteristics.collection;
+      },
+      setValue(businessObject: ModdleElement, key: string, value: string): void {
+        const bpmnContext = BpmnStore;
+        const loopCharacteristics = businessObject.loopCharacteristics;
+        loopCharacteristics.collection = value
+        bpmnContext.getModeling().updateProperties(bpmnContext.getShape(), {
+          loopCharacteristics: loopCharacteristics,
+        });
+      },
+    },
+    /*元素变量*/
+    elementVariable:{
+      component: Input,
+      placeholder: '元素变量',
+      vSlots: {
+        addonBefore: (): JSX.Element => <div>元素变量</div>,
+      },
+      predicate(businessObject: ModdleElement): boolean {
+        return businessObject.loopCharacteristics;
+      },
+      getValue(businessObject: ModdleElement): string {
+        const loopCharacteristics = businessObject.loopCharacteristics;
+        if (!loopCharacteristics) {
+          return '';
+        }
+        return loopCharacteristics.elementVariable;
+      },
+      setValue(businessObject: ModdleElement, key: string, value: string): void {
+        const bpmnContext = BpmnStore;
+        const loopCharacteristics = businessObject.loopCharacteristics;
+        loopCharacteristics.elementVariable = value
         bpmnContext.getModeling().updateProperties(bpmnContext.getShape(), {
           loopCharacteristics: loopCharacteristics,
         });
@@ -119,10 +173,9 @@ export const BpmnUserGroupProperties: GroupProperties = {
      */
     completionCondition: {
       component: Input,
-      placeholder:
-        '如：${nrOfCompletedInstances/nrOfInstances >= 0.25} 表示完成数大于等于4分1时任务完成',
+      placeholder: '如：${nrOfCompletedInstances/nrOfInstances >= 0.25} 表示完成数大于等于4分1时任务完成',
       vSlots: {
-        prepend: (): JSX.Element => <div>完成条件</div>,
+        addonBefore: (): JSX.Element => <div>完成条件</div>,
       },
       predicate(businessObject: ModdleElement): boolean {
         return businessObject.loopCharacteristics;
@@ -218,7 +271,6 @@ const BaseTaskProperties = {
 
 const CommonGroupPropertiesArray = [
   BaseTaskProperties,
-  FormGroupProperties,
   TaskListenerProperties,
   ExtensionGroupProperties,
   DocumentGroupProperties,

@@ -11,9 +11,9 @@ import { BpmnStore } from '../store';
 const commonProperties: PropertiesMap<FieldDefine> = {
   id: {
     component: Input,
-    placeholder: '节点ID',
+    placeholder: '节点编号',
     vSlots: {
-      addonBefore: (): JSX.Element => <div>节点ID</div>,
+      addonBefore: (): JSX.Element => <div>节点编号</div>,
     },
     setValue(sourceObject: ModdleElement, key: string, value: string) {
       const isNotNull = value;
@@ -166,7 +166,6 @@ export const getElementTypeListenerProperties = function (options: {
             });
         },
         setValue(businessObject: ModdleElement, key: string, value: []): void {
-          debugger
           const bpmnContext = BpmnStore;
           console.warn('activeBusinessObject', businessObject);
           const moddle = bpmnContext.getModeler().get('moddle');
