@@ -1,4 +1,5 @@
 <template>
+  <!-- <SubList :modelValue="sublistState.data" :columns="columns" :model="sublistState.model" /> -->
   <div class="app-containers">
     <Modeler />
     <Panel />
@@ -7,7 +8,6 @@
 </template>
 
 <script lang="ts" setup>
-  import '/@/components/Activiti/iconfont.js';
   import Modeler from '/@/components/Activiti/Modeler';
   import Panel from '/@/components/Activiti/panel';
   import BpmnActions from '/@/components/Activiti/bpmn-actions';

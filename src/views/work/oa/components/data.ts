@@ -1,23 +1,170 @@
-interface GroupItem {
-  title: string;
-  icon: string;
-  color: string;
-  desc: string;
-  date: string;
-  group: string;
+import { BasicColumn } from '/@/components/Table';
+
+import {
+  doFindUserNeedList,
+  doFindUserLaunchList,
+  doFindUserAlreadyList,
+} from '/@/api/oa/activiti';
+
+//表格tabs
+export const tabListTitle = [
+  {
+    key: 'need',
+    tab: '代办任务',
+  },
+  {
+    key: 'launch',
+    tab: '发起任务',
+  },
+  {
+    key: 'already',
+    tab: '参与任务',
+  },
+];
+
+//表格数据组装 代办-发起-已办
+export interface TableItem {
+  rowKey: string;
+  api: (...arg: any) => Promise<any>;
+  columns: BasicColumn[];
 }
 
+// 代办
+const need: TableItem = {
+  rowKey: 'taskId',
+  api: doFindUserNeedList,
+  columns: [
+    {
+      title: '任务编号',
+      dataIndex: 'taskId',
+      width: 100,
+    },
+    {
+      title: '任务名称',
+      dataIndex: 'name',
+      width: 100,
+    },
+    {
+      title: '用户编号',
+      dataIndex: 'assignee',
+      width: 100,
+    },
+    {
+      title: '流程实例编号',
+      dataIndex: 'instanceId',
+      width: 100,
+    },
+    {
+      title: '流程定义编号',
+      dataIndex: 'processDefinitionId',
+      width: 100,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      width: 100,
+    },
+    {
+      title: '截至时间',
+      dataIndex: 'dueDate',
+      width: 100,
+    },
+  ],
+};
+
+// 发起
+const launch: TableItem = {
+  rowKey: 'instanceId',
+  api: doFindUserLaunchList,
+  columns: [
+    {
+      title: '流程编号',
+      dataIndex: 'instanceId',
+      width: 100,
+    },
+    {
+      title: '流程名称',
+      dataIndex: 'name',
+      width: 100,
+    },
+    {
+      title: '流程定义编号',
+      dataIndex: 'processDefinitionId',
+      width: 100,
+    },
+    {
+      title: '流程定义名称',
+      dataIndex: 'processDefinitionName',
+      width: 100,
+    },
+    {
+      title: '源数据编号',
+      dataIndex: 'businessKey',
+      width: 100,
+    },
+    {
+      title: '开始时间',
+      dataIndex: 'startTime',
+      width: 100,
+    },
+    {
+      title: '结束时间',
+      dataIndex: 'endTime',
+      width: 100,
+    },
+  ],
+};
+
+// 已办
+const already: TableItem = {
+  rowKey: 'historicInstanceId',
+  api: doFindUserAlreadyList,
+  columns: [
+    {
+      title: '流程编号',
+      dataIndex: 'historicInstanceId',
+      width: 100,
+    },
+    {
+      title: '流程名称',
+      dataIndex: 'name',
+      width: 100,
+    },
+    {
+      title: '流程定义编号',
+      dataIndex: 'processDefinitionId',
+      width: 100,
+    },
+    {
+      title: '流程定义名称',
+      dataIndex: 'processDefinitionName',
+      width: 100,
+    },
+    {
+      title: '源数据编号',
+      dataIndex: 'businessKey',
+      width: 100,
+    },
+    {
+      title: '开始时间',
+      dataIndex: 'startTime',
+      width: 100,
+    },
+    {
+      title: '结束时间',
+      dataIndex: 'endTime',
+      width: 100,
+    },
+  ],
+};
+
+export const tableDate: Record<string, TableItem> = { need, launch, already };
+
+// 快捷导航设置
 interface NavItem {
   title: string;
   icon: string;
   color: string;
-}
-
-interface DynamicInfoItem {
-  avatar: string;
-  name: string;
-  date: string;
-  desc: string;
 }
 
 export const navItems: NavItem[] = [
@@ -50,107 +197,5 @@ export const navItems: NavItem[] = [
     title: '图表',
     icon: 'ion:bar-chart-outline',
     color: '#00d8ff',
-  },
-];
-
-export const dynamicInfoItems: DynamicInfoItem[] = [
-  {
-    avatar: 'dynamic-avatar-1|svg',
-    name: '威廉',
-    date: '刚刚',
-    desc: `在 <a>开源组</a> 创建了项目 <a>Vue</a>`,
-  },
-  {
-    avatar: 'dynamic-avatar-2|svg',
-    name: '艾文',
-    date: '1个小时前',
-    desc: `关注了 <a>威廉</a> `,
-  },
-  {
-    avatar: 'dynamic-avatar-3|svg',
-    name: '克里斯',
-    date: '1天前',
-    desc: `发布了 <a>个人动态</a> `,
-  },
-  {
-    avatar: 'dynamic-avatar-4|svg',
-    name: 'Vben',
-    date: '2天前',
-    desc: `发表文章 <a>如何编写一个Vite插件</a> `,
-  },
-  {
-    avatar: 'dynamic-avatar-5|svg',
-    name: '皮特',
-    date: '3天前',
-    desc: `回复了 <a>杰克</a> 的问题 <a>如何进行项目优化？</a>`,
-  },
-  {
-    avatar: 'dynamic-avatar-6|svg',
-    name: '杰克',
-    date: '1周前',
-    desc: `关闭了问题 <a>如何运行项目</a> `,
-  },
-  {
-    avatar: 'dynamic-avatar-1|svg',
-    name: '威廉',
-    date: '1周前',
-    desc: `发布了 <a>个人动态</a> `,
-  },
-  {
-    avatar: 'dynamic-avatar-1|svg',
-    name: '威廉',
-    date: '2021-04-01 20:00',
-    desc: `推送了代码到 <a>Github</a>`,
-  },
-];
-
-export const groupItems: GroupItem[] = [
-  {
-    title: 'Github',
-    icon: 'carbon:logo-github',
-    color: '',
-    desc: '不要等待机会，而要创造机会。',
-    group: '开源组',
-    date: '2021-04-01',
-  },
-  {
-    title: 'Vue',
-    icon: 'ion:logo-vue',
-    color: '#3fb27f',
-    desc: '现在的你决定将来的你。',
-    group: '算法组',
-    date: '2021-04-01',
-  },
-  {
-    title: 'Html5',
-    icon: 'ion:logo-html5',
-    color: '#e18525',
-    desc: '没有什么才能比努力更重要。',
-    group: '上班摸鱼',
-    date: '2021-04-01',
-  },
-  {
-    title: 'Angular',
-    icon: 'ion:logo-angular',
-    color: '#bf0c2c',
-    desc: '热情和欲望可以突破一切难关。',
-    group: 'UI',
-    date: '2021-04-01',
-  },
-  {
-    title: 'React',
-    icon: 'bx:bxl-react',
-    color: '#00d8ff',
-    desc: '健康的身体是实目标的基石。',
-    group: '技术牛',
-    date: '2021-04-01',
-  },
-  {
-    title: 'Js',
-    icon: 'ion:logo-javascript',
-    color: '#4daf1bc9',
-    desc: '路是走出来的，而不是空想出来的。',
-    group: '架构组',
-    date: '2021-04-01',
   },
 ];

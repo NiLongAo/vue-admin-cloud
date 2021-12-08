@@ -3,7 +3,7 @@
     <template #headerContent><WorkbenchHeader /> </template>
     <div class="lg:flex">
       <div class="lg:w-7/10 w-full !mr-4 enter-y">
-        <div>分页</div>
+        <ActivitiPage />
       </div>
       <div class="lg:w-3/10 w-full enter-y">
         <QuickNav />
@@ -21,4 +21,5 @@
   import QuickNav from './components/QuickNav.vue';
   import WorkbenchHeader from './components/WorkbenchHeader.vue';
   import SaleRadar from './components/SaleRadar.vue';
+  import ActivitiPage from './components/ActivitiPage.vue';
 </script>
