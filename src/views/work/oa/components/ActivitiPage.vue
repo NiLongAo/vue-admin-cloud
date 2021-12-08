@@ -13,11 +13,11 @@
   </Card>
 </template>
 <script lang="ts" setup>
-  import { ref, unref, reactive } from 'vue';
+  import { unref, reactive } from 'vue';
   import { Card } from 'ant-design-vue';
-  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { BasicTable, useTable, TableAction, ActionItem } from '/@/components/Table';
   import { usePermission } from '/@/hooks/web/usePermission';
-  import { tabListTitle, tableDate, TableItem } from './data';
+  import { tabListTitle, tableDate } from './data';
 
   const { hasPermission } = usePermission();
   const tableRef = reactive({
@@ -47,7 +47,6 @@
     tableRef.api = tableDate[unref(key)].api;
     tableRef.columns = tableDate[unref(key)].columns;
     tableRef.rowKey = tableDate[unref(key)].rowKey;
-    handleSuccess();
   }
   const [registerTable, { reload }] = useTable(tableRef);
 

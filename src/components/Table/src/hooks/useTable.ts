@@ -23,6 +23,7 @@ export function useTable(tableProps?: Props): [
   const tableRef = ref<Nullable<TableActionType>>(null);
   const loadedRef = ref<Nullable<boolean>>(false);
   const formRef = ref<Nullable<UseTableMethod>>(null);
+  const loadedReload = ref<Nullable<boolean>>(false);
 
   let stopWatch: WatchStopHandle;
 
@@ -44,8 +45,14 @@ export function useTable(tableProps?: Props): [
 
     stopWatch = watch(
       () => tableProps,
-      () => {
-        tableProps && instance.setProps(getDynamicProps(tableProps));
+      async () => {
+        tableProps && (await instance.setProps(getDynamicProps(tableProps)));
+        // 本人添加动态渲染表格
+        if (unref(loadedReload)) {
+          instance.reload();
+        } else {
+          loadedReload.value = true;
+        }
       },
       {
         immediate: true,
