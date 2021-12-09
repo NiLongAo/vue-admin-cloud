@@ -169,8 +169,8 @@ interface NavItem {
 
 export const navItems: NavItem[] = [
   {
-    title: '首页',
-    icon: 'ion:home-outline',
+    title: '请假',
+    icon: 'flat-color-icons:leave',
     color: '#1fdaca',
   },
   {

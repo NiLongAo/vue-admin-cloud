@@ -8,16 +8,16 @@
     <div class="flex flex-1 justify-end md:mt-0 mt-4">
       <div class="flex flex-col justify-center text-right">
         <span class="text-secondary"> 待办 </span>
-        <span class="text-2xl text-center">2</span>
+        <span class="text-2xl text-center">{{ stats.userNeedCount }}</span>
       </div>
 
       <div class="flex flex-col justify-center text-right md:ml-16 ml-12">
         <span class="text-secondary"> 发起 </span>
-        <span class="text-2xl text-center">8</span>
+        <span class="text-2xl text-center">{{ stats.userLaunchCount }}</span>
       </div>
       <div class="flex flex-col justify-center text-right md:mx-16 mx-12">
         <span class="text-secondary"> 已办 </span>
-        <span class="text-2xl text-center">8</span>
+        <span class="text-2xl text-center">{{ stats.userAlreadyCount }}</span>
       </div>
       <div class="flex flex-col justify-center text-right md:mr-10 mr-4">
         <span class="text-secondary"> 部门人数 </span>
@@ -27,13 +27,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed, reactive } from 'vue';
+  import { computed, reactive, onMounted } from 'vue';
   import { Avatar } from 'ant-design-vue';
   import { useUserStore } from '/@/store/modules/user';
   import headerImg from '/@/assets/images/header.jpg';
   import { useSystemStore } from '/@/store/modules/system';
   import { SystemEnum } from '/@/enums/systemEnum';
   import { formatToDate } from '/@/utils/dateUtil';
+  import { doStatsUserOa } from '/@/api/oa/activiti';
 
   const userStore = useUserStore();
   const userinfo = computed(() => userStore.getUserInfo);
@@ -43,7 +44,21 @@
     avatar: userinfo.value.imageUrl
       ? systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + userinfo.value.imageUrl
       : headerImg,
+    userNeedCount: 0,
+    userLaunchCount: 0,
+    userAlreadyCount: 0,
   });
+
+  onMounted(() => {
+    stats();
+  });
+
+  const stats = () => {
+    const { userNeedCount, userLaunchCount, userAlreadyCount } = doStatsUserOa();
+    stats.userNeedCount = userNeedCount;
+    stats.userLaunchCount = userLaunchCount;
+    stats.userAlreadyCount = userAlreadyCount;
+  };
 
   const holle = computed(() => {
     const h = Number(formatToDate(new Date(), 'HH'));

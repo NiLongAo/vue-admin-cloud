@@ -1,5 +1,14 @@
 import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
 
+//头部数据统计
+export interface StatsItem {
+  userNeedCount: number;
+  userLaunchCount: number;
+  userAlreadyCount: number;
+  totalNeedCount: number;
+  totalAlreadyCount: number;
+}
+
 /**
  * @description: 用户待办事项
  */

@@ -1,5 +1,6 @@
 import { defHttp } from '/@/utils/http/axios';
 import {
+  StatsItem,
   ActivitiParams,
   ActivitiUserNeedPageResultModel,
   ActivitiUserLaunchPageResultModel,
@@ -7,6 +8,8 @@ import {
 } from './model/activitiModel';
 
 enum Api {
+  //获取当前用户待办事项
+  statsUserOa = '/webapi/activiti/activiti/stats_user_oa',
   //获取当前用户待办事项
   findUserNeedList = '/webapi/activiti/activiti/find_user_need_list',
   //获取当前用户发起事项
@@ -41,6 +44,9 @@ enum Api {
   getFlowImgByInstanceId = '/webapi/activiti/activiti/get_flow_img_by_instance_id',
 }
 
+export function doStatsUserOa(params: Recordable) {
+  return defHttp.get<StatsItem>({ url: Api.statsUserOa, params });
+}
 export function doFindUserNeedList(params: ActivitiParams) {
   return defHttp.post<ActivitiUserNeedPageResultModel>({ url: Api.findUserNeedList, params });
 }
