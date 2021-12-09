@@ -50,11 +50,11 @@
   });
 
   onMounted(() => {
-    stats();
+    init();
   });
 
-  const stats = () => {
-    const { userNeedCount, userLaunchCount, userAlreadyCount } = doStatsUserOa();
+  const init = async () => {
+    const { userNeedCount, userLaunchCount, userAlreadyCount } = await doStatsUserOa();
     stats.userNeedCount = userNeedCount;
     stats.userLaunchCount = userLaunchCount;
     stats.userAlreadyCount = userAlreadyCount;
