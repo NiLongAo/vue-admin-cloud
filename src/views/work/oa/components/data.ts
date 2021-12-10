@@ -165,6 +165,7 @@ interface NavItem {
   title: string;
   icon: string;
   color: string;
+  url?: string;
 }
 
 export const navItems: NavItem[] = [
@@ -172,6 +173,7 @@ export const navItems: NavItem[] = [
     title: '请假',
     icon: 'flat-color-icons:leave',
     color: '#1fdaca',
+    url: '/work/leave/' + undefined,
   },
   {
     title: '仪表盘',

@@ -1,5 +1,5 @@
 <template>
-  <Exanube :removeApi="doDelete" :instanceId="processInstanceId" @save="save">
+  <Exanube :removeApi="doDelete" :instanceId="stats.processInstanceId" @save="save">
     <template #content>
       <BasicForm @register="registerForm" />
     </template>
@@ -30,7 +30,7 @@
     init();
   });
   const init = async () => {
-    if (!businessKey) {
+    if (!stats.businessKey) {
       return;
     }
     const { startTime, endTime, day, processInstanceId, memo } = await doFind({
@@ -42,16 +42,6 @@
     stats.day = day;
     stats.memo = memo;
   };
-
-  //初始化表单
-  const [registerForm, { validate }] = useForm({
-    labelWidth: 120,
-    schemas: schemas,
-    showActionButtonGroup: false,
-    actionColOptions: {
-      span: 24,
-    },
-  });
 
   const schemas: FormSchema[] = [
     {
@@ -96,8 +86,18 @@
     },
   ];
 
+  //初始化表单
+  const [registerForm, { validate }] = useForm({
+    labelWidth: 120,
+    schemas: schemas,
+    showActionButtonGroup: false,
+    actionColOptions: {
+      span: 24,
+    },
+  });
+
   const save = async () => {
-    const val = validate();
-    await doInsert({ ...val });
+    const val: any = validate();
+    await doInsert(val);
   };
 </script>

@@ -1,31 +1,34 @@
 <template>
-  <PageWrapper title="请假记录审批" :content="stats.memoRef" @back="goBack">
+  <PageWrapper class="high-form" title="请假记录审批" @back="goBack">
     <!-- 内容卡槽 -->
-    <div class="w-full h-4">
+    <Card :bordered="false" class="h-4/5">
       <slot name="content"></slot>
-    </div>
+    </Card>
     <!-- 审核时信息 -->
-    <div class="w-full h-4"> </div>
+    <Card :bordered="false" class="!mt-5 h-1/5">
+      <div>审核时信息 </div>
+    </Card>
     <!-- 按钮 -->
-    <div class="w-full h-4">
+    <template #rightFooter>
       <!-- 发起审核按钮 -->
-      <a-button color="success" v-if="status" @click="save()">确定</a-button>
+      <a-button color="primary" v-if="status" @click="save()">确定</a-button>
       <!-- 提交审核按钮 -->
-      <a-button color="success" v-if="!status">审核提交</a-button>
+      <a-button style="margin-right: 10px" color="success" v-if="!status">审核提交</a-button>
       <!-- 驳回按钮 -->
-      <a-button color="warning" v-if="!status">驳回</a-button>
+      <a-button style="margin-right: 10px" color="warning" v-if="!status">驳回</a-button>
       <!-- 取消按钮 -->
-      <a-button color="success">取消</a-button>
+      <a-button style="margin-right: 10px">取消</a-button>
       <!-- 删除按钮 -->
-      <a-button color="error" v-if="isAdmin">删除</a-button>
-    </div>
+      <a-button style="margin-right: 10px" color="error" v-if="isAdmin">删除</a-button>
+    </template>
   </PageWrapper>
 </template>
 <script lang="ts" setup>
   import { useGo } from '/@/hooks/web/usePage';
   import { PageWrapper } from '/@/components/Page';
-  import { reactive } from 'vue';
-  import { complete, claim, jump, backProcess, getFlowImgByInstanceId } from '/@/api/oa/activiti';
+  // import { reactive } from 'vue';
+  import { Card } from 'ant-design-vue';
+  // import { complete, claim, jump, backProcess, getFlowImgByInstanceId } from '/@/api/oa/activiti';
   const emit = defineEmits(['save']);
 
   const go = useGo();
@@ -50,9 +53,9 @@
     },
   });
 
-  const stats = reactive({
-    memoRef: '',
-  });
+  // const stats = reactive({
+  //   memoRef: '',
+  // });
 
   const save = () => {
     emit('save');
@@ -60,6 +63,11 @@
 
   function goBack() {
     // 本例的效果时点击返回始终跳转到账号列表页，实际应用时可返回上一页
-    go('/work/oa/index');
+    go('/work/oa');
   }
 </script>
+<style lang="less" scoped>
+  .high-form {
+    padding-bottom: 48px;
+  }
+</style>
