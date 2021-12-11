@@ -117,7 +117,6 @@ export function useMenuSetting() {
         ? (unref(getCollapsed) ? SIDE_BAR_MINI_WIDTH : SIDE_BAR_SHOW_TIT_MINI_WIDTH) +
           (unref(getMixSideFixed) && unref(mixSideHasChildren) ? unref(getRealWidth) : 0)
         : unref(getRealWidth);
-    console.log(width);
     return `calc(100% - ${unref(width)}px)`;
   });
 

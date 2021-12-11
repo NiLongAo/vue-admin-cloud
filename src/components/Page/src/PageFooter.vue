@@ -1,5 +1,5 @@
 <template>
-  <div :class="prefixCls" :style="{ width: getCalcContentWidth }">
+  <div :class="prefixCls" :style="{ width: width }">
     <div :class="`${prefixCls}__left`">
       <slot name="left"></slot>
     </div>
@@ -10,7 +10,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, onBeforeMount, ref, unref } from 'vue';
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
   import { useDesign } from '/@/hooks/web/useDesign';
 
@@ -18,9 +18,14 @@
     name: 'PageFooter',
     inheritAttrs: false,
     setup() {
+      const width = ref('');
+      onBeforeMount(() => {
+        const { getCalcContentWidth } = useMenuSetting();
+        width.value = unref(getCalcContentWidth);
+      });
       const { prefixCls } = useDesign('page-footer');
-      const { getCalcContentWidth } = useMenuSetting();
-      return { prefixCls, getCalcContentWidth };
+
+      return { prefixCls, width };
     },
   });
 </script>
