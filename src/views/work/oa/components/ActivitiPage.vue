@@ -18,13 +18,16 @@
   import { BasicTable, useTable, TableAction, ActionItem } from '/@/components/Table';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { tabListTitle, tableDate } from './data';
+  import { useGo } from '/@/hooks/web/usePage';
+
+  const go = useGo();
 
   const { hasPermission } = usePermission();
   const tableRef = reactive({
-    activeKey: 'launch',
-    rowKey: tableDate['launch'].rowKey,
-    api: tableDate['launch'].api,
-    columns: tableDate['launch'].columns,
+    activeKey: 'need',
+    rowKey: tableDate['need'].rowKey,
+    api: tableDate['need'].api,
+    columns: tableDate['need'].columns,
     bordered: true,
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
@@ -101,7 +104,9 @@
   };
 
   const handleNeedExamine = () => {};
-  const handleNeedView = () => {};
+  const handleNeedView = (record) => {
+    go('/work/leave/' + record.businessKey);
+  };
   const handleClaim = () => {};
   const handleJump = () => {};
   const handleActivate = () => {};

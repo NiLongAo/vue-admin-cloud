@@ -49,7 +49,7 @@
 
   const getTitle = computed(() => (!unref(isUpdate) ? '新增用户信息' : '编辑用户信息'));
 
-  const [registerModal, { setModalProps,closeModal }] = useModalInner(async (data) => {
+  const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {

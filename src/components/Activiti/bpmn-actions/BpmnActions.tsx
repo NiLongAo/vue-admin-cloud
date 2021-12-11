@@ -8,6 +8,7 @@ import 'codemirror/addon/hint/xml-hint.js';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 
+import '/@/components/Activiti/iconfont';
 import './bpmn-actions.css';
 import { ModdleElement } from '/@/components/Activiti/Bpmn/type';
 

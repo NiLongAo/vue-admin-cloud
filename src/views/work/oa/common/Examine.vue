@@ -1,33 +1,55 @@
 <template>
   <PageWrapper
-    class="high-form h-full flex flex-col"
-    title="请假记录审批"
+    class="high-form h-full"
+    :title="getTital"
     @back="goBack"
     contentFullHeight
+    contentClass="flex flex-col "
   >
+    <template #footer>
+      <Tabs v-if="getStatus" v-model:activeKey="stats.tabsKey">
+        <TabsPane key="1" tab="详情" />
+        <TabsPane key="2" tab="流程图" />
+      </Tabs>
+    </template>
     <!-- 内容卡槽 -->
-    <Card :bordered="false" :style="`height:calc(100% - ${150}px)`">
+    <Card
+      v-show="stats.tabsKey === '1'"
+      :bordered="false"
+      class="flex-auto"
+      :style="!getStatus ? `height:calc(100% - ${150}px)` : `height:100%`"
+    >
       <slot name="content"></slot>
     </Card>
     <!-- 审核时信息 -->
-    <Card :bordered="false" class="!mt-5" style="height: 150px">
+    <Card
+      :bordered="false"
+      v-show="stats.tabsKey === '1' && getStatus"
+      class="!mt-5"
+      style="height: 150px"
+    >
       <div>审核时信息 </div>
+    </Card>
+    <Card :bordered="false" class="flex-auto" :style="`height:100%`" v-show="stats.tabsKey == '2'">
+      <Image :src="stats.images" :preview="false" class="object-center" />
     </Card>
 
     <!-- 按钮 -->
     <template #rightFooter>
       <!-- 发起审核按钮 -->
-      <Button style="margin-right: 10px" type="primary" v-if="status" @click="save()">确定</Button>
+      <Button style="margin-right: 10px" type="primary" v-if="!getStatus" @click="save()"
+        >确定</Button
+      >
       <!-- 提交审核按钮 -->
-      <Button style="margin-right: 10px" type="primary" v-if="!status" @click="handleComplete()"
+      <Button style="margin-right: 10px" type="primary" v-if="getStatus" @click="handleComplete()"
         >审核提交</Button
       >
       <!-- 驳回按钮 -->
-      <Button style="margin-right: 10px" v-if="!status" @click="handleBackProcess()" danger
+      <Button style="margin-right: 10px" v-if="getStatus" @click="handleBackProcess()" danger
         >驳回</Button
       >
       <!-- 取消按钮 -->
-      <Button style="margin-right: 10px" @click="goBack()">取消</Button>
+      <Button style="margin-right: 10px" @click="closeCurrent()">取消</Button>
       <!-- 删除按钮 -->
       <Button style="margin-right: 10px" v-if="isAdmin" @click="remove()" danger>删除</Button>
     </template>
@@ -35,21 +57,19 @@
 </template>
 <script lang="ts" setup>
   import { useGo } from '/@/hooks/web/usePage';
+  import { useTabs } from '/@/hooks/web/useTabs';
   import { PageWrapper } from '/@/components/Page';
-  import { reactive } from 'vue';
-  import { Card, Button } from 'ant-design-vue';
-  import { doComplete, doBackProcess, getFlowImgByInstanceId } from '/@/api/oa/activiti';
+  import { reactive, computed, watch, unref } from 'vue';
+  import { Card, Button, Tabs, Image } from 'ant-design-vue';
+  import { doComplete, doBackProcess, doGetFlowImgByInstanceId } from '/@/api/oa/activiti';
+  const TabsPane = Tabs.TabPane;
   const emit = defineEmits(['save', 'remove']);
+  const { closeCurrent } = useTabs();
   const go = useGo();
   const props = defineProps({
-    //状态 true.创建时 false.审核时
     data: {
       type: Object as PropType<Recordable>,
       default: null,
-    },
-    status: {
-      type: Boolean,
-      default: true,
     },
     isAdmin: {
       type: Boolean,
@@ -61,9 +81,32 @@
     },
   });
 
-  // const stats = reactive({
-  //   memoRef: '',
-  // });
+  watch(
+    () => props.instanceId,
+    async (_value) => {
+      if (getStatus.value) {
+        const url = await doGetFlowImgByInstanceId({
+          instanceId: props.instanceId,
+          useCustomColor: true,
+        });
+        stats.images = String(unref(url));
+      }
+    },
+  );
+
+  //状态 true.创建时 false.审核时
+  const getStatus = computed(() => {
+    return !!props.instanceId;
+  });
+
+  const getTital = computed(() => {
+    return getStatus.value ? '请假记录审批' : '请假单';
+  });
+
+  const stats = reactive({
+    tabsKey: '1',
+    images: '',
+  });
 
   const handleComplete = () => {
     doComplete({
