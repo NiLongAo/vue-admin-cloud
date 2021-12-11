@@ -100,7 +100,6 @@ export function useDragLine(siderRef: Ref<any>, dragBarRef: Ref<any>, mix = fals
       document.onmouseup = null;
       wrap.style.transition = 'width 0.2s';
       const width = parseInt(wrap.style.width);
-
       if (!mix) {
         const miniWidth = unref(getMiniWidthNumber);
         if (!unref(getCollapsed)) {

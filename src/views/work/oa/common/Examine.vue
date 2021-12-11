@@ -1,17 +1,21 @@
 <template>
-  <PageWrapper class="high-form" title="请假记录审批" @back="goBack">
-    <!-- 内容卡槽 -->
-    <Card :bordered="false" class="h-4/5">
-      <slot name="content"></slot>
-    </Card>
-    <!-- 审核时信息 -->
-    <Card :bordered="false" class="!mt-5 h-1/5">
-      <div>审核时信息 </div>
-    </Card>
+  <PageWrapper class="high-form h-full" title="请假记录审批" @back="goBack" contentFullHeight>
+    <div class="h-full">
+      <!-- 内容卡槽 -->
+      <Card :bordered="false" class="h-4/5">
+        <slot name="content"></slot>
+      </Card>
+      <!-- 审核时信息 -->
+      <Card :bordered="false" class="!mt-5 h-1/5">
+        <div>审核时信息 </div>
+      </Card>
+    </div>
     <!-- 按钮 -->
     <template #rightFooter>
       <!-- 发起审核按钮 -->
-      <a-button color="primary" v-if="status" @click="save()">确定</a-button>
+      <a-button style="margin-right: 10px" color="primary" v-if="status" @click="save()"
+        >确定</a-button
+      >
       <!-- 提交审核按钮 -->
       <a-button style="margin-right: 10px" color="success" v-if="!status">审核提交</a-button>
       <!-- 驳回按钮 -->

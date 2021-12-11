@@ -1,7 +1,7 @@
 import type { MenuSetting } from '/#/config';
 
 import { computed, unref, ref } from 'vue';
-
+import { useAppInject } from '/@/hooks/web/useAppInject';
 import { useAppStore } from '/@/store/modules/app';
 
 import { SIDE_BAR_MINI_WIDTH, SIDE_BAR_SHOW_TIT_MINI_WIDTH } from '/@/enums/appEnum';
@@ -106,14 +106,18 @@ export function useMenuSetting() {
   });
 
   const getCalcContentWidth = computed(() => {
+    const { getIsMobile } = useAppInject();
     const width =
-      unref(getIsTopMenu) || !unref(getShowMenu) || (unref(getSplit) && unref(getMenuHidden))
+      unref(getIsTopMenu) ||
+      !unref(getShowMenu) ||
+      (unref(getSplit) && unref(getMenuHidden)) ||
+      unref(getIsMobile)
         ? 0
         : unref(getIsMixSidebar)
         ? (unref(getCollapsed) ? SIDE_BAR_MINI_WIDTH : SIDE_BAR_SHOW_TIT_MINI_WIDTH) +
           (unref(getMixSideFixed) && unref(mixSideHasChildren) ? unref(getRealWidth) : 0)
         : unref(getRealWidth);
-
+    console.log(width);
     return `calc(100% - ${unref(width)}px)`;
   });
 
