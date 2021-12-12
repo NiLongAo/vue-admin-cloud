@@ -16,13 +16,11 @@
   import { unref, reactive } from 'vue';
   import { Card } from 'ant-design-vue';
   import { BasicTable, useTable, TableAction, ActionItem } from '/@/components/Table';
-  import { usePermission } from '/@/hooks/web/usePermission';
   import { tabListTitle, tableDate } from './data';
   import { useGo } from '/@/hooks/web/usePage';
 
   const go = useGo();
 
-  const { hasPermission } = usePermission();
   const tableRef = reactive({
     activeKey: 'need',
     rowKey: tableDate['need'].rowKey,
@@ -33,7 +31,7 @@
     showIndexColumn: false,
     size: 'small',
     actionColumn: {
-      width: 50,
+      width: 150,
       title: '操作',
       dataIndex: 'action',
       slots: { customRender: 'action' },
@@ -57,12 +55,11 @@
     return [
       {
         label: '审核',
-        ifShow: hasPermission('system.role:update'),
+        ifShow: tableRef.activeKey === 'need',
         onClick: handleNeedExamine.bind(null, record),
       },
       {
         label: '查看',
-        ifShow: hasPermission('system.role:update'),
         onClick: handleNeedView.bind(null, record),
       },
     ];
@@ -70,36 +67,36 @@
 
   const dropDownActions = (record): ActionItem[] => {
     return [
-      {
-        label: '签收',
-        ifShow: hasPermission('system.role:update'),
-        onClick: handleClaim.bind(null, record),
-      },
+      // {
+      //   label: '签收',
+      //   ifShow: tableRef.activeKey === 'need',
+      //   onClick: handleClaim.bind(null, record),
+      // },
       {
         label: '跳转',
-        ifShow: hasPermission('system.role:update'),
+        ifShow: tableRef.activeKey === 'need',
         onClick: handleJump.bind(null, record),
       },
       {
         label: '激活',
-        ifShow: hasPermission('system.role:update'),
+        ifShow: tableRef.activeKey === 'need',
         onClick: handleActivate.bind(null, record),
       },
       {
         label: '挂起',
-        ifShow: hasPermission('system.role:update'),
+        ifShow: tableRef.activeKey === 'need',
         onClick: handleSuspend.bind(null, record),
       },
       {
         label: '驳回',
-        ifShow: hasPermission('system.role:update'),
+        ifShow: tableRef.activeKey === 'need',
         onClick: handleBackProcess.bind(null, record),
       },
-      {
-        label: '删除',
-        ifShow: hasPermission('system.role:update'),
-        onClick: handleDeleteProcess.bind(null, record),
-      },
+      // {
+      //   label: '删除',
+      //   ifShow: hasPermission('system.role:update'),
+      //   onClick: handleDeleteProcess.bind(null, record),
+      // },
     ];
   };
 
