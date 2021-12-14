@@ -30,7 +30,7 @@
     init();
   });
   const init = async () => {
-    if (!stats.businessKey) {
+    if (stats.businessKey === 'undefined') {
       return;
     }
     const { startTime, endTime, day, processInstanceId, memo } = await doFind({

@@ -41,7 +41,7 @@ const need: TableItem = {
     },
     {
       title: '任务名称',
-      dataIndex: 'name',
+      dataIndex: 'taskName',
       width: 100,
     },
     {
@@ -84,7 +84,7 @@ const launch: TableItem = {
     },
     {
       title: '流程名称',
-      dataIndex: 'name',
+      dataIndex: 'instanceName',
       width: 100,
     },
     {
@@ -122,12 +122,12 @@ const already: TableItem = {
   columns: [
     {
       title: '流程编号',
-      dataIndex: 'historicInstanceId',
+      dataIndex: 'instanceId',
       width: 100,
     },
     {
       title: '流程名称',
-      dataIndex: 'name',
+      dataIndex: 'instanceName',
       width: 100,
     },
     {
