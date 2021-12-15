@@ -3,7 +3,6 @@ node_modules
 dist
 .npmrc
 .cache
-pnpm-lock.yaml
 
 tests/server/static
 tests/server/static/upload

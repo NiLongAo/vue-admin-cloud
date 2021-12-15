@@ -45,8 +45,8 @@ export function useTable(tableProps?: Props): [
 
     stopWatch = watch(
       () => tableProps,
-      async () => {
-        tableProps && (await instance.setProps(getDynamicProps(tableProps)));
+      () => {
+        tableProps && instance.setProps(getDynamicProps(tableProps));
         // 本人添加动态渲染表格
         if (unref(loadedReload)) {
           instance.reload();

@@ -1,16 +1,10 @@
 {
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
   "volar.tsPlugin": true,
   "volar.tsPluginStatus": false,
-  //===========================================
-  //============= Editor ======================
-  //===========================================
+  "npm.packageManager": "pnpm",
   "editor.tabSize": 2,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  //===========================================
-  //============= files =======================
-  //===========================================
   "files.eol": "\n",
   "search.exclude": {
     "**/node_modules": true,
@@ -94,7 +88,7 @@
   },
   "[vue]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": false
     }
   },
   "i18n-ally.localesPaths": ["src/locales/lang"],
@@ -138,6 +132,7 @@
     "brotli",
     "tailwindcss",
     "sider",
-    "pnpm"
+    "pnpm",
+    "antd"
   ]
 }
