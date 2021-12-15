@@ -1,5 +1,10 @@
 <template>
-  <Exanube :removeApi="doDelete" :instanceId="stats.processInstanceId" @save="save">
+  <Exanube
+    :loading="loading"
+    :removeApi="doDelete"
+    :instanceId="stats.processInstanceId"
+    @save="save"
+  >
     <template #content>
       <BasicForm @register="registerForm" />
     </template>
@@ -8,12 +13,15 @@
 
 <script lang="ts" setup>
   import { useRoute } from 'vue-router';
-  import { reactive, onMounted, unref } from 'vue';
+  import { reactive, onMounted, unref, ref } from 'vue';
   import Exanube from '../oa/common/Examine.vue';
   import { doFind, doInsert, doDelete } from '/@/api/oa/leave';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
+  import { useTabs } from '/@/hooks/web/useTabs';
+  const { closeCurrent } = useTabs();
 
   const route = useRoute();
+  const loading = ref(false);
 
   const stats = reactive({
     // 业务主键
@@ -41,7 +49,6 @@
     stats.endTime = endTime;
     stats.day = day;
     stats.memo = memo;
-    console.log(unref(stats));
     setFieldsValue(unref(stats));
     updateSchema([
       {
@@ -120,6 +127,11 @@
 
   const save = async () => {
     const val: any = await validate();
-    await doInsert(val);
+    loading.value = true;
+    try {
+      await doInsert(val);
+    } catch (error) {}
+    loading.value = false;
+    closeCurrent();
   };
 </script>

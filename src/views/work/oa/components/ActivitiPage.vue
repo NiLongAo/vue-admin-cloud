@@ -100,7 +100,9 @@
     ];
   };
 
-  const handleNeedExamine = () => {};
+  const handleNeedExamine = (record) => {
+    go('/work/leave/' + record.businessKey);
+  };
   const handleNeedView = (record) => {
     go('/work/leave/' + record.businessKey);
   };

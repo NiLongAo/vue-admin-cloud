@@ -37,21 +37,36 @@
     <!-- 按钮 -->
     <template #rightFooter>
       <!-- 发起审核按钮 -->
-      <Button style="margin-right: 10px" type="primary" v-if="!getStatus" @click="save()"
+      <Button
+        style="margin-right: 10px"
+        :loading="stats.loading"
+        type="primary"
+        v-if="!getStatus"
+        @click="save()"
         >确定</Button
       >
       <!-- 提交审核按钮 -->
-      <Button style="margin-right: 10px" type="primary" v-if="getStatus" @click="handleComplete()"
+      <Button
+        style="margin-right: 10px"
+        :loading="stats.loading"
+        type="primary"
+        v-if="getStatus && getExamine"
+        @click="handleComplete()"
         >审核提交</Button
       >
-      <!-- 驳回按钮 -->
-      <Button style="margin-right: 10px" v-if="getStatus" @click="handleBackProcess()" danger
-        >驳回</Button
-      >
       <!-- 取消按钮 -->
-      <Button style="margin-right: 10px" @click="closeCurrent()">取消</Button>
+      <Button style="margin-right: 10px" :loading="stats.loading" @click="closeCurrent()"
+        >取消</Button
+      >
       <!-- 删除按钮 -->
-      <Button style="margin-right: 10px" v-if="isAdmin" @click="remove()" danger>删除</Button>
+      <Button
+        style="margin-right: 10px"
+        :loading="stats.loading"
+        v-if="isAdmin"
+        @click="remove()"
+        danger
+        >删除</Button
+      >
     </template>
   </PageWrapper>
 </template>
@@ -61,7 +76,12 @@
   import { PageWrapper } from '/@/components/Page';
   import { reactive, computed, watch, unref } from 'vue';
   import { Card, Button, Tabs, Image } from 'ant-design-vue';
-  import { doComplete, doBackProcess, doGetFlowImgByInstanceId } from '/@/api/oa/activiti';
+  import {
+    doComplete,
+    doBackProcess,
+    doGetFlowImgByInstanceId,
+    doFindInstanceIdDetail,
+  } from '/@/api/oa/activiti';
   const TabsPane = Tabs.TabPane;
   const emit = defineEmits(['save', 'remove']);
   const { closeCurrent } = useTabs();
@@ -75,11 +95,29 @@
       type: Boolean,
       default: false,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     instanceId: {
       type: String,
       default: null,
     },
   });
+  const stats = reactive({
+    tabsKey: '1',
+    images: '',
+    loading: false,
+    data: {} as Recordable,
+    processVariables: {} as Recordable,
+  });
+
+  watch(
+    () => props.loading,
+    async (value) => {
+      stats.loading = value;
+    },
+  );
 
   watch(
     () => props.instanceId,
@@ -89,10 +127,22 @@
           instanceId: props.instanceId,
           useCustomColor: true,
         });
+        stats.data = await doFindInstanceIdDetail({ instanceId: props.instanceId });
         stats.images = String(unref(url));
+        stats.processVariables = stats.data.processVariables;
+        console.log(stats.processVariables);
       }
     },
   );
+
+  //状态 true.创建时 false.审核时
+  const getExamine = computed(() => {
+    return (
+      stats.processVariables &&
+      stats.processVariables?.status &&
+      stats.processVariables?.status === 1
+    );
+  });
 
   //状态 true.创建时 false.审核时
   const getStatus = computed(() => {
@@ -101,11 +151,6 @@
 
   const getTital = computed(() => {
     return getStatus.value ? '请假记录审批' : '请假单';
-  });
-
-  const stats = reactive({
-    tabsKey: '1',
-    images: '',
   });
 
   const handleComplete = () => {

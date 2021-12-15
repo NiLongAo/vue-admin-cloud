@@ -40,6 +40,8 @@ enum Api {
   activate = '/webapi/activiti/activiti/activate',
   //驳回上一流程
   backProcess = '/webapi/activiti/activiti/back_process',
+  //根据节点编号获取节点信息及实例信息
+  findInstanceIdDetail = '/webapi/activiti/activiti/find_instance_id_detail',
   //根据流程实例Id,获取实时流程图片
   getFlowImgByInstanceId = '/webapi/activiti/activiti/get_flow_img_by_instance_id',
 }
@@ -99,6 +101,9 @@ export function doActivate(params: Recordable) {
 }
 export function doBackProcess(params: Recordable) {
   return defHttp.get({ url: Api.backProcess, params });
+}
+export function doFindInstanceIdDetail(params: Recordable) {
+  return defHttp.get({ url: Api.findInstanceIdDetail, params });
 }
 export function doGetFlowImgByInstanceId(params: Recordable) {
   return defHttp.get({ url: Api.getFlowImgByInstanceId, params });

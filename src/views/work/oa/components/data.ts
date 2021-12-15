@@ -78,8 +78,8 @@ const launch: TableItem = {
   api: doFindUserLaunchList,
   columns: [
     {
-      title: '流程编号',
-      dataIndex: 'instanceId',
+      title: '流程定义名称',
+      dataIndex: 'processDefinitionName',
       width: 100,
     },
     {
@@ -88,18 +88,16 @@ const launch: TableItem = {
       width: 100,
     },
     {
-      title: '流程定义编号',
-      dataIndex: 'processDefinitionId',
+      title: '当前节点名称',
+      dataIndex: 'taskName',
       width: 100,
     },
     {
-      title: '流程定义名称',
-      dataIndex: 'processDefinitionName',
-      width: 100,
-    },
-    {
-      title: '源数据编号',
-      dataIndex: 'businessKey',
+      title: '审核状态',
+      dataIndex: 'statusName',
+      customRender: ({ record }) => {
+        return record.processVariables.statusName;
+      },
       width: 100,
     },
     {
@@ -121,8 +119,8 @@ const already: TableItem = {
   api: doFindUserAlreadyList,
   columns: [
     {
-      title: '流程编号',
-      dataIndex: 'instanceId',
+      title: '流程定义名称',
+      dataIndex: 'processDefinitionName',
       width: 100,
     },
     {
@@ -131,18 +129,16 @@ const already: TableItem = {
       width: 100,
     },
     {
-      title: '流程定义编号',
-      dataIndex: 'processDefinitionId',
+      title: '当前节点名称',
+      dataIndex: 'taskName',
       width: 100,
     },
     {
-      title: '流程定义名称',
-      dataIndex: 'processDefinitionName',
-      width: 100,
-    },
-    {
-      title: '源数据编号',
-      dataIndex: 'businessKey',
+      title: '审核状态',
+      dataIndex: 'statusName',
+      customRender: ({ record }) => {
+        return record.processVariables.statusName;
+      },
       width: 100,
     },
     {
