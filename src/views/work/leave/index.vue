@@ -130,8 +130,8 @@
     loading.value = true;
     try {
       await doInsert(val);
+      closeCurrent();
     } catch (error) {}
     loading.value = false;
-    closeCurrent();
   };
 </script>

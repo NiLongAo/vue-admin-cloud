@@ -129,7 +129,7 @@ const already: TableItem = {
       width: 100,
     },
     {
-      title: '当前节点名称',
+      title: '节点名称',
       dataIndex: 'taskName',
       width: 100,
     },
