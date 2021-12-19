@@ -24,6 +24,7 @@
     <!-- 审核时信息 -->
     <Card
       :bordered="false"
+      v-if = "type"
       v-show="stats.tabsKey === '1' && getStatus"
       class="!mt-5"
       style="height: 150px"
@@ -31,7 +32,29 @@
       <div>审核时信息 </div>
     </Card>
     <Card :bordered="false" class="flex-auto" :style="`height:100%`" v-show="stats.tabsKey == '2'">
-      <Image :src="stats.images" :preview="false" class="object-center" />
+      <div>
+        <div class="w-full !mr-4 enter-y">
+          <Card title="流程图" :bordered="false">
+            <Image  :src="stats.images" :preview="false" style="height: 12rem;" class="object-none object-bottom" />
+          </Card>
+        </div>
+        <div class= "w-full enter-y">
+          <Card title="审核信息" :bordered="false" v-if="stats.stepList">
+            <Steps :current="stats.stepList.length" progress-dot size="small" direction="vertical">
+              <template v-for="step in stats.stepList">
+                <Step :title="step.activityName">
+                  <template #description>
+                    <p class="m-0" v-if="step.tackComment">审核人：{{step.tackComment?.departmentName}} {{step.tackComment?.userName}}</p>
+                    <p class="m-0" v-if="step.tackComment">审核状态：{{!step.tackComment.statusName?'审核中':step.tackComment.statusName}}</p>
+                    <p class="m-0" v-if="step.endTime">审核时间：{{step.endTime}}</p>
+                    <p class="m-0" v-if="step.tackComment">备注：{{step.tackComment.memo}}</p>
+                  </template>
+                </Step>
+              </template>
+            </Steps>
+          </Card>
+        </div>
+      </div>
     </Card>
 
     <!-- 按钮 -->
@@ -41,7 +64,7 @@
         style="margin-right: 10px"
         :loading="stats.loading"
         type="primary"
-        v-if="!getStatus"
+        v-if="!getStatus && type"
         @click="save()"
         >确定</Button
       >
@@ -50,7 +73,7 @@
         style="margin-right: 10px"
         :loading="stats.loading"
         type="primary"
-        v-if="getStatus && getExamine"
+        v-if="getStatus && getExamine && type"
         @click="handleComplete()"
         >审核提交</Button
       >
@@ -62,7 +85,7 @@
       <Button
         style="margin-right: 10px"
         :loading="stats.loading"
-        v-if="isAdmin"
+        v-if="isAdmin "
         @click="remove()"
         danger
         >删除</Button
@@ -75,13 +98,16 @@
   import { useTabs } from '/@/hooks/web/useTabs';
   import { PageWrapper } from '/@/components/Page';
   import { reactive, computed, watch, unref } from 'vue';
-  import { Card, Button, Tabs, Image } from 'ant-design-vue';
+  import { Card, Button, Tabs, Image,Steps } from 'ant-design-vue';
   import {
     doComplete,
     doBackProcess,
     doGetFlowImgByInstanceId,
     doFindInstanceIdDetail,
+    doFindHistoricalInstanceIdList,
   } from '/@/api/oa/activiti';
+
+  const Step = Steps.Step;
   const TabsPane = Tabs.TabPane;
   const emit = defineEmits(['save', 'remove']);
   const { closeCurrent } = useTabs();
@@ -103,12 +129,17 @@
       type: String,
       default: null,
     },
+    type: {
+      type: Boolean,
+      default: false,
+    },
   });
   const stats = reactive({
     tabsKey: '1',
     images: '',
     loading: false,
     data: {} as Recordable,
+    stepList: [] as Array<Recordable>,
     processVariables: {} as Recordable,
   });
 
@@ -128,6 +159,7 @@
           useCustomColor: true,
         });
         stats.data = await doFindInstanceIdDetail({ instanceId: props.instanceId });
+        stats.stepList = await doFindHistoricalInstanceIdList({ instanceId: props.instanceId });
         stats.images = String(unref(url));
         stats.processVariables = stats.data.processVariables;
         console.log(stats.processVariables);

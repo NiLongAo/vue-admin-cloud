@@ -7,6 +7,11 @@ import {
   ActivitiUserAlreadyPageResultModel,
 } from './model/activitiModel';
 
+export enum OAIndex{
+  Leave = '/work/leave/'
+}
+
+
 enum Api {
   //获取当前用户待办事项
   statsUserOa = '/webapi/activiti/activiti/stats_user_oa',

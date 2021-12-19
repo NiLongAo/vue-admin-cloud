@@ -3,6 +3,7 @@
     :loading="loading"
     :removeApi="doDelete"
     :instanceId="stats.processInstanceId"
+    :type="type"
     @save="save"
   >
     <template #content>
@@ -13,7 +14,7 @@
 
 <script lang="ts" setup>
   import { useRoute } from 'vue-router';
-  import { reactive, onMounted, unref, ref } from 'vue';
+  import { reactive,computed, onMounted, unref, ref } from 'vue';
   import Exanube from '../oa/common/Examine.vue';
   import { doFind, doInsert, doDelete } from '/@/api/oa/leave';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
@@ -25,7 +26,7 @@
 
   const stats = reactive({
     // 业务主键
-    businessKey: route.params?.id,
+    params: route.params?.id as String,
     // 表格中的值
     startTime: '',
     endTime: '',
@@ -37,12 +38,14 @@
   onMounted(() => {
     init();
   });
+
   const init = async () => {
-    if (stats.businessKey === 'undefined') {
+    const businessKey = stats.params.split(":")[0];
+    if (businessKey === 'undefined') {
       return;
     }
     const { startTime, endTime, day, processInstanceId, memo } = await doFind({
-      id: stats.businessKey,
+      id: businessKey,
     });
     stats.processInstanceId = processInstanceId;
     stats.startTime = startTime;
@@ -69,6 +72,11 @@
       },
     ]);
   };
+
+  const type = computed(()=>{
+    // 1表示审核按钮 2.表示查看按钮
+      return (stats.params.split(":")[0] === 'undefined')|| (stats.params.split(":")[1]  === "1");
+  })
 
   const schemas: FormSchema[] = [
     {

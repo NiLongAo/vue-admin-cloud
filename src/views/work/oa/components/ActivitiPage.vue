@@ -18,7 +18,7 @@
   import { BasicTable, useTable, TableAction, ActionItem } from '/@/components/Table';
   import { tabListTitle, tableDate } from './data';
   import { useGo } from '/@/hooks/web/usePage';
-
+  import { OAIndex } from '/@/api/oa/activiti';
   const go = useGo();
 
   const tableRef = reactive({
@@ -99,12 +99,17 @@
       // },
     ];
   };
+  // OAIndex:跳转路径集合枚举
+  // key[0] ：定义那个地址
+  // record.businessKey 业务主键
 
   const handleNeedExamine = (record) => {
-    go('/work/leave/' + record.businessKey);
+    const key = record.processDefinitionId.split(":");
+    go(OAIndex[key[0]] +  record.businessKey +':1');
   };
   const handleNeedView = (record) => {
-    go('/work/leave/' + record.businessKey);
+    const key = record.processDefinitionId.split(":");
+    go(OAIndex[key[0]] + record.businessKey +':2');
   };
   const handleClaim = () => {};
   const handleJump = () => {};
@@ -112,4 +117,5 @@
   const handleSuspend = () => {};
   const handleBackProcess = () => {};
   const handleDeleteProcess = () => {};
+
 </script>

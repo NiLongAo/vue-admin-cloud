@@ -35,8 +35,8 @@ const need: TableItem = {
   api: doFindUserNeedList,
   columns: [
     {
-      title: '任务编号',
-      dataIndex: 'taskId',
+      title: '流程名称',
+      dataIndex: 'instanceName',
       width: 100,
     },
     {
@@ -45,19 +45,20 @@ const need: TableItem = {
       width: 100,
     },
     {
-      title: '用户编号',
-      dataIndex: 'assignee',
+      title: '发起部门',
+      dataIndex: 'instanceComment.departmentName',
       width: 100,
+      customRender: ({ record }) => {
+        return record.instanceComment.departmentName;
+      },
     },
     {
-      title: '流程实例编号',
-      dataIndex: 'instanceId',
+      title: '发起用户',
+      dataIndex: 'instanceComment.userId',
       width: 100,
-    },
-    {
-      title: '流程定义编号',
-      dataIndex: 'processDefinitionId',
-      width: 100,
+      customRender: ({ record }) => {
+        return record.instanceComment.userName;
+      },
     },
     {
       title: '创建时间',
@@ -129,12 +130,12 @@ const already: TableItem = {
       width: 100,
     },
     {
-      title: '节点名称',
+      title: '参与节点名称',
       dataIndex: 'taskName',
       width: 100,
     },
     {
-      title: '审核状态',
+      title: '流程状态',
       dataIndex: 'statusName',
       customRender: ({ record }) => {
         return record.processVariables.statusName;
