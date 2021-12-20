@@ -3,7 +3,7 @@
     :loading="loading"
     :removeApi="doDelete"
     :instanceId="stats.processInstanceId"
-    :type="type"
+    :buttomType="buttomType"
     @save="save"
   >
     <template #content>
@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
   import { useRoute } from 'vue-router';
-  import { reactive,computed, onMounted, unref, ref } from 'vue';
+  import { reactive, computed, onMounted, unref, ref } from 'vue';
   import Exanube from '../oa/common/Examine.vue';
   import { doFind, doInsert, doDelete } from '/@/api/oa/leave';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
@@ -40,7 +40,7 @@
   });
 
   const init = async () => {
-    const businessKey = stats.params.split(":")[0];
+    const businessKey = stats.params.split(':')[0];
     if (businessKey === 'undefined') {
       return;
     }
@@ -73,10 +73,10 @@
     ]);
   };
 
-  const type = computed(()=>{
+  const buttomType = computed(() => {
     // 1表示审核按钮 2.表示查看按钮
-      return (stats.params.split(":")[0] === 'undefined')|| (stats.params.split(":")[1]  === "1");
-  })
+    return stats.params.split(':')[0] === 'undefined' || stats.params.split(':')[1] === '1';
+  });
 
   const schemas: FormSchema[] = [
     {

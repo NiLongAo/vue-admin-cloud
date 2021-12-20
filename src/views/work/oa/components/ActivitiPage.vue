@@ -104,12 +104,12 @@
   // record.businessKey 业务主键
 
   const handleNeedExamine = (record) => {
-    const key = record.processDefinitionId.split(":");
-    go(OAIndex[key[0]] +  record.businessKey +':1');
+    const key = record.processDefinitionId.split(':');
+    go(OAIndex[key[0]] + record.businessKey + ':1');
   };
   const handleNeedView = (record) => {
-    const key = record.processDefinitionId.split(":");
-    go(OAIndex[key[0]] + record.businessKey +':2');
+    const key = record.processDefinitionId.split(':');
+    go(OAIndex[key[0]] + record.businessKey + ':2');
   };
   const handleClaim = () => {};
   const handleJump = () => {};
@@ -117,5 +117,4 @@
   const handleSuspend = () => {};
   const handleBackProcess = () => {};
   const handleDeleteProcess = () => {};
-
 </script>
