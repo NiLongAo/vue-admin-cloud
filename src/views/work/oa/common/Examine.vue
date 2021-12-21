@@ -33,16 +33,6 @@
     </Card>
     <Card :bordered="false" class="flex-auto" :style="`height:100%`" v-show="stats.tabsKey == '2'">
       <div>
-        <div class="w-full !mr-4 enter-y">
-          <Card title="流程图" :bordered="false">
-            <Image
-              :src="stats.images"
-              :preview="false"
-              style="height: 12rem"
-              class="object-none object-bottom"
-            />
-          </Card>
-        </div>
         <div class="w-full enter-y">
           <Card title="审核信息" :bordered="false" v-if="stats.stepList">
             <Steps :current="stats.stepList.length" progress-dot size="small" direction="vertical">
@@ -64,6 +54,11 @@
                 </Step>
               </template>
             </Steps>
+          </Card>
+        </div>
+        <div class="w-full !mr-4 enter-y">
+          <Card title="流程图" :bordered="false">
+            <Image :src="stats.images" :preview="false" class="object-contain object-bottom" />
           </Card>
         </div>
       </div>
