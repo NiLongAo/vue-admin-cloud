@@ -34,7 +34,7 @@
   });
 </script>
 <script lang="ts" setup>
-  import { ref, unref, computed, watch } from 'vue';
+  import { ref, unref, computed, watch, nextTick } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { menuSchemas, privilegeSchemas } from './menuDrawerData';
@@ -101,21 +101,25 @@
     } else {
       type.value = 1;
     }
-    if (~~unref(type) === 3) {
-      privilegeUpdate(unref(meunId));
-    } else {
-      menuUpdate(unref(meunId));
-    }
+    nextTick(() => {
+      if (~~unref(type) === 3) {
+        privilegeUpdate(unref(meunId));
+      } else {
+        menuUpdate(unref(meunId));
+      }
+    });
   });
 
   watch(
     () => type.value,
     (visible) => {
-      if (~~visible === 3) {
-        privilegeUpdate(unref(meunId));
-      } else {
-        menuUpdate(unref(meunId));
-      }
+      nextTick(() => {
+        if (~~visible === 3) {
+          privilegeUpdate(unref(meunId));
+        } else {
+          menuUpdate(unref(meunId));
+        }
+      });
     },
   );
 
@@ -144,6 +148,7 @@
     setDrawerProps({ confirmLoading: false });
     resetPrivilegeFields();
     const treeData = await doMenuTree({ topName: '默认' });
+
     updatePrivilegeSchema([
       {
         field: 'menuId',
