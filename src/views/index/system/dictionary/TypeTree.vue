@@ -5,7 +5,7 @@
       toolbar
       search
       ref="asyncExpandTreeRef"
-      :replaceFields="{ key: 'typeId', title: 'name' }"
+      :fieldNames="{ key: 'typeId', title: 'name' }"
       :clickRowToExpand="false"
       :beforeRightClick="getRightMenuList"
       :treeData="treeData"

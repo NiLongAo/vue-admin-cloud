@@ -34,7 +34,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { settingUpdateList, settingInsertList } from './data';
 
-  const props = defineProps({
+  defineProps({
     reload: {
       type: Function,
     },

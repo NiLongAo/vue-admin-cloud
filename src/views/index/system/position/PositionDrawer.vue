@@ -37,7 +37,7 @@
         span: 24,
       },
       componentProps: {
-        replaceFields: {
+        fieldNames: {
           title: 'positionName',
           key: 'id',
           value: 'id',

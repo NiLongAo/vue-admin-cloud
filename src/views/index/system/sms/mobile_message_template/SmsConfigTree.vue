@@ -5,7 +5,7 @@
       toolbar
       search
       ref="asyncExpandTreeRef"
-      :replaceFields="{ key: 'id', title: 'configName' }"
+      :fieldNames="{ key: 'id', title: 'configName' }"
       :clickRowToExpand="false"
       :treeData="treeData"
       @select="handleSelect"

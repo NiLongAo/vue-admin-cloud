@@ -18,7 +18,7 @@ export const menuSchemas: FormSchema[] = [
       span: 24,
     },
     componentProps: {
-      replaceFields: {
+      fieldNames: {
         title: 'menuName',
         key: 'id',
         value: 'id',
@@ -133,7 +133,7 @@ export const privilegeSchemas: FormSchema[] = [
       span: 24,
     },
     componentProps: {
-      replaceFields: {
+      fieldNames: {
         title: 'menuName',
         key: 'id',
         value: 'id',

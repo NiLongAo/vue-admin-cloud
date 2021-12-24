@@ -116,7 +116,7 @@
         loops(dataTree.value, true, obj);
         tree.value = dataTree.value;
       });
-    }
+    },
   );
 
   //切换权限监控
@@ -125,7 +125,7 @@
     (data) => {
       tree.value = data;
       onInit();
-    }
+    },
   );
   //点击复选框触发
   const handleSubsetChange = async (val) => {
@@ -221,7 +221,7 @@
       if (cheList.indexOf(v) != -1) {
         cheList.splice(
           cheList.findIndex((o) => o === v),
-          1
+          1,
         );
         checkList.value = cheList;
       }

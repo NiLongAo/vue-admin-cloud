@@ -17,7 +17,7 @@
       showLine
       search
       ref="asyncExpandTreeRef"
-      :replaceFields="{ key: ketFields, title: titleFields }"
+      :fieldNames="{ key: ketFields, title: titleFields }"
       :clickRowToExpand="false"
       :treeData="treeData"
       @select="handleSelect"
