@@ -4,7 +4,7 @@
     @register="registerModal"
     :title="getTitle"
     @ok="handleSubmit"
-    width="800px"
+    width="900px"
   >
     <BasicTable
       @register="registerTable"
@@ -179,6 +179,7 @@
     useSearchForm: true,
     bordered: true,
     defaultExpandAllRows: true,
+    isCanResizeParent: true,
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
     size: 'small',

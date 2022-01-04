@@ -121,7 +121,6 @@ export class VAxios {
    * @description:  File Upload
    */
   uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
-    debugger;
     const formData = new window.FormData();
 
     formData.append(params.name || 'file', params.file, params.filename);
