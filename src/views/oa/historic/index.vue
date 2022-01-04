@@ -1,16 +1,13 @@
 <template>
   <div>
-    <BasicTable
-      @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys }"
-    >
+    <BasicTable @register="registerTable">
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
               ifShow: hasPermission('system.config:update'),
-              icon: 'mdi:file-edit-outline',
-              onClick: handleEdit.bind(null, record),
+              icon: 'clarity:info-standard-line',
+              onClick: handleView.bind(null, record),
             },
           ]"
         />
@@ -20,15 +17,16 @@
 </template>
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doConfigPage } from '/@/api/sys/config';
-  import { ref } from 'vue';
+  import { doFindAlreadyList } from '/@/api/oa/activiti';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { useGo } from '/@/hooks/web/usePage';
+  import { OAIndex } from '/@/api/oa/activiti';
+  const go = useGo();
   const { hasPermission } = usePermission();
-  const checkedKeys = ref<Array<string | number>>([]);
 
-  const [registerTable, { reload }] = useTable({
+  const [registerTable] = useTable({
     title: '历史流程列表',
-    api: doConfigPage,
+    api: doFindAlreadyList,
     columns: getBasicColumns(),
     formConfig: getFormConfig(),
     useSearchForm: true,
@@ -38,15 +36,16 @@
     showIndexColumn: false,
     rowKey: 'k',
     actionColumn: {
-      width: 160,
+      width: 50,
       title: 'Action',
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
   });
-  const handleSuccess = () => {
-    //刷新表单
-    reload();
+
+  const handleView = (record: Recordable) => {
+    const key = record.processDefinitionId.split(':');
+    go(OAIndex[key[0]] + record.businessKey + ':2');
   };
 
   function getFormConfig(): Partial<FormProps> {
@@ -55,8 +54,8 @@
       autoSubmitOnEnter: true,
       schemas: [
         {
-          field: `configName`,
-          label: `系统设置名称`,
+          field: `name`,
+          label: `任务名称`,
           component: 'Input',
           colProps: {
             xl: 6,
@@ -70,19 +69,26 @@
   function getBasicColumns(): BasicColumn[] {
     return [
       {
-        title: '配置键',
-        dataIndex: 'k',
+        title: '流程定义名称',
+        dataIndex: 'processDefinitionName',
         fixed: 'left',
         width: 100,
       },
       {
-        title: '配置值',
-        dataIndex: 'v',
-        width: 200,
+        title: '任务名称',
+        dataIndex: 'instanceName',
+        fixed: 'left',
+        width: 100,
       },
       {
-        title: '配置名称',
-        dataIndex: 'configName',
+        title: '开始时间',
+        dataIndex: 'startTime',
+        fixed: 'left',
+        width: 100,
+      },
+      {
+        title: '结束时间',
+        dataIndex: 'endTime',
         fixed: 'left',
         width: 100,
       },

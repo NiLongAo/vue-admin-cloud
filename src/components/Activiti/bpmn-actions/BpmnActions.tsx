@@ -1,4 +1,4 @@
-import { defineComponent, ref, nextTick } from 'vue';
+import { defineComponent, ref, nextTick, unref } from 'vue';
 import ButtonRender, { ButtonRenderProps } from '/@/components/Activiti/button-render';
 import { BpmnStore } from '/@/components/Activiti/Bpmn/store';
 import CodeMirror from 'codemirror';
@@ -21,11 +21,33 @@ export default defineComponent({
     const previewActive = ref(false);
     //取到的xml
     const xml = ref('');
+    const bpmnContext = BpmnStore;
+
+
+    const getXml = async () =>{
+      const rootElement: ModdleElement = await bpmnContext
+              .getModeler()
+              .get('canvas')
+              .getRootElement();
+              console.log(rootElement);
+      await bpmnContext
+              .getXML()
+              .then((response) => {
+                xml.value = response.xml;
+              })
+              .catch((err: unknown) => {
+                console.warn(err);
+              });
+             
+              
+      return {id:rootElement.id,name:rootElement.id,xml:unref(xml)};
+    }
 
     return {
       zoom,
       previewActive,
       xml,
+      getXml,
     };
   },
   render() {

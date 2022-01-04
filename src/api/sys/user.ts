@@ -47,6 +47,8 @@ enum Api {
   SaveUserPosition = '/webapi/bean/user/save_user_position',
   //生成验证码的接口
   getCode = '/webapi/bean/user/getcode',
+  //获取用户列表信息
+  choiceUserPage = '/webapi/bean/user/choice_user_page',
 }
 
 /**
@@ -104,6 +106,16 @@ export function UserInfoApi(params) {
 export function getUserPage(params: UserParams) {
   return defHttp.post<UserPageResultModel>({
     url: Api.GetUserPage,
+    params,
+  });
+}
+
+/**
+ * @description: 获取用户分页接口
+ */
+export function getChoiceUserPage(params: UserParams) {
+  return defHttp.post<UserPageResultModel>({
+    url: Api.choiceUserPage,
     params,
   });
 }

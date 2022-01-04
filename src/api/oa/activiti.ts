@@ -5,10 +5,12 @@ import {
   ActivitiUserNeedPageResultModel,
   ActivitiUserLaunchPageResultModel,
   ActivitiUserAlreadyPageResultModel,
+  ActivitiRepositoryPageResultModel,
 } from './model/activitiModel';
 
 export enum OAIndex {
   Leave = '/work/leave/',
+  Deploy = '/oa/deploy/',
 }
 
 enum Api {
@@ -20,12 +22,16 @@ enum Api {
   findUserLaunchList = '/webapi/activiti/activiti/find_user_launch_list',
   //获取当前用户已办事项
   findUserAlreadyList = '/webapi/activiti/activiti/find_user_already_list',
+  //获取流程部署实例
+  findRepositoryList = '/webapi/activiti/activiti/find_repository_list',
   //待办事项
   findNeedList = '/webapi/activiti/activiti/find_need_list',
   //历史记录
   findAlreadyList = '/webapi/activiti/activiti/find_already_list',
   //根据流程编号获取审批历史记录
   findHistoricalInstanceIdList = '/webapi/activiti/activiti/find_historical_instance_id_list',
+  //获取流程定义 xml
+  findRepositoryXml = '/webapi/activiti/activiti/find_repository_xml',
   //部署流程引擎实例(以参数传输方式)
   deployProcessParameter = '/webapi/activiti/activiti/deploy_process_parameter',
   //部署流程引擎实例(以文本传输方式)
@@ -40,8 +46,10 @@ enum Api {
   jump = '/webapi/activiti/activiti/jump',
   //挂起流程
   suspend = '/webapi/activiti/activiti/suspend',
-  //激活流程
-  activate = '/webapi/activiti/activiti/activate',
+  //挂起 - 激活 流程实例流程
+  suspendedInstance = '/webapi/activiti/activiti/suspended_instance',
+  //挂起 - 激活 流程定义
+  suspendedProcessDefinition = '/webapi/activiti/activiti/suspended_process_definition',
   //驳回上一流程
   backProcess = '/webapi/activiti/activiti/back_process',
   //根据节点编号获取节点信息及实例信息
@@ -62,6 +70,9 @@ export function doFindUserLaunchList(params: ActivitiParams) {
 export function doFindUserAlreadyList(params: ActivitiParams) {
   return defHttp.post<ActivitiUserAlreadyPageResultModel>({ url: Api.findUserAlreadyList, params });
 }
+export function doFindRepositoryList(params: ActivitiParams) {
+  return defHttp.post<ActivitiRepositoryPageResultModel>({ url: Api.findRepositoryList, params });
+}
 export function doFindNeedList(params: ActivitiParams) {
   return defHttp.post<ActivitiUserNeedPageResultModel>({ url: Api.findNeedList, params });
 }
@@ -71,6 +82,9 @@ export function doFindAlreadyList(params: ActivitiParams) {
 
 export function doFindHistoricalInstanceIdList(params: Recordable) {
   return defHttp.get({ url: Api.findHistoricalInstanceIdList, params });
+}
+export function doFindRepositoryXml(params: Recordable) {
+  return defHttp.get({ url: Api.findRepositoryXml, params });
 }
 
 export function doDeployProcessParameter(params: Recordable) {
@@ -100,8 +114,11 @@ export function doSuspend(params: Recordable) {
   return defHttp.get({ url: Api.suspend, params });
 }
 
-export function doActivate(params: Recordable) {
-  return defHttp.get({ url: Api.activate, params });
+export function doSuspendedInstance(params: Recordable) {
+  return defHttp.get({ url: Api.suspendedInstance, params });
+}
+export function doSuspendedProcessDefinition(params: Recordable) {
+  return defHttp.get({ url: Api.suspendedProcessDefinition, params });
 }
 export function doBackProcess(params: Recordable) {
   return defHttp.get({ url: Api.backProcess, params });

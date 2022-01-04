@@ -4,7 +4,7 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted,watch } from 'vue';
 import createDefaultBpmnXml from '../Bpmn/defaultBpmnXml';
 import activitiModdel from '../Bpmn/activiti-moddel.json';
 import translate from '../Bpmn/i18n';
@@ -12,7 +12,13 @@ import { BpmnStore } from '../Bpmn/store';
 
 export default defineComponent({
   name: 'Modeler',
-  setup() {
+  props: {
+    xml: {
+      type: String,
+      default:'',
+    },
+  },
+  setup(props) {
     const bpmnContext = BpmnStore;
     onMounted(() => {
       bpmnContext.initModeler({
@@ -37,6 +43,13 @@ export default defineComponent({
           console.warn('importFail errors ', err);
         });
     });
+
+    watch(
+      () => props.xml,
+      (value) => {
+        bpmnContext.importXML(value);
+      },
+    );
 
     return () => <div id="modeler-container" />;
   },
