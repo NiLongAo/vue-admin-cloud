@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     v-bind="$attrs"
-    @register="registerModal"
+    @register="registerBasicModal"
     :title="getTitle"
     @ok="handleSubmit"
     width="900px"
@@ -25,26 +25,37 @@
   import { RowSelectionType } from 'ant-design-vue/lib/table/interface';
   import { doDepartmentAll } from '/@/api/sys/department';
   import { BasicTable, useTable, BasicColumn, FormProps } from '/@/components/Table';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   const emit = defineEmits(['success', 'register']);
   const getTitle = computed(() => '用户选择器');
   const checkedKeys = ref<Array<string | number>>([]);
+  const { notification } = useMessage();
 
   const stats = reactive({
     selectType: 'radio' as RowSelectionType,
+    //传过来的数据
+    data: null,
   });
 
   const handleSubmit = () => {
     try {
-      console.log(unref(checkedKeys));
-      emit('success', unref(checkedKeys));
+      if (unref(checkedKeys).length <= 0) {
+        notification.error({
+          message: '请选择人员',
+          duration: 3,
+        });
+        return;
+      }
+      emit('success', unref(stats.data), unref(checkedKeys));
       closeModal();
     } finally {
       setModalProps({ confirmLoading: false });
     }
   };
 
-  const [registerModal, { setModalProps, closeModal }] = useModalInner((data) => {
+  const [registerBasicModal, { setModalProps, closeModal }] = useModalInner((data) => {
+    stats.data = data.data;
     if (data.selectType) {
       stats.selectType = data.selectType;
     }

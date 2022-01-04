@@ -42,6 +42,8 @@ enum Api {
   complete = '/webapi/activiti/activiti/complete',
   //签收任务
   claim = '/webapi/activiti/activiti/claim',
+  //指定用户签收任务
+  appointClaim = '/webapi/activiti/activiti/appoint_claim',
   //任务跳转
   jump = '/webapi/activiti/activiti/jump',
   //挂起流程
@@ -104,6 +106,10 @@ export function doComplete(params: Recordable) {
 
 export function doClaim(params: Recordable) {
   return defHttp.get({ url: Api.claim, params });
+}
+
+export function doAppointClaim(params: Recordable) {
+  return defHttp.get({ url: Api.appointClaim, params });
 }
 
 export function doJump(params: Recordable) {

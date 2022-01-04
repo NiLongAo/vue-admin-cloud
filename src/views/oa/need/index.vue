@@ -33,26 +33,20 @@
                 confirm: handleBackProcess.bind(null, record),
               },
             },
-            {
-              ifShow: hasPermission('system.config:update'),
-              label: '跳转',
-              onClick: handleJump.bind(null, record),
-            },
           ]"
         />
       </template>
     </BasicTable>
-    <UserModel @register="registerModal" />
+    <UserModel @register="registerModal" @success="onSuccessModel" />
   </div>
 </template>
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import {
     doFindNeedList,
-    doClaim,
+    doAppointClaim,
     doSuspendedInstance,
     doBackProcess,
-    doJump,
   } from '/@/api/oa/activiti';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useGo } from '/@/hooks/web/usePage';
@@ -60,7 +54,7 @@
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
   import { useModal } from '/@/components/Modal';
-  import UserModel from '/@/views/work/oa/components/UserModel.vue';
+  import UserModel from '../../index/system/user/components/UserModel.vue';
   const [registerModal, { openModal }] = useModal();
 
   const go = useGo();
@@ -95,18 +89,19 @@
   };
 
   const handleClaim = (record: Recordable) => {
-    openModal(true, {});
+    openModal(true, { data: record });
+  };
+  const onSuccessModel = async (data, userIdList) => {
+    await doAppointClaim({ taskId: data.taskId, userId: userIdList[0] });
     handleSuccess();
   };
+
   const handleSuspended = async (record: Recordable) => {
     await doSuspendedInstance({ instanceId: record.instanceId });
     handleSuccess();
   };
   const handleBackProcess = async (record: Recordable) => {
     await doBackProcess({ taskId: record.taskId });
-    handleSuccess();
-  };
-  const handleJump = (record: Recordable) => {
     handleSuccess();
   };
 
