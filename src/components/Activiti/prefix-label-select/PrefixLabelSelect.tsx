@@ -28,7 +28,6 @@ const PrefixLabelSelect = defineComponent({
       }
       stats.isblur = true
     }
-
     const onSearch = (value)=>{
       if (stats.choose || stats.isblur) {
         stats.res= ''

@@ -16,6 +16,7 @@
 
 .prefix-label-number {
     display: table-cell;
+    width: 100%;
 }
 
 .prefix-label-number .el-input, .el-number {

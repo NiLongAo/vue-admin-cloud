@@ -34,7 +34,7 @@ const USER_OPTIONS = [
 const UserOption: JSX.Element = (
   <>
     {USER_OPTIONS.map((item) => {
-      return <SelectOption value={item.value} >{item.label}</SelectOption>;
+      return <SelectOption value={item.value} key={item.label} >{item.label}</SelectOption>;
     })}
   </>
 );
@@ -55,6 +55,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
       allowCreate: true,
       filterable: true,
       showSearch:true,
+      optionFilterProp:'key',
       vSlots: {
         default: (): JSX.Element => UserOption,
       },
@@ -69,6 +70,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
       multiple: true,
       mode:"tags",
       allowCreate: true,
+      optionFilterProp:'key',
       vSlots: {
         default: (): JSX.Element => UserOption,
       },
@@ -84,7 +86,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
      */
     loopCardinality: {
       component: PrefixLabelNumBer,
-      prefixTitle: '循环基数',
+      prefixTitle: '循环数',
       min:0,
       precision:0,
       predicate(businessObject: ModdleElement): boolean {
@@ -113,11 +115,12 @@ export const BpmnUserGroupProperties: GroupProperties = {
     /*任务参与人 */
     collection:{
       component: PrefixLabelSelect,
-      prefixTitle: '任务参与人',
+      prefixTitle: '参与人',
       filterable: true,
       multiple: true,
       mode:"tags",
       allowCreate: true,
+      optionFilterProp:'key',
       vSlots: {
         default: (): JSX.Element => UserOption,
       },

@@ -28,7 +28,7 @@
     const authorizedGrantTypes = systemStore.getEnumMap[AUTHORIZED_GRANT_TYPES];
     const types = [] as any;
     Object.keys(authorizedGrantTypes).forEach((key) => {
-      types.push({ label: authorizedGrantTypes[key], value: key });
+      types.push({ label: authorizedGrantTypes[key], key: authorizedGrantTypes[key], value: key });
     });
     return types;
   });
@@ -76,6 +76,7 @@
       },
       componentProps: {
         mode: 'multiple',
+        optionFilterProp: 'key',
         options: authorizedGrantTypesOptions.value,
       },
       required: true,
