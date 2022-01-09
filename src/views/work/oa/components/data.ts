@@ -1,5 +1,6 @@
 import { BasicColumn } from '/@/components/Table';
-
+import { Tag } from 'ant-design-vue';
+import { h } from 'vue';
 import {
   doFindUserNeedList,
   doFindUserLaunchList,
@@ -61,6 +62,18 @@ const need: TableItem = {
       },
     },
     {
+      title: '状态',
+      dataIndex: 'isSuspended',
+      width: 100,
+      customRender: ({ record }) => {
+        const { isSuspended } = (record as Recordable) || {};
+        const status = !isSuspended;
+        const color = status ? 'green' : 'red';
+        const text = status ? '启用' : '挂起';
+        return h(Tag, { color: color }, () => text);
+      },
+    },
+    {
       title: '创建时间',
       dataIndex: 'createTime',
       width: 100,
@@ -100,6 +113,18 @@ const launch: TableItem = {
         return record.processVariables.statusName;
       },
       width: 100,
+    },
+    {
+      title: '状态',
+      dataIndex: 'isSuspended',
+      width: 100,
+      customRender: ({ record }) => {
+        const { isSuspended } = (record as Recordable) || {};
+        const status = !isSuspended;
+        const color = status ? 'green' : 'red';
+        const text = status ? '启用' : '挂起';
+        return h(Tag, { color: color }, () => text);
+      },
     },
     {
       title: '开始时间',

@@ -16,6 +16,12 @@
   import { unref, reactive } from 'vue';
   import { Card } from 'ant-design-vue';
   import { BasicTable, useTable, TableAction, ActionItem } from '/@/components/Table';
+  import {
+    doClaim,
+    doSuspendedInstance,
+    doDeleteProcessInstance,
+    doBackProcess,
+  } from '/@/api/oa/activiti';
   import { tabListTitle, tableDate } from './data';
   import { useGo } from '/@/hooks/web/usePage';
   import { OAIndex } from '/@/api/oa/activiti';
@@ -67,24 +73,14 @@
 
   const dropDownActions = (record): ActionItem[] => {
     return [
-      // {
-      //   label: '签收',
-      //   ifShow: tableRef.activeKey === 'need',
-      //   onClick: handleClaim.bind(null, record),
-      // },
       {
-        label: '跳转',
-        ifShow: tableRef.activeKey === 'need',
-        onClick: handleJump.bind(null, record),
+        label: '签收',
+        ifShow: tableRef.activeKey === 'need' && record.assignee === null,
+        onClick: handleClaim.bind(null, record),
       },
       {
-        label: '激活',
-        ifShow: tableRef.activeKey === 'need',
-        onClick: handleActivate.bind(null, record),
-      },
-      {
-        label: '挂起',
-        ifShow: tableRef.activeKey === 'need',
+        label: record.isSuspended ? '激活' : '挂起',
+        ifShow: tableRef.activeKey === 'launch' && record.processVariables.status === 1,
         onClick: handleSuspend.bind(null, record),
       },
       {
@@ -92,11 +88,11 @@
         ifShow: tableRef.activeKey === 'need',
         onClick: handleBackProcess.bind(null, record),
       },
-      // {
-      //   label: '删除',
-      //   ifShow: hasPermission('system.role:update'),
-      //   onClick: handleDeleteProcess.bind(null, record),
-      // },
+      {
+        label: '删除',
+        ifShow: tableRef.activeKey === 'launch' && record.processVariables.status === 1,
+        onClick: handleDeleteProcessInstance.bind(null, record),
+      },
     ];
   };
   // OAIndex:跳转路径集合枚举
@@ -111,10 +107,21 @@
     const key = record.processDefinitionId.split(':');
     go(OAIndex[key[0]] + record.businessKey + ':2');
   };
-  const handleClaim = () => {};
-  const handleJump = () => {};
-  const handleActivate = () => {};
-  const handleSuspend = () => {};
-  const handleBackProcess = () => {};
-  const handleDeleteProcess = () => {};
+  const handleClaim = async (record) => {
+    await doClaim({ taskId: record.taskId });
+    handleSuccess();
+  };
+
+  const handleSuspend = async (record) => {
+    await doSuspendedInstance({ instanceId: record.instanceId });
+    handleSuccess();
+  };
+  const handleDeleteProcessInstance = async (record) => {
+    await doDeleteProcessInstance({ processInstanceId: record.instanceId, memo: '' });
+    handleSuccess();
+  };
+  const handleBackProcess = async (record) => {
+    await doBackProcess({ taskId: record.taskId });
+    handleSuccess();
+  };
 </script>

@@ -38,6 +38,8 @@ enum Api {
   deployProcess = '/webapi/activiti/activiti/deploy_process',
   //删除流程引擎实例
   deleteProcess = '/webapi/activiti/activiti/delete_process',
+  //删除流程实例-只能删除当前用户的实例
+  deleteProcessInstance = '/webapi/activiti/activiti/delete_process_instance',
   //完成任务
   complete = '/webapi/activiti/activiti/complete',
   //签收任务
@@ -60,8 +62,8 @@ enum Api {
   getFlowImgByInstanceId = '/webapi/activiti/activiti/get_flow_img_by_instance_id',
 }
 
-export function doStatsUserOa(params: Recordable) {
-  return defHttp.get<StatsItem>({ url: Api.statsUserOa, params });
+export function doStatsUserOa() {
+  return defHttp.get<StatsItem>({ url: Api.statsUserOa });
 }
 export function doFindUserNeedList(params: ActivitiParams) {
   return defHttp.post<ActivitiUserNeedPageResultModel>({ url: Api.findUserNeedList, params });
@@ -98,6 +100,10 @@ export function doDeployProcess(params: Recordable) {
 
 export function doDeleteProcess(params: Recordable) {
   return defHttp.get({ url: Api.deleteProcess, params });
+}
+
+export function doDeleteProcessInstance(params: Recordable) {
+  return defHttp.get({ url: Api.deleteProcessInstance, params });
 }
 
 export function doComplete(params: Recordable) {
