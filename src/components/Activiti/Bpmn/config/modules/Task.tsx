@@ -6,9 +6,11 @@ import {
   getElementTypeListenerProperties,
 } from '../common';
 import { GroupProperties } from '../index';
+import PrefixLabelLinkageSelect from '/@/components/Activiti/prefix-label-linkage-select';
 import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
 import PrefixLabelNumBer from '/@/components/Activiti/prefix-label-number';
 import { Input,SelectOption } from 'ant-design-vue';
+import {getChoiceUserPage} from '/@/api/sys/user';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
 
@@ -51,34 +53,39 @@ export const BpmnUserGroupProperties: GroupProperties = {
      */
     assignee: {
       component: PrefixLabelSelect,
-      prefixTitle: '处理人',
-      allowCreate: true,
-      filterable: true,
-      showSearch:true,
-      optionFilterProp:'key',
-      vSlots: {
-        default: (): JSX.Element => UserOption,
+      isApi:true,
+      api: getChoiceUserPage,
+      searchName:'search',
+      labelField:'userName',
+      valueField:'userId',
+      resultField:'data',
+      isValueType:true,
+      allowClear:true,
+      params:{
+        pageNumber:1,
+        pageSize:100
       },
+      showSearch:true,
+      filterOption:false,
+      prefixTitle: '处理人',
     },
     /**
      * 候选人属性
      */
     candidateUsers: {
-      component: PrefixLabelSelect,
+      component: PrefixLabelLinkageSelect,
       prefixTitle: '候选人',
       filterable: true,
       multiple: true,
-      mode:"tags",
       allowCreate: true,
-      optionFilterProp:'key',
-      vSlots: {
-        default: (): JSX.Element => UserOption,
-      },
+      showSearch:true,
+      filterOption:false,
       getValue(businessObject: ModdleElement): string {
         console.warn('businessObject', businessObject);
-        return 'string' === typeof businessObject.candidateUsers
-          ? businessObject.candidateUsers.split(',')
-          : businessObject.candidateUsers;
+        return businessObject.candidateUsers;
+        // return 'string' === typeof businessObject.candidateUsers
+        //   ? businessObject.candidateUsers.split(',')
+        //   : businessObject.candidateUsers;
       },
     },
     /**
@@ -114,16 +121,13 @@ export const BpmnUserGroupProperties: GroupProperties = {
     },
     /*任务参与人 */
     collection:{
-      component: PrefixLabelSelect,
+      component: PrefixLabelLinkageSelect,
       prefixTitle: '参与人',
       filterable: true,
       multiple: true,
-      mode:"tags",
       allowCreate: true,
-      optionFilterProp:'key',
-      vSlots: {
-        default: (): JSX.Element => UserOption,
-      },
+      showSearch:true,
+      filterOption:false,
       predicate(businessObject: ModdleElement): boolean {
         return businessObject.loopCharacteristics;
       },

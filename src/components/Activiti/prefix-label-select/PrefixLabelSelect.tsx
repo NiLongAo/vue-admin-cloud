@@ -1,51 +1,62 @@
 import { Select } from 'ant-design-vue';
-import { defineComponent, PropType, computed,reactive} from 'vue';
+import ApiSelect from '/@/components/Form/src/components/ApiSelect.vue';
+import { debounce } from 'lodash-es';
+import { defineComponent, PropType, computed,reactive,unref} from 'vue';
+import { propTypes } from '/@/utils/propTypes';
 import './prefix-label-select.css';
+import { integer } from 'vue-types';
 
 const PrefixLabelSelect = defineComponent({
   props: {
     ...Select.props,
-    prefixTitle: {
-      type: String as PropType<string>,
-      default: () => '',
-    },
+    ...ApiSelect.props,
+    searchName: propTypes.string.def('name'),
+    isApi:propTypes.bool.def(false),
+    //true: String,false:Number
+    isValueType:propTypes.bool.def(false),
+    prefixTitle: propTypes.string.def(''),
   },
   emits: ['update:value'],
   setup(props, { emit, slots }) {
     const computedModelValue = computed({
-      get: () => props.value,
+      get: () => (props.isValueType && !Number.isNaN(Number.parseInt(props.value))) ? Number(props.value): props.value ,
       set: (val) => emit('update:value', val),
     });
     const stats = reactive({
-      res: '',
+      keyword:props.value,
       choose: true,
       isblur: false,
       select: {}
     });
+    const searchParams = computed<Recordable>(() => {
+      const searchName = {...props.params};
+      searchName[props.searchName] = unref(stats.keyword);
+      return searchName;
+    });
+
     const onBlur = ()=>{
-      if (stats.res && !stats.choose) {
-        computedModelValue.value= stats.res
+      if (stats.keyword && !stats.choose) {
+        computedModelValue.value= stats.keyword
       }
       stats.isblur = true
     }
-    const onSearch = (value)=>{
+    const onSearch = debounce((value)=>{
       if (stats.choose || stats.isblur) {
-        stats.res= ''
+        stats.keyword= ''
       }
       stats.choose = false
       stats.isblur = false
-      if (value) {
-        stats.res= value
-      }
-    }
+      stats.keyword= value
+    }, 300)
 
-    const onSelect = (value)=>{
+    const onSelect = debounce(value=>{
       stats.choose = true
       computedModelValue.value = value
-    }
+    })
 
     if(props.showSearch){
       stats.select =  {
+        params:searchParams,
         onBlur,
         onSearch,
         onSelect
@@ -53,20 +64,34 @@ const PrefixLabelSelect = defineComponent({
     }else{
       stats.select = {}
     }
-
-    return () => (
-      <div class="prefix-label-select-container">
-        {props.prefixTitle && <div class="prefix-title ">{props.prefixTitle}</div>}
-        <Select
-          class="prefix-label-select"
-          {...props}
-          {...stats.select}
-          v-model:value={computedModelValue.value}
-          v-slots={slots}
-         
-        />
-      </div>
-    );
+    if(props.isApi){
+      return () => (
+        <div class="prefix-label-select-container">
+          {props.prefixTitle && <div class="prefix-title ">{props.prefixTitle}</div>}
+          <ApiSelect
+            class="prefix-label-select"
+            {...props}
+            {...stats.select}
+            optionFilterProp="label"
+            v-model:value={computedModelValue.value}
+            v-slots={slots}
+          />
+        </div>
+      );
+    }else{
+      return () => (
+        <div class="prefix-label-select-container">
+          {props.prefixTitle && <div class="prefix-title ">{props.prefixTitle}</div>}
+          <Select
+            class="prefix-label-select"
+            {...props}
+            {...stats.select}
+            v-model:value={computedModelValue.value}
+            v-slots={slots}
+          />
+        </div>
+      );
+    }
   },
 });
 
