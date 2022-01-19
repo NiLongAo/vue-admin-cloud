@@ -101,11 +101,11 @@
 
   const handleNeedExamine = (record) => {
     const key = record.processDefinitionId.split(':');
-    go(OAIndex[key[0]] + record.businessKey + ':1');
+    go(OAIndex[key[0]] + record.businessKey + ':1:' + record.taskId);
   };
   const handleNeedView = (record) => {
     const key = record.processDefinitionId.split(':');
-    go(OAIndex[key[0]] + record.businessKey + ':2');
+    go(OAIndex[key[0]] + record.businessKey + ':2:' + record.taskId);
   };
   const handleClaim = async (record) => {
     await doClaim({ taskId: record.taskId });

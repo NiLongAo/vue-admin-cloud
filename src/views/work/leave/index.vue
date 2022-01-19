@@ -3,6 +3,7 @@
     :loading="loading"
     :removeApi="doDelete"
     :instanceId="stats.processInstanceId"
+    :taskId="stats.params.split(':')[2]"
     :buttomType="buttomType"
     @save="save"
   >

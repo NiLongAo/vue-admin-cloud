@@ -137,6 +137,10 @@
       type: String,
       default: null,
     },
+    taskId: {
+      type: String,
+      default: null,
+    },
     buttomType: {
       type: Boolean,
       default: false,
@@ -198,7 +202,7 @@
     const val: any = await validate();
     const { status, memo } = val;
     await doComplete({
-      taskId: stats.data.taskId,
+      taskId: props.taskId,
       comment: { ...val },
       variables: { ...props.variables },
       taskVariables: { ...props.taskVariables, examineStatus: status, examineMemo: memo },
