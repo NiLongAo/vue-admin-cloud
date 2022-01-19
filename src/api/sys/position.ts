@@ -19,6 +19,8 @@ enum Api {
   remove = '/webapi/bean/position/remove',
   //获取下拉职位树
   tree = '/webapi/bean/position/tree',
+  //职位信息下拉展示(动态搜索数据源)
+  select = '/webapi/bean/position/select',
 }
 
 export function doPositionPage(params: PositionParams) {
@@ -26,6 +28,10 @@ export function doPositionPage(params: PositionParams) {
     url: Api.page,
     params,
   });
+}
+
+export function doSelect(params) {
+  return defHttp.get({ url: Api.select, params });
 }
 
 export function doPositionAll() {

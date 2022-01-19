@@ -166,6 +166,9 @@ export class VAxios {
       !Reflect.has(config, 'data') ||
       config.method?.toUpperCase() === RequestEnum.GET
     ) {
+      config.paramsSerializer = (params) => {
+        return qs.stringify(params, { indices: false });
+      };
       return config;
     }
 

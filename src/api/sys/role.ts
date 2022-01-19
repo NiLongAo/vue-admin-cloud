@@ -12,6 +12,8 @@ enum Api {
   save = '/webapi/bean/role/save',
   //删除角色
   remove = '/webapi/bean/role/remove',
+  //角色信息下拉展示(动态搜索数据源)
+  select = '/webapi/bean/role/select',
 }
 
 export function getRolePage(params: RoleParams) {
@@ -19,6 +21,10 @@ export function getRolePage(params: RoleParams) {
     url: Api.page,
     params,
   });
+}
+
+export function doSelect(params) {
+  return defHttp.get({ url: Api.select, params });
 }
 
 export function doAll() {

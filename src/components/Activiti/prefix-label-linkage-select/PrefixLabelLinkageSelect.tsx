@@ -1,8 +1,8 @@
 import { Space,Select,Input } from 'ant-design-vue';
 import ApiSelect from '/@/components/Form/src/components/ApiSelect.vue';
-import {getChoiceUserPage} from '/@/api/sys/user';
-import {getRolePage} from '/@/api/sys/role';
-import {doPositionPage} from '/@/api/sys/position';
+import {doSelect as doUserSelect} from '/@/api/sys/user';
+import {doSelect as doRoleSelect} from '/@/api/sys/role';
+import {doSelect as doPositionSelect} from '/@/api/sys/position';
 import { debounce } from 'lodash-es';
 import { defineComponent, computed,reactive,unref,watch} from 'vue';
 import { propTypes } from '/@/utils/propTypes';
@@ -29,33 +29,33 @@ const PrefixLabelSelect = defineComponent({
         emit('update:value', val)
       },
     });
+
+    const delSApi = (avl) =>{
+      return{}
+    }
     const stats = reactive({
-      keyword:props.value,
-      selectValue:'user',
+      keyword:'',
+      selectValue:'',
       apiSelectValue:[],
-      searchApi:getChoiceUserPage as Function,
-      searchValues:'search',
-      labelField:'userName',
-      valueField:'userId',
-      resultField:'data',
+      searchApi:delSApi as Function,
+      labelField:'name',
+      valueField:'id',
     });
+
+   
 
     watch(
       () => stats.selectValue,
       () => {
         stats.apiSelectValue= [];
         if(stats.selectValue == 'user'){
-          stats.searchApi = getChoiceUserPage;
-          stats.labelField = 'userName';
-          stats.valueField = 'userId';
+          stats.searchApi = doUserSelect;
         }else if(stats.selectValue == 'role'){
-          stats.searchApi = getRolePage;
-          stats.labelField = 'roleName';
-          stats.valueField = 'id';
+          stats.searchApi = doRoleSelect;
         }else if(stats.selectValue == 'dept'){
-          stats.searchApi = doPositionPage;
-          stats.labelField = 'positionName';
-          stats.valueField = 'id';
+          stats.searchApi = doPositionSelect;
+        }else{
+          stats.searchApi = delSApi;
         }
       },
       { deep: true },
@@ -63,22 +63,26 @@ const PrefixLabelSelect = defineComponent({
     watch(
       () => stats.apiSelectValue,
       () => {
-        let jsonString = "${assignments.resolve(execution,'JSON')}";
-        let json = [{
-          dimension:stats.selectValue,
-          values:stats.apiSelectValue
-        }]
-        computedModelValue.value = jsonString.replace('JSON',JSON.stringify(json))
+        if(stats.apiSelectValue.length > 0 ){
+          let jsonString = "${assignments.resolve(execution,'JSON')}";
+          let json = [{
+            dimension:stats.selectValue,
+            values:stats.apiSelectValue
+          }]
+          computedModelValue.value = jsonString.replace('JSON',JSON.stringify(json))
+        }else{
+          computedModelValue.value = '';
+        }
       },
       { deep: true },
     );
 
     const searchParams = computed<Recordable>(() => {
       const searchName = {
-        pageNumber:1,
-        pageSize:1000
+        idList:stats.apiSelectValue,
+        name:stats.keyword,
+        limit:20
       };
-      searchName[stats.searchValues] = unref(stats.keyword);
       return searchName;
     });
     const onSearch = debounce((value)=>{
@@ -97,16 +101,15 @@ const PrefixLabelSelect = defineComponent({
           <ApiSelect
              class="w-1/2"
             {...props}
-            mode="tags"
+            mode="multiple"
             maxTagTextLength={4}
             maxTagCount={2}
             optionFilterProp="label"
             labelField={stats.labelField}
             api={stats.searchApi}
-            params={searchParams}
+            params={unref(searchParams)}
             onSearch={onSearch}
             valueField={stats.valueField}
-            resultField={stats.resultField}
             v-model:value={stats.apiSelectValue}
             v-slots={slots}
           />

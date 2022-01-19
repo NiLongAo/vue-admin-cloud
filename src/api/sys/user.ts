@@ -49,6 +49,8 @@ enum Api {
   getCode = '/webapi/bean/user/getcode',
   //获取用户列表信息
   choiceUserPage = '/webapi/bean/user/choice_user_page',
+  //用户信息下拉展示(动态搜索数据源)
+  select = '/webapi/bean/user/select',
 }
 
 /**
@@ -98,6 +100,10 @@ export function doLogout() {
 
 export function UserInfoApi(params) {
   return defHttp.get<UserInfoModel>({ url: Api.UserInfo, params });
+}
+
+export function doSelect(params) {
+  return defHttp.get({ url: Api.select, params });
 }
 
 /**
