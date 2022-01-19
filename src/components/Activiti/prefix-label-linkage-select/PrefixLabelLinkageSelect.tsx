@@ -2,7 +2,7 @@ import { Space,Select,Input } from 'ant-design-vue';
 import ApiSelect from '/@/components/Form/src/components/ApiSelect.vue';
 import {doSelect as doUserSelect} from '/@/api/sys/user';
 import {doSelect as doRoleSelect} from '/@/api/sys/role';
-import {doSelect as doPositionSelect} from '/@/api/sys/position';
+import {doSelect as doDepartmentSelect} from '/@/api/sys/department';
 import { debounce } from 'lodash-es';
 import { defineComponent, computed,reactive,unref,watch} from 'vue';
 import { propTypes } from '/@/utils/propTypes';
@@ -21,7 +21,7 @@ const PrefixLabelSelect = defineComponent({
           jsonStr = jsonStr.split("')}")[0];
           let json = JSON.parse(jsonStr)[0];
           stats.selectValue=json.dimension;
-          stats.apiSelectValue=json.values;
+          stats.apiSelectValue=json.values.map((obg) => Number(obg))
         }
         return props.value
       } ,
@@ -53,7 +53,7 @@ const PrefixLabelSelect = defineComponent({
         }else if(stats.selectValue == 'role'){
           stats.searchApi = doRoleSelect;
         }else if(stats.selectValue == 'dept'){
-          stats.searchApi = doPositionSelect;
+          stats.searchApi = doDepartmentSelect;
         }else{
           stats.searchApi = delSApi;
         }
@@ -67,8 +67,9 @@ const PrefixLabelSelect = defineComponent({
           let jsonString = "${assignments.resolve(execution,'JSON')}";
           let json = [{
             dimension:stats.selectValue,
-            values:stats.apiSelectValue
+            values:stats.apiSelectValue.map((obg) => String(obg))
           }]
+          console.log(json);
           computedModelValue.value = jsonString.replace('JSON',JSON.stringify(json))
         }else{
           computedModelValue.value = '';

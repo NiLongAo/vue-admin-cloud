@@ -19,6 +19,8 @@ enum Api {
   remove = '/webapi/bean/department/remove',
   //获取下拉部门树
   tree = '/webapi/bean/department/tree',
+  //部门信息下拉展示(动态搜索数据源)
+  select = '/webapi/bean/department/select',
 }
 
 export function doDepartmentPage(params: DepartmentParams) {
@@ -30,6 +32,10 @@ export function doDepartmentPage(params: DepartmentParams) {
 
 export function doDepartmentAll() {
   return defHttp.get({ url: Api.all });
+}
+
+export function doSelect() {
+  return defHttp.get({ url: Api.select });
 }
 
 export function doDepartmentSave(params: DepartmentEntity) {
