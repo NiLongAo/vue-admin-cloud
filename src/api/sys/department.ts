@@ -34,8 +34,8 @@ export function doDepartmentAll() {
   return defHttp.get({ url: Api.all });
 }
 
-export function doSelect() {
-  return defHttp.get({ url: Api.select });
+export function doSelect(params: Recordable) {
+  return defHttp.get({ url: Api.select, params });
 }
 
 export function doDepartmentSave(params: DepartmentEntity) {
