@@ -30,7 +30,7 @@
   import { UserInfoApi, doInsert, doUpdate } from '/@/api/sys/user';
   import { useSystemStore } from '/@/store/modules/system';
   import headerImg from '/@/assets/images/header.jpg';
-  import { baseSetschemas } from './data';
+  import { baseSetschemas, insertSetschemas } from './data';
   import { uploadApi } from '/@/api/sys/upload';
   import { SystemEnum } from '/@/enums/systemEnum';
   import { isFunction } from '/@/utils/is';
@@ -52,9 +52,14 @@
     },
   });
 
+  const schemas = computed(() => {
+    console.log(props.userId, !!unref(props.userId));
+    return !!unref(props.userId) ? baseSetschemas : insertSetschemas;
+  });
+
   const [register, { setFieldsValue, resetFields, validate }] = useForm({
     labelWidth: 120,
-    schemas: baseSetschemas,
+    schemas: schemas.value,
     showActionButtonGroup: false,
   });
   onMounted(async () => {

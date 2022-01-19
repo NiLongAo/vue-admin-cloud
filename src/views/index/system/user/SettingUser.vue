@@ -3,6 +3,7 @@
     <BasicModal
       v-bind="$attrs"
       @register="registerModal"
+      destroyOnClose
       :title="getTitle"
       :showOkBtn="false"
       width="1000px"
