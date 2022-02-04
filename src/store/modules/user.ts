@@ -4,10 +4,17 @@ import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
-import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, ABILITY_KEY } from '/@/enums/cacheEnum';
+import {
+  ROLES_KEY,
+  TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  USER_INFO_KEY,
+  CHECK_URL_TOKEN_KEY,
+  ABILITY_KEY,
+} from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { GetUserInfoModel, LoginParams, LoginMobileParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi, loginMobileApi } from '/@/api/sys/user';
+import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
+import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -21,6 +28,8 @@ import { h } from 'vue';
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
+  checkUrl?: string | undefined;
+  refresh_token?: string;
   roleList: RoleEnum[];
   abilityList: Array<string>;
   sessionTimeout?: boolean;
@@ -34,6 +43,8 @@ export const useUserStore = defineStore({
     userInfo: null,
     // token
     token: undefined,
+    // refresh_token
+    refresh_token: undefined,
     // roleList
     roleList: [],
     // 权限集合
@@ -42,6 +53,8 @@ export const useUserStore = defineStore({
     sessionTimeout: false,
     // Last fetch time
     lastUpdateTime: 0,
+    // 点击的菜单
+    checkUrl: undefined,
   }),
   getters: {
     getUserInfo(): UserInfo {
@@ -49,6 +62,9 @@ export const useUserStore = defineStore({
     },
     getToken(): string {
       return this.token || getAuthCache<string>(TOKEN_KEY);
+    },
+    getRefreshToken(): string {
+      return this.refresh_token || getAuthCache<string>(REFRESH_TOKEN_KEY);
     },
     getRoleList(): RoleEnum[] {
       return this.roleList && this.roleList.length > 0
@@ -64,11 +80,20 @@ export const useUserStore = defineStore({
     getLastUpdateTime(): number {
       return this.lastUpdateTime;
     },
+    getCheckUrl(): string | undefined {
+      return this.checkUrl;
+    },
   },
   actions: {
-    setToken(info: string | undefined) {
+    setToken(info: string | undefined, refresh_token: string | undefined) {
       this.token = info ? info : ''; // for null or undefined value
+      this.refresh_token = refresh_token ? refresh_token : ''; // for null or undefined value
       setAuthCache(TOKEN_KEY, info);
+      setAuthCache(REFRESH_TOKEN_KEY, refresh_token);
+    },
+    setRefreshToken(refresh_token: string | undefined) {
+      this.refresh_token = refresh_token ? refresh_token : ''; // for null or undefined value
+      setAuthCache(REFRESH_TOKEN_KEY, refresh_token);
     },
     setRoleList(roleList: RoleEnum[]) {
       this.roleList = roleList;
@@ -85,6 +110,10 @@ export const useUserStore = defineStore({
     },
     setSessionTimeout(flag: boolean) {
       this.sessionTimeout = flag;
+    },
+    setCheckUrl(url: string | undefined) {
+      this.checkUrl = url;
+      setAuthCache(CHECK_URL_TOKEN_KEY, url);
     },
     resetState() {
       this.userInfo = null;
@@ -104,30 +133,28 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        const { access_token } = data;
+        const { access_token, refresh_token } = data;
         // save token
-        this.setToken(access_token);
+        this.setToken(access_token, refresh_token);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
       }
     },
     /**
-     * @description: login
+     * @description: refreshToken
      */
-    async loginMobile(
-      params: LoginMobileParams & {
-        goHome?: boolean;
-        mode?: ErrorMessageMode;
-      },
-    ): Promise<GetUserInfoModel | null> {
+    async refreshToken() {
       try {
-        const { goHome = true, mode, ...loginParams } = params;
-        const data = await loginMobileApi(loginParams, mode);
-        const { access_token } = data;
+        const data = await loginApi({
+          grantType: 'refresh_token',
+          refreshToken: {
+            refreshToken: this.getRefreshToken,
+          },
+        });
+        const { access_token, refresh_token } = data;
         // save token
-        this.setToken(access_token);
-        return this.afterLoginAction(goHome);
+        this.setToken(access_token, refresh_token);
       } catch (error) {
         return Promise.reject(error);
       }
@@ -188,7 +215,7 @@ export const useUserStore = defineStore({
           console.log('注销Token失败');
         }
       }
-      this.setToken(undefined);
+      this.setToken(undefined, undefined);
       this.setSessionTimeout(false);
       this.setUserInfo(null);
       systemStore.setSystemConfigMap({}); //清空配置信息

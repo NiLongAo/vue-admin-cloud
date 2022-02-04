@@ -1,7 +1,7 @@
 // axios配置  可自行根据项目进行更改，只需更改该文件即可，其他文件可以不动
 // The axios configuration can be changed according to the project, just change the file, other files can be left unchanged
 
-import type { AxiosResponse } from 'axios';
+import type { AxiosResponse, AxiosInstance } from 'axios';
 import { clone } from 'lodash-es';
 import type { RequestOptions, Result } from '/#/axios';
 import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
@@ -29,7 +29,7 @@ const transform: AxiosTransform = {
   /**
    * @description: 处理请求数据。如果数据不是预期格式，可直接抛出错误
    */
-  transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
+  transformRequestHook: async (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n();
     const { isTransformResponse, isReturnNativeResponse, isMessage = true } = options;
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
@@ -59,15 +59,14 @@ const transform: AxiosTransform = {
       }
       return dataData;
     }
-
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
     // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
     let timeoutMsg = '';
+    const userStore = useUserStoreWithOut();
     switch (code) {
       case ResultEnum.TIMEOUT:
         timeoutMsg = t('sys.api.timeoutMessage');
-        const userStore = useUserStoreWithOut();
-        userStore.setToken(undefined);
+        userStore.setToken(undefined, undefined);
         userStore.logout(true);
         break;
       default:
@@ -152,15 +151,39 @@ const transform: AxiosTransform = {
 
   /**
    * @description: 响应拦截器处理
+   * 无感token 刷新策略
    */
-  responseInterceptors: (res: AxiosResponse<any>) => {
+  responseInterceptors: async (axiosInstance: AxiosInstance, res: AxiosResponse<any>) => {
+    const { t } = useI18n();
+    const { data: resData } = res;
+    if (!resData) {
+      // return '[HTTP] Request has no return value';
+      throw new Error(t('sys.api.apiRequestFailed'));
+    }
+    //  这里 code，data，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+    const { code } = resData;
+    const userStore = useUserStoreWithOut();
+    switch (code) {
+      case ResultEnum.OVERDUE:
+        if (userStore.getRefreshToken !== undefined) {
+          userStore.setToken(undefined, userStore.getRefreshToken);
+          await userStore.refreshToken();
+          if (userStore.getToken == undefined) {
+            userStore.logout(true);
+          } else {
+            return axiosInstance(res.config);
+          }
+        }
+        break;
+    }
+
     return res;
   },
 
   /**
    * @description: 响应错误处理
    */
-  responseInterceptorsCatch: (error: any) => {
+  responseInterceptorsCatch: async (error: any) => {
     const { t } = useI18n();
     const errorLogStore = useErrorLogStoreWithOut();
     errorLogStore.addAjaxErrorInfo(error);
@@ -190,7 +213,7 @@ const transform: AxiosTransform = {
       throw new Error(error as unknown as string);
     }
 
-    checkStatus(error?.response?.status, msg, errorMessageMode);
+    await checkStatus(error?.response?.status, msg, errorMessageMode);
     return Promise.reject(error);
   },
 };
@@ -206,7 +229,6 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         timeout: 15 * 1000,
         // 基础接口地址
         // baseURL: globSetting.apiUrl,
-
         headers: { 'Content-Type': ContentTypeEnum.JSON },
         // 如果是form-data格式
         // headers: { 'Content-Type': ContentTypeEnum.FORM_URLENCODED },

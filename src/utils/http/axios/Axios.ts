@@ -17,6 +17,7 @@ export * from './axiosTransform';
 export class VAxios {
   private axiosInstance: AxiosInstance;
   private readonly options: CreateAxiosOptions;
+  private requests = []; // 存储待重发请求的数组(同时发起多个请求的处理)
 
   constructor(options: CreateAxiosOptions) {
     this.options = options;
@@ -106,7 +107,7 @@ export class VAxios {
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
       res && axiosCanceler.removePending(res.config);
       if (responseInterceptors && isFunction(responseInterceptors)) {
-        res = responseInterceptors(res);
+        res = responseInterceptors(this.axiosInstance, res);
       }
       return res;
     }, undefined);

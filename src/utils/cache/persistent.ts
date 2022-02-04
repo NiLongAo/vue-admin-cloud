@@ -8,6 +8,7 @@ import { createLocalStorage, createSessionStorage } from '/@/utils/cache';
 import { Memory } from './memory';
 import {
   TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
   USER_INFO_KEY,
   ROLES_KEY,
   ABILITY_KEY,
@@ -20,6 +21,7 @@ import {
   AREA_KEY,
   ENUM_KEY,
   REMEMBER,
+  CHECK_URL_TOKEN_KEY,
 } from '/@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '/@/settings/encryptionSetting';
 import { toRaw } from 'vue';
@@ -27,6 +29,7 @@ import { pick, omit } from 'lodash-es';
 
 interface BasicStore {
   [TOKEN_KEY]: string | number | null | undefined;
+  [REFRESH_TOKEN_KEY]: string | number | null | undefined;
   [USER_INFO_KEY]: UserInfo;
   [ROLES_KEY]: string[];
   [ABILITY_KEY]: string[];
@@ -37,6 +40,7 @@ interface BasicStore {
   [AREA_KEY]: Array<AreaEntity>;
   [ENUM_KEY]: EnumModel;
   [REMEMBER]: RememberLoing;
+  [CHECK_URL_TOKEN_KEY]: string | null | undefined;
 }
 
 type LocalStore = BasicStore;

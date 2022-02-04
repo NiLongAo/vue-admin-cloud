@@ -3,13 +3,35 @@ import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
  * @description: Login interface parameters
  */
 export interface LoginParams {
-  loginAccount: string;
-  password: string;
+  grantType:
+    | 'authorization_code'
+    | 'password'
+    | 'refresh_token'
+    | 'implicit'
+    | 'client_credentials'
+    | 'sms'
+    | 'code';
+  authorizationCode?: AuthorizationCodeParams;
+  code?: CodeParams;
+  sms?: SmsParams;
+  refreshToken?: RefreshTokenParams;
 }
 
-export interface LoginMobileParams {
-  phone: string;
+export interface AuthorizationCodeParams {
+  code: string;
+  redirectUri: string;
+}
+export interface CodeParams {
+  username: string;
+  password: string;
   verificationCode: string;
+}
+export interface SmsParams {
+  SmsCodeCode: string;
+  phone: string;
+}
+export interface RefreshTokenParams {
+  refreshToken: string;
 }
 
 export interface RoleInfo {
@@ -23,6 +45,7 @@ export interface RoleInfo {
 export interface LoginResultModel {
   userId: string | number;
   access_token: string;
+  refresh_token: string;
   role?: RoleInfo;
 }
 
@@ -98,6 +121,6 @@ export interface UserInfoModel {
 
 export interface RememberLoing {
   rememberMe: boolean;
-  loginAccount: string;
+  username: string;
   password: string;
 }

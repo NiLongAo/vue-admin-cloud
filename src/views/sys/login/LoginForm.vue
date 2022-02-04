@@ -8,10 +8,10 @@
     v-show="getShow"
     @keypress.enter="handleLogin"
   >
-    <FormItem name="loginAccount" class="enter-x">
+    <FormItem name="username" class="enter-x">
       <Input
         size="large"
-        v-model:value="formData.loginAccount"
+        v-model:value="formData.username"
         :placeholder="t('sys.login.userName')"
         class="fix-auto-fill"
       />
@@ -136,7 +136,7 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    loginAccount: '',
+    username: '',
     password: '',
     loginCode: '',
     images: '',
@@ -156,9 +156,9 @@
   const init = () => {
     const rememberLoing = getAuthCache<RememberLoing>(REMEMBER);
     if (!!rememberLoing) {
-      const { rememberMe: rem, loginAccount: account, password: paswd } = rememberLoing;
+      const { rememberMe: rem, username: account, password: paswd } = rememberLoing;
       rememberMe.value = rem;
-      formData.loginAccount = account;
+      formData.username = account;
       formData.password = paswd;
     }
   };
@@ -175,9 +175,12 @@
       loading.value = true;
       const userInfo = await userStore.login(
         toRaw({
-          loginAccount: encryption.encryptByAES(data.loginAccount),
-          password: encryption.encryptByAES(data.password),
-          verificationCode: data.loginCode,
+          grantType: 'code',
+          code: {
+            username: encryption.encryptByAES(data.username),
+            password: encryption.encryptByAES(data.password),
+            verificationCode: data.loginCode,
+          },
           mode: 'none', //不要默认的错误提示
         }),
       );
@@ -190,7 +193,7 @@
         //存入缓存
         setAuthCache(REMEMBER, {
           rememberMe: unref(rememberMe),
-          loginAccount: unref(rememberMe) ? unref(formData.loginAccount) : '',
+          username: unref(rememberMe) ? unref(formData.username) : '',
           password: unref(rememberMe) ? unref(formData.password) : '',
         });
       }
