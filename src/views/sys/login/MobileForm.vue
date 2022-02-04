@@ -85,10 +85,13 @@
     if (!data) return;
     try {
       loading.value = true;
-      const userInfo = await userStore.loginMobile(
+      const userInfo = await userStore.login(
         toRaw({
-          phone: data.phone,
-          verificationCode: data.verificationCode,
+          grantType: 'sms',
+          sms: {
+            phone: data.phone,
+            smsCodeCode: data.verificationCode,
+          },
           mode: 'none', //不要默认的错误提示
         }),
       );

@@ -27,7 +27,7 @@ export interface CodeParams {
   verificationCode: string;
 }
 export interface SmsParams {
-  SmsCodeCode: string;
+  smsCodeCode: string;
   phone: string;
 }
 export interface RefreshTokenParams {
