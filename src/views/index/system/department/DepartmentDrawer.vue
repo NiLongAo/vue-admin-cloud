@@ -38,7 +38,7 @@
       },
       componentProps: {
         fieldNames: {
-          title: 'departmentName',
+          label: 'departmentName',
           key: 'id',
           value: 'id',
         },

@@ -38,7 +38,7 @@
       },
       componentProps: {
         fieldNames: {
-          title: 'positionName',
+          label: 'positionName',
           key: 'id',
           value: 'id',
         },

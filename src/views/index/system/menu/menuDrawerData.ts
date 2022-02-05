@@ -19,7 +19,7 @@ export const menuSchemas: FormSchema[] = [
     },
     componentProps: {
       fieldNames: {
-        title: 'menuName',
+        label: 'menuName',
         key: 'id',
         value: 'id',
       },
@@ -134,7 +134,7 @@ export const privilegeSchemas: FormSchema[] = [
     },
     componentProps: {
       fieldNames: {
-        title: 'menuName',
+        label: 'menuName',
         key: 'id',
         value: 'id',
       },
