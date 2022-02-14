@@ -10,6 +10,7 @@
   import { ConfigProvider } from 'ant-design-vue';
   import { AppProvider } from '/@/components/Application';
   import { useTitle } from '/@/hooks/web/useTitle';
+  import { useSocket } from '/@/hooks/web/useSocket';
   import { useLocale } from '/@/locales/useLocale';
 
   import 'dayjs/locale/zh-cn';
@@ -18,4 +19,6 @@
 
   // Listening to page changes and dynamically changing site titles
   useTitle();
+  // 链接websocket
+  useSocket();
 </script>
