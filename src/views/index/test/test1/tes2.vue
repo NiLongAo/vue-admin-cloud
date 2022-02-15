@@ -1,15 +1,27 @@
 <template>
   <div class="app-containers">
-    <Modeler />
-    <Panel />
-    <BpmnActions />
+    <Input placeholder="Basic usage" v-model:value="stats.message" />
+    <Button type="primary" @click="onClick"> 更新基本信息 </Button>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import Modeler from '/@/components/Activiti/Modeler';
-  import Panel from '/@/components/Activiti/panel';
-  import BpmnActions from '/@/components/Activiti/bpmn-actions';
+  import { reactive, computed } from 'vue';
+  import { useSocketStore } from '/@/store/modules/socket';
+  import { Input, Button } from 'ant-design-vue';
+  const stats = reactive({
+    message: '',
+  });
+
+  const useSocket = useSocketStore();
+  const onClick = () => {
+    const socket = useSocket.getSocket;
+    socket?.emit('message_event', {
+      msgType: 4,
+      outType: 1,
+      msgContent: stats.message,
+    });
+  };
 </script>
 <style scoped>
   .app-containers {
