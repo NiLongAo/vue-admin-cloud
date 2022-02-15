@@ -30,6 +30,10 @@
   });
   console.log(socket);
 
+  socket.io.on('connect', () => {
+    console.log('开启链接！！！');
+  });
+
   socket.io.on('message_event', (data) => {
     console.log('client has connected' + data);
   });
