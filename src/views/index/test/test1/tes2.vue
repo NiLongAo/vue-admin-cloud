@@ -9,14 +9,36 @@
   import { reactive, computed } from 'vue';
   import { useSocketStore } from '/@/store/modules/socket';
   import { Input, Button } from 'ant-design-vue';
+  import io, { ManagerOptions } from 'socket.io-client';
+  import VueSocketIO from 'vue-socket.io';
+  import { useUserStore } from '/@/store/modules/user';
+  const userStore = useUserStore();
   const stats = reactive({
     message: '',
   });
 
-  const useSocket = useSocketStore();
+  const socket = new VueSocketIO({
+    debug: true,
+    connection: 'http://localhost:9190',
+    options: {
+      path: '/sms-socket/socket.io',
+      transports: ['websocket', 'polling'],
+      query: {
+        Authorization: 'Bearer ' + userStore.getToken,
+      },
+    },
+  });
+  console.log(socket);
+
+  socket.io.on('message_event', (data) => {
+    console.log('client has connected' + data);
+  });
+
+  //const useSocket = useSocketStore();
+
   const onClick = () => {
-    const socket = useSocket.getSocket;
-    socket?.emit('message_event', {
+    //const socket = useSocket.getSocket;
+    socket.io.emit('message_event', {
       msgType: 4,
       outType: 1,
       msgContent: stats.message,

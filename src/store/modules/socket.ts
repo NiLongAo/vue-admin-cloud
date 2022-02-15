@@ -1,42 +1,23 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
-import io, { Socket } from 'socket.io-client';
 
 interface SocketState {
-  socket: Socket | null;
+  message: string;
 }
 export const useSocketStore = defineStore({
   id: 'app-socket',
   state: (): SocketState => ({
-    socket: null,
+    message: '',
   }),
   getters: {
-    getSocket(): Socket | null {
-      return this.socket as Socket;
+    getSocket(): string {
+      return this.message;
     },
   },
-  actions: {
-    setSocket(token: string) {
-      // if (this.socket) {
-      //   this.socket.disconnect();
-      // }
-      this.socket = io('http://localhost:9190', {
-        path: '/sms-socket/socket.io',
-        // autoConnect: false,
-        reconnection: false,
-        transports: ['websocket', 'polling'],
-        query: {
-          Authorization: 'Bearer ' + token,
-        },
-        transportOptions: {
-          polling: {
-            extraHeaders: {
-              Authorization: 'Bearer ' + token,
-            },
-          },
-        },
-      });
-      // this.socket.connect();
+  actions: {},
+  mutations: {
+    connect() {
+      console.log('链接成功！！！!!!!');
     },
   },
 });

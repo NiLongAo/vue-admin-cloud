@@ -16,7 +16,6 @@
   import 'dayjs/locale/zh-cn';
   // support Multi-language
   const { getAntdLocale } = useLocale();
-  useSocket();
   // Listening to page changes and dynamically changing site titles
   useTitle();
 </script>
