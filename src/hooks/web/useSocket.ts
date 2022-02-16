@@ -1,17 +1,12 @@
-import { useUserStore } from '/@/store/modules/user';
-import { useSocketStore } from '/@/store/modules/socket';
-import { reactive, watch, watchEffect, computed } from 'vue';
+import io from 'socket.io-client';
 
 /**
  * Listening to page changes and dynamically changing site titles
  */
-export function useSocket() {
-  const userStore = useUserStore();
-  const useSocket = useSocketStore();
-
-  watchEffect(() => {
-    if (userStore.getToken) {
-      // useSocket.setSocket(userStore.getToken);
-    }
-  });
-}
+export default {
+  install: (app, { connection, options }) => {
+    const socket = io(connection, options);
+    app.config.globalProperties.$socket = socket;
+    app.provide('socket', socket);
+  },
+};
