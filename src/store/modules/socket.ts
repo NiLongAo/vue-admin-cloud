@@ -17,19 +17,32 @@ export const useSocketStore = defineStore({
   },
   actions: {
     setSocket(token: string) {
-      // if (this.socket) {
-      //   this.socket.disconnect();
-      // }
-      this.socket = io('http://localhost:9190', {
+      if (this.socket) {
+        this.socket.disconnect();
+      }
+      this.socket = io('ws://localhost:9190', {
+        //自动链接
+        autoConnect: false,
+        //重新链接
+        reconnection: true,
+        //重新链接的最大延迟（毫秒）
+        reconnectionDelayMax: 5000,
+        //链接地址
         path: '/sms-socket/socket.io',
-        // autoConnect: false,
-        reconnection: false,
-        transports: ['websocket'],
+        //请求附加参数
         query: {
           Authorization: 'Bearer ' + token,
         },
+        transports: ['websocket', 'polling'],
+        // 请求头
+        // extraHeaders: {},
       });
-      // this.socket.connect();
+      this.socket.connect();
+    },
+    async disconnectSocket() {
+      if (this.socket) {
+        this.socket.disconnect();
+      }
     },
   },
 });

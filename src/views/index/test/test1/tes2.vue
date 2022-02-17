@@ -1,46 +1,35 @@
 <template>
   <div class="app-containers">
     <Input placeholder="Basic usage" v-model:value="stats.message" />
-    <Button type="primary" @click="onClick"> 更新基本信息 </Button>
+    <Button type="primary" @click="onClick"> 按钮 </Button>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, computed, watchEffect } from 'vue';
+  import { reactive, watch } from 'vue';
   import { Input, Button } from 'ant-design-vue';
-  import VueSocketIO from 'vue-socket.io';
-  import { useUserStore } from '/@/store/modules/user';
-  const userStore = useUserStore();
+  import { useSocketStore } from '/@/store/modules/socket';
+
+  // socket.io链接不成功问题 https://www.cnblogs.com/youran-he/p/15684362.html
   const stats = reactive({
     message: '',
   });
+  const socketIo = useSocketStore();
 
-  const socket = new VueSocketIO({
-    debug: true,
-    connection: 'http://localhost:9190',
-    options: {
-      path: '/sms-socket/socket.io',
-      transports: ['websocket', 'polling'],
-      query: {
-        Authorization: 'Bearer ' + userStore.getToken,
-      },
+  let socket;
+  watch(
+    () => socketIo.getSocket,
+    () => {
+      socket = socketIo.getSocket;
+      socket.on('message_event', (data) => {
+        console.log('client has connected' + data.outMessage);
+      });
     },
-  });
-  console.log(socket);
-
-  socket.io.on('connect', () => {
-    console.log('开启链接！！！');
-  });
-
-  socket.io.on('message_event', (data) => {
-    console.log('client has connected' + data);
-  });
-
-  //const useSocket = useSocketStore();
+    { immediate: true },
+  );
 
   const onClick = () => {
-    //const socket = useSocket.getSocket;
-    socket.io.emit('message_event', {
+    socket.emit('message_event', {
       msgType: 4,
       outType: 1,
       msgContent: stats.message,
