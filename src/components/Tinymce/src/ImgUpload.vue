@@ -1,5 +1,6 @@
 <template>
   <div :class="[prefixCls, { fullscreen }]">
+    <!-- 后台存储存储 -->
     <Upload
       name="file"
       multiple
@@ -14,6 +15,19 @@
         {{ t('component.upload.imgUpload') }}
       </a-button>
     </Upload>
+
+    <!-- bean64存储 -->
+    <!-- <Upload
+      name="file"
+      multiple
+      :before-upload="beforeUpload"
+      :showUploadList="false"
+      accept=".jpg,.jpeg,.gif,.png,.webp"
+    >
+      <a-button type="primary" v-bind="{ ...getButtonProps }">
+        {{ t('component.upload.imgUpload') }}
+      </a-button>
+    </Upload> -->
   </div>
 </template>
 <script lang="ts">
@@ -24,6 +38,7 @@
   import { useGlobSetting } from '/@/hooks/setting';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useUserStore } from '/@/store/modules/user';
+  import { checkImgType, getBase64WithFile } from '/@/components/Upload/src/helper';
 
   export default defineComponent({
     name: 'TinymceImageUpload',
@@ -64,6 +79,22 @@
         };
       });
 
+      // 上传前校验
+      function beforeUpload(file: File) {
+        // 生成图片缩略图
+        if (checkImgType(file)) {
+          // beforeUpload，如果异步会调用自带上传方法
+          // file.thumbUrl = await getBase64(file);
+          getBase64WithFile(file).then(async ({ result: thumbUrl }) => {
+            await emit('uploading', file?.name);
+            await emit('done', file?.name, thumbUrl);
+          });
+        } else {
+          createMessage.error('图片格式错误');
+        }
+        return false;
+      }
+
       function handleChange(info: Recordable) {
         const file = info.file;
         const status = file?.status;
@@ -75,7 +106,6 @@
           }
         } else if (status === 'done') {
           const response = unref(file?.response);
-          console.log(response?.code);
           if (response?.code != 0) {
             error('上传图片失败');
             uploading = false;
@@ -93,6 +123,7 @@
       return {
         prefixCls,
         handleChange,
+        beforeUpload,
         uploadUrl,
         stats,
         t,
