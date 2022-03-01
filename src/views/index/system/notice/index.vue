@@ -98,8 +98,8 @@
             options: [
               {
                 label: '系统公告',
-                value: '1',
-                key: '1',
+                value: 1,
+                key: 1,
               },
             ],
           },

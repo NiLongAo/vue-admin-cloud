@@ -4,7 +4,9 @@
       name="file"
       multiple
       @change="handleChange"
+      :data="{ type: 4 }"
       :action="uploadUrl"
+      :headers="stats.headers"
       :showUploadList="false"
       accept=".jpg,.jpeg,.gif,.png,.webp"
     >
@@ -15,12 +17,13 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, computed } from 'vue';
-
+  import { defineComponent, computed, reactive, watch, unref } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { Upload } from 'ant-design-vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useGlobSetting } from '/@/hooks/setting';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { useUserStore } from '/@/store/modules/user';
 
   export default defineComponent({
     name: 'TinymceImageUpload',
@@ -36,11 +39,23 @@
     },
     emits: ['uploading', 'done', 'error'],
     setup(props, { emit }) {
+      const { createMessage } = useMessage();
+      const error = createMessage.error!;
+      const stats = reactive<Recordable>({});
       let uploading = false;
-
+      const userStore = useUserStore();
       const { uploadUrl } = useGlobSetting();
       const { t } = useI18n();
       const { prefixCls } = useDesign('tinymce-img-upload');
+      watch(
+        () => userStore.getToken,
+        () => {
+          if (userStore.getToken) {
+            stats.headers = { Authorization: 'Bearer ' + userStore.getToken };
+          }
+        },
+        { immediate: true },
+      );
 
       const getButtonProps = computed(() => {
         const { disabled } = props;
@@ -52,15 +67,21 @@
       function handleChange(info: Recordable) {
         const file = info.file;
         const status = file?.status;
-        const url = file?.response?.url;
         const name = file?.name;
-
         if (status === 'uploading') {
           if (!uploading) {
             emit('uploading', name);
             uploading = true;
           }
         } else if (status === 'done') {
+          const response = unref(file?.response);
+          console.log(response?.code);
+          if (response?.code != 0) {
+            error('上传图片失败');
+            uploading = false;
+            return;
+          }
+          const url = response?.data[0].fullPath;
           emit('done', name, url);
           uploading = false;
         } else if (status === 'error') {
@@ -73,6 +94,7 @@
         prefixCls,
         handleChange,
         uploadUrl,
+        stats,
         t,
         getButtonProps,
       };

@@ -30,22 +30,31 @@
 
   const schemas: FormSchema[] = [
     {
+      field: 'id',
+      show: false,
+      component: 'Input',
+      label: '编号',
+      colProps: {
+        span: 24,
+      },
+    },
+    {
       field: 'noticeType',
       component: 'Select',
       label: '通知类型',
       colProps: {
         span: 24,
       },
+      required: true,
       componentProps: {
         options: [
           {
             label: '系统公告',
-            value: '1',
-            key: '1',
+            value: 1,
+            key: 1,
           },
         ],
       },
-      rules: [{ required: true }],
     },
     {
       field: 'title',

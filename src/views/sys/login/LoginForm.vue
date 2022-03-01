@@ -166,6 +166,7 @@
   const GetCode = async () => {
     const code = await doGetCode();
     formData.images = code;
+    formData.loginCode = '';
   };
 
   async function handleLogin() {

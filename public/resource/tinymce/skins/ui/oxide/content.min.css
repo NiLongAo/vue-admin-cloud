@@ -230,6 +230,8 @@ pre[class*=language-]{padding: 1em;margin: .5em 0;overflow: auto;}
 
 .mce-shy::after{content: '-';}
 
+img {max-width:100%;}
+
 body{font-family: sans-serif;}
 
 table{border-collapse: collapse;}
