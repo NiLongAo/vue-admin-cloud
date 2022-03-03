@@ -43,10 +43,7 @@
   import { CollapseContainer } from '/@/components/Container';
   import { unref, reactive, onMounted, onUpdated } from 'vue';
   import { useModal } from '/@/components/Modal';
-
   import SettingTreeMode from './SettingTreeMode.vue';
-  const [registerTreeModal, { openModal: onTreeModel }] = useModal();
-
   import {
     GetUserRole,
     SaveUserRole,
@@ -55,6 +52,8 @@
     GetUserPosition,
     SaveUserPosition,
   } from '/@/api/sys/user';
+
+  const [registerTreeModal, { openModal: onTreeModel }] = useModal();
 
   const props = defineProps({
     userId: {

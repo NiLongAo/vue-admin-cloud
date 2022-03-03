@@ -29,4 +29,6 @@ export interface PublicNoticeEntity {
   status: number;
   //创建时间
   createTime: string;
+  //是否已读
+  readNotice: string;
 }

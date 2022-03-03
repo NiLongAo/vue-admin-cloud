@@ -12,6 +12,7 @@ export interface ListItem {
   clickClose?: boolean;
   extra?: string;
   color?: string;
+  url?: string;
 }
 
 export interface TabItem {

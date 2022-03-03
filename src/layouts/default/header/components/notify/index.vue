@@ -5,35 +5,93 @@
         <BellOutlined />
       </Badge>
       <template #content>
-        <Tabs>
-          <template v-for="item in listData" :key="item.key">
+        <Tabs v-model:activeKey="activeKey">
+          <template v-for="item in stats.tabList" :key="item.key">
             <TabPane>
               <template #tab>
                 {{ item.name }}
-                <span v-if="item.list.length !== 0">({{ item.list.length }})</span>
+                <span v-if="stats.listParams.list.length !== 0"
+                  >({{ stats.listParams.list.length }})</span
+                >
               </template>
               <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
-              <NoticeList :list="item.list" v-if="item.key === '1'" @title-click="onNoticeClick" />
-              <NoticeList :list="item.list" v-else />
+              <NoticeList
+                :list="stats.listParams.list"
+                :pageSize="stats.listParams.pageSize"
+                v-if="item.key === '1'"
+                @update:currentPage="updatePage"
+                @title-click="onNoticeClick"
+              />
+              <NoticeList
+                :list="stats.listParams.list"
+                :pageSize="stats.listParams.pageSize"
+                @update:currentPage="updatePage"
+                v-else
+              />
             </TabPane>
           </template>
+          <UserNoticeModel @register="registerModal" />
         </Tabs>
       </template>
     </Popover>
   </div>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref, reactive, unref, watch } from 'vue';
   import { Popover, Tabs, Badge } from 'ant-design-vue';
   import { BellOutlined } from '@ant-design/icons-vue';
   import { tabListData, ListItem } from './data';
+  import UserNoticeModel from './UserNoticeModel.vue';
+  import { useModal } from '/@/components/Modal';
   import NoticeList from './NoticeList.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { getUserPublicNoticePage, doUserReadNoticeDetail } from '/@/api/notice/publicNotice';
 
   export default defineComponent({
-    components: { Popover, BellOutlined, Tabs, TabPane: Tabs.TabPane, Badge, NoticeList },
+    components: {
+      Popover,
+      BellOutlined,
+      Tabs,
+      TabPane: Tabs.TabPane,
+      Badge,
+      NoticeList,
+      UserNoticeModel,
+    },
     setup() {
+      const [registerModal, { openModal }] = useModal();
+      const stats = reactive({
+        tabList: [
+          {
+            key: '1',
+            name: '公告',
+          },
+          {
+            key: '2',
+            name: '消息',
+          },
+          {
+            key: '3',
+            name: '代办',
+          },
+        ],
+        params: {
+          pageNumber: 1,
+          pageSize: 5,
+        },
+        listParams: {
+          list: [] as Array<ListItem>,
+          pageSize: 5,
+        },
+      });
+      //不同分页接口
+      let api = ref();
+      //不同详情接口
+      let apiDetail = ref();
+      //不同数据组装
+      let updateData = ref();
+      //当前初始化页签位置
+      const activeKey = ref('1');
       const { prefixCls } = useDesign('header-notify');
       const { createMessage } = useMessage();
       const listData = ref(tabListData);
@@ -45,18 +103,88 @@
         }
         return count;
       });
+      //初始化表单数据源
+      const initData = async () => {
+        const data = await unref(api)(stats.params);
+        stats.listParams.list = unref(updateData)(data.data);
+        stats.listParams.pageSize = data.total;
+      };
 
-      function onNoticeClick(record: ListItem) {
+      //点击分页时触发加载按钮
+      async function updatePage(pageNumber) {
+        stats.params.pageNumber = pageNumber;
+        const data = await unref(api)(stats.params);
+        stats.listParams.list = unref(updateData)(data.data);
+        stats.listParams.pageSize = data.total;
+      }
+      //公告分页数据组装
+      const updatePublicNoticeData = (data) => {
+        let dataList = [] as Array<ListItem>;
+        data.forEach((element) => {
+          let model;
+          model = {
+            id: element.id,
+            avatar: '',
+            description: '',
+            url: element.content,
+            titleDelete: element.readNotice == 1 ? true : false,
+            title: element.title,
+            datetime: element.createTime,
+            type: '1',
+            extra: data.readNotice == 1 ? '已读' : '未读',
+            color: data.readNotice == 1 ? 'blue' : 'gold',
+          } as ListItem;
+          console.log(model);
+          dataList.push(model);
+        });
+        return dataList as Array<ListItem>;
+      };
+      //点击标题触发 详情
+      async function onNoticeClick(record: ListItem) {
         createMessage.success('你点击了通知，ID=' + record.id);
+        const data = await unref(apiDetail)({ id: record.id });
+        openModal(true, data);
         // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
         record.titleDelete = !record.titleDelete;
       }
+      //检测点击页签变化调用不同接口数据
+      watch(
+        () => unref(activeKey),
+        (val) => {
+          //公告相关
+          if (val == '1') {
+            api.value = getUserPublicNoticePage;
+            apiDetail.value = doUserReadNoticeDetail;
+            updateData.value = updatePublicNoticeData;
+          }
+          //消息相关
+          else if (val == '2') {
+            api.value = getUserPublicNoticePage;
+            apiDetail.value = doUserReadNoticeDetail;
+            updateData.value = updatePublicNoticeData;
+          }
+          //代办相关
+          else if (val == '3') {
+            api.value = getUserPublicNoticePage;
+            apiDetail.value = doUserReadNoticeDetail;
+            updateData.value = updatePublicNoticeData;
+          }
+          initData();
+        },
+        {
+          immediate: true,
+        },
+      );
 
       return {
         prefixCls,
         listData,
         count,
+        stats,
+        activeKey,
+        updatePage,
         onNoticeClick,
+        registerModal,
         numberStyle: {},
       };
     },

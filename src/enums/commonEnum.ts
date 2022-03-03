@@ -5,6 +5,8 @@ export const AUTHORIZED_GRANT_TYPES = 'authorizedGrantTypes';
 export const SMS_CONFIG_TYPES = 'smsConfigTypes';
 export const MOBILE_MESSAGE_TEMPLATE_TYPES = 'mobileMessageTemplateTypes';
 
+export const MINIO_PATH = 'minio.path';
+
 /**
  * @description: 客户端设置中,账号密码加密密钥
  */
