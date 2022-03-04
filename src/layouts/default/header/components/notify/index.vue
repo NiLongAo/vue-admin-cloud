@@ -5,14 +5,12 @@
         <BellOutlined />
       </Badge>
       <template #content>
-        <Tabs v-model:activeKey="activeKey">
+        <Tabs v-model:activeKey="activeKey" tabBarStyle="width:300px">
           <template v-for="item in stats.tabList" :key="item.key">
             <TabPane>
               <template #tab>
                 {{ item.name }}
-                <span v-if="stats.listParams.list.length !== 0"
-                  >({{ stats.listParams.list.length }})</span
-                >
+                <span v-if="item.count !== 0">({{ item.count }})</span>
               </template>
               <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
               <NoticeList
@@ -30,10 +28,10 @@
               />
             </TabPane>
           </template>
-          <UserNoticeModel @register="registerModal" />
         </Tabs>
       </template>
     </Popover>
+    <UserNoticeModel @register="registerModal" />
   </div>
 </template>
 <script lang="ts">
@@ -65,14 +63,17 @@
           {
             key: '1',
             name: '公告',
+            count: 0,
           },
           {
             key: '2',
             name: '消息',
+            count: 0,
           },
           {
             key: '3',
             name: '代办',
+            count: 0,
           },
         ],
         params: {
@@ -106,7 +107,7 @@
       //初始化表单数据源
       const initData = async () => {
         const data = await unref(api)(stats.params);
-        stats.listParams.list = unref(updateData)(data.data);
+        stats.listParams.list = unref(updateData)(data);
         stats.listParams.pageSize = data.total;
       };
 
@@ -114,13 +115,14 @@
       async function updatePage(pageNumber) {
         stats.params.pageNumber = pageNumber;
         const data = await unref(api)(stats.params);
-        stats.listParams.list = unref(updateData)(data.data);
+        stats.listParams.list = unref(updateData)(data);
         stats.listParams.pageSize = data.total;
       }
       //公告分页数据组装
       const updatePublicNoticeData = (data) => {
         let dataList = [] as Array<ListItem>;
-        data.forEach((element) => {
+        console.log(data);
+        data.data.forEach((element) => {
           let model;
           model = {
             id: element.id,
@@ -134,9 +136,48 @@
             extra: data.readNotice == 1 ? '已读' : '未读',
             color: data.readNotice == 1 ? 'blue' : 'gold',
           } as ListItem;
-          console.log(model);
           dataList.push(model);
         });
+        stats.tabList[0].count = data.total;
+        return dataList as Array<ListItem>;
+      };
+      //消息分页数据组装
+      const updateMessagesData = (data) => {
+        let dataList = [] as Array<ListItem>;
+
+        let model = {
+          id: '1',
+          avatar: '',
+          description: '',
+          url: '',
+          titleDelete: false,
+          title: '开发中',
+          datetime: '',
+          type: '1',
+          extra: '',
+          color: '',
+        } as ListItem;
+        dataList.push(model);
+        return dataList as Array<ListItem>;
+      };
+
+      //待办分页数据组装
+      const updateNeedData = (data) => {
+        let dataList = [] as Array<ListItem>;
+
+        let model = {
+          id: '1',
+          avatar: '',
+          description: '',
+          url: '',
+          titleDelete: false,
+          title: '开发中',
+          datetime: '',
+          type: '1',
+          extra: '',
+          color: '',
+        } as ListItem;
+        dataList.push(model);
         return dataList as Array<ListItem>;
       };
       //点击标题触发 详情
@@ -161,13 +202,13 @@
           else if (val == '2') {
             api.value = getUserPublicNoticePage;
             apiDetail.value = doUserReadNoticeDetail;
-            updateData.value = updatePublicNoticeData;
+            updateData.value = updateMessagesData;
           }
           //代办相关
           else if (val == '3') {
             api.value = getUserPublicNoticePage;
             apiDetail.value = doUserReadNoticeDetail;
-            updateData.value = updatePublicNoticeData;
+            updateData.value = updateNeedData;
           }
           initData();
         },

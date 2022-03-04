@@ -1,23 +1,84 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerBasicModal" :title="stats.data?.title">
-    <div>测试</div>
+  <BasicModal
+    v-bind="$attrs"
+    @register="registerBasicModal"
+    :title="stats.data?.title"
+    :bodyStyle="getWrapStyle"
+    width="80%"
+  >
+    <Spin size="large" :spinning="loading" :style="getWrapStyle">
+      <iframe
+        :src="stats.path + stats.data.content"
+        ref="frameRef"
+        class="iframeClass"
+        @load="hideLoading"
+      ></iframe>
+    </Spin>
   </BasicModal>
 </template>
 <script lang="ts" setup>
+  import type { CSSProperties } from 'vue';
   import { ref, reactive, computed, unref } from 'vue';
+  import { Spin } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { doConfigDetail } from '/@/api/sys/config';
   import { MINIO_PATH } from '/@/enums/commonEnum';
   import { PublicNoticeEntity } from '/@/api/notice/model/publicNoticeModel';
+  import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
+  import { useLayoutHeight } from '/@/layouts/default/content/useContentViewHeight';
 
+  const { headerHeightRef } = useLayoutHeight();
+  const loading = ref(true);
+  const topRef = ref(50);
+  const heightRef = ref(window.innerHeight);
+
+  const frameRef = ref<HTMLFrameElement>();
   const stats = reactive({
     //传过来的数据
     data: {} as PublicNoticeEntity,
     path: '',
   });
-  const [registerBasicModal] = useModalInner(async (data) => {
+
+  useWindowSizeFn(calcHeight, 150, { immediate: true });
+
+  const getWrapStyle = computed((): CSSProperties => {
+    return {
+      height: `${unref(heightRef) - 200}px`,
+    };
+  });
+
+  function calcHeight() {
+    const iframe = unref(frameRef);
+    if (!iframe) {
+      return;
+    }
+    const top = headerHeightRef.value;
+    topRef.value = top;
+    heightRef.value = window.innerHeight - top;
+    const clientHeight = document.documentElement.clientHeight - top;
+    iframe.style.height = `${clientHeight - 230}px`;
+  }
+
+  function hideLoading() {
+    loading.value = false;
+    calcHeight();
+  }
+  const [registerBasicModal, { redoModalHeight }] = useModalInner(async (data) => {
     stats.data = data;
     const model = await doConfigDetail({ k: MINIO_PATH });
     stats.path = model.v;
+    console.log(stats.data);
+    console.log(stats.path);
+    redoModalHeight();
   });
 </script>
+<style lang="less" scoped>
+  .iframeClass {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: @component-background;
+    border: 0;
+    box-sizing: border-box;
+  }
+</style>
