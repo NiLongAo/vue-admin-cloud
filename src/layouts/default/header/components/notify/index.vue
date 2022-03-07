@@ -1,11 +1,11 @@
 <template>
   <div :class="prefixCls">
-    <Popover title="" trigger="click" :overlayClassName="`${prefixCls}__overlay`">
+    <Popover title="" trigger="hover" :overlayClassName="`${prefixCls}__overlay`">
       <Badge :count="count" dot :numberStyle="numberStyle">
         <BellOutlined />
       </Badge>
       <template #content>
-        <Tabs v-model:activeKey="activeKey" tabBarStyle="width:300px">
+        <Tabs v-model:activeKey="activeKey" style="width: 300px">
           <template v-for="item in stats.tabList" :key="item.key">
             <TabPane>
               <template #tab>
@@ -31,7 +31,7 @@
         </Tabs>
       </template>
     </Popover>
-    <UserNoticeModel @register="registerModal" />
+    <UserNoticeModel @register="registerModal" @afterClose="afterClose" />
   </div>
 </template>
 <script lang="ts">
@@ -43,7 +43,7 @@
   import { useModal } from '/@/components/Modal';
   import NoticeList from './NoticeList.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  // import { useMessage } from '/@/hooks/web/useMessage';
   import { getUserPublicNoticePage, doUserReadNoticeDetail } from '/@/api/notice/publicNotice';
 
   export default defineComponent({
@@ -79,6 +79,10 @@
         params: {
           pageNumber: 1,
           pageSize: 5,
+          sort: {
+            field: 'createTime',
+            order: 'descend',
+          },
         },
         listParams: {
           list: [] as Array<ListItem>,
@@ -94,7 +98,7 @@
       //当前初始化页签位置
       const activeKey = ref('1');
       const { prefixCls } = useDesign('header-notify');
-      const { createMessage } = useMessage();
+      //const { createMessage } = useMessage();
       const listData = ref(tabListData);
 
       const count = computed(() => {
@@ -121,7 +125,6 @@
       //公告分页数据组装
       const updatePublicNoticeData = (data) => {
         let dataList = [] as Array<ListItem>;
-        console.log(data);
         data.data.forEach((element) => {
           let model;
           model = {
@@ -133,8 +136,8 @@
             title: element.title,
             datetime: element.createTime,
             type: '1',
-            extra: data.readNotice == 1 ? '已读' : '未读',
-            color: data.readNotice == 1 ? 'blue' : 'gold',
+            extra: element.readNotice == 1 ? '已读' : '未读',
+            color: element.readNotice == 1 ? 'blue' : 'gold',
           } as ListItem;
           dataList.push(model);
         });
@@ -182,11 +185,11 @@
       };
       //点击标题触发 详情
       async function onNoticeClick(record: ListItem) {
-        createMessage.success('你点击了通知，ID=' + record.id);
+        // createMessage.success('你点击了通知，ID=' + record.id);
+        // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
+        // record.titleDelete = !record.titleDelete;
         const data = await unref(apiDetail)({ id: record.id });
         openModal(true, data);
-        // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
-        record.titleDelete = !record.titleDelete;
       }
       //检测点击页签变化调用不同接口数据
       watch(
@@ -216,10 +219,15 @@
           immediate: true,
         },
       );
+      //model关闭时刷新分页
+      const afterClose = () => {
+        initData();
+      };
 
       return {
         prefixCls,
         listData,
+        afterClose,
         count,
         stats,
         activeKey,

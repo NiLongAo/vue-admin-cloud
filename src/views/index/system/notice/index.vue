@@ -49,6 +49,10 @@
     columns: getBasicColumns(),
     formConfig: getFormConfig(),
     bordered: true,
+    defSort: {
+      field: 'createTime',
+      order: 'descend',
+    },
     useSearchForm: true,
     showTableSetting: true,
     tableSetting: { fullScreen: true },
@@ -206,11 +210,6 @@
         width: 100,
       },
       {
-        title: '公告结束时间',
-        dataIndex: 'endTime',
-        width: 100,
-      },
-      {
         title: '状态',
         dataIndex: 'status',
         width: 100,
@@ -225,6 +224,8 @@
       {
         title: '创建时间',
         dataIndex: 'createTime',
+        sorter: true,
+        defaultSortOrder: 'descend',
         width: 100,
       },
     ];

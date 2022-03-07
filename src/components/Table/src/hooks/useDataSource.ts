@@ -70,16 +70,18 @@ export function useDataSource(
     sorter: SorterResult,
   ) {
     const { clearSelectOnPageChange, sortFn, filterFn } = unref(propsRef);
+
     if (clearSelectOnPageChange) {
       clearSelectedRowKeys();
     }
     setPagination(pagination);
-
     const params: Recordable = {};
     if (sorter && isFunction(sortFn)) {
       const sortInfo = sortFn(sorter);
       searchState.sortInfo = sortInfo;
       params.sortInfo = sortInfo;
+      //点击排序后清空默认排序
+      unref(propsRef).defSort = {};
     }
 
     if (filters && isFunction(filterFn)) {
@@ -250,6 +252,7 @@ export function useDataSource(
       useSearchForm,
       pagination,
     } = unref(propsRef);
+
     if (!api || !isFunction(api)) return;
     try {
       setLoading(true);
@@ -271,17 +274,20 @@ export function useDataSource(
 
       const { sortInfo = {}, filterInfo } = searchState;
 
+      const sort = {
+        ...defSort,
+        ...sortInfo,
+        ...(opt?.sortInfo ?? {}),
+      };
       let params: Recordable = merge(
         pageParams,
         useSearchForm ? getFieldsValue() : {},
         searchInfo,
         opt?.searchInfo ?? {},
-        defSort,
-        sortInfo,
         filterInfo,
-        opt?.sortInfo ?? {},
         opt?.filterInfo ?? {},
       );
+      params = { ...params, sort };
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }

@@ -2,6 +2,8 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerBasicModal"
+    :afterClose="afterCloseModel"
+    :showOkBtn="false"
     :title="stats.data?.title"
     :bodyStyle="getWrapStyle"
     width="80%"
@@ -26,6 +28,8 @@
   import { PublicNoticeEntity } from '/@/api/notice/model/publicNoticeModel';
   import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
   import { useLayoutHeight } from '/@/layouts/default/content/useContentViewHeight';
+
+  const emit = defineEmits(['afterClose', 'register']);
 
   const { headerHeightRef } = useLayoutHeight();
   const loading = ref(true);
@@ -63,13 +67,16 @@
     loading.value = false;
     calcHeight();
   }
+  const afterCloseModel = () => {
+    emit('afterClose');
+  };
+
   const [registerBasicModal, { redoModalHeight }] = useModalInner(async (data) => {
-    stats.data = data;
     const model = await doConfigDetail({ k: MINIO_PATH });
     stats.path = model.v;
-    console.log(stats.data);
-    console.log(stats.path);
+    stats.data = data;
     redoModalHeight();
+    registerBasicModal;
   });
 </script>
 <style lang="less" scoped>
