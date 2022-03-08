@@ -4,15 +4,50 @@ import io, { Socket } from 'socket.io-client';
 
 interface SocketState {
   socket: Socket | null;
+  type: number | null;
+  message: OutMessage | {};
+}
+interface OutMessage {
+  //发送人编号
+  userId: string;
+  //发送人名称
+  userName: string;
+  /**
+   * 消息类型
+   *  1.平台通知公告
+   * 2.强制下线
+   */
+  type: number;
+  /**
+   * 消息类型
+   * 1.字符串
+   * 2.图片
+   * 3.视频
+   */
+  outType: number;
+  //消息主体
+  message: string;
+  //创建时间
+  createTime: string;
 }
 export const useSocketStore = defineStore({
   id: 'app-socket',
   state: (): SocketState => ({
     socket: null,
+    type: null,
+    message: {},
   }),
   getters: {
     getSocket(): Socket | null {
       return this.socket as Socket;
+    },
+    getType(): number | null {
+      return this.type;
+    },
+    getMessage(): OutMessage | null {
+      //获取消息后重置类型，防止无法监听到值改变
+      this.type = null;
+      return this.message as Socket;
     },
   },
   actions: {
@@ -43,6 +78,10 @@ export const useSocketStore = defineStore({
       if (this.socket) {
         this.socket.disconnect();
       }
+    },
+    messageEvent(data: OutMessage) {
+      this.type = data.type;
+      this.message = data;
     },
   },
 });

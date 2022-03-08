@@ -43,7 +43,8 @@
   import { useModal } from '/@/components/Modal';
   import NoticeList from './NoticeList.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  // import { useMessage } from '/@/hooks/web/useMessage';
+  import { useSocketStore } from '/@/store/modules/socket';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { getUserPublicNoticePage, doUserReadNoticeDetail } from '/@/api/notice/publicNotice';
 
   export default defineComponent({
@@ -58,6 +59,7 @@
     },
     setup() {
       const [registerModal, { openModal }] = useModal();
+      const useSocket = useSocketStore();
       const stats = reactive({
         tabList: [
           {
@@ -98,7 +100,7 @@
       //当前初始化页签位置
       const activeKey = ref('1');
       const { prefixCls } = useDesign('header-notify');
-      //const { createMessage } = useMessage();
+      const { notification } = useMessage();
       const listData = ref(tabListData);
 
       const count = computed(() => {
@@ -219,6 +221,23 @@
           immediate: true,
         },
       );
+      //检测socket平台消息
+      watch(
+        () => useSocket.getType,
+        (val) => {
+          // 1.平台通知公告
+          if (val == 1) {
+            const message = useSocket.getMessage;
+            notification.info({
+              message: '平台通知公告:',
+              description: message?.message,
+              duration: 5,
+            });
+            initData();
+          }
+        },
+      );
+
       //model关闭时刷新分页
       const afterClose = () => {
         initData();
