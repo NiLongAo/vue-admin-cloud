@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import io, { Socket } from 'socket.io-client';
+import { useGlobSetting } from '/@/hooks/setting';
 
+const { socketUrl = '' } = useGlobSetting();
 interface SocketState {
   socket: Socket | null;
   type: number | null;
@@ -55,7 +57,7 @@ export const useSocketStore = defineStore({
       if (this.socket) {
         this.socket.disconnect();
       }
-      this.socket = io('ws://localhost:9190', {
+      this.socket = io(socketUrl, {
         //自动链接
         autoConnect: false,
         //重新链接

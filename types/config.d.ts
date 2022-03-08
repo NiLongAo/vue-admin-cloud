@@ -146,6 +146,8 @@ export interface GlobConfig {
   urlPrefix?: string;
   // Project abbreviation
   shortName: string;
+  // Project abbreviation
+  socketUrl?: string;
 }
 export interface GlobEnvConfig {
   // Site title
@@ -158,4 +160,6 @@ export interface GlobEnvConfig {
   VITE_GLOB_APP_SHORT_NAME: string;
   // Upload url
   VITE_GLOB_UPLOAD_URL?: string;
+  // socket 服务地址
+  VITE_SOCKET_URL?: string;
 }
