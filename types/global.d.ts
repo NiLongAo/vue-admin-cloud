@@ -71,6 +71,7 @@ declare global {
     VITE_LEGACY: boolean;
     VITE_USE_IMAGEMIN: boolean;
     VITE_GENERATE_UI: string;
+    VITE_SOCKET_URL: string;
   }
 
   declare function parseInt(s: string | number, radix?: number): number;

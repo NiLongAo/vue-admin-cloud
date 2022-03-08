@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import io, { Socket } from 'socket.io-client';
-import { useGlobSetting } from '/@/hooks/setting';
 
 interface SocketState {
   socket: Socket | null;
@@ -56,9 +55,7 @@ export const useSocketStore = defineStore({
       if (this.socket) {
         this.socket.disconnect();
       }
-      const { socketUrl = '' } = useGlobSetting();
-      console.log(socketUrl);
-      this.socket = io(socketUrl, {
+      this.socket = io(import.meta.env.VITE_SOCKET_URL, {
         //自动链接
         autoConnect: false,
         //重新链接
