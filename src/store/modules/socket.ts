@@ -3,7 +3,6 @@ import { store } from '/@/store';
 import io, { Socket } from 'socket.io-client';
 import { useGlobSetting } from '/@/hooks/setting';
 
-const { socketUrl = '' } = useGlobSetting();
 interface SocketState {
   socket: Socket | null;
   type: number | null;
@@ -57,6 +56,8 @@ export const useSocketStore = defineStore({
       if (this.socket) {
         this.socket.disconnect();
       }
+      const { socketUrl = '' } = useGlobSetting();
+      console.log(socketUrl);
       this.socket = io(socketUrl, {
         //自动链接
         autoConnect: false,
