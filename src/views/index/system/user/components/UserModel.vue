@@ -73,7 +73,7 @@
     return [
       {
         title: '人员名称',
-        dataIndex: 'userName',
+        dataIndex: 'id',
         fixed: 'left',
         width: 100,
       },

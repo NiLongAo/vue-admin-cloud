@@ -62,7 +62,11 @@
     showTableSetting: true,
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
-    rowKey: 'userId',
+    rowKey: 'id',
+    defSort: {
+      field: 'id',
+      order: 'descend',
+    },
     actionColumn: {
       width: 160,
       title: 'Action',
@@ -74,12 +78,12 @@
     openModal(true, { isUpdate: false });
   }
   function handleView(record: Recordable) {
-    go('/system/user/user_detail/' + record.userId);
+    go('/system/user/user_detail/' + record.id);
   }
   function handleEdit(record: Recordable) {
     openModal(true, {
       isUpdate: true,
-      userId: record.userId,
+      userId: record.id,
     });
   }
   const handleSuccess = () => {
@@ -115,8 +119,10 @@
     return [
       {
         title: '用户编号',
-        dataIndex: 'userId',
+        dataIndex: 'id',
         fixed: 'left',
+        sorter: true,
+        defaultSortOrder: 'descend',
         width: 100,
       },
       {
@@ -153,6 +159,7 @@
       {
         title: '登录时间',
         dataIndex: 'loginLastTime',
+        sorter: true,
         width: 200,
       },
     ];
