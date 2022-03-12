@@ -89,12 +89,12 @@ export function createPermissionGuard(router: Router) {
         return;
       }
     }
-    userStore.setCheckUrl(to?.path);
 
     if (permissionStore.getIsDynamicAddedRoute) {
       next();
       return;
     }
+
     const routes = await permissionStore.buildRoutesAction();
 
     routes.forEach((route) => {

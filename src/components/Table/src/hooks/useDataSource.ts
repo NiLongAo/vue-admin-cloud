@@ -70,11 +70,11 @@ export function useDataSource(
     sorter: SorterResult,
   ) {
     const { clearSelectOnPageChange, sortFn, filterFn } = unref(propsRef);
-
     if (clearSelectOnPageChange) {
       clearSelectedRowKeys();
     }
     setPagination(pagination);
+
     const params: Recordable = {};
     if (sorter && isFunction(sortFn)) {
       const sortInfo = sortFn(sorter);

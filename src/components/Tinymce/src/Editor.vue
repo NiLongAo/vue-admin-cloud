@@ -303,7 +303,6 @@
         if (!editor) {
           return;
         }
-        console.log(name, url);
         const content = editor?.getContent() ?? '';
         const val = content?.replace(getUploadingImgName(name), `<img src="${url}"/>`) ?? '';
         setValue(editor, val);
