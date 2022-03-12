@@ -4,6 +4,7 @@ node_modules
 *.md
 *.woff
 *.ttf
+*.zip
 .vscode
 .idea
 dist
