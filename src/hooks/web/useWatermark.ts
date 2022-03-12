@@ -34,12 +34,13 @@ export function useWatermark(
 
     const cans = can.getContext('2d');
     if (cans) {
-      cans.rotate((-20 * Math.PI) / 120);
       cans.font = '15px Vedana';
       cans.fillStyle = 'rgba(0, 0, 0, 0.15)';
-      cans.textAlign = 'left';
+      cans.textAlign = 'center';
       cans.textBaseline = 'middle';
-      cans.fillText(str, width / 20, height);
+      cans.translate(300 / 2, 240 / 2);
+      cans.rotate((-30 * Math.PI) / 180);
+      cans.fillText(str, 0, 0);
     }
     return can.toDataURL('image/png');
   }

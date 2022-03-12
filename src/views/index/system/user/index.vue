@@ -14,6 +14,12 @@
               onClick: handleView.bind(null, record),
             },
             {
+              ifShow: hasPermission('system.user:detail'),
+              icon: 'ic:outline-local-printshop',
+              tooltip: '打印用户详情',
+              onClick: handlePrint.bind(null, record),
+            },
+            {
               ifShow: hasPermission('system.user:update'),
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
@@ -37,6 +43,7 @@
       </template>
     </BasicTable>
     <SettingUser :reload="reload" @register="registerModal" @success="handleSuccess" />
+    <UserDetailPrintModel @register="registerPrintModal" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -47,7 +54,10 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useGo } from '/@/hooks/web/usePage';
   import SettingUser from './SettingUser.vue';
+  import UserDetailPrintModel from './UserDetailPrintModel.vue';
+
   const checkedKeys = ref<Array<string | number>>([]);
+  const [registerPrintModal, { openModal: openPrintModal }] = useModal();
   const [registerModal, { openModal }] = useModal();
   const { hasPermission } = usePermission();
   const go = useGo();
@@ -76,6 +86,9 @@
   });
   function handleAdd() {
     openModal(true, { isUpdate: false });
+  }
+  function handlePrint(record: Recordable) {
+    openPrintModal(true, { id: record.id });
   }
   function handleView(record: Recordable) {
     go('/system/user/user_detail/' + record.id);
