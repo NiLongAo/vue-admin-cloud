@@ -14,7 +14,7 @@
               onClick: handleView.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.user:detail'),
+              ifShow: hasPermission('system.user:print'),
               icon: 'ic:outline-local-printshop',
               tooltip: '打印用户详情',
               onClick: handlePrint.bind(null, record),
