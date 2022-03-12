@@ -58,7 +58,8 @@
   import { ListItem } from './data';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { List, Avatar, Tag, Typography } from 'ant-design-vue';
-  import { isNumber } from '/@/utils/is';
+  // import { isNumber } from '/@/utils/is';
+  // import { listenerCount } from 'process';
   export default defineComponent({
     components: {
       [Avatar.name]: Avatar,
@@ -76,6 +77,10 @@
       pageSize: {
         type: [Boolean, Number] as PropType<Boolean | Number>,
         default: 5,
+      },
+      total: {
+        type: [Boolean, Number] as PropType<Boolean | Number>,
+        default: false,
       },
       currentPage: {
         type: Number,
@@ -99,9 +104,10 @@
       const current = ref(props.currentPage || 1);
       const getData = computed(() => {
         const { pageSize, list } = props;
-        if (pageSize === false) return [];
-        let size = isNumber(pageSize) ? pageSize : 5;
-        return list.slice(size * (unref(current) - 1), size * unref(current));
+        // if (pageSize === false) return [];
+        // let size = isNumber(pageSize) ? pageSize : 5;
+        // return list.slice(size * (unref(current) - 1), size * unref(current));
+        return list;
       });
       watch(
         () => props.currentPage,
@@ -111,10 +117,10 @@
       );
       const isTitleClickable = computed(() => !!props.onTitleClick);
       const getPagination = computed(() => {
-        const { list, pageSize } = props;
-        if (pageSize > 0 && list && list.length > pageSize) {
+        const { list, total, pageSize } = props;
+        if (total && total > 0 && list && total > list.length) {
           return {
-            total: list.length,
+            total,
             pageSize,
             //size: 'small',
             current: unref(current),

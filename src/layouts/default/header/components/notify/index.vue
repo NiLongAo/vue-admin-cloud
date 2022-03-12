@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixCls">
-    <Popover title="" trigger="hover" :overlayClassName="`${prefixCls}__overlay`">
+    <Popover title="" trigger="click" :overlayClassName="`${prefixCls}__overlay`">
       <Badge :count="count" dot :numberStyle="numberStyle">
         <BellOutlined />
       </Badge>
@@ -15,14 +15,16 @@
               <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
               <NoticeList
                 :list="stats.listParams.list"
-                :pageSize="stats.listParams.pageSize"
+                :pageSize="stats.params.pageSize"
+                :total="stats.listParams.total"
                 v-if="item.key === '1'"
                 @update:currentPage="updatePage"
                 @title-click="onNoticeClick"
               />
               <NoticeList
                 :list="stats.listParams.list"
-                :pageSize="stats.listParams.pageSize"
+                :pageSize="stats.params.pageSize"
+                :total="stats.listParams.total"
                 @update:currentPage="updatePage"
                 v-else
               />
@@ -88,7 +90,7 @@
         },
         listParams: {
           list: [] as Array<ListItem>,
-          pageSize: 5,
+          total: 5,
         },
       });
       //不同分页接口
@@ -114,7 +116,7 @@
       const initData = async () => {
         const data = await unref(api)(stats.params);
         stats.listParams.list = unref(updateData)(data);
-        stats.listParams.pageSize = data.total;
+        stats.listParams.total = data.total;
       };
 
       //点击分页时触发加载按钮
@@ -122,7 +124,7 @@
         stats.params.pageNumber = pageNumber;
         const data = await unref(api)(stats.params);
         stats.listParams.list = unref(updateData)(data);
-        stats.listParams.pageSize = data.total;
+        stats.listParams.total = data.total;
       }
       //公告分页数据组装
       const updatePublicNoticeData = (data) => {
