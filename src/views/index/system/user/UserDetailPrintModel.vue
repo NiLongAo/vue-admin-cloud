@@ -14,6 +14,8 @@
   import { reactive, ref, nextTick, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { UserInfoApi } from '/@/api/sys/user';
+  import { doConfigDetail } from '/@/api/sys/config';
+  import { PRINT_NAME } from '/@/enums/commonEnum';
   import printJS from 'print-js';
   import { Description, DescItem, useDescription } from '/@/components/Description/index';
   import { useWatermark } from '/@/hooks/web/useWatermark';
@@ -69,6 +71,7 @@
       return;
     }
     const val = await UserInfoApi({ id: usetId });
+    const model = await doConfigDetail({ k: PRINT_NAME });
     formData.data = val;
     const { userName, nickName, phone, gender, idCard, address, memo } = val;
     setDescProps({
@@ -81,7 +84,7 @@
       htmlElement.value = document.getElementById('myHtmlElement');
       console.log(unref(htmlElement));
       const { setWatermark } = useWatermark(htmlElement);
-      setWatermark('fasdfasefasdfasefasdfaef');
+      setWatermark(model.v);
     });
   });
 
