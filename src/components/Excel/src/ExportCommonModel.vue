@@ -92,7 +92,6 @@
     if (!props.exportApi || !isFunction(props.exportApi)) return;
     const val = await props.exportApi(param);
     const fullPath = val[0].fullPath;
-    console.log(fullPath);
     downloadByUrl({
       url: fullPath,
       target: '_self',
