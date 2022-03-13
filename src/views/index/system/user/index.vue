@@ -40,29 +40,39 @@
         <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.user:add')"
           >添加</a-button
         >
+        <a-button type="primary" @click="handleExport" v-if="hasPermission('system.user:add')"
+          >导出</a-button
+        >
       </template>
     </BasicTable>
     <SettingUser :reload="reload" @register="registerModal" @success="handleSuccess" />
     <UserDetailPrintModel @register="registerPrintModal" />
+    <ExportCommonModel
+      :paramApi="doExportEntityInfo"
+      :exportApi="doExportUrl"
+      @register="registerExportCommonModel"
+    />
   </div>
 </template>
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { getUserPage, doDelete } from '/@/api/sys/user';
+  import { getUserPage, doDelete, doExportEntityInfo, doExportUrl } from '/@/api/sys/user';
   import { ref } from 'vue';
   import { useModal } from '/@/components/Modal';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useGo } from '/@/hooks/web/usePage';
   import SettingUser from './SettingUser.vue';
   import UserDetailPrintModel from './UserDetailPrintModel.vue';
+  import { ExportCommonModel } from '/@/components/Excel';
 
   const checkedKeys = ref<Array<string | number>>([]);
   const [registerPrintModal, { openModal: openPrintModal }] = useModal();
+  const [registerExportCommonModel, { openModal: openExportCommonModel }] = useModal();
   const [registerModal, { openModal }] = useModal();
   const { hasPermission } = usePermission();
   const go = useGo();
 
-  const [registerTable, { reload }] = useTable({
+  const [registerTable, { reload, getForm, getSearchParam }] = useTable({
     title: '用户列表',
     api: getUserPage,
     columns: getBasicColumns(),
@@ -93,6 +103,14 @@
   function handleView(record: Recordable) {
     go('/system/user/user_detail/' + record.id);
   }
+
+  const handleExport = () => {
+    //获取查询参数
+    const searchParam = { ...getSearchParam(), ...getForm().getFieldsValue() };
+
+    openExportCommonModel(true, { searchParam });
+  };
+
   function handleEdit(record: Recordable) {
     openModal(true, {
       isUpdate: true,

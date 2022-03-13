@@ -49,6 +49,8 @@ export function useDataSource(
   const dataSourceRef = ref<Recordable[]>([]);
   const rawDataSourceRef = ref<Recordable>({});
 
+  const searchParam = ref<Recordable>({});
+
   watchEffect(() => {
     tableData.value = unref(dataSourceRef);
   });
@@ -291,7 +293,8 @@ export function useDataSource(
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
-
+      //添加查询参数
+      searchParam.value = params;
       const res = await api(params);
       rawDataSourceRef.value = res;
 
@@ -347,6 +350,10 @@ export function useDataSource(
     return getDataSourceRef.value as T[];
   }
 
+  function getSearchParam<T = Recordable>() {
+    return unref(searchParam) as T;
+  }
+
   function getRawDataSource<T = Recordable>() {
     return rawDataSourceRef.value as T;
   }
@@ -364,6 +371,7 @@ export function useDataSource(
   return {
     getDataSourceRef,
     getDataSource,
+    getSearchParam,
     getRawDataSource,
     getRowKey,
     setTableData,

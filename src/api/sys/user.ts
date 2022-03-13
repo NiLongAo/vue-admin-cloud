@@ -48,6 +48,10 @@ enum Api {
   choiceUserPage = '/webapi/bean/user/choice_user_page',
   //用户信息下拉展示(动态搜索数据源)
   select = '/webapi/bean/user/select',
+  //用户信息下拉展示(动态搜索数据源)
+  findExportEntityInfo = '/webapi/bean/user/find_export_entity_info',
+  //用户信息下拉展示(动态搜索数据源)
+  findExportUrl = '/webapi/bean/user/find_export_url',
 }
 
 /**
@@ -146,4 +150,12 @@ export function SaveUserPosition(params: Recordable) {
 
 export function doGetCode() {
   return defHttp.post({ url: Api.getCode });
+}
+
+export function doExportEntityInfo(params) {
+  return defHttp.get({ url: Api.findExportEntityInfo, params });
+}
+
+export function doExportUrl(params: Recordable) {
+  return defHttp.post({ url: Api.findExportUrl, params });
 }

@@ -89,6 +89,9 @@ export function useTable(tableProps?: Props): [
     getDataSource: () => {
       return getTableInstance().getDataSource();
     },
+    getSearchParam: () => {
+      return getTableInstance().getSearchParam();
+    },
     getRawDataSource: () => {
       return getTableInstance().getRawDataSource();
     },
