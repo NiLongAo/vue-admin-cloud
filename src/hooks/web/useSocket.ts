@@ -7,10 +7,11 @@ import { watch } from 'vue';
 export function useSocket() {
   const userStore = useUserStore();
   const useSocket = useSocketStore();
-
-  let socket, //客户端
-    reconnectCount = 0 as number, // 重连次数
-    reconnectErrorCount = 10 as number;
+  //客户端
+  let socket,
+    // 重连次数
+    reconnectCount = 0 as number;
+  const reconnectErrorCount = 10;
   watch(
     () => userStore.getToken,
     () => {
