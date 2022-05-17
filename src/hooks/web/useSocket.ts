@@ -69,7 +69,7 @@ export function useSocket() {
           console.log('reconnect_failed');
         });
         //接收服务端发送来消息
-        socket.on('message_event', (data) => {
+        socket.on('public_member_event', (data) => {
           useSocket.messageEvent(data);
         });
       }
