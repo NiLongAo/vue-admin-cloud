@@ -19,8 +19,8 @@ const PrefixLabelSelect = defineComponent({
   emits: ['update:value'],
   setup(props, { emit, slots }) {
     const computedModelValue = computed({
-      get: () => (props.isValueType && !Number.isNaN(Number.parseInt(props.value))) ? Number(props.value): props.value ,
-      set: (val) => emit('update:value', val),
+      get: () => (props.isValueType && !Number.isNaN(Number.parseInt(props.value))) ? Number(props.value): props.value,
+      set: (val) =>  emit('update:value', val),
     });
     const stats = reactive({
       keyword:props.value,

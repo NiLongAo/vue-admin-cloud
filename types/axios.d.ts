@@ -23,8 +23,15 @@ export interface RequestOptions {
   ignoreCancelToken?: boolean;
   // Whether to send token in header
   withToken?: boolean;
+// 请求重试机制
+  retryRequest?: RetryRequest;
   //是否展示后台结果消息
   isMessage?: boolean;
+}
+export interface RetryRequest {
+  isOpenRetry: boolean;
+  count: number;
+  waitTime: number;
 }
 
 export interface Result<T = any> {

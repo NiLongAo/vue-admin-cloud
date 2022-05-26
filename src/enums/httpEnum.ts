@@ -4,8 +4,9 @@
 export enum ResultEnum {
   SUCCESS = 0,
   ERROR = 1,
-  TIMEOUT = 313,
-  OVERDUE = 314,
+  TIMEOUT = 313, //客户端认证失败
+  OVERDUE = 314, //token无效或已过期
+  PROHIBIT = 315, //token已被禁止访问
   TYPE = 'success',
 }
 

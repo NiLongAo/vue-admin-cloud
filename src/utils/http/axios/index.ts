@@ -17,6 +17,7 @@ import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
 import { useUserStoreWithOut } from '/@/store/modules/user';
+import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
@@ -64,8 +65,8 @@ const transform: AxiosTransform = {
     let timeoutMsg = '';
     const userStore = useUserStoreWithOut();
     switch (code) {
-      case ResultEnum.TIMEOUT:
-        timeoutMsg = t('sys.api.timeoutMessage');
+      case ResultEnum.TIMEOUT | ResultEnum.PROHIBIT:
+        timeoutMsg = message;
         userStore.setToken(undefined, undefined);
         userStore.logout(true);
         break;
@@ -183,7 +184,7 @@ const transform: AxiosTransform = {
   /**
    * @description: 响应错误处理
    */
-  responseInterceptorsCatch: async (error: any) => {
+  responseInterceptorsCatch: (axiosInstance: AxiosResponse, error: any) => {
     const { t } = useI18n();
     const errorLogStore = useErrorLogStoreWithOut();
     errorLogStore.addAjaxErrorInfo(error);
@@ -213,7 +214,15 @@ const transform: AxiosTransform = {
       throw new Error(error as unknown as string);
     }
 
-    await checkStatus(error?.response?.status, msg, errorMessageMode);
+    checkStatus(error?.response?.status, msg, errorMessageMode);
+
+    // 添加自动重试机制 保险起见 只针对GET请求
+    const retryRequest = new AxiosRetry();
+    const { isOpenRetry } = config.requestOptions.retryRequest;
+    config.method?.toUpperCase() === RequestEnum.GET &&
+      isOpenRetry &&
+      // @ts-ignore
+      retryRequest.retry(axiosInstance, error);
     return Promise.reject(error);
   },
 };
@@ -226,7 +235,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // authentication schemes，e.g: Bearer
         authenticationScheme: 'Bearer',
         //authenticationScheme: '',
-        timeout: 15 * 1000,
+        timeout: 10 * 1000,
         // 基础接口地址
         // baseURL: globSetting.apiUrl,
         headers: { 'Content-Type': ContentTypeEnum.JSON },
@@ -258,6 +267,11 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           ignoreCancelToken: true,
           // 是否携带token
           withToken: true,
+          retryRequest: {
+            isOpenRetry: true,
+            count: 5,
+            waitTime: 100,
+          },
         },
       },
       opt || {},
