@@ -57,7 +57,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
       api: getChoiceUserPage,
       searchName:'search',
       labelField:'userName',
-      valueField:'userId',
+      valueField:'id',
       resultField:'data',
       isValueType:true,
       allowClear:true,

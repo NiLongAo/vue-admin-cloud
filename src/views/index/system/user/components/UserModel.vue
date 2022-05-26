@@ -157,6 +157,7 @@
   };
 
   const onSelectChange = (selectedRowKeys: (string | number)[]) => {
+    console.log(selectedRowKeys);
     checkedKeys.value = selectedRowKeys;
   };
   const fromChange = (val) => {
@@ -194,7 +195,7 @@
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
     size: 'small',
-    rowKey: 'userId',
+    rowKey: 'id',
     scroll: { y: 500 },
   });
 </script>
