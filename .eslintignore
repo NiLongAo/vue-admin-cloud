@@ -11,5 +11,6 @@ dist
 /docs
 .husky
 .local
+.lock
 /bin
 Dockerfile
