@@ -4,7 +4,7 @@
       <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
-          {{ getUserInfo.realName }}
+          {{ getUserInfo.userName }}
         </span>
       </span>
     </span>
@@ -76,9 +76,9 @@
       const userStore = useUserStore();
       const systemStore = useSystemStore();
       const getUserInfo = computed(() => {
-        const { realName = '', imageUrl, desc } = userStore.getUserInfo || {};
+        const { userName = '', imageUrl, desc } = userStore.getUserInfo || {};
         return {
-          realName,
+          userName,
           avatar: imageUrl
             ? systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + imageUrl
             : headerImg,
