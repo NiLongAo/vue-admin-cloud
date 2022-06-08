@@ -2,7 +2,7 @@
   <div>
     <BasicTable
       @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys }"
+      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys , onChange: onSelectChange}"
     >
       <template #smsTypeTag="{ record }">
         <Tag color="green">
@@ -102,5 +102,8 @@
         width: 500,
       },
     ];
+  }
+  function onSelectChange(selectedRowKeys: (string | number)[]) {
+    checkedKeys.value = selectedRowKeys;
   }
 </script>

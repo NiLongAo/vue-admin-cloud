@@ -3,7 +3,7 @@
     <BasicTable
       @register="registerTable"
       @fetch-success="onFetchSuccess"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys }"
+      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys , onChange: onSelectChange}"
     >
       <template #action="{ record }">
         <TableAction
@@ -206,5 +206,8 @@
         width: 200,
       },
     ];
+  }
+  function onSelectChange(selectedRowKeys: (string | number)[]) {
+    checkedKeys.value = selectedRowKeys;
   }
 </script>
