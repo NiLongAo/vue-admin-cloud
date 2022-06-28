@@ -14,8 +14,8 @@
   import { PageWrapper } from '/@/components/Page';
   import PrivilegeTree from './PrivilegeTree.vue';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
-  import { ref, unref, onMounted } from 'vue';
-  import { doMenuPrivilegeTree } from '/@/api/sys/menu';
+  import { ref, unref } from 'vue';
+  import { doTenantMenuPrivilegeTree } from '/@/api/sys/menu';
   import { useMessage } from '/@/hooks/web/useMessage';
   import {
     doDepartmentPrivilegeList,
@@ -34,25 +34,18 @@
   const selectId = ref();
   const handleCheckRef = ref();
 
-  //初始化
-  onMounted(() => {
-    getMenu();
-    getChecked();
-  });
-
   //获取权限组
-  const getMenu = async () => {
-    const data = await doMenuPrivilegeTree();
+  const getMenu = async (tenantId) => {
+    const data = await doTenantMenuPrivilegeTree({ tenantId });
     treeData.value = data;
   };
-  //获取当前选中权限
-  const getChecked = () => {};
 
   //点击字典类型事件
-  const handleSelect = async (type = undefined, id = '') => {
+  const handleSelect = async (type = undefined, id = '', tenantId = '') => {
     await handleCheckRef.value.onInit();
     let checked = [];
     if (!!id) {
+      await getMenu(tenantId);
       selectType.value = type;
       selectId.value = id;
       if (~~type === 1) {

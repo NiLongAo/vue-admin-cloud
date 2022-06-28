@@ -53,6 +53,14 @@
   const treeData = ref<TreeItem[]>([]);
   const defaultKey = ref();
 
+  function getTree() {
+    const tree = unref(asyncExpandTreeRef);
+    if (!tree) {
+      throw new Error('tree is null!');
+    }
+    return tree;
+  }
+
   watch(
     () => type.value,
     (visible) => {
@@ -77,9 +85,10 @@
       }
       // 展开全部
       nextTick(() => {
-        unref(asyncExpandTreeRef)?.checkAll(false);
-        unref(asyncExpandTreeRef)?.setSelectedKeys(unref(defaultKey));
-        emit('select', unref(type), unref(defaultKey)[0]);
+        getTree().checkAll(false);
+        getTree().setSelectedKeys(unref(defaultKey));
+        const node = getTree().getSelectedNode(unref(defaultKey));
+        emit('select', unref(type), node?.id, node?.tenantTd);
       });
     },
   );
@@ -102,14 +111,18 @@
     }
     // 展开全部
     nextTick(() => {
-      unref(asyncExpandTreeRef)?.expandAll(true);
-      unref(asyncExpandTreeRef)?.setSelectedKeys(unref(defaultKey));
-      emit('select', 1, unref(defaultKey)[0]);
+      getTree().expandAll(true);
+      getTree().setSelectedKeys(unref(defaultKey));
+      const node = getTree().getSelectedNode(unref(defaultKey));
+      emit('select', 1, node?.id, node?.tenantTd);
     });
   };
 
   const handleSelect = (keys) => {
-    emit('select', unref(type), keys[0]);
+    nextTick(() => {
+      const node = getTree().getSelectedNode(keys[0]);
+      emit('select', unref(type), node?.id, node?.tenantTd);
+    });
   };
 
   onMounted(() => {

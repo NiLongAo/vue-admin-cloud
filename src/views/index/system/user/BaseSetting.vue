@@ -53,7 +53,6 @@
   });
 
   const schemas = computed(() => {
-    console.log(props.userId, !!unref(props.userId));
     return !!unref(props.userId) ? baseSetschemas : insertSetschemas;
   });
 

@@ -2,7 +2,7 @@
   <div>
     <BasicTable
       @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys , onChange: onSelectChange }"
+      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
     >
       <template #action="{ record }">
         <TableAction
@@ -47,7 +47,7 @@
     </BasicTable>
     <SettingUser :reload="reload" @register="registerModal" @success="handleSuccess" />
     <UserDetailPrintModel @register="registerPrintModal" />
-    <ExportCommonModel
+    <ExpExcelModal
       :paramApi="doExportEntityInfo"
       :exportApi="doExportUrl"
       @register="registerExportCommonModel"
@@ -63,7 +63,7 @@
   import { useGo } from '/@/hooks/web/usePage';
   import SettingUser from './SettingUser.vue';
   import UserDetailPrintModel from './UserDetailPrintModel.vue';
-  import { ExportCommonModel } from '/@/components/Excel';
+  import { ExpExcelModal } from '/@/components/Excel';
 
   const checkedKeys = ref<Array<string | number>>([]);
   const [registerPrintModal, { openModal: openPrintModal }] = useModal();
@@ -127,7 +127,7 @@
     //刷新表单
     reload();
   }
-  
+
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     checkedKeys.value = selectedRowKeys;
   }

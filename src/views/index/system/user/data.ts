@@ -296,6 +296,7 @@ export const insertSetschemas: FormSchema[] = [
     colProps: {
       span: 18,
     },
+    defaultValue: true,
   },
   {
     field: 'isEnabled',

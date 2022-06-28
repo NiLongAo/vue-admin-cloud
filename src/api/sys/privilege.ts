@@ -13,6 +13,10 @@ enum Api {
   rolePrivilegeList = '/webapi/bean/privilege/role_privilege_list',
   //角色权限保存
   rolePrivilegeSave = '/webapi/bean/privilege/role_privilege_save',
+  //租户权限信息
+  tenantPrivilegeList = '/webapi/bean/privilege/tenant_privilege_list',
+  //租户权限保存
+  tenantPrivilegeSave = '/webapi/bean/privilege/tenant_privilege_save',
 }
 
 export function doDepartmentPrivilegeList(params) {
@@ -34,4 +38,10 @@ export function doRolePrivilegeList(params) {
 }
 export function doRolePrivilegeSave(params) {
   return defHttp.post({ url: Api.rolePrivilegeSave, params });
+}
+export function doTenantPrivilegeList(params) {
+  return defHttp.get({ url: Api.tenantPrivilegeList, params });
+}
+export function doTenantPrivilegeSave(params) {
+  return defHttp.post({ url: Api.tenantPrivilegeSave, params });
 }

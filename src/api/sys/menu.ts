@@ -28,7 +28,8 @@ enum Api {
   menuTree = '/webapi/bean/menu/tree',
   //获取菜单权限树
   menuPrivilegeTree = '/webapi/bean/menu/menu_privilege_tree',
-
+  //获取租户菜单权限树
+  tenantMenuPrivilegeTree = '/webapi/bean/menu/tenant_menu_privilege_tree',
   /**
    * 权限协议
    */
@@ -57,6 +58,10 @@ export function doMenuPage(params: MenuParams) {
 //获取菜单权限树
 export function doMenuPrivilegeTree() {
   return defHttp.get({ url: Api.menuPrivilegeTree });
+}
+//获取菜单权限树
+export function doTenantMenuPrivilegeTree(params) {
+  return defHttp.get({ url: Api.tenantMenuPrivilegeTree, params });
 }
 
 //查询所有菜单
