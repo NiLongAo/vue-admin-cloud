@@ -224,7 +224,6 @@ export const useUserStore = defineStore({
       socketIo.disconnectSocket(); //关闭socketio
       goLogin && router.push(PageEnum.BASE_LOGIN);
     },
-
     /**
      * @description: Confirm before logging out
      */

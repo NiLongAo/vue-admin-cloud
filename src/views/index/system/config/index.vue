@@ -2,7 +2,7 @@
   <div>
     <BasicTable
       @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys , onChange: onSelectChange}"
+      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
     >
       <template #action="{ record }">
         <TableAction

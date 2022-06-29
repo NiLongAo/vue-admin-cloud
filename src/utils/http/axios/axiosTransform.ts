@@ -41,7 +41,7 @@ export abstract class AxiosTransform {
   responseInterceptors?: (
     axiosInstance: AxiosInstance,
     res: AxiosResponse<any>,
-  ) => AxiosResponse<any>;
+  ) => AxiosResponse<any, any>;
 
   /**
    * @description: 请求之前的拦截器错误处理

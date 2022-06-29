@@ -44,12 +44,6 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  interface TreeDataItem {
-    key: string;
-    title: string;
-    disabled?: boolean;
-    children?: TreeDataItem[];
-  }
   import { CheckEvent } from 'ant-design-vue/es/tree/Tree';
   import { Transfer } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -58,6 +52,13 @@
   import { doDepartmentTree } from '/@/api/sys/department';
   import { doPositionTree } from '/@/api/sys/position';
   import { ref, unref, computed, nextTick } from 'vue';
+
+  interface TreeDataItem {
+    key: string;
+    title: string;
+    disabled?: boolean;
+    children?: TreeDataItem[];
+  }
 
   const emit = defineEmits(['success', 'register']);
   const asyncExpandTreeRef = ref<Nullable<TreeActionType>>(null);

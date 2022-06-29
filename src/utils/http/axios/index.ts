@@ -154,7 +154,7 @@ const transform: AxiosTransform = {
    * @description: 响应拦截器处理
    * 无感token 刷新策略
    */
-  responseInterceptors: async (axiosInstance: AxiosInstance, res: AxiosResponse<any>) => {
+  responseInterceptors: async (axiosInstance: AxiosInstance, res: AxiosResponse<any, any>) => {
     const { t } = useI18n();
     const { data: resData } = res;
     if (!resData) {
@@ -177,7 +177,6 @@ const transform: AxiosTransform = {
         }
         break;
     }
-
     return res;
   },
 

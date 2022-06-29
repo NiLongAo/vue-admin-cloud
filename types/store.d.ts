@@ -37,6 +37,8 @@ export interface UserInfo {
   imageUrl: string;
   desc?: string;
   homePath?: string;
+  tenantId?: string;
+  isSysTenant?: boolean;
   roles?: RoleInfo[];
   ability?: Array<string>;
 }
