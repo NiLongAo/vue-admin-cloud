@@ -57,7 +57,7 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { getUserPage, doDelete, doExportEntityInfo, doExportUrl } from '/@/api/sys/user';
-  import { schemas } from '/@/settings/tenantSetting';
+  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { ref } from 'vue';
   import { useModal } from '/@/components/Modal';
   import { usePermission } from '/@/hooks/web/usePermission';
@@ -138,7 +138,7 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
-        ...schemas,
+        ...tenantSchemas,
         {
           field: `userName`,
           label: `人员名称`,

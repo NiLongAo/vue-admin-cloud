@@ -41,6 +41,10 @@ export class VAxios {
     return this.axiosInstance;
   }
 
+  getOptions(): CreateAxiosOptions {
+    return this.options;
+  }
+
   /**
    * @description: Reconfigure axios
    */

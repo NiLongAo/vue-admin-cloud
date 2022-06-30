@@ -3,7 +3,7 @@
     <BasicTable
       @register="registerTable"
       @fetch-success="onFetchSuccess"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys , onChange: onSelectChange}"
+      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
     >
       <template #action="{ record }">
         <TableAction
@@ -37,6 +37,7 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doPositionPage, doPositionRemove } from '/@/api/sys/position';
+  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { ref, nextTick } from 'vue';
   import { h } from 'vue';
   import { Tag } from 'ant-design-vue';
@@ -95,6 +96,7 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
+        ...tenantSchemas,
         {
           field: `positionName`,
           label: `职位名称`,

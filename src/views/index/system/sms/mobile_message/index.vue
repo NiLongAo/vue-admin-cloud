@@ -2,7 +2,7 @@
   <div>
     <BasicTable
       @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys , onChange: onSelectChange}"
+      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
     >
       <template #smsTypeTag="{ record }">
         <Tag color="green">
@@ -15,6 +15,7 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps } from '/@/components/Table';
   import { getMobileMessagePage } from '/@/api/sys/mobileMessage';
+  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { Tag } from 'ant-design-vue';
   import { ref, h } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
@@ -41,6 +42,7 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
+        ...tenantSchemas,
         {
           field: `mobile`,
           label: `手机号`,

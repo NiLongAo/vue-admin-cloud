@@ -37,6 +37,7 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doDepartmentPage, doDepartmentRemove } from '/@/api/sys/department';
+  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { ref, nextTick } from 'vue';
   import { h } from 'vue';
   import { Tag } from 'ant-design-vue';
@@ -95,6 +96,7 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
+        ...tenantSchemas,
         {
           field: `departmentName`,
           label: `部门名称`,

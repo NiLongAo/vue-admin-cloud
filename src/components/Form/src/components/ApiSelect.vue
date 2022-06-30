@@ -83,7 +83,6 @@
               value: numberToString ? `${value}` : value,
             });
           }
-          console.log(prev);
           return prev;
         }, [] as OptionsItem[]);
       });

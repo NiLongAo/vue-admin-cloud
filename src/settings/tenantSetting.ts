@@ -1,7 +1,13 @@
 import { FormSchema } from '/@/components/Form/src/types/form';
 import { doTenantSelect } from '/@/api/sys/tenant';
+import { isString, isNumber } from '/@/utils/is';
+import { sysTenantId } from '/@/api/sys/model/tenantModel';
+import { useUserStore } from '/@/store/modules/user';
 import { debounce } from 'lodash-es';
-import { reactive, computed } from 'vue';
+import { defHttp } from '/@/utils/http/axios';
+import { reactive, computed, unref } from 'vue';
+
+const userStore = useUserStore();
 
 const state = reactive({
   tenantName: '',
@@ -12,6 +18,19 @@ const searchParams = computed<Recordable>(() => {
   return searchName;
 });
 
+const schemasTenantId = defHttp.getOptions().requestOptions?.dataHeaderTenant;
+
+const isTenant = computed<Boolean>(() => {
+  const tenantId = userStore.getUserInfo?.tenantId;
+  if (schemasTenantId && !isString(tenantId) && !isNumber(tenantId)) {
+    return false;
+  }
+  if (sysTenantId !== tenantId) {
+    return false;
+  }
+  return true;
+});
+
 const onTenantSearch = debounce((value) => {
   state.tenantName = value;
 }, 300);
@@ -20,27 +39,29 @@ const handleChange = () => {
   state.tenantName = '';
 };
 
-export const schemas: FormSchema[] = [
-  {
-    field: `tenantId`,
-    label: `租户`,
-    component: 'ApiSelect',
-    colProps: {
-      xl: 6,
-      xxl: 5,
-    },
-    componentProps: {
-      api: doTenantSelect,
-      filterable: true,
-      multiple: true,
-      allowCreate: true,
-      showSearch: true,
-      filterOption: false,
-      params: searchParams,
-      onSearch: onTenantSearch,
-      change: handleChange,
-      labelField: 'name',
-      valueField: 'id',
-    },
-  },
-];
+export const tenantSchemas: FormSchema[] = unref(isTenant)
+  ? [
+      {
+        field: schemasTenantId as string,
+        label: `租户`,
+        component: 'ApiSelect',
+        colProps: {
+          xl: 6,
+          xxl: 5,
+        },
+        componentProps: {
+          api: doTenantSelect,
+          filterable: true,
+          multiple: true,
+          allowCreate: true,
+          showSearch: true,
+          filterOption: false,
+          params: searchParams,
+          onSearch: onTenantSearch,
+          onChange: handleChange,
+          labelField: 'name',
+          valueField: 'id',
+        },
+      },
+    ]
+  : [];

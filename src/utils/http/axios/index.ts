@@ -10,7 +10,7 @@ import { checkStatus } from './checkStatus';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
-import { isString } from '/@/utils/is';
+import { isString, isNumber } from '/@/utils/is';
 import { getToken } from '/@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
@@ -141,11 +141,23 @@ const transform: AxiosTransform = {
   requestInterceptors: (config, options) => {
     // 请求之前处理config
     const token = getToken();
-    if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
+    if (token && options?.requestOptions?.withToken !== false) {
       // jwt token
       (config as Recordable).headers.Authorization = options.authenticationScheme
         ? `${options.authenticationScheme} ${token}`
         : token;
+    }
+    // 添加 Tenant
+    if (options?.requestOptions?.dataHeaderTenant) {
+      const dataHeaderTenant = options?.requestOptions?.dataHeaderTenant as string;
+      const { [dataHeaderTenant]: tenantIdParams, ...params } = config.params || {};
+      const { [dataHeaderTenant]: tenantIdData, ...data } = config.data || false;
+      const tenantId = tenantIdParams ? tenantIdParams : tenantIdData;
+      if (isString(tenantId) || isNumber(tenantId)) {
+        config.data = data;
+        config.params = params;
+        (config as Recordable).headers[dataHeaderTenant] = tenantId;
+      }
     }
     return config;
   },
@@ -266,6 +278,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           ignoreCancelToken: true,
           // 是否携带token
           withToken: true,
+          // 是否从参数中找租户添加至header
+          dataHeaderTenant: 'schemasTenantId',
           retryRequest: {
             isOpenRetry: true,
             count: 5,
