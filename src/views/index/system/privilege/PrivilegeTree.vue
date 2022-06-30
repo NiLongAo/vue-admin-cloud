@@ -87,8 +87,8 @@
       nextTick(() => {
         getTree().checkAll(false);
         getTree().setSelectedKeys(unref(defaultKey));
-        const node = getTree().getSelectedNode(unref(defaultKey));
-        emit('select', unref(type), node?.id, node?.tenantTd);
+        const node: any = getTree().getSelectedNode(unref(defaultKey)[0]);
+        emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
       });
     },
   );
@@ -113,15 +113,15 @@
     nextTick(() => {
       getTree().expandAll(true);
       getTree().setSelectedKeys(unref(defaultKey));
-      const node = getTree().getSelectedNode(unref(defaultKey));
-      emit('select', 1, node?.id, node?.tenantTd);
+      const node: any = getTree().getSelectedNode(unref(defaultKey)[0]);
+      emit('select', 1, node[unref(ketFields)], node?.tenantId);
     });
   };
 
   const handleSelect = (keys) => {
     nextTick(() => {
-      const node = getTree().getSelectedNode(keys[0]);
-      emit('select', unref(type), node?.id, node?.tenantTd);
+      const node: any = getTree().getSelectedNode(keys[0]);
+      emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
     });
   };
 

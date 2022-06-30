@@ -55,7 +55,7 @@
 
   const emit = defineEmits(['subset']);
 
-  export interface CheckboxGroupEntity {
+  interface CheckboxGroupEntity {
     parentId?: string;
     k: string;
     type: number;
