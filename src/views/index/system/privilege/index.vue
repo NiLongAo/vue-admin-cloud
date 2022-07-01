@@ -1,18 +1,33 @@
 <template>
-  <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
-    <PrivilegeTree class="w-1/4 xl:w-1/5" @select="handleSelect" />
-    <PrivilegeCheckbox
-      ref="handleCheckRef"
-      class="w-3/4 xl:w-4/5"
-      :treeData="treeData"
-      :checkedList="checkedList"
-      @save="handleSave"
-    />
+  <PageWrapper dense contentFullHeight fixedHeight>
+    <Row>
+      <Col :span="24">
+        <CollapseContainer title="useForm示例">
+          <BasicForm @register="registerForm" @submit="handleSubmit" /> </CollapseContainer
+      ></Col>
+    </Row>
+    <Row class="fixed h-1/1">
+      <Col :span="5">
+        <PrivilegeTree @select="handleSelect" />
+      </Col>
+      <Col :span="19">
+        <PrivilegeCheckbox
+          ref="handleCheckRef"
+          :treeData="treeData"
+          :checkedList="checkedList"
+          @save="handleSave"
+        />
+      </Col>
+    </Row>
   </PageWrapper>
 </template>
 <script ang="ts" setup>
   import { PageWrapper } from '/@/components/Page';
+  import { CollapseContainer } from '/@/components/Container/index';
+  import { Row, Col } from 'ant-design-vue';
   import PrivilegeTree from './PrivilegeTree.vue';
+  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { tenantSchemas } from '/@/settings/tenantSetting';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
   import { ref, unref } from 'vue';
   import { doTenantMenuPrivilegeTree } from '/@/api/sys/menu';
@@ -57,6 +72,18 @@
       }
     }
     checkedList.value = checked;
+  };
+
+  const [registerForm, { setFieldsValue, validate }] = useForm({
+    labelWidth: 120,
+    schemas: tenantSchemas,
+    actionColOptions: {
+      span: 24,
+    },
+  });
+
+  const handleSubmit = (values) => {
+    console.log(values);
   };
 
   //保存选中的元素
