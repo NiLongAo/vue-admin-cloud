@@ -1,15 +1,14 @@
 <template>
-  <PageWrapper dense contentFullHeight fixedHeight>
-    <Row>
+  <PageWrapper ref="PageWrapperT" dense contentFullHeight fixedHeight>
+    <Row ref="rowHeight">
       <Col :span="24">
-        <CollapseContainer title="useForm示例">
-          <BasicForm @register="registerForm" @submit="handleSubmit" /> </CollapseContainer
-      ></Col>
-    </Row>
-    <Row class="fixed h-1/1">
-      <Col :span="5">
-        <PrivilegeTree @select="handleSelect" />
+        <div class="box-border p-2 bg-white">
+          <BasicForm @register="registerForm" @submit="handleSubmit" />
+        </div>
       </Col>
+    </Row>
+    <Row class="relative" :style="`height:` + state.rowHeightVal + `px`">
+      <Col :span="5"> <PrivilegeTree @select="handleSelect" :tenant="state.tenant" /></Col>
       <Col :span="19">
         <PrivilegeCheckbox
           ref="handleCheckRef"
@@ -23,13 +22,12 @@
 </template>
 <script ang="ts" setup>
   import { PageWrapper } from '/@/components/Page';
-  import { CollapseContainer } from '/@/components/Container/index';
   import { Row, Col } from 'ant-design-vue';
   import PrivilegeTree from './PrivilegeTree.vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { tenantSchemas } from '/@/settings/tenantSetting';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
-  import { ref, unref } from 'vue';
+  import { ref, unref, reactive, onMounted, nextTick } from 'vue';
   import { doTenantMenuPrivilegeTree } from '/@/api/sys/menu';
   import { useMessage } from '/@/hooks/web/useMessage';
   import {
@@ -43,11 +41,18 @@
 
   const { createMessage } = useMessage();
   const { error } = createMessage;
+  const PageWrapperT = ref();
+  const rowHeight = ref();
   const treeData = ref();
   const checkedList = ref();
   const selectType = ref();
   const selectId = ref();
   const handleCheckRef = ref();
+
+  const state = reactive({
+    rowHeightVal: 0,
+    tenant: {},
+  });
 
   //获取权限组
   const getMenu = async (tenantId) => {
@@ -70,11 +75,13 @@
       } else {
         checked = await doRolePrivilegeList({ roleId: id });
       }
+    } else {
+      treeData.value = [];
     }
     checkedList.value = checked;
   };
 
-  const [registerForm, { setFieldsValue, validate }] = useForm({
+  const [registerForm] = useForm({
     labelWidth: 120,
     schemas: tenantSchemas,
     actionColOptions: {
@@ -83,7 +90,7 @@
   });
 
   const handleSubmit = (values) => {
-    console.log(values);
+    state.tenant = values;
   };
 
   //保存选中的元素
@@ -106,4 +113,11 @@
       await doRolePrivilegeSave({ roleId: unref(selectId), privilegeList: checkIdList });
     }
   };
+
+  onMounted(() => {
+    nextTick(() => {
+      const rowHeightEl = unref(rowHeight)?.$el;
+      state.rowHeightVal = unref(PageWrapperT).contentHeight - (rowHeightEl?.clientHeight || 0);
+    });
+  });
 </script>

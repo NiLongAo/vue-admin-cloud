@@ -27,8 +27,8 @@ export function doSelect(params) {
   return defHttp.get({ url: Api.select, params });
 }
 
-export function doAll() {
-  return defHttp.get({ url: Api.all });
+export function doAll(params) {
+  return defHttp.get({ url: Api.all, params });
 }
 
 export function doSave(params: RoleModel) {

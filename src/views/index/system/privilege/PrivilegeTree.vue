@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white m-4 mr-0 overflow-hidden">
+  <div class="h-full box-border border-14 border-r-0 border-gray-100 overflow-hidden bg-white">
     <div>
       <RadioGroup
         v-model:value="type"
@@ -41,6 +41,11 @@
   import { doDepartmentTree } from '/@/api/sys/department';
   import { doPositionTree } from '/@/api/sys/position';
 
+  const props = defineProps({
+    tenant: {
+      type: Object as PropType<Recordable>,
+    },
+  });
   const emit = defineEmits(['select', 'edit', 'remove']);
   const asyncExpandTreeRef = ref<Nullable<TreeActionType>>(null);
   const type = ref(1);
@@ -80,48 +85,104 @@
         getTitle.value = '角色信息';
         treeData.value = unref(roleData);
       }
-      if (unref(treeData) && unref(treeData).length > 0) {
-        defaultKey.value = [unref(treeData)[0][unref(ketFields)]];
-      }
       // 展开全部
       nextTick(() => {
-        getTree().checkAll(false);
-        getTree().setSelectedKeys(unref(defaultKey));
-        const node: any = getTree().getSelectedNode(unref(defaultKey)[0]);
-        emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
+        if (unref(treeData) && unref(treeData).length > 0) {
+          defaultKey.value = [unref(treeData)[0][unref(ketFields)]];
+          getTree().expandAll(true);
+          getTree().checkAll(false);
+          getTree().setSelectedKeys(unref(defaultKey));
+          const node: any = getTree().getSelectedNode(unref(defaultKey)[0]);
+          emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
+        } else {
+          treeData.value = [];
+          getTree().checkAll(false);
+          emit('select', unref(type), null, null);
+        }
       });
     },
   );
 
+  watch(
+    () => props.tenant,
+    async (visible) => {
+      await dataApi();
+      if (unref(type) === 1) {
+        ketFields.value = 'id';
+        titleFields.value = 'departmentName';
+        getTitle.value = '部门信息';
+        treeData.value = unref(departmentData);
+      } else if (unref(type) === 2) {
+        ketFields.value = 'id';
+        titleFields.value = 'positionName';
+        getTitle.value = '职位信息';
+        treeData.value = unref(positionData);
+      } else {
+        ketFields.value = 'roleId';
+        titleFields.value = 'roleName';
+        getTitle.value = '角色信息';
+        treeData.value = unref(roleData);
+      }
+
+      // 展开全部
+      nextTick(() => {
+        if (unref(treeData) && unref(treeData).length > 0) {
+          defaultKey.value = [unref(treeData)[0][unref(ketFields)]];
+          getTree().expandAll(true);
+          getTree().checkAll(false);
+          getTree().setSelectedKeys(unref(defaultKey));
+          const node: any = getTree().getSelectedNode(unref(defaultKey)[0]);
+          emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
+        } else {
+          getTree().checkAll(false);
+          treeData.value = [];
+          emit('select', unref(type), null, null);
+        }
+      });
+    },
+  );
+
+  const dataApi = async () => {
+    //部门信息
+    departmentData.value = (await doDepartmentTree({ ...props.tenant })) as unknown as TreeItem[];
+    //职位信息
+    positionData.value = (await doPositionTree({ ...props.tenant })) as unknown as TreeItem[];
+    //角色信息
+    roleData.value = (await doAll({ ...props.tenant })) as unknown as TreeItem[];
+  };
+
   //初步加载
   const fetch = async () => {
-    //部门信息
-    departmentData.value = (await doDepartmentTree({})) as unknown as TreeItem[];
-    //职位信息
-    positionData.value = (await doPositionTree({})) as unknown as TreeItem[];
-    //角色信息
-    roleData.value = (await doAll()) as unknown as TreeItem[];
-
+    await dataApi();
     ketFields.value = 'id';
     titleFields.value = 'departmentName';
     getTitle.value = '部门信息';
     treeData.value = unref(departmentData);
-    if (unref(treeData) && unref(treeData).length > 0) {
-      defaultKey.value = [unref(treeData)[0][unref(ketFields)]];
-    }
     // 展开全部
     nextTick(() => {
-      getTree().expandAll(true);
-      getTree().setSelectedKeys(unref(defaultKey));
-      const node: any = getTree().getSelectedNode(unref(defaultKey)[0]);
-      emit('select', 1, node[unref(ketFields)], node?.tenantId);
+      if (unref(treeData) && unref(treeData).length > 0) {
+        defaultKey.value = [unref(treeData)[0][unref(ketFields)]];
+        getTree().expandAll(true);
+        getTree().checkAll(false);
+        getTree().setSelectedKeys(unref(defaultKey));
+        const node: any = getTree().getSelectedNode(unref(defaultKey)[0]);
+        emit('select', 1, node[unref(ketFields)], node?.tenantId);
+      } else {
+        getTree().checkAll(false);
+        treeData.value = [];
+        emit('select', unref(type), null, null);
+      }
     });
   };
 
   const handleSelect = (keys) => {
     nextTick(() => {
       const node: any = getTree().getSelectedNode(keys[0]);
-      emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
+      if (node) {
+        emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
+      } else {
+        emit('select', unref(type), null, null);
+      }
     });
   };
 

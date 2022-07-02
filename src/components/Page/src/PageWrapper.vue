@@ -148,6 +148,7 @@
       return {
         getContentStyle,
         wrapperRef,
+        contentHeight,
         headerRef,
         contentRef,
         footerRef,

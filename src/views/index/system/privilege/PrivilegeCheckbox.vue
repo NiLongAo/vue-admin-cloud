@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-white m-4 overflow-hidden px-10 py-10">
+  <div
+    class="h-full box-border border-14 border-gray-100 overflow-hidden bg-white px-10 py-10 absolute w-full"
+  >
     <div class="flex justify-end">
       <a-button
         class="!ml-4"
@@ -10,9 +12,11 @@
         保存
       </a-button>
     </div>
-    <ScrollContainer>
-      <MyCheckBox :treeData="tree" @subset="handleSubsetChange" />
-    </ScrollContainer>
+    <div class="h-full">
+      <ScrollContainer>
+        <MyCheckBox :treeData="tree" @subset="handleSubsetChange" />
+      </ScrollContainer>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
