@@ -120,7 +120,9 @@
     {
       label: ' ',
       field: 'privilege',
-      show: unref(isUpdate),
+      show: () => {
+        return unref(isUpdate);
+      },
       slot: 'privilege',
       component: 'Input',
       defaultValue: [],

@@ -25,6 +25,7 @@ const isTenant = computed<Boolean>(() => {
   if (schemasTenantId && !isString(tenantId) && !isNumber(tenantId)) {
     return false;
   }
+  console.log(sysTenantId, tenantId);
   if (sysTenantId !== tenantId) {
     return false;
   }
@@ -39,29 +40,30 @@ const handleChange = () => {
   state.tenantName = '';
 };
 
-export const tenantSchemas: FormSchema[] = unref(isTenant)
-  ? [
-      {
-        field: schemasTenantId as string,
-        label: `租户`,
-        component: 'ApiSelect',
-        colProps: {
-          xl: 6,
-          xxl: 5,
-        },
-        componentProps: {
-          api: doTenantSelect,
-          filterable: true,
-          multiple: true,
-          allowCreate: true,
-          showSearch: true,
-          filterOption: false,
-          params: searchParams,
-          onSearch: onTenantSearch,
-          onChange: handleChange,
-          labelField: 'name',
-          valueField: 'id',
-        },
-      },
-    ]
-  : [];
+export const tenantSchemas: FormSchema[] = [
+  {
+    field: schemasTenantId as string,
+    label: `租户`,
+    component: 'ApiSelect',
+    colProps: {
+      xl: 6,
+      xxl: 5,
+    },
+    show: () => {
+      return unref(isTenant) as boolean;
+    },
+    componentProps: {
+      api: doTenantSelect,
+      filterable: true,
+      multiple: true,
+      allowCreate: true,
+      showSearch: true,
+      filterOption: false,
+      params: searchParams,
+      onSearch: onTenantSearch,
+      onChange: handleChange,
+      labelField: 'name',
+      valueField: 'id',
+    },
+  },
+];
