@@ -20,7 +20,7 @@ const searchParams = computed<Recordable>(() => {
 
 const schemasTenantId = defHttp.getOptions().requestOptions?.dataHeaderTenant;
 
-const isTenant = computed<Boolean>(() => {
+export const isTenant = computed<Boolean>(() => {
   const tenantId = userStore.getUserInfo?.tenantId;
   if (schemasTenantId && !isString(tenantId) && !isNumber(tenantId)) {
     return false;

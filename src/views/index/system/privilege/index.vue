@@ -1,6 +1,6 @@
 <template>
   <PageWrapper ref="PageWrapperT" dense contentFullHeight fixedHeight>
-    <Row ref="rowHeight">
+    <Row ref="rowHeight" v-if="isTenant">
       <Col :span="24">
         <div class="box-border p-2 bg-white">
           <BasicForm @register="registerForm" @submit="handleSubmit" />
@@ -25,7 +25,7 @@
   import { Row, Col } from 'ant-design-vue';
   import PrivilegeTree from './PrivilegeTree.vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { tenantSchemas } from '/@/settings/tenantSetting';
+  import { tenantSchemas, isTenant } from '/@/settings/tenantSetting';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
   import { ref, unref, reactive, onMounted, nextTick } from 'vue';
   import { doTenantMenuPrivilegeTree } from '/@/api/sys/menu';
@@ -56,7 +56,12 @@
 
   //获取权限组
   const getMenu = async (tenantId) => {
-    const data = await doTenantMenuPrivilegeTree({ tenantId });
+    let data;
+    if (tenantId) {
+      data = await doTenantMenuPrivilegeTree({ tenantId });
+    } else {
+      data = await doMenuPrivilegeTree();
+    }
     treeData.value = data;
   };
 

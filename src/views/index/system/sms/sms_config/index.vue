@@ -44,7 +44,6 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doRemove, getSmsConfigPage } from '/@/api/sys/smsConfig';
-  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { Tag } from 'ant-design-vue';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { ref, h } from 'vue';
@@ -100,7 +99,6 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
-        ...tenantSchemas,
         {
           field: `configName`,
           label: `配置名称`,
