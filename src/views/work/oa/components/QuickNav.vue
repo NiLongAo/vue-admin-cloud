@@ -9,14 +9,14 @@
   </Card>
 </template>
 <script lang="ts" setup>
-  import { Card,CardGrid } from 'ant-design-vue';
+  import { Card, CardGrid } from 'ant-design-vue';
   import { navItems } from './data';
   import { Icon } from '/@/components/Icon';
-  import { useGo } from '/@/hooks/web/usePage';  
+  import { useGo } from '/@/hooks/web/usePage';
   const go = useGo();
-  const goUrl = (url: string | unknown) =>{
+  const goUrl = (url: string | unknown) => {
     if (typeof url === 'string') {
       go(String(url));
     }
-  }
+  };
 </script>

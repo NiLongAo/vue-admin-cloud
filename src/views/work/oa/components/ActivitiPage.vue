@@ -23,6 +23,7 @@
     doBackProcess,
   } from '/@/api/oa/activiti';
   import { tabListTitle, tableDate } from './data';
+  import { nextTick } from 'vue';
   import { useGo } from '/@/hooks/web/usePage';
   import { OAIndex } from '/@/api/oa/activiti';
   const go = useGo();
@@ -54,6 +55,9 @@
     tableRef.api = tableDate[unref(key)].api;
     tableRef.columns = tableDate[unref(key)].columns;
     tableRef.rowKey = tableDate[unref(key)].rowKey;
+    nextTick(() => {
+      reload();
+    });
   }
   const [registerTable, { reload }] = useTable(tableRef);
 

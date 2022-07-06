@@ -57,18 +57,22 @@
     updateSchema([
       {
         field: 'startTime',
+        defaultValue: stats.startTime,
         componentProps: { disabled: !!stats.processInstanceId },
       },
       {
         field: 'endTime',
+        defaultValue: stats.endTime,
         componentProps: { disabled: !!stats.processInstanceId },
       },
       {
         field: 'day',
+        defaultValue: stats.day,
         componentProps: { disabled: !!stats.processInstanceId },
       },
       {
         field: 'memo',
+        defaultValue: stats.memo,
         componentProps: { disabled: !!stats.processInstanceId },
       },
     ]);
