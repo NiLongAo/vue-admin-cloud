@@ -18,7 +18,17 @@ const searchParams = computed<Recordable>(() => {
   return searchName;
 });
 
+//默认api传入租户名称与后端名称对应
 const schemasTenantId = defHttp.getOptions().requestOptions?.dataHeaderTenant;
+
+export const tenantObj = computed(() => {
+  const tenantId = userStore.getUserInfo?.tenantId;
+  const obj = {};
+  if (isString(schemasTenantId)) {
+    obj[schemasTenantId] = tenantId;
+  }
+  return obj;
+});
 
 export const isTenant = computed<Boolean>(() => {
   const tenantId = userStore.getUserInfo?.tenantId;

@@ -9,10 +9,12 @@ import { GroupProperties } from '../index';
 import PrefixLabelLinkageSelect from '/@/components/Activiti/prefix-label-linkage-select';
 import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
 import PrefixLabelNumBer from '/@/components/Activiti/prefix-label-number';
+import { tenantObj } from '/@/settings/tenantSetting';
 import { Input,SelectOption } from 'ant-design-vue';
 import {getChoiceUserPage} from '/@/api/sys/user';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
+import { unref} from 'vue';
 
 const TASK_EVENT_OPTIONS = [
   { label: '创建', value: 'create' },
@@ -62,6 +64,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
       isValueType:true,
       allowClear:true,
       params:{
+        ...unref(tenantObj),
         pageNumber:1,
         pageSize:100
       },

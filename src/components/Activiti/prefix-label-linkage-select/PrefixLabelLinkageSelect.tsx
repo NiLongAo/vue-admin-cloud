@@ -3,6 +3,7 @@ import ApiSelect from '/@/components/Form/src/components/ApiSelect.vue';
 import {doSelect as doUserSelect} from '/@/api/sys/user';
 import {doSelect as doRoleSelect} from '/@/api/sys/role';
 import {doSelect as doDepartmentSelect} from '/@/api/sys/department';
+import { tenantObj } from '/@/settings/tenantSetting';
 import { debounce } from 'lodash-es';
 import { defineComponent, computed,reactive,unref,watch} from 'vue';
 import { propTypes } from '/@/utils/propTypes';
@@ -80,6 +81,7 @@ const PrefixLabelSelect = defineComponent({
 
     const searchParams = computed<Recordable>(() => {
       const searchName = {
+        ...unref(tenantObj),
         idList:stats.apiSelectValue,
         name:stats.keyword,
         limit:20
