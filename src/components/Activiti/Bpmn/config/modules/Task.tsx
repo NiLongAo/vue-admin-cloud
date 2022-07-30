@@ -84,7 +84,6 @@ export const BpmnUserGroupProperties: GroupProperties = {
       showSearch:true,
       filterOption:false,
       getValue(businessObject: ModdleElement): string {
-        console.warn('businessObject', businessObject);
         return businessObject.candidateUsers;
         // return 'string' === typeof businessObject.candidateUsers
         //   ? businessObject.candidateUsers.split(',')

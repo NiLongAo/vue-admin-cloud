@@ -48,7 +48,6 @@ const PrefixLabelSelect = defineComponent({
     watch(
       () => stats.selectValue,
       () => {
-        stats.apiSelectValue= [];
         if(stats.selectValue == 'user'){
           stats.searchApi = doUserSelect;
         }else if(stats.selectValue == 'role'){
@@ -70,7 +69,6 @@ const PrefixLabelSelect = defineComponent({
             dimension:stats.selectValue,
             values:stats.apiSelectValue.map((obg) => String(obg))
           }]
-          console.log(json);
           computedModelValue.value = jsonString.replace('JSON',JSON.stringify(json))
         }else{
           computedModelValue.value = '';
@@ -98,6 +96,7 @@ const PrefixLabelSelect = defineComponent({
           <Select
               class="w-1/2"
               options={[{value:'user',label:'用户'},{value:'role',label:'角色'},{value:'dept',label:'部门'}]}
+              onChange={()=>{stats.apiSelectValue= []}}
               v-model:value={stats.selectValue}
               allowClear={true}
             />
