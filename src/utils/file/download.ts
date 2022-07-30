@@ -90,6 +90,7 @@ export function downloadByUrl({
   if (url.indexOf('?') === -1) {
     url += '?download';
   }
+
   openWindow(url, { target });
   return true;
 }

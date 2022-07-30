@@ -95,8 +95,8 @@
           const node: any = getTree().getSelectedNode(unref(defaultKey)[0]);
           emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
         } else {
-          treeData.value = [];
           getTree().checkAll(false);
+          treeData.value = [];
           emit('select', unref(type), null, null);
         }
       });

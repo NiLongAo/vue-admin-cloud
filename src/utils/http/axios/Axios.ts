@@ -66,7 +66,7 @@ export class VAxios {
   }
 
   /**
-   * @description: Interceptor configuration
+   * @description: Interceptor configuration 拦截器配置
    */
   private setupInterceptors() {
     const transform = this.getTransform();

@@ -28,7 +28,7 @@
   import { tenantSchemas, isTenant } from '/@/settings/tenantSetting';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
   import { ref, unref, reactive, onMounted, nextTick } from 'vue';
-  import { doTenantMenuPrivilegeTree } from '/@/api/sys/menu';
+  import { doTenantMenuPrivilegeTree, doMenuPrivilegeTree } from '/@/api/sys/menu';
   import { useMessage } from '/@/hooks/web/useMessage';
   import {
     doDepartmentPrivilegeList,
