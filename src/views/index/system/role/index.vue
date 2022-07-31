@@ -1,9 +1,6 @@
 <template>
   <div>
-    <BasicTable
-      @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-    >
+    <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox' }">
       <template #action="{ record }">
         <TableAction
           :actions="[
@@ -38,10 +35,8 @@
   import { doRemove, getRolePage } from '/@/api/sys/role';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { tenantSchemas } from '/@/settings/tenantSetting';
-  import { ref } from 'vue';
   import { useDrawer } from '/@/components/Drawer';
   import RoleDrawer from './RoleDrawer.vue';
-  const checkedKeys = ref<Array<string | number>>([]);
   const [register, { openDrawer }] = useDrawer();
   const { hasPermission } = usePermission();
 
@@ -121,9 +116,5 @@
         width: 200,
       },
     ];
-  }
-
-  function onSelectChange(selectedRowKeys: (string | number)[]) {
-    checkedKeys.value = selectedRowKeys;
   }
 </script>

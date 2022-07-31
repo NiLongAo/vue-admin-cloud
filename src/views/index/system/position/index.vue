@@ -3,7 +3,7 @@
     <BasicTable
       @register="registerTable"
       @fetch-success="onFetchSuccess"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
+      :rowSelection="{ type: 'checkbox' }"
     >
       <template #action="{ record }">
         <TableAction
@@ -38,14 +38,12 @@
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doPositionPage, doPositionRemove } from '/@/api/sys/position';
   import { tenantSchemas } from '/@/settings/tenantSetting';
-  import { ref, nextTick } from 'vue';
-  import { h } from 'vue';
+  import { nextTick, h } from 'vue';
   import { Tag } from 'ant-design-vue';
   import { useDrawer } from '/@/components/Drawer';
   import PositionDrawer from './PositionDrawer.vue';
   import { usePermission } from '/@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
-  const checkedKeys = ref<Array<string | number>>([]);
   const [register, { openDrawer }] = useDrawer();
 
   const [registerTable, { reload, expandAll }] = useTable({
@@ -146,8 +144,5 @@
         width: 200,
       },
     ];
-  }
-  function onSelectChange(selectedRowKeys: (string | number)[]) {
-    checkedKeys.value = selectedRowKeys;
   }
 </script>

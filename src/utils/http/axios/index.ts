@@ -10,7 +10,7 @@ import { checkStatus } from './checkStatus';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
-import { isString, isNumber, isEmpty } from '/@/utils/is';
+import { isString, isNumber, isNullOrUnDef } from '/@/utils/is';
 import { getToken } from '/@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
@@ -113,7 +113,11 @@ const transform: AxiosTransform = {
     } else {
       if (!isString(params)) {
         formatDate && formatRequestDate(params);
-        if (Reflect.has(config, 'data') && config.data && (Object.keys(config.data).length > 0 || config.data instanceof FormData)) {
+        if (
+          Reflect.has(config, 'data') &&
+          config.data &&
+          (Object.keys(config.data).length > 0 || config.data instanceof FormData)
+        ) {
           config.data = data;
           config.params = params;
         } else {
@@ -153,7 +157,7 @@ const transform: AxiosTransform = {
       const dataHeaderTenant = options?.requestOptions?.dataHeaderTenant as string;
       const { [dataHeaderTenant]: tenantIdParams, ...params } = config.params || {};
       const { [dataHeaderTenant]: tenantIdData, ...data } = config.data || false;
-      const tenantId = isEmpty(tenantIdParams) ? tenantIdData : tenantIdParams;
+      const tenantId = isNullOrUnDef(tenantIdParams) ? tenantIdData : tenantIdParams;
       if (isString(tenantId) || isNumber(tenantId)) {
         config.data = data;
         config.params = params;

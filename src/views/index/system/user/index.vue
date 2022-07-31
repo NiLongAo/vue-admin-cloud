@@ -1,9 +1,6 @@
 <template>
   <div>
-    <BasicTable
-      @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-    >
+    <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox' }">
       <template #action="{ record }">
         <TableAction
           :actions="[
@@ -58,7 +55,6 @@
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { getUserPage, doDelete, doExportEntityInfo, doExportUrl } from '/@/api/sys/user';
   import { tenantSchemas } from '/@/settings/tenantSetting';
-  import { ref } from 'vue';
   import { useModal } from '/@/components/Modal';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useGo } from '/@/hooks/web/usePage';
@@ -66,7 +62,6 @@
   import UserDetailPrintModel from './UserDetailPrintModel.vue';
   import { ExpExcelModal } from '/@/components/Excel';
 
-  const checkedKeys = ref<Array<string | number>>([]);
   const [registerPrintModal, { openModal: openPrintModal }] = useModal();
   const [registerExportCommonModel, { openModal: openExportCommonModel }] = useModal();
   const [registerModal, { openModal }] = useModal();
@@ -127,10 +122,6 @@
     await doDelete({ id: record.userId });
     //刷新表单
     reload();
-  }
-
-  function onSelectChange(selectedRowKeys: (string | number)[]) {
-    checkedKeys.value = selectedRowKeys;
   }
 
   function getFormConfig(): Partial<FormProps> {

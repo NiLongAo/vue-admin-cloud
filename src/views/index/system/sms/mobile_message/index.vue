@@ -1,9 +1,6 @@
 <template>
   <div>
-    <BasicTable
-      @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-    >
+    <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox' }">
       <template #smsTypeTag="{ record }">
         <Tag color="green">
           {{ systemStore.getEnumMap[SMS_CONFIG_TYPES][record.type] }}
@@ -17,10 +14,9 @@
   import { getMobileMessagePage } from '/@/api/sys/mobileMessage';
   import { tenantSchemas } from '/@/settings/tenantSetting';
   import { Tag } from 'ant-design-vue';
-  import { ref, h } from 'vue';
+  import { h } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
   import { SMS_CONFIG_TYPES } from '/@/enums/commonEnum';
-  const checkedKeys = ref<Array<string | number>>([]);
   const systemStore = useSystemStore();
 
   const [registerTable] = useTable({
@@ -104,8 +100,5 @@
         width: 500,
       },
     ];
-  }
-  function onSelectChange(selectedRowKeys: (string | number)[]) {
-    checkedKeys.value = selectedRowKeys;
   }
 </script>

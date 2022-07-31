@@ -6,18 +6,11 @@
     @ok="handleSubmit"
     width="900px"
   >
-    <BasicTable
-      @register="registerTable"
-      :rowSelection="{
-        type: stats.selectType,
-        selectedRowKeys: checkedKeys,
-        onChange: onSelectChange,
-      }"
-    />
+    <BasicTable @register="registerTable" :rowSelection="{ type: stats.selectType }" />
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { ref, reactive, computed, unref } from 'vue';
+  import { reactive, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getChoiceUserPage } from '/@/api/sys/user';
   import { doAll as doRoleAll } from '/@/api/sys/role';
@@ -29,7 +22,6 @@
 
   const emit = defineEmits(['success', 'register']);
   const getTitle = computed(() => '用户选择器');
-  const checkedKeys = ref<Array<string | number>>([]);
   const { notification } = useMessage();
 
   const stats = reactive({
@@ -37,22 +29,6 @@
     //传过来的数据
     data: null,
   });
-
-  const handleSubmit = () => {
-    try {
-      if (unref(checkedKeys).length <= 0) {
-        notification.error({
-          message: '请选择人员',
-          duration: 3,
-        });
-        return;
-      }
-      emit('success', unref(stats.data), unref(checkedKeys));
-      closeModal();
-    } finally {
-      setModalProps({ confirmLoading: false });
-    }
-  };
 
   const [registerBasicModal, { setModalProps, closeModal }] = useModalInner((data) => {
     stats.data = data.data;
@@ -156,10 +132,6 @@
     };
   };
 
-  const onSelectChange = (selectedRowKeys: (string | number)[]) => {
-    console.log(selectedRowKeys);
-    checkedKeys.value = selectedRowKeys;
-  };
   const fromChange = (val) => {
     const from = getForm();
     let labelField, valueField, api;
@@ -184,7 +156,7 @@
     ]);
   };
 
-  const [registerTable, { getForm, setProps }] = useTable({
+  const [registerTable, { getForm, setProps, getSelectRows }] = useTable({
     api: getChoiceUserPage,
     columns: basicColumns(),
     formConfig: formConfig(),
@@ -198,4 +170,21 @@
     rowKey: 'id',
     scroll: { y: 500 },
   });
+
+  const handleSubmit = () => {
+    const keys = getSelectRows();
+    try {
+      if (unref(keys).length <= 0) {
+        notification.error({
+          message: '请选择人员',
+          duration: 3,
+        });
+        return;
+      }
+      emit('success', unref(stats.data), unref(keys));
+      closeModal();
+    } finally {
+      setModalProps({ confirmLoading: false });
+    }
+  };
 </script>

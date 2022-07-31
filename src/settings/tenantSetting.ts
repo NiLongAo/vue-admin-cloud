@@ -35,7 +35,6 @@ export const isTenant = computed<Boolean>(() => {
   if (schemasTenantId && !isString(tenantId) && !isNumber(tenantId)) {
     return false;
   }
-  console.log(sysTenantId, tenantId);
   if (sysTenantId !== tenantId) {
     return false;
   }
@@ -46,7 +45,7 @@ const onTenantSearch = debounce((value) => {
   state.tenantName = value;
 }, 300);
 
-const handleChange = () => {
+const handleSelectChange = () => {
   state.tenantName = '';
 };
 
@@ -71,7 +70,7 @@ export const tenantSchemas: FormSchema[] = [
       filterOption: false,
       params: searchParams,
       onSearch: onTenantSearch,
-      onChange: handleChange,
+      onChange: handleSelectChange,
       labelField: 'name',
       valueField: 'id',
     },

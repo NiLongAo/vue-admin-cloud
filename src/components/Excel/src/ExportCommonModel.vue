@@ -8,14 +8,7 @@
     width="900px"
   >
     <div class="p-4">
-      <BasicTable
-        @register="registerTable"
-        :rowSelection="{
-          type: stats.selectType,
-          selectedRowKeys: checkedKeys,
-          onChange: onSelectChange,
-        }"
-      />
+      <BasicTable @register="registerTable" :rowSelection="{ type: stats.selectType }" />
     </div>
   </BasicModal>
 </template>
@@ -24,7 +17,7 @@
   import { RowSelectionType } from 'ant-design-vue/lib/table/interface';
   import { BasicTable, useTable, BasicColumn } from '/@/components/Table';
   import { propTypes } from '/@/utils/propTypes';
-  import { h, reactive, ref } from 'vue';
+  import { h, reactive } from 'vue';
   import { Switch } from 'ant-design-vue';
   import { isFunction } from 'lodash-es';
   import { downloadByUrl } from '/@/utils/file/download';
@@ -35,8 +28,6 @@
     // 导出数据API
     exportApi: propTypes.func,
   });
-
-  const checkedKeys = ref<Array<string | number>>([]);
 
   const stats = reactive({
     selectType: 'checkbox' as RowSelectionType,
@@ -97,9 +88,5 @@
       target: '_self',
     });
     closeModal();
-  };
-
-  const onSelectChange = (selectedRowKeys: (string | number)[]) => {
-    checkedKeys.value = selectedRowKeys;
   };
 </script>

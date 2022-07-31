@@ -1,9 +1,6 @@
 <template>
   <div>
-    <BasicTable
-      @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys , onChange: onSelectChange}"
-    >
+    <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox' }">
       <template #authorizedType="{ record }">
         <Tag
           v-for="(item, index) in record.authorizedGrantTypes.split(',')"
@@ -45,7 +42,7 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doOauthClientRemove, getOauthClientPage } from '/@/api/sys/oauthClient';
-  import { ref, h } from 'vue';
+  import { h } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
   import { AUTHORIZED_GRANT_TYPES } from '/@/enums/commonEnum';
   import { Tag } from 'ant-design-vue';
@@ -53,7 +50,6 @@
   import OauthClientDrawer from './OauthClientDrawer.vue';
   import { usePermission } from '/@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
-  const checkedKeys = ref<Array<string | number>>([]);
   const systemStore = useSystemStore();
   const [register, { openDrawer }] = useDrawer();
 
@@ -181,8 +177,5 @@
         },
       },
     ];
-  }
-  function onSelectChange(selectedRowKeys: (string | number)[]) {
-    checkedKeys.value = selectedRowKeys;
   }
 </script>
