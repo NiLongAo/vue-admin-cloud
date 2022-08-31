@@ -376,6 +376,7 @@
             ? renderColContent(values)
             : renderItem();
         };
+
         return (
           isIfShow && (
             <Col {...realColProps} v-show={isShow}>
