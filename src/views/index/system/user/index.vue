@@ -42,7 +42,13 @@
         >
       </template>
     </BasicTable>
-    <SettingUser :reload="reload" @register="registerModal" @success="handleSuccess" />
+    <SettingUser
+      :isUpdate="data.isUpdate"
+      :userId="data.userId"
+      :reload="reload"
+      @register="registerModal"
+      @success="handleSuccess"
+    />
     <UserDetailPrintModel @register="registerPrintModal" />
     <ExpExcelModal
       :paramApi="doExportEntityInfo"
@@ -61,12 +67,17 @@
   import SettingUser from './SettingUser.vue';
   import UserDetailPrintModel from './UserDetailPrintModel.vue';
   import { ExpExcelModal } from '/@/components/Excel';
+  import { reactive } from 'vue';
 
   const [registerPrintModal, { openModal: openPrintModal }] = useModal();
   const [registerExportCommonModel, { openModal: openExportCommonModel }] = useModal();
   const [registerModal, { openModal }] = useModal();
   const { hasPermission } = usePermission();
   const go = useGo();
+  const data = reactive({
+    isUpdate: false,
+    userId: undefined,
+  });
 
   const [registerTable, { reload, getForm, getSearchParam }] = useTable({
     title: '用户列表',
@@ -91,7 +102,9 @@
     },
   });
   function handleAdd() {
-    openModal(true, { isUpdate: false });
+    data.isUpdate = false;
+    data.userId = undefined;
+    openModal(true);
   }
   function handlePrint(record: Recordable) {
     openPrintModal(true, { id: record.id });
@@ -108,10 +121,9 @@
   };
 
   function handleEdit(record: Recordable) {
-    openModal(true, {
-      isUpdate: true,
-      userId: record.id,
-    });
+    data.isUpdate = true;
+    data.userId = record.id;
+    openModal(true);
   }
   const handleSuccess = () => {
     //刷新表单

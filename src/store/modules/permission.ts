@@ -40,6 +40,7 @@ interface PermissionState {
   // 菜单列表
   frontMenuList: Menu[];
 }
+
 export const usePermissionStore = defineStore({
   id: 'app-permission',
   state: (): PermissionState => ({

@@ -130,13 +130,13 @@ export class VAxios {
    */
   uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
     const formData = new window.FormData();
+    const customFilename = params.name || 'file';
 
-    formData.append(params.name || 'file', params.file, params.filename);
-    const customParams = omit(params, 'file', 'filename', 'file');
-
-    Object.keys(customParams).forEach((key) => {
-      formData.append(key, customParams[key]);
-    });
+    if (params.filename) {
+      formData.append(customFilename, params.file, params.filename);
+    } else {
+      formData.append(customFilename, params.file);
+    }
 
     if (params.data) {
       Object.keys(params.data).forEach((key) => {
@@ -174,9 +174,6 @@ export class VAxios {
       !Reflect.has(config, 'data') ||
       config.method?.toUpperCase() === RequestEnum.GET
     ) {
-      config.paramsSerializer = (params) => {
-        return qs.stringify(params, { indices: false });
-      };
       return config;
     }
 
@@ -210,7 +207,7 @@ export class VAxios {
 
     const opt: RequestOptions = Object.assign({}, requestOptions, options);
 
-    const { beforeRequestHook, requestCatchHook, transformRequestHook } = transform || {};
+    const { beforeRequestHook, requestCatchHook, transformResponseHook } = transform || {};
     if (beforeRequestHook && isFunction(beforeRequestHook)) {
       conf = beforeRequestHook(conf, opt);
     }
@@ -222,9 +219,9 @@ export class VAxios {
       this.axiosInstance
         .request<any, AxiosResponse<Result>>(conf)
         .then((res: AxiosResponse<Result>) => {
-          if (transformRequestHook && isFunction(transformRequestHook)) {
+          if (transformResponseHook && isFunction(transformResponseHook)) {
             try {
-              const ret = transformRequestHook(res, opt);
+              const ret = transformResponseHook(res, opt);
               resolve(ret);
             } catch (err) {
               reject(err || new Error('request error!'));

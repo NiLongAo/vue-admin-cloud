@@ -11,11 +11,11 @@ const { createMessage, createErrorModal } = useMessage();
 const error = createMessage.error!;
 const stp = projectSetting.sessionTimeoutProcessing;
 
-export async function checkStatus(
+export function checkStatus(
   status: number,
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message',
-): Promise<void> {
+): void {
   const { t } = useI18n();
   const userStore = useUserStoreWithOut();
   let errMessage = '';

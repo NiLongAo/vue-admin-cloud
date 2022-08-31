@@ -13,12 +13,7 @@
           <Tabs tab-position="left" :tabBarStyle="tabBarStyle">
             <template v-for="item in settingList" :key="item.key">
               <TabPane :tab="item.name">
-                <component
-                  :is="item.component"
-                  :userId="userId"
-                  :closeModal="closeModal"
-                  :reload="reload"
-                />
+                <component v-bind="$attrs" :is="item.component" :closeModal="closeModal" />
               </TabPane>
             </template>
           </Tabs>
@@ -29,35 +24,27 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, unref, computed } from 'vue';
+  import { ref, computed } from 'vue';
   import { Tabs } from 'ant-design-vue';
   import { ScrollContainer } from '/@/components/Container/index';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { settingUpdateList, settingInsertList } from './data';
 
-  defineProps({
-    reload: {
-      type: Function,
+  const props = defineProps({
+    isUpdate: {
+      type: Boolean,
     },
   });
 
   const prefixCls = ref('account-setting');
   const tabBarStyle = ref({ width: '220px' });
-  const userId = ref(undefined);
-  const isUpdate = ref(true);
 
-  const settingList = computed(() => (!unref(isUpdate) ? settingInsertList : settingUpdateList));
+  const settingList = computed(() => (!props.isUpdate ? settingInsertList : settingUpdateList));
 
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增用户信息' : '编辑用户信息'));
+  const getTitle = computed(() => (!props.isUpdate ? '新增用户信息' : '编辑用户信息'));
 
-  const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
+  const [registerModal, { setModalProps, closeModal }] = useModalInner(() => {
     setModalProps({ confirmLoading: false });
-    isUpdate.value = !!data?.isUpdate;
-    if (unref(isUpdate)) {
-      userId.value = data?.userId;
-    } else {
-      userId.value = undefined;
-    }
   });
 </script>
 

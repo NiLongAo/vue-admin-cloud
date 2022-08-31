@@ -3,7 +3,7 @@
     v-bind="$attrs"
     @register="register"
     :title="getTitle"
-    width="40%"
+    width="35%"
     showFooter
     @ok="handleOk"
   >
@@ -130,11 +130,9 @@
   ];
   const [registerTenantForm, { setFieldsValue, validate: TenantValidate, resetFields }] = useForm({
     labelWidth: 120,
+    baseColProps: { span: 24 },
     schemas: schemasTenant,
     showActionButtonGroup: false,
-    actionColOptions: {
-      span: 24,
-    },
   });
   const [registerUserForm, { setFieldsValue: setUserFieldsValue, validate: UserValidate }] =
     useForm({

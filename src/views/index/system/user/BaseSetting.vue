@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
   import { Button, Row, Col } from 'ant-design-vue';
-  import { computed, ref, onMounted, onUpdated, unref } from 'vue';
+  import { computed, ref, unref, onMounted } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { CollapseContainer } from '/@/components/Container';
   import { CropperAvatar } from '/@/components/Cropper';
@@ -38,7 +38,6 @@
   const systemStore = useSystemStore();
   const staticPath = systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH];
   const image = ref();
-  const id = ref();
   const upload = uploadApi as any;
   const props = defineProps({
     userId: {
@@ -52,25 +51,18 @@
     },
   });
 
-  const schemas = computed(() => {
-    return !!unref(props.userId) ? baseSetschemas : insertSetschemas;
-  });
-
-  const [register, { setFieldsValue, resetFields, validate }] = useForm({
+  const [register, { setFieldsValue, resetSchema, resetFields, validate }] = useForm({
     labelWidth: 120,
-    schemas: schemas.value,
     showActionButtonGroup: false,
   });
   onMounted(async () => {
     initModel();
   });
-  onUpdated(async () => {
-    initModel();
-  });
 
   const initModel = async () => {
+    console.log(props.userId);
+    resetSchema(!!unref(props.userId) ? baseSetschemas : insertSetschemas);
     resetFields();
-    id.value = props.userId;
     if (!!props.userId) {
       const { isAdmin, isEnabled, provinceId, cityId, areaId, imageUrl, ...userInfo } =
         await UserInfoApi({
@@ -101,7 +93,7 @@
     const reload = props.reload;
     try {
       const { isAdmin, isEnabled, areaList, ...values } = await validate();
-      if (unref(id)) {
+      if (unref(props.userId)) {
         //修改
         await doUpdate({
           ...values,
