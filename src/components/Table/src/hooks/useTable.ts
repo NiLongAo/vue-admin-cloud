@@ -47,12 +47,6 @@ export function useTable(tableProps?: Props): [
       () => tableProps,
       () => {
         tableProps && instance.setProps(getDynamicProps(tableProps));
-        // 本人添加动态渲染表格
-        if (unref(loadedReload)) {
-          instance.reload();
-        } else {
-          loadedReload.value = true;
-        }
       },
       {
         immediate: true,

@@ -25,6 +25,12 @@
           icon="ion:lock-closed-outline"
         />
         <MenuItem
+          v-if="getUseLockPage"
+          key="tenant"
+          :text="t('layout.header.switchTenants')"
+          icon="ion:lock-closed-outline"
+        />
+        <MenuItem
           key="logout"
           :text="t('layout.header.dropdownItemLoginOut')"
           icon="ion:power-outline"
@@ -32,7 +38,8 @@
       </Menu>
     </template>
   </Dropdown>
-  <LockAction @register="register" />
+  <LockAction @register="registerLockAction" />
+  <TenantAction @register="registerTenantAction" />
 </template>
 <script lang="ts">
   // components
@@ -55,7 +62,7 @@
   import { SystemEnum } from '/@/enums/systemEnum';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'tenant';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -65,6 +72,7 @@
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
       MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
+      TenantAction: createAsyncComponent(() => import('../tenant/TenantModal.vue')),
     },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
@@ -86,10 +94,11 @@
         };
       });
 
-      const [register, { openModal }] = useModal();
+      const [registerLockAction, { openModal: openModalLockAction }] = useModal();
+      const [registerTenantAction, { openModal: openModalTenantAction }] = useModal();
 
       function handleLock() {
-        openModal(true);
+        openModalLockAction(true);
       }
 
       //  login out
@@ -102,6 +111,10 @@
         openWindow(DOC_URL);
       }
 
+      //open tenant
+      const handleTenant = () => {
+        openModalTenantAction(true);
+      };
       function handleMenuClick(e: { key: MenuEvent }) {
         switch (e.key) {
           case 'logout':
@@ -113,6 +126,9 @@
           case 'lock':
             handleLock();
             break;
+          case 'tenant':
+            handleTenant();
+            break;
         }
       }
 
@@ -122,7 +138,8 @@
         getUserInfo,
         handleMenuClick,
         getShowDoc,
-        register,
+        registerLockAction,
+        registerTenantAction,
         getUseLockPage,
       };
     },

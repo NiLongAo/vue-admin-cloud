@@ -18,6 +18,10 @@ export default {
     lockScreen: '锁定屏幕',
     lockScreenBtn: '锁定',
 
+    //tenant
+    switchTenants: '切换租户',
+    tenantName: '租户',
+    switch: '切换',
     home: '首页',
   },
   multipleTab: {

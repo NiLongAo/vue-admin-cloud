@@ -1,93 +1,93 @@
 <template>
   <BasicModal
     :footer="null"
-    :title="t('layout.header.lockScreen')"
+    :title="t('layout.header.switchTenants')"
     v-bind="$attrs"
     :class="prefixCls"
     @register="register"
   >
     <div :class="`${prefixCls}__entry`">
-      <div :class="`${prefixCls}__header`">
-        <img :src="avatar" :class="`${prefixCls}__header-img`" />
-        <p :class="`${prefixCls}__header-name`">
-          {{ getRealName }}
-        </p>
-      </div>
-
       <BasicForm @register="registerForm" />
-
       <div :class="`${prefixCls}__footer`">
-        <a-button type="primary" block class="mt-2" @click="handleLock">
-          {{ t('layout.header.lockScreenBtn') }}
+        <a-button type="primary" block class="mt-2" @click="handleSwitch">
+          {{ t('layout.header.switch') }}
         </a-button>
       </div>
     </div>
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, computed } from 'vue';
+  import { defineComponent, computed, reactive } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { doTenantSelect } from '/@/api/sys/tenant';
+  import { debounce } from 'lodash-es';
   import { BasicModal, useModalInner } from '/@/components/Modal/index';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { SystemEnum } from '/@/enums/systemEnum';
-  import { useUserStore } from '/@/store/modules/user';
-  import { useLockStore } from '/@/store/modules/lock';
-  import headerImg from '/@/assets/images/header.jpg';
+
   export default defineComponent({
-    name: 'LockModal',
+    name: 'TenantModal',
     components: { BasicModal, BasicForm },
 
     setup() {
       const { t } = useI18n();
       const { prefixCls } = useDesign('header-lock-modal');
-      const userStore = useUserStore();
-      const lockStore = useLockStore();
-      const systemStore = useSystemStore();
-      const getRealName = computed(() => userStore.getUserInfo?.realName);
       const [register, { closeModal }] = useModalInner();
+      const state = reactive({
+        tenantName: '',
+      });
+
+      const searchParams = computed<Recordable>(() => {
+        const searchName = { tenantName: state.tenantName, limit: 20 };
+        return searchName;
+      });
+
+      const onTenantSearch = debounce((value) => {
+        state.tenantName = value;
+      }, 300);
+
+      const handleSelectChange = () => {
+        state.tenantName = '';
+      };
 
       const [registerForm, { validateFields, resetFields }] = useForm({
         showActionButtonGroup: false,
         schemas: [
           {
-            field: 'password',
-            label: t('layout.header.lockScreenPassword'),
+            field: 'sysTenantId',
+            label: t('layout.header.tenantName'),
             colProps: {
               span: 24,
             },
-            component: 'InputPassword',
+            component: 'ApiSelect',
             required: true,
+            componentProps: {
+              api: doTenantSelect,
+              filterable: true,
+              multiple: true,
+              allowCreate: true,
+              showSearch: true,
+              filterOption: false,
+              params: searchParams,
+              onSearch: onTenantSearch,
+              onChange: handleSelectChange,
+              labelField: 'name',
+              valueField: 'id',
+            },
           },
         ],
       });
 
-      async function handleLock() {
-        const values = (await validateFields()) as any;
-        const password: string | undefined = values.password;
+      const handleSwitch = () => {
         closeModal();
-
-        lockStore.setLockInfo({
-          isLock: true,
-          pwd: password,
-        });
-        await resetFields();
-      }
-
-      const avatar = computed(() => {
-        const { imageUrl } = userStore.getUserInfo;
-        return systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + imageUrl || headerImg;
-      });
+      };
 
       return {
         t,
         prefixCls,
-        getRealName,
         register,
         registerForm,
-        handleLock,
-        avatar,
+        handleSwitch,
       };
     },
   });
@@ -99,7 +99,7 @@
     &__entry {
       position: relative;
       //height: 240px;
-      padding: 130px 30px 30px;
+      padding: 0 30px;
       border-radius: 10px;
     }
 

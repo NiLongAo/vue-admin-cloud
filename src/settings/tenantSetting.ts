@@ -68,6 +68,7 @@ export const tenantSchemas: FormSchema[] = [
       allowCreate: true,
       showSearch: true,
       filterOption: false,
+      immediate: false,
       params: searchParams,
       onSearch: onTenantSearch,
       onChange: handleSelectChange,

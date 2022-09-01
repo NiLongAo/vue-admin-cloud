@@ -21,16 +21,7 @@
   </Select>
 </template>
 <script lang="ts">
-  import {
-    defineComponent,
-    PropType,
-    ref,
-    watchEffect,
-    computed,
-    unref,
-    watch,
-    nextTick,
-  } from 'vue';
+  import { defineComponent, PropType, ref, watchEffect, computed, unref, watch } from 'vue';
   import { Select } from 'ant-design-vue';
   import { isFunction } from '/@/utils/is';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
@@ -97,17 +88,13 @@
       });
 
       watchEffect(async () => {
-        nextTick(() => {
-          props.immediate && !props.alwaysLoad && fetch();
-        });
+        props.immediate && !props.alwaysLoad && fetch();
       });
 
       watch(
         () => props.params,
         async () => {
-          nextTick(() => {
-            !unref(isFirstLoad) && fetch();
-          });
+          !unref(isFirstLoad) && fetch();
         },
         { deep: true },
       );

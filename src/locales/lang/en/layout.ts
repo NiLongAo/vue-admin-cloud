@@ -17,6 +17,11 @@ export default {
     lockScreen: 'Lock screen',
     lockScreenBtn: 'Locking',
 
+    //tenant
+    switchTenants: 'Switch Tenants',
+    tenantName: 'Tenants',
+    switch: 'Switch',
+
     home: 'Home',
   },
   multipleTab: {
