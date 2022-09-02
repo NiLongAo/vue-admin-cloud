@@ -25,7 +25,7 @@
           icon="ion:lock-closed-outline"
         />
         <MenuItem
-          v-if="getUseLockPage"
+          v-if="isSysTenant"
           key="tenant"
           :text="t('layout.header.switchTenants')"
           icon="ion:lock-closed-outline"
@@ -39,7 +39,7 @@
     </template>
   </Dropdown>
   <LockAction @register="registerLockAction" />
-  <TenantAction @register="registerTenantAction" />
+  <TenantAction @register="registerTenantAction" :isSysTenant="isSysTenant" />
 </template>
 <script lang="ts">
   // components
@@ -54,7 +54,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useModal } from '/@/components/Modal';
-
+  import { sysTenantId } from '/@/api/sys/model/tenantModel';
   import headerImg from '/@/assets/images/header.jpg';
   import { propTypes } from '/@/utils/propTypes';
   import { openWindow } from '/@/utils';
@@ -84,14 +84,19 @@
       const userStore = useUserStore();
       const systemStore = useSystemStore();
       const getUserInfo = computed(() => {
-        const { userName = '', imageUrl, desc } = userStore.getUserInfo || {};
+        const { userName = '', imageUrl, desc, tenantId } = userStore.getUserInfo || {};
         return {
           userName,
+          tenantId,
           avatar: imageUrl
             ? systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + imageUrl
             : headerImg,
           desc,
         };
+      });
+
+      const isSysTenant = computed(() => {
+        return sysTenantId == getUserInfo.value.tenantId;
       });
 
       const [registerLockAction, { openModal: openModalLockAction }] = useModal();
@@ -135,6 +140,7 @@
       return {
         prefixCls,
         t,
+        isSysTenant,
         getUserInfo,
         handleMenuClick,
         getShowDoc,

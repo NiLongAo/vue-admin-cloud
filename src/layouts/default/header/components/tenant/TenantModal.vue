@@ -21,7 +21,10 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { doTenantSelect } from '/@/api/sys/tenant';
+  import { defHttp } from '/@/utils/http/axios';
+  import { useUserStore } from '/@/store/modules/user';
   import { debounce } from 'lodash-es';
+  import { useGo } from '/@/hooks/web/usePage';
   import { BasicModal, useModalInner } from '/@/components/Modal/index';
   import { BasicForm, useForm } from '/@/components/Form/index';
 
@@ -31,11 +34,15 @@
 
     setup() {
       const { t } = useI18n();
+      const go = useGo();
+      const userStore = useUserStore();
       const { prefixCls } = useDesign('header-lock-modal');
       const [register, { closeModal }] = useModalInner();
       const state = reactive({
         tenantName: '',
       });
+      //默认api传入租户名称与后端名称对应
+      const schemasTenantId = defHttp.getOptions().requestOptions?.dataHeaderTenant;
 
       const searchParams = computed<Recordable>(() => {
         const searchName = { tenantName: state.tenantName, limit: 20 };
@@ -54,7 +61,7 @@
         showActionButtonGroup: false,
         schemas: [
           {
-            field: 'sysTenantId',
+            field: schemasTenantId as string,
             label: t('layout.header.tenantName'),
             colProps: {
               span: 24,
@@ -77,11 +84,13 @@
           },
         ],
       });
-
-      const handleSwitch = () => {
+      const handleSwitch = async () => {
+        const val = (await validateFields()) as any;
+        await userStore.setSearchTenant(val[schemasTenantId as string]);
         closeModal();
+        //刷新页面
+        go();
       };
-
       return {
         t,
         prefixCls,
@@ -99,7 +108,7 @@
     &__entry {
       position: relative;
       //height: 240px;
-      padding: 0 30px;
+      padding: 40px 30px;
       border-radius: 10px;
     }
 
