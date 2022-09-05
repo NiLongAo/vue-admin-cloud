@@ -76,12 +76,11 @@ export default defineComponent({
                 }
               },
             );
-
             return (
               <Component
                 {...bindData}
-                v-model:value={bindData.value}
                 v-slots={bindData.vSlots}
+                v-model:value={bindData.value}
                 class={`${Component.name}-${key} dynamic-binder-item`}
               />
             );

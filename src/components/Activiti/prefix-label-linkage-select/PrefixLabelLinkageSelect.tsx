@@ -39,9 +39,7 @@ const PrefixLabelSelect = defineComponent({
         }
         return props.value;
       },
-      set: (val) => {
-        emit('update:value', val);
-      },
+      set: (val) => emit('update:value', val),
     });
     const searchParams = reactive({
       idList: stats.apiSelectValue,
