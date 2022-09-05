@@ -34,7 +34,6 @@
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doRemove, getRolePage } from '/@/api/sys/role';
   import { usePermission } from '/@/hooks/web/usePermission';
-  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { useDrawer } from '/@/components/Drawer';
   import RoleDrawer from './RoleDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
@@ -82,7 +81,6 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
-        ...tenantSchemas,
         {
           field: `roleName`,
           label: `角色名称`,

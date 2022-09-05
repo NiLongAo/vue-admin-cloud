@@ -53,7 +53,7 @@ export const DocumentGroupProperties: GroupProperties = {
     'documentation.text': {
       component: Input.TextArea,
       type: 'textarea',
-      allowClear:'allow-clear',
+      allowClear: 'allow-clear',
       getValue: (obj: { documentation: Array<Documentation> }): string => {
         return obj['documentation']?.[0]?.['text'];
       },
@@ -113,8 +113,8 @@ export const getElementTypeListenerProperties = function (options: {
             title: '序号',
             align: 'center',
             width: 50,
-            editRow:false,
-            customRender: ({index}) => `${index+1}`,
+            editRow: false,
+            customRender: ({ index }) => `${index + 1}`,
           },
           {
             title: '事件',
@@ -143,7 +143,7 @@ export const getElementTypeListenerProperties = function (options: {
             title: '执行内容',
             editRule: true,
             align: 'center',
-            editRow:true
+            editRow: true,
           },
         ],
         getValue: (businessObject: ModdleElement): Array<any> => {
@@ -203,22 +203,22 @@ export const ExtensionGroupProperties: GroupProperties = {
           title: '序号',
           width: 50,
           align: 'center',
-          editRow:false,
-          customRender: ({index}) => `${index+1}`,
+          editRow: false,
+          customRender: ({ index }) => `${index + 1}`,
         },
         {
           dataIndex: 'name',
           title: '属性名',
           editRule: true,
           align: 'center',
-          editRow:true
+          editRow: true,
         },
         {
           dataIndex: 'value',
           title: '属性值',
           editRule: true,
           align: 'center',
-          editRow:true
+          editRow: true,
         },
       ],
       getValue: (businessObject: ModdleElement): Array<any> => {
@@ -276,21 +276,21 @@ export const FormGroupProperties: GroupProperties = {
           title: '编码',
           editRule: true,
           align: 'center',
-          editRow:true
+          editRow: true,
         },
         {
           dataIndex: 'type',
           title: '类型',
           editRule: true,
           align: 'center',
-          editRow:true
+          editRow: true,
         },
         {
           dataIndex: 'name',
           title: '名称',
           editRule: true,
           align: 'center',
-          editRow:true
+          editRow: true,
         },
       ],
       getValue: (businessObject: ModdleElement): Array<FromPropertyElement> => {

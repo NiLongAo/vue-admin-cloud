@@ -10,11 +10,11 @@ import PrefixLabelLinkageSelect from '/@/components/Activiti/prefix-label-linkag
 import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
 import PrefixLabelNumBer from '/@/components/Activiti/prefix-label-number';
 import { tenantObj } from '/@/settings/tenantSetting';
-import { Input,SelectOption } from 'ant-design-vue';
-import {getChoiceUserPage} from '/@/api/sys/user';
+import { Input, SelectOption } from 'ant-design-vue';
+import { getChoiceUserPage } from '/@/api/sys/user';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
-import { unref} from 'vue';
+import { unref } from 'vue';
 
 const TASK_EVENT_OPTIONS = [
   { label: '创建', value: 'create' },
@@ -38,7 +38,11 @@ const USER_OPTIONS = [
 const UserOption: JSX.Element = (
   <>
     {USER_OPTIONS.map((item) => {
-      return <SelectOption value={item.value} key={item.label} >{item.label}</SelectOption>;
+      return (
+        <SelectOption value={item.value} key={item.label}>
+          {item.label}
+        </SelectOption>
+      );
     })}
   </>
 );
@@ -55,21 +59,21 @@ export const BpmnUserGroupProperties: GroupProperties = {
      */
     assignee: {
       component: PrefixLabelSelect,
-      isApi:true,
+      isApi: true,
       api: getChoiceUserPage,
-      searchName:'search',
-      labelField:'userName',
-      valueField:'id',
-      resultField:'data',
-      isValueType:true,
-      allowClear:true,
-      params:{
+      searchName: 'search',
+      labelField: 'userName',
+      valueField: 'id',
+      resultField: 'data',
+      isValueType: true,
+      allowClear: true,
+      params: {
         ...unref(tenantObj),
-        pageNumber:1,
-        pageSize:100
+        pageNumber: 1,
+        pageSize: 100,
       },
-      showSearch:true,
-      filterOption:false,
+      showSearch: true,
+      filterOption: false,
       prefixTitle: '处理人',
     },
     /**
@@ -81,8 +85,8 @@ export const BpmnUserGroupProperties: GroupProperties = {
       filterable: true,
       multiple: true,
       allowCreate: true,
-      showSearch:true,
-      filterOption:false,
+      showSearch: true,
+      filterOption: false,
       getValue(businessObject: ModdleElement): string {
         return businessObject.candidateUsers;
         // return 'string' === typeof businessObject.candidateUsers
@@ -96,8 +100,8 @@ export const BpmnUserGroupProperties: GroupProperties = {
     loopCardinality: {
       component: PrefixLabelNumBer,
       prefixTitle: '循环数',
-      min:0,
-      precision:0,
+      min: 0,
+      precision: 0,
       predicate(businessObject: ModdleElement): boolean {
         return businessObject.loopCharacteristics;
       },
@@ -122,14 +126,14 @@ export const BpmnUserGroupProperties: GroupProperties = {
       },
     },
     /*任务参与人 */
-    collection:{
+    collection: {
       component: PrefixLabelLinkageSelect,
       prefixTitle: '参与人',
       filterable: true,
       multiple: true,
       allowCreate: true,
-      showSearch:true,
-      filterOption:false,
+      showSearch: true,
+      filterOption: false,
       predicate(businessObject: ModdleElement): boolean {
         return businessObject.loopCharacteristics;
       },
@@ -143,14 +147,14 @@ export const BpmnUserGroupProperties: GroupProperties = {
       setValue(businessObject: ModdleElement, key: string, value: string): void {
         const bpmnContext = BpmnStore;
         const loopCharacteristics = businessObject.loopCharacteristics;
-        loopCharacteristics.collection = value
+        loopCharacteristics.collection = value;
         bpmnContext.getModeling().updateProperties(bpmnContext.getShape(), {
           loopCharacteristics: loopCharacteristics,
         });
       },
     },
     /*元素变量*/
-    elementVariable:{
+    elementVariable: {
       component: Input,
       placeholder: '元素变量',
       vSlots: {
@@ -169,7 +173,7 @@ export const BpmnUserGroupProperties: GroupProperties = {
       setValue(businessObject: ModdleElement, key: string, value: string): void {
         const bpmnContext = BpmnStore;
         const loopCharacteristics = businessObject.loopCharacteristics;
-        loopCharacteristics.elementVariable = value
+        loopCharacteristics.elementVariable = value;
         bpmnContext.getModeling().updateProperties(bpmnContext.getShape(), {
           loopCharacteristics: loopCharacteristics,
         });
@@ -185,7 +189,8 @@ export const BpmnUserGroupProperties: GroupProperties = {
      */
     completionCondition: {
       component: Input,
-      placeholder: '如：${nrOfCompletedInstances/nrOfInstances >= 0.25} 表示完成数大于等于4分1时任务完成',
+      placeholder:
+        '如：${nrOfCompletedInstances/nrOfInstances >= 0.25} 表示完成数大于等于4分1时任务完成',
       vSlots: {
         addonBefore: (): JSX.Element => <div>完成条件</div>,
       },
@@ -224,7 +229,7 @@ const LOOP_OPTIONS = [
 const LoopOptions: JSX.Element = (
   <>
     {LOOP_OPTIONS.map((item) => {
-      return <SelectOption v-model:value={item.value} >{item.label}</SelectOption>;
+      return <SelectOption v-model:value={item.value}>{item.label}</SelectOption>;
     })}
   </>
 );

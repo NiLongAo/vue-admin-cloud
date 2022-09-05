@@ -60,7 +60,6 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { getUserPage, doDelete, doExportEntityInfo, doExportUrl } from '/@/api/sys/user';
-  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { useModal } from '/@/components/Modal';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useGo } from '/@/hooks/web/usePage';
@@ -141,7 +140,6 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
-        ...tenantSchemas,
         {
           field: `userName`,
           label: `人员名称`,

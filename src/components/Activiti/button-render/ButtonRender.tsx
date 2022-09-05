@@ -1,6 +1,6 @@
 import { defineComponent, PropType } from 'vue';
 import { Button, ButtonRenderProps } from './index';
-import { Button as AntButton,Tooltip } from 'ant-design-vue';
+import { Button as AntButton, Tooltip } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'ButtonRender',

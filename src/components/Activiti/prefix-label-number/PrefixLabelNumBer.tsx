@@ -1,5 +1,5 @@
 import { InputNumber } from 'ant-design-vue';
-import { defineComponent, PropType, computed} from 'vue';
+import { defineComponent, PropType, computed } from 'vue';
 import './prefix-label-number.css';
 
 const PrefixLabelNumBer = defineComponent({

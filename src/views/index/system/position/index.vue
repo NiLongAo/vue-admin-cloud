@@ -37,7 +37,6 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doPositionPage, doPositionRemove } from '/@/api/sys/position';
-  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { nextTick, h } from 'vue';
   import { Tag } from 'ant-design-vue';
   import { useDrawer } from '/@/components/Drawer';
@@ -94,7 +93,6 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
-        ...tenantSchemas,
         {
           field: `positionName`,
           label: `职位名称`,

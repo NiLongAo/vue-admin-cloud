@@ -12,7 +12,6 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps } from '/@/components/Table';
   import { getMobileMessagePage } from '/@/api/sys/mobileMessage';
-  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
@@ -38,7 +37,6 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
-        ...tenantSchemas,
         {
           field: `mobile`,
           label: `手机号`,

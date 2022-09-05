@@ -4,7 +4,7 @@ import {
   DocumentGroupProperties,
   getElementTypeListenerProperties,
 } from '../common';
-import { Input,SelectOption } from 'ant-design-vue';
+import { Input, SelectOption } from 'ant-design-vue';
 import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
@@ -46,7 +46,7 @@ const BaseProperties = {
         default: (): JSX.Element => (
           <>
             {FLOW_TYPE_OPTIONS.map((item) => {
-              return <SelectOption value={item.value} >{item.label}</SelectOption>;
+              return <SelectOption value={item.value}>{item.label}</SelectOption>;
             })}
           </>
         ),

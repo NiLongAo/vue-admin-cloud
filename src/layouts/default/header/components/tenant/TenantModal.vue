@@ -24,7 +24,7 @@
   import { defHttp } from '/@/utils/http/axios';
   import { useUserStore } from '/@/store/modules/user';
   import { debounce } from 'lodash-es';
-  import { useGo } from '/@/hooks/web/usePage';
+  import { useTabs } from '/@/hooks/web/useTabs';
   import { BasicModal, useModalInner } from '/@/components/Modal/index';
   import { BasicForm, useForm } from '/@/components/Form/index';
 
@@ -34,7 +34,7 @@
 
     setup() {
       const { t } = useI18n();
-      const go = useGo();
+      const { refreshPage } = useTabs();
       const userStore = useUserStore();
       const { prefixCls } = useDesign('header-lock-modal');
       const [register, { closeModal }] = useModalInner();
@@ -57,7 +57,7 @@
         state.tenantName = '';
       };
 
-      const [registerForm, { validateFields, resetFields }] = useForm({
+      const [registerForm, { validateFields }] = useForm({
         showActionButtonGroup: false,
         schemas: [
           {
@@ -67,7 +67,6 @@
               span: 24,
             },
             component: 'ApiSelect',
-            required: true,
             componentProps: {
               api: doTenantSelect,
               filterable: true,
@@ -87,9 +86,9 @@
       const handleSwitch = async () => {
         const val = (await validateFields()) as any;
         await userStore.setSearchTenant(val[schemasTenantId as string]);
-        closeModal();
         //刷新页面
-        go();
+        refreshPage();
+        closeModal();
       };
       return {
         t,

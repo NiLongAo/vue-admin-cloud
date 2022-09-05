@@ -10,7 +10,7 @@ export default defineComponent({
   name: 'DynamicBinder',
   props: {
     //传进来的源对象，这里需要通过动态组件修改源对象的值进行数据动态绑定
-     value: {
+    value: {
       type: Object as PropType<unknown>,
       default: () => Object.assign({}),
       required: true,
@@ -18,7 +18,7 @@ export default defineComponent({
     /**
      * 组件的需要绑定数据的定义
      */
-    fieldDefine: {                                                     
+    fieldDefine: {
       type: Object as PropType<FieldDefine>,
       default: () => ({}),
       required: true,

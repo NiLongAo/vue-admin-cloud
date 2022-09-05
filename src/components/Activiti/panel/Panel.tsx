@@ -2,7 +2,7 @@ import { defineComponent, reactive, watch } from 'vue';
 import { BpmnStore } from '/@/components/Activiti/Bpmn/store';
 import DynamicBinder from '/@/components/Activiti/dynamic-binder';
 import { GroupProperties } from '/@/components/Activiti/Bpmn/config';
-import { Collapse,CollapsePanel } from 'ant-design-vue';
+import { Collapse, CollapsePanel } from 'ant-design-vue';
 import './panel.css';
 
 export default defineComponent({
@@ -73,11 +73,13 @@ export default defineComponent({
             </div>
             <div class="bpmn-panel" v-show={!panelState.shrinkageOff}>
               <div class="title">{bpmnContext.getActiveElementName()}</div>
-              <Collapse class="bpmn-panel-collapse" expandIconPosition="right" v-model:activeKey={panelState.elCollapses}>
+              <Collapse
+                class="bpmn-panel-collapse"
+                expandIconPosition="right"
+                v-model:activeKey={panelState.elCollapses}
+              >
                 {contextState.activeBindDefine.map((groupItem) => {
-                  return (
-                    <CollapsePanel key={groupItem.name}  v-slots={getSlotObject(groupItem)} />
-                  );
+                  return <CollapsePanel key={groupItem.name} v-slots={getSlotObject(groupItem)} />;
                 })}
               </Collapse>
             </div>

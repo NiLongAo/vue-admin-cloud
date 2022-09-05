@@ -29,7 +29,7 @@ import { h } from 'vue';
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
-  searchTenant: string | number;
+  searchTenant?: string | number | undefined;
   checkUrl?: string | undefined;
   refresh_token?: string;
   roleList: RoleEnum[];
@@ -44,7 +44,7 @@ export const useUserStore = defineStore({
     // user info
     userInfo: null,
     // searchTenant
-    searchTenant: '',
+    searchTenant: undefined,
     // token
     token: undefined,
     // refresh_token
@@ -87,7 +87,7 @@ export const useUserStore = defineStore({
     getCheckUrl(): string | undefined {
       return this.checkUrl;
     },
-    getSearchTenant(): string | number {
+    getSearchTenant(): string | number | undefined {
       return this.searchTenant;
     },
   },
@@ -122,7 +122,7 @@ export const useUserStore = defineStore({
       this.checkUrl = url;
       setAuthCache(CHECK_URL_TOKEN_KEY, url);
     },
-    setSearchTenant(searchTenant: string | number) {
+    setSearchTenant(searchTenant: string | number | undefined) {
       this.searchTenant = searchTenant;
     },
     resetState() {

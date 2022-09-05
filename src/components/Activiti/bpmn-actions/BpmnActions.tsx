@@ -2,7 +2,7 @@ import { defineComponent, ref, nextTick, unref } from 'vue';
 import ButtonRender, { ButtonRenderProps } from '/@/components/Activiti/button-render';
 import { BpmnStore } from '/@/components/Activiti/Bpmn/store';
 import CodeMirror from 'codemirror';
-import { Drawer ,Input } from 'ant-design-vue';
+import { Drawer, Input } from 'ant-design-vue';
 import 'codemirror/mode/xml/xml.js';
 import 'codemirror/addon/hint/xml-hint.js';
 import 'codemirror/lib/codemirror.css';
@@ -23,25 +23,23 @@ export default defineComponent({
     const xml = ref('');
     const bpmnContext = BpmnStore;
 
-
-    const getXml = async () =>{
+    const getXml = async () => {
       const rootElement: ModdleElement = await bpmnContext
-              .getModeler()
-              .get('canvas')
-              .getRootElement();
-              console.log(rootElement);
+        .getModeler()
+        .get('canvas')
+        .getRootElement();
+      console.log(rootElement);
       await bpmnContext
-              .getXML()
-              .then((response) => {
-                xml.value = response.xml;
-              })
-              .catch((err: unknown) => {
-                console.warn(err);
-              });
-             
-              
-      return {id:rootElement.id,name:rootElement.id,xml:unref(xml)};
-    }
+        .getXML()
+        .then((response) => {
+          xml.value = response.xml;
+        })
+        .catch((err: unknown) => {
+          console.warn(err);
+        });
+
+      return { id: rootElement.id, name: rootElement.id, xml: unref(xml) };
+    };
 
     return {
       zoom,
@@ -151,25 +149,24 @@ export default defineComponent({
               .catch((err: unknown) => {
                 console.warn(err);
               });
-              await nextTick(() => {
-                if (!coder) {
-                  const html = document.getElementById('xml-highlight-container') as HTMLTextAreaElement;
-                  coder = CodeMirror.fromTextArea(
-                    html,
-                    {
-                      lineWrapping: true,
-                      readOnly: true,//只读
-                      mode: 'application/xml', // HMTL混合模式
-                      theme: 'material',
-                      lineNumbers: true
-                      // theme: 'monokai', // 使用monokai模版
-                    },
-                  );
-                  coder.setSize('100%', '100%');
-                } else {
-                  coder.setValue(this.xml);
-                }
-              });
+            await nextTick(() => {
+              if (!coder) {
+                const html = document.getElementById(
+                  'xml-highlight-container',
+                ) as HTMLTextAreaElement;
+                coder = CodeMirror.fromTextArea(html, {
+                  lineWrapping: true,
+                  readOnly: true, //只读
+                  mode: 'application/xml', // HMTL混合模式
+                  theme: 'material',
+                  lineNumbers: true,
+                  // theme: 'monokai', // 使用monokai模版
+                });
+                coder.setSize('100%', '100%');
+              } else {
+                coder.setValue(this.xml);
+              }
+            });
           },
         },
         {
@@ -191,7 +188,14 @@ export default defineComponent({
     return (
       <div class="bpmn-actions">
         <ButtonRender {...buttonRenderProps} />
-        <Drawer placement="left" v-model:visible={this.previewActive}  width="35%" height="100%" destroyOnClose={true} closable={false}>
+        <Drawer
+          placement="left"
+          v-model:visible={this.previewActive}
+          width="35%"
+          height="100%"
+          destroyOnClose={true}
+          closable={false}
+        >
           <textarea id="xml-highlight-container" v-model={this.xml} />
         </Drawer>
         <Input

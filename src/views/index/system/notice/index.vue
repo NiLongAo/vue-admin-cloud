@@ -33,7 +33,6 @@
 <script lang="ts" setup>
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doPublicNoticeRemove, getPublicNoticePage } from '/@/api/notice/publicNotice';
-  import { tenantSchemas } from '/@/settings/tenantSetting';
   import { stringToTime } from '/@/utils/dateUtil';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useDrawer } from '/@/components/Drawer';
@@ -91,7 +90,6 @@
       labelWidth: 100,
       autoSubmitOnEnter: true,
       schemas: [
-        ...tenantSchemas,
         {
           field: `noticeType`,
           label: `通知类型`,

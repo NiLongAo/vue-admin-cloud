@@ -11,6 +11,7 @@ import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
 import { isString, isNumber, isNullOrUnDef } from '/@/utils/is';
+import qs from 'qs';
 import { getToken } from '/@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
@@ -110,6 +111,10 @@ const transform: AxiosTransform = {
         config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
         config.params = undefined;
       }
+      //处理 get 请求传输集合参数
+      config.paramsSerializer = function (params) {
+        return qs.stringify(params, { arrayFormat: 'repeat' });
+      };
     } else {
       if (!isString(params)) {
         formatDate && formatRequestDate(params);
@@ -153,14 +158,11 @@ const transform: AxiosTransform = {
         : token;
     }
     // 添加 Tenant
-    if (options?.requestOptions?.dataHeaderTenant) {
+    const userStore = useUserStoreWithOut();
+    const tenantId = userStore.getSearchTenant;
+    if (options?.requestOptions?.dataHeaderTenant && tenantId) {
       const dataHeaderTenant = options?.requestOptions?.dataHeaderTenant as string;
-      const { [dataHeaderTenant]: tenantIdParams, ...params } = config.params || {};
-      const { [dataHeaderTenant]: tenantIdData, ...data } = config.data || false;
-      const tenantId = isNullOrUnDef(tenantIdParams) ? tenantIdData : tenantIdParams;
       if (isString(tenantId) || isNumber(tenantId)) {
-        config.data = data;
-        config.params = params;
         (config as Recordable).headers[dataHeaderTenant] = tenantId;
       }
     }

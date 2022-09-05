@@ -4,7 +4,7 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 
-import { defineComponent, onMounted,watch } from 'vue';
+import { defineComponent, onMounted, watch } from 'vue';
 import createDefaultBpmnXml from '../Bpmn/defaultBpmnXml';
 import activitiModdel from '../Bpmn/activiti-moddel.json';
 import translate from '../Bpmn/i18n';
@@ -15,7 +15,7 @@ export default defineComponent({
   props: {
     xml: {
       type: String,
-      default:'',
+      default: '',
     },
   },
   setup(props) {

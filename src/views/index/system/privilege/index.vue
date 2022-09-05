@@ -1,12 +1,5 @@
 <template>
   <PageWrapper ref="PageWrapperT" dense contentFullHeight fixedHeight>
-    <Row ref="rowHeight" v-if="isTenant">
-      <Col :span="24">
-        <div class="box-border p-2 bg-white">
-          <BasicForm @register="registerForm" @submit="handleSubmit" />
-        </div>
-      </Col>
-    </Row>
     <Row class="relative" :style="`height:` + state.rowHeightVal + `px`">
       <Col :span="5"> <PrivilegeTree @select="handleSelect" :tenant="state.tenant" /></Col>
       <Col :span="19">
@@ -24,8 +17,6 @@
   import { PageWrapper } from '/@/components/Page';
   import { Row, Col } from 'ant-design-vue';
   import PrivilegeTree from './PrivilegeTree.vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
-  import { tenantSchemas, isTenant } from '/@/settings/tenantSetting';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
   import { ref, unref, reactive, onMounted, nextTick } from 'vue';
   import { doTenantMenuPrivilegeTree, doMenuPrivilegeTree } from '/@/api/sys/menu';
@@ -84,18 +75,6 @@
       treeData.value = [];
     }
     checkedList.value = checked;
-  };
-
-  const [registerForm] = useForm({
-    labelWidth: 120,
-    schemas: tenantSchemas,
-    actionColOptions: {
-      span: 24,
-    },
-  });
-
-  const handleSubmit = (values) => {
-    state.tenant = values;
   };
 
   //保存选中的元素
