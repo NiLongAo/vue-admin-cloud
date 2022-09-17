@@ -130,14 +130,11 @@ export class VAxios {
    */
   uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
     const formData = new window.FormData();
-    const customFilename = params.name || 'file';
-
-    if (params.filename) {
-      formData.append(customFilename, params.file, params.filename);
-    } else {
-      formData.append(customFilename, params.file);
-    }
-
+    formData.append(params.name || 'file', params.file, params.filename);
+    const customParams = omit(params, 'file', 'filename', 'file');
+    Object.keys(customParams).forEach((key) => {
+      formData.append(key, customParams[key]);
+    });
     if (params.data) {
       Object.keys(params.data).forEach((key) => {
         const value = params.data![key];
