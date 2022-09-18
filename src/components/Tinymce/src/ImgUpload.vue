@@ -6,7 +6,7 @@
       multiple
       @change="handleChange"
       :data="{ type: 4 }"
-      :action="uploadUrl"
+      :action="apiUrl + uploadUrl"
       :headers="stats.headers"
       :showUploadList="false"
       accept=".jpg,.jpeg,.gif,.png,.webp"
@@ -59,7 +59,7 @@
       const stats = reactive<Recordable>({});
       let uploading = false;
       const userStore = useUserStore();
-      const { uploadUrl } = useGlobSetting();
+      const { apiUrl, uploadUrl } = useGlobSetting();
       const { t } = useI18n();
       const { prefixCls } = useDesign('tinymce-img-upload');
       watch(
@@ -125,6 +125,7 @@
         handleChange,
         beforeUpload,
         uploadUrl,
+        apiUrl,
         stats,
         t,
         getButtonProps,
