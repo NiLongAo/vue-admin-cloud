@@ -10,7 +10,7 @@ import { checkStatus } from './checkStatus';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
-import { isString, isNumber, isNullOrUnDef } from '/@/utils/is';
+import { isString, isNumber } from '/@/utils/is';
 import qs from 'qs';
 import { getToken } from '/@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
@@ -44,7 +44,6 @@ const transform: AxiosTransform = {
       return res.data;
     }
     // 错误的时候返回
-
     const { data: resData } = res;
     if (!resData) {
       // return '[HTTP] Request has no return value';
