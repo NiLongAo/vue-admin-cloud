@@ -1,7 +1,7 @@
 <template>
   <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
-      <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
+      <img :class="`${prefixCls}__header`" :src="getUserInfo.imageUrl" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
           {{ getUserInfo.userName }}
@@ -58,8 +58,6 @@
   import headerImg from '/@/assets/images/header.jpg';
   import { propTypes } from '/@/utils/propTypes';
   import { openWindow } from '/@/utils';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { SystemEnum } from '/@/enums/systemEnum';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
   type MenuEvent = 'logout' | 'doc' | 'lock' | 'tenant';
@@ -82,16 +80,12 @@
       const { t } = useI18n();
       const { getShowDoc, getUseLockPage } = useHeaderSetting();
       const userStore = useUserStore();
-      const systemStore = useSystemStore();
       const getUserInfo = computed(() => {
-        const { userName = '', imageUrl, desc, tenantId } = userStore.getUserInfo || {};
+        const { userName = '', imageUrl, tenantId } = userStore.getUserInfo || {};
         return {
           userName,
           tenantId,
-          avatar: imageUrl
-            ? systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + imageUrl
-            : headerImg,
-          desc,
+          imageUrl: imageUrl ? imageUrl : headerImg,
         };
       });
 

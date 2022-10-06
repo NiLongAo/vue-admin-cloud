@@ -53,20 +53,94 @@ export interface LoginResultModel {
  * @description: Get user information return value
  */
 export interface GetUserInfoModel {
-  //角色
-  roles?: RoleInfo[];
-  //权限
-  ability?: Array<string>;
-  // 用户名
+  /**
+   * 用户编号
+   */
+  id: string | number;
+  /**
+   * 用户姓名
+   */
   userName: string;
-  // 用户id
-  userId?: string | number;
-  // 真实名字
-  realName?: string;
-  // 头像
+  /**
+   * 用户昵称
+   */
+  nickName?: string;
+  /**
+   * 用户图像
+   */
   imageUrl: string;
-  // 介绍
-  desc?: string;
+  /**
+   * 登录账号
+   */
+  loginAccount?: string;
+  /**
+   * 手机号
+   */
+  phone?: string;
+  /**
+   * 性别
+   */
+  gender?: number;
+  /**
+   * 省编码
+   */
+  provinceId?: number;
+  /**
+   * 市编码
+   */
+  cityId?: number;
+  /**
+   * 区编码
+   */
+  areaId?: number;
+  /**
+   * 身份证
+   */
+  idCard?: string;
+  /**
+   * 住址
+   */
+  address?: string;
+  /**
+   * 备注
+   */
+  memo?: string;
+  /**
+   * 最后登录时间
+   */
+  loginLastTime?: string;
+  /**
+   * 是否系统管理员
+   */
+  isAdmin?: number;
+  /**
+   * 是否启用
+   */
+  isEnabled?: number;
+  /**
+   * 租户编号
+   */
+  tenantId?: number;
+  /**
+   * 租户是否被禁用
+   */
+  tenantStatus?: number;
+  /**
+   * 用户角色
+   */
+  roleIdList?: Array<number>;
+  /**
+   * 用户职位
+   */
+  positionIdList?: Array<number>;
+  /**
+   * 用户部门
+   */
+  departmentIdList?: Array<number>;
+  /**
+   * 用户权限
+   */
+  privilegeList?: Array<string>;
 }
 
 /**

@@ -1,6 +1,6 @@
 <template>
   <div class="lg:flex">
-    <Avatar :src="stats.avatar || headerImg" :size="72" class="!mx-auto !block" />
+    <Avatar :src="stats.avatar" :size="72" class="!mx-auto !block" />
     <div class="md:ml-6 flex flex-col justify-center md:mt-0 mt-2">
       <h1 class="md:text-lg text-md">{{ holle }}</h1>
       <!-- <span class="text-secondary"> 今日晴，20℃ - 32℃！ </span> -->
@@ -31,19 +31,14 @@
   import { Avatar } from 'ant-design-vue';
   import { useUserStore } from '/@/store/modules/user';
   import headerImg from '/@/assets/images/header.jpg';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { SystemEnum } from '/@/enums/systemEnum';
   import { formatToDate } from '/@/utils/dateUtil';
   import { doStatsUserOa } from '/@/api/oa/activiti';
 
   const userStore = useUserStore();
   const userinfo = computed(() => userStore.getUserInfo);
-  const systemStore = useSystemStore();
 
   const stats = reactive({
-    avatar: userinfo.value.imageUrl
-      ? systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + userinfo.value.imageUrl
-      : headerImg,
+    avatar: userinfo.value.imageUrl ? userinfo.value.imageUrl : headerImg,
     userNeedCount: 0,
     userLaunchCount: 0,
     userAlreadyCount: 0,

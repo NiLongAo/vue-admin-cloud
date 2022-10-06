@@ -30,8 +30,6 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { BasicModal, useModalInner } from '/@/components/Modal/index';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { SystemEnum } from '/@/enums/systemEnum';
   import { useUserStore } from '/@/store/modules/user';
   import { useLockStore } from '/@/store/modules/lock';
   import headerImg from '/@/assets/images/header.jpg';
@@ -44,8 +42,7 @@
       const { prefixCls } = useDesign('header-lock-modal');
       const userStore = useUserStore();
       const lockStore = useLockStore();
-      const systemStore = useSystemStore();
-      const getRealName = computed(() => userStore.getUserInfo?.realName);
+      const getRealName = computed(() => userStore.getUserInfo?.nickName);
       const [register, { closeModal }] = useModalInner();
 
       const [registerForm, { validateFields, resetFields }] = useForm({
@@ -77,7 +74,7 @@
 
       const avatar = computed(() => {
         const { imageUrl } = userStore.getUserInfo;
-        return systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + imageUrl || headerImg;
+        return imageUrl ? imageUrl : headerImg;
       });
 
       return {

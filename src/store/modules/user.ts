@@ -2,7 +2,6 @@ import type { UserInfo } from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
-import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import {
   ROLES_KEY,
@@ -19,6 +18,7 @@ import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
 import { usePermissionStore } from '/@/store/modules/permission';
+import { SystemEnum } from '/@/enums/systemEnum';
 import { useSocketStore } from '/@/store/modules/socket';
 import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
@@ -32,7 +32,7 @@ interface UserState {
   searchTenant?: string | number | undefined;
   checkUrl?: string | undefined;
   refresh_token?: string;
-  roleList: RoleEnum[];
+  roleList: Array<number>;
   abilityList: Array<string>;
   sessionTimeout?: boolean;
   lastUpdateTime: number;
@@ -70,10 +70,10 @@ export const useUserStore = defineStore({
     getRefreshToken(): string {
       return this.refresh_token || getAuthCache<string>(REFRESH_TOKEN_KEY);
     },
-    getRoleList(): RoleEnum[] {
+    getRoleList(): Array<number> {
       return this.roleList && this.roleList.length > 0
         ? this.roleList
-        : getAuthCache<RoleEnum[]>(ROLES_KEY);
+        : getAuthCache<Array<number>>(ROLES_KEY);
     },
     getAbilityList(): Array<string> {
       return this.abilityList && this.abilityList.length > 0 ? this.abilityList : [];
@@ -102,7 +102,7 @@ export const useUserStore = defineStore({
       this.refresh_token = refresh_token ? refresh_token : ''; // for null or undefined value
       setAuthCache(REFRESH_TOKEN_KEY, refresh_token);
     },
-    setRoleList(roleList: RoleEnum[]) {
+    setRoleList(roleList: Array<number>) {
       this.roleList = roleList;
       setAuthCache(ROLES_KEY, roleList);
     },
@@ -196,18 +196,20 @@ export const useUserStore = defineStore({
       return userInfo;
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
+      const systemStore = useSystemStore();
       if (!this.getToken) return null;
       const userInfo = await getUserInfo();
-      const { roles = [], ability = [] } = userInfo;
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
-        this.setRoleList(roleList);
+      const { roleIdList = [], privilegeList = [], imageUrl } = userInfo;
+      if (isArray(roleIdList)) {
+        this.setRoleList(roleIdList);
       } else {
-        userInfo.roles = [];
         this.setRoleList([]);
       }
-      if (isArray(ability)) {
-        this.setAbilityList(ability);
+      if (isArray(privilegeList)) {
+        this.setAbilityList(privilegeList);
+      }
+      if (imageUrl) {
+        userInfo.imageUrl = systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH] + imageUrl;
       }
       this.setUserInfo(userInfo);
 
