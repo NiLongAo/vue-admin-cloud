@@ -27,8 +27,6 @@ export interface RequestOptions {
   retryRequest?: RetryRequest;
   //是否展示后台结果消息
   isMessage?: boolean;
-  //是否展示后台结果消息
-  isMessage?: boolean;
   // 是否从参数中找租户添加至header
   dataHeaderTenant?: string | boolean;
 }
