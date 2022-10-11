@@ -39,6 +39,7 @@
             <RegisterForm />
             <MobileForm />
             <QrCodeForm />
+            <WxMiniForm />
           </div>
         </div>
       </div>
@@ -50,6 +51,7 @@
   import { AppLogo } from '/@/components/Application';
   import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import LoginForm from './LoginForm.vue';
+  import WxMiniForm from './WxMiniForm.vue';
   import ForgetPasswordForm from './ForgetPasswordForm.vue';
   import RegisterForm from './RegisterForm.vue';
   import MobileForm from './MobileForm.vue';

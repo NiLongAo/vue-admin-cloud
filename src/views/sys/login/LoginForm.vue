@@ -88,7 +88,7 @@
 
     <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
       <GithubFilled />
-      <WechatFilled />
+      <WechatFilled @click="setLoginState(LoginStateEnum.WX_MINI)" />
       <AlipayCircleFilled />
       <GoogleCircleFilled />
       <TwitterCircleFilled />
