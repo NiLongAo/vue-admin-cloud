@@ -5,6 +5,7 @@
       <Image
         :src="stats.img"
         :preview="false"
+        :width="280"
         class="enter-x flex justify-center xl:justify-start"
         @click="qrCode()"
       />
