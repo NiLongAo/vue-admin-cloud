@@ -6,6 +6,7 @@ export default {
     dropdownItemLoginOut: 'Login Out',
 
     tooltipErrorLog: 'Error log',
+    tooltipPersonalCenter: 'Personal Center',
     tooltipLock: 'Lock screen',
     tooltipNotify: 'Notification',
 

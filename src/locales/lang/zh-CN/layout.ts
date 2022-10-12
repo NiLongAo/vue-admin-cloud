@@ -7,6 +7,7 @@ export default {
 
     // tooltip
     tooltipErrorLog: '错误日志',
+    tooltipPersonalCenter: '个人中心',
     tooltipLock: '锁定屏幕',
     tooltipNotify: '消息通知',
 

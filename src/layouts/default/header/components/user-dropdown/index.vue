@@ -19,6 +19,11 @@
         />
         <MenuDivider v-if="getShowDoc" />
         <MenuItem
+          key="personal"
+          :text="t('layout.header.tooltipPersonalCenter')"
+          icon="ion:lock-closed-outline"
+        />
+        <MenuItem
           v-if="getUseLockPage"
           key="lock"
           :text="t('layout.header.tooltipLock')"
@@ -58,9 +63,10 @@
   import headerImg from '/@/assets/images/header.jpg';
   import { propTypes } from '/@/utils/propTypes';
   import { openWindow } from '/@/utils';
+  import { useGo } from '/@/hooks/web/usePage';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock' | 'tenant';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'tenant' | 'personal';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -78,6 +84,7 @@
     setup() {
       const { prefixCls } = useDesign('header-user-dropdown');
       const { t } = useI18n();
+      const go = useGo();
       const { getShowDoc, getUseLockPage } = useHeaderSetting();
       const userStore = useUserStore();
       const getUserInfo = computed(() => {
@@ -127,6 +134,9 @@
             break;
           case 'tenant':
             handleTenant();
+            break;
+          case 'personal':
+            go('/work/personal');
             break;
         }
       }
