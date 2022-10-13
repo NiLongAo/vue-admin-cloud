@@ -28,6 +28,10 @@ enum Api {
   insert = '/webapi/bean/user/insert',
   //修改用户
   update = '/webapi/bean/user/update',
+  //修改用户
+  updateLoginUserInfo = '/webapi/bean/user/update_login_user_info',
+  //根据当前登陆用户获取绑定其他端登陆账户
+  findUserBind = '/webapi/bean/user/find_user_bind',
   //删除用户
   delete = '/webapi/bean/user/delete',
   //获取用户角色
@@ -122,6 +126,14 @@ export function doInsert(params: Recordable) {
 
 export function doUpdate(params: Recordable) {
   return defHttp.post({ url: Api.update, params });
+}
+
+export function doUpdateLoginUserInfo(params: Recordable) {
+  return defHttp.post({ url: Api.updateLoginUserInfo, params });
+}
+
+export function doFindUserBind() {
+  return defHttp.get({ url: Api.findUserBind });
 }
 
 export function doDelete(params: Recordable) {
