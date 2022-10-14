@@ -60,6 +60,10 @@ enum Api {
   getQrCode = '/webapi/mini/get_qr_code',
   //web用户登录小程序接口
   miniWebLogin = '/webapi/mini/mini_web_login',
+  //web用户绑定小程序用户
+  bindMiniWeb = '/webapi/mini/bind_mini_web',
+  //web用户解绑小程序用户
+  unbindMiniWeb = '/webapi/mini/unbind_mini_web',
 }
 
 /**
@@ -182,4 +186,11 @@ export function dogetQrCode() {
 
 export function doMiniWebLogin(params) {
   return defHttp.get({ url: Api.miniWebLogin, params }, { isTransformResponse: false });
+}
+
+export function doBindMiniWeb(params) {
+  return defHttp.get({ url: Api.bindMiniWeb, params }, { isTransformResponse: false });
+}
+export function doUnBindMiniWeb() {
+  return defHttp.post({ url: Api.unbindMiniWeb }, { isTransformResponse: false });
 }

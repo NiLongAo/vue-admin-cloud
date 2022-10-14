@@ -54,6 +54,7 @@
     if (code != ResultEnum.SUCCESS) {
       createMessage.error(message);
       stats.scene = '';
+      return;
     }
 
     const { status, access_token, refresh_token } = data;
