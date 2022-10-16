@@ -19,7 +19,9 @@
       </Col>
     </Row>
     <div class="flex justify-center">
-      <Button type="primary" @click="handleSubmit"> 更新基本信息 </Button>
+      <Button type="primary" @click="handleSubmit" v-if="hasPermission('work.personal:user_save')">
+        更新基本信息
+      </Button>
     </div>
   </CollapseContainer>
 </template>
@@ -36,8 +38,10 @@
   import { uploadApi } from '/@/api/sys/upload';
   import { SystemEnum } from '/@/enums/systemEnum';
   import { useUserStore } from '/@/store/modules/user';
-  const userStore = useUserStore();
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
 
+  const userStore = useUserStore();
   const systemStore = useSystemStore();
   const staticPath = systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH];
   const image = ref();

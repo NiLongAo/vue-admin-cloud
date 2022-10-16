@@ -5,6 +5,7 @@
     :title="getTitle"
     width="40%"
     showFooter
+    :showOkBtn="hasPermission('system.oauth_client:update')"
     @ok="handleOk"
   >
     <div>
@@ -20,6 +21,8 @@
   import { useSystemStore } from '/@/store/modules/system';
   import { AUTHORIZED_GRANT_TYPES } from '/@/enums/commonEnum';
   import { ref, unref, computed } from 'vue';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
 
   const emit = defineEmits(['success', 'register']);
   const isUpdate = ref(true);

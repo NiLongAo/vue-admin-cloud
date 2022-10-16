@@ -5,6 +5,7 @@
         <TableAction
           :actions="[
             {
+              ifShow: hasPermission('work.personal:other_save'),
               label: record.isBind == 1 ? '解绑账户' : '绑定账户',
               popConfirm: {
                 title: record.isBind == 1 ? '是否解绑账户' : '是否绑定账户',
@@ -26,6 +27,8 @@
   import { Tag, Avatar } from 'ant-design-vue';
   import { doFindUserBind, doUnBindMiniWeb } from '/@/api/sys/user';
   import { useModal } from '/@/components/Modal';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
 
   type LoginType = 'wx_mini_user';
 
