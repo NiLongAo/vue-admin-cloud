@@ -80,6 +80,7 @@ export const useSocketStore = defineStore({
       }
     },
     messageEvent(data: OutMessage) {
+      debugger;
       this.type = data.type;
       this.message = data;
     },

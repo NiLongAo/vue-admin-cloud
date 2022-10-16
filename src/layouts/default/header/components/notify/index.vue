@@ -226,16 +226,17 @@
       //检测socket平台消息
       watch(
         () => useSocket.getType,
-        (val) => {
+        async (val) => {
           // 1.平台通知公告
+          debugger;
           if (val == 1) {
-            const message = useSocket.getMessage;
-            notification.info({
+            const message = await useSocket.getMessage;
+            await notification.info({
               message: '平台通知公告:',
               description: message?.message,
               duration: 5,
             });
-            initData();
+            await initData();
           }
         },
       );
