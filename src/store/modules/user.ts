@@ -175,10 +175,10 @@ export const useUserStore = defineStore({
       const userInfo = await this.getUserInfoAction();
 
       const sessionTimeout = this.sessionTimeout;
-      const systemStore = useSystemStore();
-      systemStore.getSystemConfigAction(); //加载权限配置信息
-      systemStore.getAreaListAction(); //加载省市区配置信息
-      systemStore.getEnumMapAction(); //加载后端枚举配置类
+      const systemStore = await useSystemStore();
+      await systemStore.getSystemConfigAction(); //加载权限配置信息
+      await systemStore.getAreaListAction(); //加载省市区配置信息
+      await systemStore.getEnumMapAction(); //加载后端枚举配置类
       if (sessionTimeout) {
         this.setSessionTimeout(false);
       } else {
