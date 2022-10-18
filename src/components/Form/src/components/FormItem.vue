@@ -282,6 +282,7 @@
           ...on,
           ...bindValue,
         };
+
         if (!renderComponentContent) {
           return <Comp {...compAttr} />;
         }
@@ -335,6 +336,7 @@
               ? render(unref(getValues))
               : renderComponent();
           };
+
           const showSuffix = !!suffix;
           const getSuffix = isFunction(suffix) ? suffix(unref(getValues)) : suffix;
 

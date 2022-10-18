@@ -254,7 +254,6 @@ export function useDataSource(
       useSearchForm,
       pagination,
     } = unref(propsRef);
-
     if (!api || !isFunction(api)) return;
     try {
       setLoading(true);

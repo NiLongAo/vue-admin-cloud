@@ -1,5 +1,6 @@
 import { cacheCipher } from '/@/settings/encryptionSetting';
-import { AesEncryption, EncryptionParams } from '/@/utils/cipher';
+import type { EncryptionParams } from '/@/utils/cipher';
+import { AesEncryption } from '/@/utils/cipher';
 import { isNullOrUnDef } from '/@/utils/is';
 
 export interface CreateStorageParams extends EncryptionParams {
