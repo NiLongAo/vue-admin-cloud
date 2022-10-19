@@ -76,7 +76,9 @@ export const useUserStore = defineStore({
         : getAuthCache<Array<number>>(ROLES_KEY);
     },
     getAbilityList(): Array<string> {
-      return this.abilityList && this.abilityList.length > 0 ? this.abilityList : [];
+      return this.abilityList && this.abilityList.length > 0
+        ? this.abilityList
+        : getAuthCache<Array<string>>(ABILITY_KEY);
     },
     getSessionTimeout(): boolean {
       return !!this.sessionTimeout;
@@ -171,14 +173,13 @@ export const useUserStore = defineStore({
     },
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
-      // get user info
-      const userInfo = await this.getUserInfoAction();
-
       const sessionTimeout = this.sessionTimeout;
       const systemStore = await useSystemStore();
       await systemStore.getSystemConfigAction(); //加载权限配置信息
       await systemStore.getAreaListAction(); //加载省市区配置信息
       await systemStore.getEnumMapAction(); //加载后端枚举配置类
+      // get user info
+      const userInfo = await this.getUserInfoAction();
       if (sessionTimeout) {
         this.setSessionTimeout(false);
       } else {
