@@ -2,7 +2,13 @@
  * @description: 客户端设置中,授权方式枚举
  */
 export const AUTHORIZED_GRANT_TYPES = 'authorizedGrantTypes';
+/**
+ * @description: 系统配置类型枚举
+ */
 export const SMS_CONFIG_TYPES = 'smsConfigTypes';
+/**
+ *  @description:手机验证码类型
+ */
 export const MOBILE_MESSAGE_TEMPLATE_TYPES = 'mobileMessageTemplateTypes';
 
 /**

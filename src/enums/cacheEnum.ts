@@ -41,6 +41,9 @@ export const ENUM_KEY = 'ENUM_KEY__';
 // area info key
 export const AREA_KEY = 'AREA_KEY__';
 
+// area info key
+export const DITC_KEY = 'DITC_KEY__';
+
 // 记住账号密码
 export const REMEMBER = 'REMEMBER__';
 

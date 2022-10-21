@@ -20,6 +20,7 @@ import {
   SYSYTEM_KEY,
   AREA_KEY,
   ENUM_KEY,
+  DITC_KEY,
   REMEMBER,
   CHECK_URL_TOKEN_KEY,
 } from '/@/enums/cacheEnum';
@@ -39,6 +40,7 @@ interface BasicStore {
   [MULTIPLE_TABS_KEY]: RouteLocationNormalized[];
   [AREA_KEY]: Array<AreaEntity>;
   [ENUM_KEY]: EnumModel;
+  [DITC_KEY]: Recordable;
   [REMEMBER]: RememberLoing;
   [CHECK_URL_TOKEN_KEY]: string | null | undefined;
 }
