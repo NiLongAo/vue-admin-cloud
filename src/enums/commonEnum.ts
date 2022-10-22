@@ -1,16 +1,15 @@
-/**
- * @description: 客户端设置中,授权方式枚举
- */
-export const AUTHORIZED_GRANT_TYPES = 'authorizedGrantTypes';
-/**
- * @description: 系统配置类型枚举
- */
-export const SMS_CONFIG_TYPES = 'smsConfigTypes';
-/**
- *  @description:手机验证码类型
- */
-export const MOBILE_MESSAGE_TEMPLATE_TYPES = 'mobileMessageTemplateTypes';
+//********************字典key********************** */
 
+//登陆授权方式字典
+export const DITE_AUTHORIZED_KEY = 'AUTHORIZATION';
+//流程相关信息字典
+export const DITE_OA_ACTIVITI_KEY = 'OA_ACTIVITI';
+//短信类型
+export const DITE_SMS_TYPE_KEY = 'SMS_TYPE';
+//短信发送类型
+export const DITE_SMS_SEND_TYPE_KEY = 'SMS_SEND_TYPE';
+
+//********************系统配置key********************** */
 /**
  * 系统设置静态服务器域名
  */

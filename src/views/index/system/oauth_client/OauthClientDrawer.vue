@@ -19,7 +19,7 @@
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { doOauthClientDetail, doOauthClientSave } from '/@/api/sys/oauthClient';
   import { useSystemStore } from '/@/store/modules/system';
-  import { AUTHORIZED_GRANT_TYPES } from '/@/enums/commonEnum';
+  import { DITE_AUTHORIZED_KEY } from '/@/enums/commonEnum';
   import { ref, unref, computed } from 'vue';
   import { usePermission } from '/@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
@@ -28,7 +28,7 @@
   const isUpdate = ref(true);
   const systemStore = useSystemStore();
   const authorizedGrantTypesOptions = computed(() => {
-    const authorizedGrantTypes = systemStore.getEnumMap[AUTHORIZED_GRANT_TYPES];
+    const authorizedGrantTypes = systemStore.getDictMap[DITE_AUTHORIZED_KEY];
     const types = [] as any;
     Object.keys(authorizedGrantTypes).forEach((key) => {
       types.push({ label: authorizedGrantTypes[key], key: authorizedGrantTypes[key], value: key });
@@ -80,7 +80,7 @@
       componentProps: {
         mode: 'multiple',
         optionFilterProp: 'key',
-        options: authorizedGrantTypesOptions.value,
+        options: unref(authorizedGrantTypesOptions),
       },
       required: true,
     },

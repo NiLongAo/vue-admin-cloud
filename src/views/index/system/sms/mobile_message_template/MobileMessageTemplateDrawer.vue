@@ -19,14 +19,14 @@
   import { doInsert, doUpdate, doDetail } from '/@/api/sys/mobileMessageTemplate';
   import { ref, unref, computed } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
-  import { MOBILE_MESSAGE_TEMPLATE_TYPES } from '/@/enums/commonEnum';
+  import { DITE_SMS_SEND_TYPE_KEY } from '/@/enums/commonEnum';
 
   const isUpdate = ref(true);
   const configId = ref();
   const emit = defineEmits(['success', 'register']);
   const systemStore = useSystemStore();
   const templateTypes = computed(() => {
-    const template = systemStore.getEnumMap[MOBILE_MESSAGE_TEMPLATE_TYPES];
+    const template = systemStore.getDictMap[DITE_SMS_SEND_TYPE_KEY];
     const types = [] as any;
     Object.keys(template).forEach((key) => {
       types.push({ label: template[key], value: Number(key), key: Number(key) });

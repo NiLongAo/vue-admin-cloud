@@ -177,7 +177,7 @@ export const useUserStore = defineStore({
       const systemStore = await useSystemStore();
       await systemStore.getSystemConfigAction(); //加载权限配置信息
       await systemStore.getAreaListAction(); //加载省市区配置信息
-      await systemStore.getEnumMapAction(); //加载后端枚举配置类
+      await systemStore.getDictMapAction(); //加载后端字典配置类
       // get user info
       const userInfo = await this.getUserInfoAction();
       if (sessionTimeout) {

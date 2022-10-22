@@ -2,7 +2,6 @@ import type { LockInfo, UserInfo } from '/#/store';
 import type { ProjectConfig } from '/#/config';
 import type { RouteLocationNormalized } from 'vue-router';
 import { AreaEntity } from '/@/api/sys/model/systemModel';
-import { EnumModel } from '/@/api/common/model/enumModel';
 import { RememberLoing } from '/@/api/sys/model/userModel';
 import { createLocalStorage, createSessionStorage } from '/@/utils/cache';
 import { Memory } from './memory';
@@ -19,7 +18,6 @@ import {
   MULTIPLE_TABS_KEY,
   SYSYTEM_KEY,
   AREA_KEY,
-  ENUM_KEY,
   DITC_KEY,
   REMEMBER,
   CHECK_URL_TOKEN_KEY,
@@ -39,7 +37,6 @@ interface BasicStore {
   [PROJ_CFG_KEY]: ProjectConfig;
   [MULTIPLE_TABS_KEY]: RouteLocationNormalized[];
   [AREA_KEY]: Array<AreaEntity>;
-  [ENUM_KEY]: EnumModel;
   [DITC_KEY]: Recordable;
   [REMEMBER]: RememberLoing;
   [CHECK_URL_TOKEN_KEY]: string | null | undefined;

@@ -19,14 +19,14 @@
   import { doDetail, doInsert, doUpdate } from '/@/api/sys/smsConfig';
   import { ref, unref, computed } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
-  import { SMS_CONFIG_TYPES } from '/@/enums/commonEnum';
+  import { DITE_SMS_TYPE_KEY } from '/@/enums/commonEnum';
 
   const systemStore = useSystemStore();
   const isUpdate = ref(true);
   const emit = defineEmits(['success', 'register']);
 
   const smsConfigTypes = computed(() => {
-    const authorizedGrantTypes = systemStore.getEnumMap[SMS_CONFIG_TYPES];
+    const authorizedGrantTypes = systemStore.getDictMap[DITE_SMS_TYPE_KEY];
     const types = [] as any;
     Object.keys(authorizedGrantTypes).forEach((key) => {
       types.push({ label: authorizedGrantTypes[key], value: Number(key), key: Number(key) });

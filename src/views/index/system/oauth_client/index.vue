@@ -7,7 +7,7 @@
           :key="index"
           color="green"
         >
-          {{ systemStore.getEnumMap[AUTHORIZED_GRANT_TYPES][item] }}
+          {{ systemStore.getDictMap[DITE_AUTHORIZED_KEY][item] }}
         </Tag>
       </template>
       <template #action="{ record }">
@@ -44,7 +44,7 @@
   import { doOauthClientRemove, getOauthClientPage } from '/@/api/sys/oauthClient';
   import { h } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
-  import { AUTHORIZED_GRANT_TYPES } from '/@/enums/commonEnum';
+  import { DITE_AUTHORIZED_KEY } from '/@/enums/commonEnum';
   import { Tag } from 'ant-design-vue';
   import { useDrawer } from '/@/components/Drawer';
   import OauthClientDrawer from './OauthClientDrawer.vue';

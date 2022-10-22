@@ -3,7 +3,7 @@
     <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox' }">
       <template #smsTypeTag="{ record }">
         <Tag color="green">
-          {{ systemStore.getEnumMap[SMS_CONFIG_TYPES][record.type] }}
+          {{ systemStore.getDictMap[DITE_SMS_TYPE_KEY][record.type] }}
         </Tag>
       </template>
     </BasicTable>
@@ -15,7 +15,7 @@
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
-  import { SMS_CONFIG_TYPES } from '/@/enums/commonEnum';
+  import { DITE_SMS_TYPE_KEY } from '/@/enums/commonEnum';
   const systemStore = useSystemStore();
 
   const [registerTable] = useTable({

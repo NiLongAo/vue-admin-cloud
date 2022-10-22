@@ -1,16 +1,15 @@
 import { getSystem, getAreaInfoList } from '/@/api/sys/system';
-import { doEnumCheck } from '/@/api/common/enum';
+import { doDictionaryItemMap } from '/@/api/sys/dictionary';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { SYSYTEM_KEY, AREA_KEY, ENUM_KEY, DITC_KEY } from '/@/enums/cacheEnum';
+import { SYSYTEM_KEY, AREA_KEY, DITC_KEY } from '/@/enums/cacheEnum';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { AreaEntity } from '/@/api/sys/model/systemModel';
-import { EnumModel } from '/@/api/common/model/enumModel';
+import { DictionaryItemEntity } from '/@/api/sys/model/dictionaryModel';
 interface SystemState {
   systemConfigMap: Recordable | undefined;
   areaList: Array<AreaEntity> | undefined;
-  dictMap: Recordable | undefined;
-  enumMap: EnumModel | undefined;
+  dictMap: Record<string, Array<DictionaryItemEntity>> | undefined;
 }
 
 export const useSystemStore = defineStore({
@@ -19,7 +18,6 @@ export const useSystemStore = defineStore({
     systemConfigMap: undefined,
     areaList: undefined,
     dictMap: undefined,
-    enumMap: undefined,
   }),
   getters: {
     getSystemConfigMap(): Recordable {
@@ -28,10 +26,7 @@ export const useSystemStore = defineStore({
     getAreaList(): Array<AreaEntity> {
       return this.areaList || getAuthCache<Array<AreaEntity>>(AREA_KEY) || [];
     },
-    getEnumMap(): EnumModel {
-      return this.enumMap || getAuthCache<EnumModel>(ENUM_KEY) || {};
-    },
-    getDictMap(): Recordable {
+    getDictMap(): Record<string, Array<DictionaryItemEntity>> {
       return this.dictMap || getAuthCache<Recordable>(DITC_KEY) || {};
     },
   },
@@ -44,11 +39,7 @@ export const useSystemStore = defineStore({
       this.areaList = areaList;
       setAuthCache(AREA_KEY, areaList);
     },
-    setEnumMap(enumMap: EnumModel) {
-      this.enumMap = enumMap;
-      setAuthCache(ENUM_KEY, enumMap);
-    },
-    setDictMap(dictMap: Recordable) {
+    setDictMap(dictMap: Record<string, Array<DictionaryItemEntity>>) {
       this.dictMap = dictMap;
       setAuthCache(DITC_KEY, dictMap);
     },
@@ -66,14 +57,9 @@ export const useSystemStore = defineStore({
       this.setAreaList(areaList);
       return areaList;
     },
-    async getEnumMapAction(): Promise<EnumModel> {
-      const enumMap = await doEnumCheck();
-      this.setEnumMap(enumMap);
-      return enumMap;
-    },
-    async getDictMapAction(): Promise<Recordable<any>> {
-      const enumMap = await doEnumCheck();
-      this.setEnumMap(enumMap);
+    async getDictMapAction(): Promise<Record<string, Array<DictionaryItemEntity>>> {
+      const enumMap = await doDictionaryItemMap();
+      this.setDictMap(enumMap);
       return enumMap;
     },
   },

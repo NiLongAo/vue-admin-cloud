@@ -43,6 +43,8 @@ enum DictionaryItemApi {
   remove = '/webapi/config/dictionary_item/remove',
   //字典条目详情
   detail = '/webapi/config/dictionary_item/detail',
+  //获取有效字典条目
+  findDict = '/webapi/config/dictionary_item/find_dict',
 }
 export function doDictionaryItemList() {
   return defHttp.get<Array<DictionaryItemEntity>>({ url: DictionaryItemApi.itemList });
@@ -65,4 +67,8 @@ export function doDictionaryItemRemove(params: Recordable) {
 
 export function doDictionaryItemDetail(params: Recordable) {
   return defHttp.get({ url: DictionaryItemApi.detail, params });
+}
+
+export function doDictionaryItemMap() {
+  return defHttp.get({ url: DictionaryItemApi.findDict });
 }

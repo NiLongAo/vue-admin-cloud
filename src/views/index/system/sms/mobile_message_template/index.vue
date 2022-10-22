@@ -12,7 +12,7 @@
       </template>
       <template #typeTag="{ record }">
         <Tag color="green">
-          {{ systemStore.getEnumMap[MOBILE_MESSAGE_TEMPLATE_TYPES][record.type] }}
+          {{ systemStore.getDictMap[DITE_SMS_SEND_TYPE_KEY][record.type] }}
         </Tag>
       </template>
       <template #action="{ record }">
@@ -50,7 +50,7 @@
   import { getSmsConfigPage, doRemove } from '/@/api/sys/mobileMessageTemplate';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useSystemStore } from '/@/store/modules/system';
-  import { MOBILE_MESSAGE_TEMPLATE_TYPES } from '/@/enums/commonEnum';
+  import { DITE_SMS_SEND_TYPE_KEY } from '/@/enums/commonEnum';
   const { hasPermission } = usePermission();
   const systemStore = useSystemStore();
 
