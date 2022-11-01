@@ -20,7 +20,7 @@
   import { h, reactive, unref } from 'vue';
   import { Switch } from 'ant-design-vue';
   import { isFunction } from 'lodash-es';
-  import { downloadByData } from '/@/utils/file/download';
+  import { downloadByData, findFileName } from '/@/utils/file/download';
 
   const props = defineProps({
     // 查询导出参数API
@@ -96,7 +96,7 @@
     };
     if (!props.exportApi || !isFunction(props.exportApi)) return;
     const res = await props.exportApi(param);
-    downloadByData(res, '用户信息导出.xls');
+    downloadByData(res.data, findFileName(res));
     closeModal();
   };
   const heightChange = (height) => {

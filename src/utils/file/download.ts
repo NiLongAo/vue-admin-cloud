@@ -33,7 +33,7 @@ export function downloadByBase64(buf: string, filename: string, mime?: string, b
  * @param {*} mime
  * @param {*} bom
  */
-export function downloadByData(data: BlobPart, filename: string, mime?: string, bom?: BlobPart) {
+export function downloadByData(data: BlobPart, filename?: string, mime?: string, bom?: BlobPart) {
   const blobData = typeof bom !== 'undefined' ? [bom, data] : [data];
   const blob = new Blob(blobData, { type: mime || 'application/octet-stream' });
 
@@ -41,7 +41,9 @@ export function downloadByData(data: BlobPart, filename: string, mime?: string, 
   const tempLink = document.createElement('a');
   tempLink.style.display = 'none';
   tempLink.href = blobURL;
-  tempLink.setAttribute('download', filename);
+  if (filename) {
+    tempLink.setAttribute('download', filename);
+  }
   if (typeof tempLink.download === 'undefined') {
     tempLink.setAttribute('target', '_blank');
   }
@@ -107,4 +109,11 @@ export const dataURLtoFile = (base64, filename) => {
   return new File([u8arr], filename, {
     type: mime,
   });
+};
+
+export const findFileName = (res) => {
+  const dis = res.headers['content-disposition'];
+  const regEx = /^attachment; filename="(.*?)";/;
+  const match = dis.match(regEx);
+  return decodeURIComponent(match[1]);
 };

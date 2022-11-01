@@ -183,7 +183,7 @@ export function doExportUrl(params: Recordable) {
       responseType: 'blob',
       params,
     },
-    { isTransformResponse: false },
+    { isReturnNativeResponse: true },
   );
 }
 
