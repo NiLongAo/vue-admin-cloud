@@ -106,7 +106,7 @@
             return false;
           }
           return true;
-        }).filter((item) => !item.meta?.hideBreadcrumb || !item.meta?.hideMenu);
+        }).filter((item) => !item.meta?.hideBreadcrumb);
       }
 
       function handleClick(route: RouteLocationMatched, paths: string[], e: Event) {
