@@ -1,7 +1,7 @@
 <template>
   <div :class="[prefixCls, { fullscreen }]">
     <!-- 后台存储存储 -->
-    <Upload
+    <!-- <Upload
       name="file"
       multiple
       @change="handleChange"
@@ -14,10 +14,10 @@
       <a-button type="primary" v-bind="{ ...getButtonProps }">
         {{ t('component.upload.imgUpload') }}
       </a-button>
-    </Upload>
+    </Upload> -->
 
     <!-- bean64存储 -->
-    <!-- <Upload
+    <Upload
       name="file"
       multiple
       :before-upload="beforeUpload"
@@ -27,7 +27,7 @@
       <a-button type="primary" v-bind="{ ...getButtonProps }">
         {{ t('component.upload.imgUpload') }}
       </a-button>
-    </Upload> -->
+    </Upload>
   </div>
 </template>
 <script lang="ts">
