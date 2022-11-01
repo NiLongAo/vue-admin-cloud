@@ -6,7 +6,7 @@
     ok-text="导出"
     @register="registerModal"
   >
-    <div class="absolute flex flex-col h-full p-4">
+    <div class="absolute h-full p-4">
       <BasicTable @register="registerTable" :rowSelection="{ type: stats.selectType }" />
     </div>
   </BasicModal>
