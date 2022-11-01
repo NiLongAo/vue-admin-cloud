@@ -5,6 +5,7 @@
     :title="getTitle"
     width="40%"
     showFooter
+    destroyOnClose
     @ok="handleOk"
   >
     <div>
