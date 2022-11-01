@@ -50,7 +50,9 @@
       @success="handleSuccess"
     />
     <UserDetailPrintModel @register="registerPrintModal" />
-    <ExpExcelModal
+    <ExpCommonModel
+      :width="900"
+      :min-height="600"
       :paramApi="doExportEntityInfo"
       :exportApi="doExportUrl"
       @register="registerExportCommonModel"
@@ -65,7 +67,7 @@
   import { useGo } from '/@/hooks/web/usePage';
   import SettingUser from './SettingUser.vue';
   import UserDetailPrintModel from './UserDetailPrintModel.vue';
-  import { ExpExcelModal } from '/@/components/Excel';
+  import { ExpCommonModel } from '/@/components/Excel';
   import { reactive } from 'vue';
 
   const [registerPrintModal, { openModal: openPrintModal }] = useModal();

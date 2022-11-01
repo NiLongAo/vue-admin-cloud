@@ -5,9 +5,8 @@
     @ok="handleOk"
     ok-text="导出"
     @register="registerModal"
-    width="900px"
   >
-    <div class="p-4">
+    <div class="absolute flex flex-col h-full p-4">
       <BasicTable @register="registerTable" :rowSelection="{ type: stats.selectType }" />
     </div>
   </BasicModal>
@@ -17,10 +16,10 @@
   import { RowSelectionType } from 'ant-design-vue/lib/table/interface';
   import { BasicTable, useTable, BasicColumn } from '/@/components/Table';
   import { propTypes } from '/@/utils/propTypes';
-  import { h, reactive } from 'vue';
+  import { h, reactive, unref } from 'vue';
   import { Switch } from 'ant-design-vue';
   import { isFunction } from 'lodash-es';
-  import { downloadByUrl } from '/@/utils/file/download';
+  import { downloadByData } from '/@/utils/file/download';
 
   const props = defineProps({
     // 查询导出参数API
@@ -47,7 +46,7 @@
       width: 200,
     },
     {
-      title: '字段名词',
+      title: '字段名称',
       dataIndex: 'fieldName',
       width: 200,
     },
@@ -69,24 +68,31 @@
     },
   ];
 
-  const [registerTable, { getSelectRows }] = useTable({
+  const [registerTable, { getSelectRows, getDataSource }] = useTable({
     api: props.paramApi,
     columns: columns,
     showIndexColumn: false,
     bordered: true,
     pagination: false,
+    isCanResizeParent: true,
     rowKey: 'field',
   });
   const handleOk = async () => {
-    const data = getSelectRows();
-    const param = { request: stats.searchParam, result: data };
+    const allData = unref(getDataSource());
+    const allfieldList = allData.map((o) => o.fieldName);
+    const data = unref(getSelectRows());
+    const fieldListSet = new Set(data.map((o) => o.fieldName));
+    const desensitizedList = data.filter((o) => o.isDesensitized).map((o) => o.fieldName);
+    const fieldList = Array.from(allfieldList.filter((item) => !fieldListSet.has(item)));
+    debugger;
+    const param = {
+      request: stats.searchParam,
+      fieldList: fieldList,
+      desensitizedList: desensitizedList,
+    };
     if (!props.exportApi || !isFunction(props.exportApi)) return;
-    const val = await props.exportApi(param);
-    const fullPath = val[0].fullPath;
-    downloadByUrl({
-      url: fullPath,
-      target: '_self',
-    });
+    const res = await props.exportApi(param);
+    downloadByData(res, '用户信息导出.xls');
     closeModal();
   };
 </script>

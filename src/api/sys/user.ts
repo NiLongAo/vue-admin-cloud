@@ -177,7 +177,14 @@ export function doExportEntityInfo(params) {
 }
 
 export function doExportUrl(params: Recordable) {
-  return defHttp.post({ url: Api.findExportUrl, params });
+  return defHttp.post(
+    {
+      url: Api.findExportUrl,
+      responseType: 'blob',
+      params,
+    },
+    { isTransformResponse: false },
+  );
 }
 
 export function dogetQrCode() {
