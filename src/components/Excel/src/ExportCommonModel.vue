@@ -5,8 +5,9 @@
     @ok="handleOk"
     ok-text="导出"
     @register="registerModal"
+    @height-change="heightChange"
   >
-    <div class="absolute h-full p-4">
+    <div class="flex w-full p-2" :style="`height:` + state.height + `px`">
       <BasicTable @register="registerTable" :rowSelection="{ type: stats.selectType }" />
     </div>
   </BasicModal>
@@ -26,6 +27,10 @@
     paramApi: propTypes.func,
     // 导出数据API
     exportApi: propTypes.func,
+  });
+
+  const state = reactive({
+    height: 0,
   });
 
   const stats = reactive({
@@ -84,7 +89,6 @@
     const fieldListSet = new Set(data.map((o) => o.fieldName));
     const desensitizedList = data.filter((o) => o.isDesensitized).map((o) => o.fieldName);
     const fieldList = Array.from(allfieldList.filter((item) => !fieldListSet.has(item)));
-    debugger;
     const param = {
       request: stats.searchParam,
       fieldList: fieldList,
@@ -94,5 +98,8 @@
     const res = await props.exportApi(param);
     downloadByData(res, '用户信息导出.xls');
     closeModal();
+  };
+  const heightChange = (height) => {
+    state.height = height - 5;
   };
 </script>
