@@ -162,7 +162,8 @@
           auto_focus: true,
           skin: skinName.value,
           skin_url: publicPath + 'resource/tinymce/skins/ui/' + skinName.value,
-          convert_usrl: false,
+          convert_usrl: true,
+          relative_urls: false,
           remove_script_host: false,
           content_css:
             publicPath + 'resource/tinymce/skins/ui/' + skinName.value + '/content.min.css',
