@@ -51,10 +51,15 @@ export const useSocketStore = defineStore({
     },
   },
   actions: {
-    setSocket(token: string) {
+    setSocket(token?: string) {
       if (this.socket) {
         this.socket.disconnect();
       }
+      const query = token
+        ? {
+            Authorization: 'Bearer ' + token,
+          }
+        : {};
       this.socket = io(import.meta.env.VITE_SOCKET_URL, {
         //自动链接
         autoConnect: false,
@@ -65,9 +70,7 @@ export const useSocketStore = defineStore({
         //链接地址
         path: '/sms-socket/socket.io',
         //请求附加参数
-        query: {
-          Authorization: 'Bearer ' + token,
-        },
+        query: query,
         transports: ['websocket', 'polling'],
         // 请求头
         // extraHeaders: {},
