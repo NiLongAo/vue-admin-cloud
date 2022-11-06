@@ -138,6 +138,7 @@
   const formData = reactive({
     username: '',
     password: '',
+    key: '',
     loginCode: '',
     images: '',
   });
@@ -164,8 +165,9 @@
   };
 
   const GetCode = async () => {
-    const code = await doGetCode();
-    formData.images = code;
+    const { key, image } = await doGetCode();
+    formData.images = image;
+    formData.key = key;
     formData.loginCode = '';
   };
 
@@ -180,6 +182,7 @@
           code: {
             username: encryption.encryptByAES(data.username),
             password: encryption.encryptByAES(data.password),
+            key: formData.key,
             verificationCode: data.loginCode,
           },
           mode: 'none', //不要默认的错误提示
