@@ -10,7 +10,7 @@
   import { ConfigProvider } from 'ant-design-vue';
   import { AppProvider } from '/@/components/Application';
   import { useTitle } from '/@/hooks/web/useTitle';
-  import { useSocket } from '/@/hooks/web/useSocket';
+  import { useSocket } from '/@/hooks/socket';
   import { useLocale } from '/@/locales/useLocale';
 
   import 'dayjs/locale/zh-cn';

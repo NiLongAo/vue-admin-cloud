@@ -19,7 +19,6 @@ import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
 import { usePermissionStore } from '/@/store/modules/permission';
 import { SystemEnum } from '/@/enums/systemEnum';
-import { useSocketStore } from '/@/store/modules/socket';
 import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { useSystemStore } from './system';
@@ -221,7 +220,6 @@ export const useUserStore = defineStore({
      */
     async logout(goLogin = false) {
       const systemStore = useSystemStore();
-      const socketIo = useSocketStore();
       if (this.getToken) {
         try {
           await doLogout();
@@ -233,7 +231,6 @@ export const useUserStore = defineStore({
       this.setSessionTimeout(false);
       this.setUserInfo(null);
       systemStore.setSystemConfigMap({}); //清空配置信息
-      socketIo.disconnectSocket(); //关闭socketio
       goLogin && router.push(PageEnum.BASE_LOGIN);
     },
     /**

@@ -17,16 +17,19 @@
   </template>
 </template>
 <script lang="ts" setup>
-  import { computed, reactive, unref, onMounted, onBeforeUnmount } from 'vue';
+  import { computed, reactive, unref, onMounted } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { Button, Divider, Image } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, LoginStateEnum } from './useLogin';
-  import { dogetQrCode, doMiniWebLogin } from '/@/api/sys/user';
   import { useUserStore } from '/@/store/modules/user';
-  import { ResultEnum } from '/@/enums/httpEnum';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { SocketNamespace, SocketEvent, SocketData, ResultEnum } from '/@/enums/SocketEnum';
+  import { useSocketStore } from '/@/store/modules/socket';
+  import mitt from '/@/utils/mitt';
 
+  const rootSocketEmitter = mitt();
+  const useSocket = useSocketStore();
   const stats = reactive({
     img: '',
     scene: '',
@@ -39,36 +42,36 @@
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.WX_MINI);
 
   const qrCode = async () => {
-    const { img, scene } = await dogetQrCode();
+    const val: any = await useSocket.sendMessage(
+      SocketNamespace.QR_NAMESPACE,
+      SocketEvent.WX_MINI_QR_LOGIN_EVENT,
+      {
+        type: SocketData.WX_MINI_QR_LOGIN_DATA,
+      },
+    );
+    const { code, message, data } = val;
+    if (code != ResultEnum.SUCCESS) {
+      createMessage.error(message || '获取消息错误');
+      console.log(val);
+      return;
+    }
+    const { scene, img } = data;
     stats.img = img;
     stats.scene = scene;
   };
-
-  const timeInter = setInterval(async () => {
-    if (!stats.scene) {
-      return;
-    }
-    const { code, message, data } = await doMiniWebLogin({
-      scene: stats.scene,
-    });
-    if (code != ResultEnum.SUCCESS) {
-      createMessage.error(message);
-      stats.scene = '';
-      return;
-    }
-
-    const { status, access_token, refresh_token } = data;
-    if (status === 2) {
-      //二维码过期;刷新二维码
+  rootSocketEmitter.on(SocketEvent.WX_MINI_QR_LOGIN_EVENT, (val) => {
+    const { code, message, data } = val;
+    if (code == ResultEnum.OVERDUE) {
       qrCode();
-    } else if (status == 0) {
-      userStore.setToken(access_token, refresh_token);
-      userStore.afterLoginAction(true);
+      createMessage.info('二维码过期');
+    } else if (code != ResultEnum.SUCCESS) {
+      createMessage.error(message || '获取消息错误');
+      console.log(val);
+      return;
     }
-  }, 3000);
-
-  onBeforeUnmount(() => {
-    clearInterval(timeInter);
+    const { access_token, refresh_token } = data;
+    userStore.setToken(access_token, refresh_token);
+    userStore.afterLoginAction(true);
   });
 
   onMounted(() => {

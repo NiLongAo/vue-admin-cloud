@@ -56,12 +56,6 @@ enum Api {
   findExportEntityInfo = '/webapi/bean/user/find_export_entity_info',
   //用户信息下拉展示(动态搜索数据源)
   findExportUrl = '/webapi/bean/user/find_export_url',
-  //获取用户微信小程序登录二维码
-  getQrCode = '/webapi/mini/get_qr_code',
-  //web用户登录小程序接口
-  miniWebLogin = '/webapi/mini/mini_web_login',
-  //web用户绑定小程序用户
-  bindMiniWeb = '/webapi/mini/bind_mini_web',
   //web用户解绑小程序用户
   unbindMiniWeb = '/webapi/mini/unbind_mini_web',
 }
@@ -185,18 +179,6 @@ export function doExportUrl(params: Recordable) {
     },
     { isReturnNativeResponse: true },
   );
-}
-
-export function dogetQrCode() {
-  return defHttp.get({ url: Api.getQrCode });
-}
-
-export function doMiniWebLogin(params) {
-  return defHttp.get({ url: Api.miniWebLogin, params }, { isTransformResponse: false });
-}
-
-export function doBindMiniWeb(params) {
-  return defHttp.get({ url: Api.bindMiniWeb, params }, { isTransformResponse: false });
 }
 export function doUnBindMiniWeb() {
   return defHttp.post({ url: Api.unbindMiniWeb }, { isTransformResponse: false });

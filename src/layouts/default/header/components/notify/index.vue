@@ -45,9 +45,10 @@
   import { useModal } from '/@/components/Modal';
   import NoticeList from './NoticeList.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useSocketStore } from '/@/store/modules/socket';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { SocketEvent } from '/@/enums/SocketEnum';
   import { getUserPublicNoticePage, doUserReadNoticeDetail } from '/@/api/notice/publicNotice';
+  import mitt from '/@/utils/mitt';
 
   export default defineComponent({
     components: {
@@ -61,7 +62,6 @@
     },
     setup() {
       const [registerModal, { openModal }] = useModal();
-      const useSocket = useSocketStore();
       const stats = reactive({
         tabList: [
           {
@@ -93,6 +93,7 @@
           total: 5,
         },
       });
+      const rootSocketEmitter = mitt();
       //不同分页接口
       let api = ref();
       //不同详情接口
@@ -149,7 +150,7 @@
         return dataList as Array<ListItem>;
       };
       //消息分页数据组装
-      const updateMessagesData = (data) => {
+      const updateMessagesData = () => {
         let dataList = [] as Array<ListItem>;
 
         let model = {
@@ -169,7 +170,7 @@
       };
 
       //待办分页数据组装
-      const updateNeedData = (data) => {
+      const updateNeedData = () => {
         let dataList = [] as Array<ListItem>;
 
         let model = {
@@ -223,23 +224,17 @@
           immediate: true,
         },
       );
-      //检测socket平台消息
-      watch(
-        () => useSocket.getType,
-        async (val) => {
-          // 1.平台通知公告
-          debugger;
-          if (val == 1) {
-            const message = await useSocket.getMessage;
-            await notification.info({
-              message: '平台通知公告:',
-              description: message?.message,
-              duration: 5,
-            });
-            await initData();
-          }
-        },
-      );
+      rootSocketEmitter.on(SocketEvent.PUBLIC_MEMBER_EVENT, async (val) => {
+        const { outType, message } = val;
+        if (outType == 1) {
+          await notification.info({
+            message: '平台通知公告:',
+            description: message,
+            duration: 5,
+          });
+          await initData();
+        }
+      });
 
       //model关闭时刷新分页
       const afterClose = () => {

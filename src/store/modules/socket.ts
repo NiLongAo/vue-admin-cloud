@@ -1,66 +1,39 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
+import { SocketNamespace, SocketEvent } from '../../enums/SocketEnum';
 import io, { Socket } from 'socket.io-client';
 
 interface SocketState {
-  socket: Socket | null;
-  type: number | null;
-  message: OutMessage | {};
-}
-interface OutMessage {
-  //发送人编号
-  userId: string;
-  //发送人名称
-  userName: string;
-  /**
-   * 消息类型
-   *  1.平台通知公告
-   * 2.强制下线
-   */
-  type: number;
-  /**
-   * 消息类型
-   * 1.字符串
-   * 2.图片
-   * 3.视频
-   */
-  outType: number;
-  //消息主体
-  message: string;
-  //创建时间
-  createTime: string;
+  socketMap: Recordable<Socket> | {};
 }
 export const useSocketStore = defineStore({
   id: 'app-socket',
   state: (): SocketState => ({
-    socket: null,
-    type: null,
-    message: {},
+    socketMap: {},
   }),
   getters: {
-    getSocket(): Socket | null {
-      return this.socket as Socket;
-    },
-    getType(): number | null {
-      return this.type;
-    },
-    getMessage(): OutMessage | null {
-      //获取消息后重置类型，防止无法监听到值改变
-      this.type = null;
-      return this.message as Socket;
+    getSocketMap(): Recordable<Socket> | {} {
+      return this.socketMap;
     },
   },
   actions: {
-    setSocket(token?: string) {
-      if (this.socket) {
-        this.socket.disconnect();
+    /**
+     * 创建socket
+     * @param namespace 空间名
+     * @param token 是否添加token
+     * @returns
+     */
+    setSocketMap(namespace: string, token?: string) {
+      let socket: Socket = this.socketMap[namespace];
+      if (socket) {
+        socket.disconnect();
       }
       const query = token
         ? {
             Authorization: 'Bearer ' + token,
           }
         : {};
-      this.socket = io(import.meta.env.VITE_SOCKET_URL, {
+      socket = io(import.meta.env.VITE_SOCKET_URL + namespace, {
         //自动链接
         autoConnect: false,
         //重新链接
@@ -75,17 +48,22 @@ export const useSocketStore = defineStore({
         // 请求头
         // extraHeaders: {},
       });
-      this.socket.connect();
+      socket.connect();
+      this.socketMap[namespace] = socket;
+      return socket;
     },
-    async disconnectSocket() {
-      if (this.socket) {
-        this.socket.disconnect();
-      }
+    getSocket(namespace: SocketNamespace): Socket {
+      return this.socketMap[namespace];
     },
-    messageEvent(data: OutMessage) {
-      debugger;
-      this.type = data.type;
-      this.message = data;
+    sendMessage(namespace: SocketNamespace, event: SocketEvent, message: any) {
+      return new Promise((resolve, reject) => {
+        const socket: Socket = this.socketMap[namespace];
+        if (!socket) {
+          reject(new Error('socket is null! namespace:' + namespace));
+        }
+        const data = socket.emit(event, message);
+        resolve(data);
+      });
     },
   },
 });
