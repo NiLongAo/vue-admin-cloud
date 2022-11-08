@@ -22,13 +22,13 @@ export async function useSocket() {
     }
   });
   //无需token的socket
-  Object.keys(notTokenNamespaceMap).forEach((key) => {
+  Object.keys(notTokenNamespaceMap).forEach(async (key) => {
     const namespace: Namespace = notTokenNamespaceMap[key];
     let socket = namespace.getSocket();
     if (socket) {
       socket.disconnect();
     }
-    socket = useSocket.setSocketMap(key);
+    socket = await useSocket.setSocketMap(key);
     setEvent(socket);
     namespace.setSocket(socket);
   });
@@ -36,7 +36,7 @@ export async function useSocket() {
   watch(
     () => userStore.getToken,
     () => {
-      Object.keys(tokenNamespaceMap).forEach((key: SocketNamespace) => {
+      Object.keys(tokenNamespaceMap).forEach(async (key: SocketNamespace) => {
         const namespace: Namespace = tokenNamespaceMap[key];
         let socket = namespace.getSocket();
         if (socket) {
@@ -44,7 +44,7 @@ export async function useSocket() {
         }
         if (userStore.getToken) {
           //创建Socket监听
-          socket = useSocket.setSocketMap(key, userStore.getToken);
+          socket = await useSocket.setSocketMap(key, userStore.getToken);
           setEvent(socket);
           namespace.setSocket(socket);
         } else {

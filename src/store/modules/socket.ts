@@ -23,7 +23,7 @@ export const useSocketStore = defineStore({
      * @param token 是否添加token
      * @returns
      */
-    setSocketMap(namespace: string, token?: string) {
+    async setSocketMap(namespace: string, token?: string) {
       let socket: Socket = this.socketMap[namespace];
       if (socket) {
         socket.disconnect();
@@ -33,7 +33,8 @@ export const useSocketStore = defineStore({
             Authorization: 'Bearer ' + token,
           }
         : {};
-      socket = io(import.meta.env.VITE_SOCKET_URL + namespace, {
+      const url = import.meta.env.VITE_SOCKET_URL + namespace;
+      socket = io(url, {
         //自动链接
         autoConnect: false,
         //重新链接
@@ -48,7 +49,7 @@ export const useSocketStore = defineStore({
         // 请求头
         // extraHeaders: {},
       });
-      socket.connect();
+      await socket.connect();
       this.socketMap[namespace] = socket;
       return socket;
     },
@@ -56,14 +57,11 @@ export const useSocketStore = defineStore({
       return this.socketMap[namespace];
     },
     sendMessage(namespace: SocketNamespace, event: SocketEvent, message: any) {
-      return new Promise((resolve, reject) => {
-        const socket: Socket = this.socketMap[namespace];
-        if (!socket) {
-          reject(new Error('socket is null! namespace:' + namespace));
-        }
-        const data = socket.emit(event, message);
-        resolve(data);
-      });
+      const socket: Socket = this.socketMap[namespace];
+      if (!socket) {
+        new Error('socket is null! namespace:' + namespace);
+      }
+      socket.emit(event, message);
     },
   },
 });
