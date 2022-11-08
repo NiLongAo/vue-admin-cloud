@@ -21,6 +21,6 @@ export enum SocketEvent {
 
 //socket监听事件
 export enum SocketData {
-  WX_MINI_QR_LOGIN_DATA = 1, //微信小程序二维码登录
-  WX_MINI_QR_BIND_DATA = 2, //微信小程序二维码绑定web
+  WX_MINI_QR_LOGIN_DATA = 'WX_MINI_QR_LOGIN', //微信小程序二维码登录
+  WX_MINI_QR_BIND_DATA = 'WX_MINI_QR_BIND', //微信小程序二维码绑定web
 }
