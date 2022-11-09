@@ -13,16 +13,21 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { reactive } from 'vue';
+  import { reactive, onBeforeMount } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { Divider, Image } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { SocketNamespace, SocketEvent, SocketData, ResultEnum } from '/@/enums/SocketEnum';
+  import {
+    SocketNamespace,
+    SocketInEvent,
+    SocketOutEvent,
+    SocketData,
+    ResultEnum,
+  } from '/@/enums/SocketEnum';
   import { useSocketStore } from '/@/store/modules/socket';
-  import mitt from '/@/utils/mitt';
+  import rootSocketEmitter from '/@/hooks/socket/rootSocketEmitter';
 
-  const rootSocketEmitter = mitt();
   const useSocket = useSocketStore();
 
   const { t } = useI18n();
@@ -34,42 +39,45 @@
     scene: '',
   });
 
-  const qrCode = async () => {
-    const val: any = await useSocket.sendMessage(
-      SocketNamespace.QR_NAMESPACE,
-      SocketEvent.WX_MINI_QR_BIND_EVENT,
-      {
-        type: SocketData.WX_MINI_QR_BIND_DATA,
-      },
-    );
-    const { code, message, data } = val;
-    if (code != ResultEnum.SUCCESS) {
-      createMessage.error(message || '获取消息错误');
-      console.log(val);
-      return;
-    }
-    const { scene, img } = data;
-    stats.img = img;
-    stats.scene = scene;
+  const qrCode = () => {
+    useSocket.sendMessage(SocketNamespace.QR_NAMESPACE, SocketInEvent.IN_LOGIN_QR_CODE_EVENT, {
+      type: SocketData.WX_MINI_QR_BIND_DATA,
+    });
   };
-  //检测socket平台消息
-  rootSocketEmitter.on(SocketEvent.WX_MINI_QR_BIND_EVENT, (val) => {
-    const { code, message } = val;
-    if (code == ResultEnum.OVERDUE) {
-      qrCode();
-      createMessage.info('二维码过期');
-    } else if (code != ResultEnum.SUCCESS) {
-      createMessage.error(message || '获取消息错误');
-      console.log(val);
-      return;
-    }
-    createMessage.success('绑定成功');
-    emit('success');
-  });
 
   const [registerModal, { setModalProps }] = useModalInner(async (_res) => {
     setModalProps({ loading: true });
     await qrCode();
-    setModalProps({ loading: false });
+  });
+
+  onBeforeMount(() => {
+    rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_QR_CODE_EVENT, (val) => {
+      const { code, message, data } = val;
+      if (code != ResultEnum.SUCCESS) {
+        createMessage.error(message || '获取消息错误');
+        console.log(val);
+        return;
+      }
+      const { scene, type, img } = data;
+      if (type && type == SocketData.WX_MINI_QR_BIND_DATA) {
+        stats.img = img;
+        stats.scene = scene;
+      }
+      setModalProps({ loading: false });
+    });
+    //检测socket平台消息
+    rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_BIND_EVENT, (val) => {
+      const { code, message } = val;
+      if (code == ResultEnum.OVERDUE) {
+        qrCode();
+        createMessage.info('二维码过期');
+      } else if (code != ResultEnum.SUCCESS) {
+        createMessage.error(message || '获取消息错误');
+        console.log(val);
+        return;
+      }
+      createMessage.success('绑定成功');
+      emit('success');
+    });
   });
 </script>

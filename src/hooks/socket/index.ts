@@ -15,46 +15,39 @@ export async function useSocket() {
   Object.keys(namespaceFiles).forEach((key) => {
     const namespace: Namespace = new namespaceFiles[key].default();
     const param = namespace.getParam();
-    if (param.token) {
-      tokenNamespaceMap[param.namespace] = namespace;
-    } else {
+    if (!param.token) {
       notTokenNamespaceMap[param.namespace] = namespace;
     }
+    tokenNamespaceMap[param.namespace] = namespace;
   });
-  //无需token的socket
-  Object.keys(notTokenNamespaceMap).forEach(async (key) => {
-    const namespace: Namespace = notTokenNamespaceMap[key];
-    let socket = namespace.getSocket();
-    if (socket) {
-      socket.disconnect();
-    }
-    socket = await useSocket.setSocketMap(key);
-    setEvent(socket);
-    namespace.setSocket(socket);
-  });
-  //需要token的socket
   watch(
     () => userStore.getToken,
     () => {
       Object.keys(tokenNamespaceMap).forEach(async (key: SocketNamespace) => {
         const namespace: Namespace = tokenNamespaceMap[key];
-        let socket = namespace.getSocket();
+        const socket = namespace.getSocket();
         if (socket) {
           socket.disconnect();
         }
-        if (userStore.getToken) {
+      });
+      if (userStore.getToken) {
+        Object.keys(tokenNamespaceMap).forEach(async (key: SocketNamespace) => {
+          const namespace: Namespace = tokenNamespaceMap[key];
+          let socket = namespace.getSocket();
           //创建Socket监听
           socket = await useSocket.setSocketMap(key, userStore.getToken);
           setEvent(socket);
           namespace.setSocket(socket);
-        } else {
-          //关闭相关tokenSocket
-          socket = namespace.getSocket();
-          if (socket) {
-            socket.disconnect();
-          }
-        }
-      });
+        });
+      } else {
+        Object.keys(notTokenNamespaceMap).forEach(async (key) => {
+          const namespace: Namespace = notTokenNamespaceMap[key];
+          let socket = namespace.getSocket();
+          socket = await useSocket.setSocketMap(key);
+          setEvent(socket);
+          namespace.setSocket(socket);
+        });
+      }
     },
     { immediate: true },
   );

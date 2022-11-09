@@ -37,7 +37,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, ref, reactive, unref, watch } from 'vue';
+  import { computed, defineComponent, ref, reactive, unref, watch, onBeforeMount } from 'vue';
   import { Popover, Tabs, Badge } from 'ant-design-vue';
   import { BellOutlined } from '@ant-design/icons-vue';
   import { tabListData, ListItem } from './data';
@@ -46,9 +46,9 @@
   import NoticeList from './NoticeList.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { SocketEvent } from '/@/enums/SocketEnum';
+  import { SocketOutEvent } from '/@/enums/SocketEnum';
   import { getUserPublicNoticePage, doUserReadNoticeDetail } from '/@/api/notice/publicNotice';
-  import mitt from '/@/utils/mitt';
+  import rootSocketEmitter from '/@/hooks/socket/rootSocketEmitter';
 
   export default defineComponent({
     components: {
@@ -93,7 +93,6 @@
           total: 5,
         },
       });
-      const rootSocketEmitter = mitt();
       //不同分页接口
       let api = ref();
       //不同详情接口
@@ -224,22 +223,23 @@
           immediate: true,
         },
       );
-      rootSocketEmitter.on(SocketEvent.PUBLIC_MEMBER_EVENT, async (val) => {
-        const { outType, message } = val;
-        if (outType == 1) {
-          await notification.info({
-            message: '平台通知公告:',
-            description: message,
-            duration: 5,
-          });
-          await initData();
-        }
-      });
 
       //model关闭时刷新分页
       const afterClose = () => {
         initData();
       };
+      onBeforeMount(() => {
+        rootSocketEmitter.on(SocketOutEvent.PUBLIC_MEMBER_EVENT, ({ outType, message }) => {
+          if (outType == 1) {
+            notification.info({
+              message: '平台通知公告:',
+              description: message,
+              duration: 5,
+            });
+            initData();
+          }
+        });
+      });
 
       return {
         prefixCls,

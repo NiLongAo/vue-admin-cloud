@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
-import { SocketNamespace, SocketEvent } from '../../enums/SocketEnum';
+import { SocketNamespace, SocketInEvent } from '../../enums/SocketEnum';
 import io, { Socket } from 'socket.io-client';
 
 interface SocketState {
@@ -56,7 +56,7 @@ export const useSocketStore = defineStore({
     getSocket(namespace: SocketNamespace): Socket {
       return this.socketMap[namespace];
     },
-    sendMessage(namespace: SocketNamespace, event: SocketEvent, message: any) {
+    sendMessage(namespace: SocketNamespace, event: SocketInEvent, message: any) {
       const socket: Socket = this.socketMap[namespace];
       if (!socket) {
         new Error('socket is null! namespace:' + namespace);

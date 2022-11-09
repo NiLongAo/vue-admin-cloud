@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io-client';
 import { SocketModel, Namespace } from '../common';
-import { SocketNamespace, SocketEvent } from '/@/enums/SocketEnum';
-import mitt from '/@/utils/mitt';
+import { SocketNamespace, SocketOutEvent } from '/@/enums/SocketEnum';
+import rootSocketEmitter from '/@/hooks/socket/rootSocketEmitter';
 
 class PublicMemberNamespace implements Namespace {
   private socket: Socket;
@@ -32,9 +32,8 @@ class PublicMemberNamespace implements Namespace {
   private setEvent() {
     if (!this.socket) return;
     //监听事件
-    this.socket.on(SocketEvent.PUBLIC_MEMBER_EVENT, (data) => {
-      const rootSocketEmitter = mitt();
-      rootSocketEmitter.emit(SocketEvent.PUBLIC_MEMBER_EVENT, data);
+    this.socket.on(SocketOutEvent.PUBLIC_MEMBER_EVENT, (data) => {
+      rootSocketEmitter.emit(SocketOutEvent.PUBLIC_MEMBER_EVENT, data);
     });
   }
 }

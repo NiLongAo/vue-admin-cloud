@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io-client';
 import { SocketModel, Namespace } from '../common';
-import { SocketNamespace, SocketEvent } from '/@/enums/SocketEnum';
-import mitt from '/@/utils/mitt';
+import { SocketNamespace, SocketOutEvent } from '/@/enums/SocketEnum';
+import rootSocketEmitter from '/@/hooks/socket/rootSocketEmitter';
 
 class LoginQrNamespace implements Namespace {
   private socket: Socket;
@@ -31,13 +31,14 @@ class LoginQrNamespace implements Namespace {
   }
   private setEvent() {
     if (!this.socket) return;
-    this.socket.on(SocketEvent.WX_MINI_QR_BIND_EVENT, (data) => {
-      const rootSocketEmitter = mitt();
-      rootSocketEmitter.emit(SocketEvent.WX_MINI_QR_BIND_EVENT, data);
+    this.socket.on(SocketOutEvent.OUT_LOGIN_QR_CODE_EVENT, (data) => {
+      rootSocketEmitter.emit(SocketOutEvent.OUT_LOGIN_QR_CODE_EVENT, data);
     });
-    this.socket.on(SocketEvent.WX_MINI_QR_LOGIN_EVENT, (data) => {
-      const rootSocketEmitter = mitt();
-      rootSocketEmitter.emit(SocketEvent.WX_MINI_QR_LOGIN_EVENT, data);
+    this.socket.on(SocketOutEvent.OUT_LOGIN_INFO_EVENT, (data) => {
+      rootSocketEmitter.emit(SocketOutEvent.OUT_LOGIN_INFO_EVENT, data);
+    });
+    this.socket.on(SocketOutEvent.OUT_LOGIN_BIND_EVENT, (data) => {
+      rootSocketEmitter.emit(SocketOutEvent.OUT_LOGIN_BIND_EVENT, data);
     });
   }
 }
