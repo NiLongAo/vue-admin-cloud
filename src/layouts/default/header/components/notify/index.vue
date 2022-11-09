@@ -46,7 +46,7 @@
   import NoticeList from './NoticeList.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { SocketOutEvent } from '/@/enums/SocketEnum';
+  import { SocketOutEvent, ResultEnum } from '/@/enums/SocketEnum';
   import { getUserPublicNoticePage, doUserReadNoticeDetail } from '/@/api/notice/publicNotice';
   import rootSocketEmitter from '/@/hooks/socket/rootSocketEmitter';
 
@@ -102,7 +102,7 @@
       //当前初始化页签位置
       const activeKey = ref('1');
       const { prefixCls } = useDesign('header-notify');
-      const { notification } = useMessage();
+      const { notification, createMessage } = useMessage();
       const listData = ref(tabListData);
 
       const count = computed(() => {
@@ -229,11 +229,16 @@
         initData();
       };
       onBeforeMount(() => {
-        rootSocketEmitter.on(SocketOutEvent.PUBLIC_MEMBER_EVENT, ({ outType, message }) => {
+        rootSocketEmitter.on(SocketOutEvent.PUBLIC_MEMBER_EVENT, ({ code, message, data }) => {
+          if (code != ResultEnum.SUCCESS) {
+            createMessage.error(message || '获取消息错误');
+            return;
+          }
+          const { outType, message: meg } = data;
           if (outType == 1) {
             notification.info({
               message: '平台通知公告:',
-              description: message,
+              description: meg,
               duration: 5,
             });
             initData();
