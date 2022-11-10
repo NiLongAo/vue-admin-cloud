@@ -1,5 +1,6 @@
 <template>
-  <h2 class="mb-3 text-2xl font-bold text-center xl:text-3xl enter-x xl:text-left">
+  <!--  xl:text-left -->
+  <h2 class="mb-3 text-2xl font-bold text-center xl:text-3xl enter-x">
     {{ getFormTitle }}
   </h2>
 </template>
@@ -19,6 +20,7 @@
       [LoginStateEnum.REGISTER]: t('sys.login.signUpFormTitle'),
       [LoginStateEnum.MOBILE]: t('sys.login.mobileSignInFormTitle'),
       [LoginStateEnum.QR_CODE]: t('sys.login.qrSignInFormTitle'),
+      [LoginStateEnum.WX_MINI]: t('sys.login.wxMiniInFormTitle'),
     };
     return titleObj[unref(getLoginState)];
   });

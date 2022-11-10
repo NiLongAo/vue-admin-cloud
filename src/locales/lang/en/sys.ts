@@ -67,6 +67,7 @@ export default {
     backSignIn: 'Back sign in',
     mobileSignInFormTitle: 'Mobile sign in',
     qrSignInFormTitle: 'Qr code sign in',
+    wxMiniInFormTitle: 'WX mini sign in',
     signInFormTitle: 'Sign in',
     signUpFormTitle: 'Sign up',
     forgetFormTitle: 'Reset password',

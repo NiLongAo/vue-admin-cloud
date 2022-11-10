@@ -62,6 +62,7 @@ export default {
     signInFormTitle: '登录',
     mobileSignInFormTitle: '手机登录',
     qrSignInFormTitle: '二维码登录',
+    wxMiniInFormTitle: '微信小程序登录',
     signUpFormTitle: '注册',
     forgetFormTitle: '重置密码',
 
