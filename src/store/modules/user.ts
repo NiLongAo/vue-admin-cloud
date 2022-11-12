@@ -219,7 +219,6 @@ export const useUserStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
-      const systemStore = useSystemStore();
       if (this.getToken) {
         try {
           await doLogout();
@@ -227,6 +226,11 @@ export const useUserStore = defineStore({
           console.log('注销Token失败');
         }
       }
+      this.close(goLogin);
+    },
+    //清空缓存
+    close(goLogin = false) {
+      const systemStore = useSystemStore();
       this.setToken(undefined, undefined);
       this.setSessionTimeout(false);
       this.setUserInfo(null);

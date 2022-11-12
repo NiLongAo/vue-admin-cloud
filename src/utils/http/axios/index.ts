@@ -69,7 +69,7 @@ const transform: AxiosTransform = {
       case ResultEnum.TIMEOUT | ResultEnum.PROHIBIT:
         timeoutMsg = message;
         userStore.setToken(undefined, undefined);
-        userStore.logout(true);
+        userStore.close(true);
         break;
       default:
         if (message) {
