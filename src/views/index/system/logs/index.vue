@@ -51,6 +51,10 @@
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
     rowKey: 'id',
+    defSort: {
+      field: 'createTime',
+      order: 'descend',
+    },
     actionColumn: {
       width: 160,
       title: '操作',
