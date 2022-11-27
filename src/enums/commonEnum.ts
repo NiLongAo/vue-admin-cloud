@@ -8,7 +8,8 @@ export const DITE_OA_ACTIVITI_KEY = 'OA_ACTIVITI';
 export const DITE_SMS_TYPE_KEY = 'SMS_TYPE';
 //短信发送类型
 export const DITE_SMS_SEND_TYPE_KEY = 'SMS_SEND_TYPE';
-
+//系统日志类型
+export const LOGS_TYPE_ENUM = 'LOGS_TYPE_ENUM';
 //********************系统配置key********************** */
 /**
  * 系统设置静态服务器域名

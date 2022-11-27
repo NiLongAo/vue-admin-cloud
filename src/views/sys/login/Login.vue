@@ -194,7 +194,7 @@
       min-width: 360px;
 
       @media (max-width: @screen-xl) {
-        min-width: 265px;
+        min-width: 320px;
       }
 
       @media (max-width: @screen-lg) {
@@ -202,7 +202,7 @@
       }
 
       @media (max-width: @screen-md) {
-        min-width: 165px;
+        min-width: 240px;
       }
 
       @media (max-width: @screen-sm) {

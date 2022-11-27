@@ -77,6 +77,9 @@ export function useTable(tableProps?: Props): [
     redoHeight: () => {
       getTableInstance().redoHeight();
     },
+    setSelectedRows: (rows: Recordable[]) => {
+      return toRaw(getTableInstance().setSelectedRows(rows));
+    },
     setLoading: (loading: boolean) => {
       getTableInstance().setLoading(loading);
     },

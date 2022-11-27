@@ -136,6 +136,7 @@
         getRowSelection,
         getRowSelectionRef,
         getSelectRows,
+        setSelectedRows,
         clearSelectedRowKeys,
         getSelectRowKeys,
         deleteSelectRowByKey,
@@ -257,7 +258,6 @@
         // if (slots.expandedRowRender) {
         //   propsData = omit(propsData, 'scroll');
         // }
-
         propsData = omit(propsData, ['class', 'onChange']);
         return propsData;
       });
@@ -289,6 +289,7 @@
       const tableAction: TableActionType = {
         reload,
         getSelectRows,
+        setSelectedRows,
         clearSelectedRowKeys,
         getSelectRowKeys,
         deleteSelectRowByKey,
