@@ -242,13 +242,13 @@
         propsRef.value = deepMerge(unref(propsRef) || {}, formProps);
       }
 
-      function setFormModel(key: string, value: any) {
+      function setFormModel(key: string, value: any, schema: FormSchema) {
         formModel[key] = value;
-        const { validateTrigger } = unref(getBindValue);
-        if (!validateTrigger || validateTrigger === 'change') {
+        emit('field-value-change', key, value);
+        // TODO 优化验证，这里如果是autoLink=false手动关联的情况下才会再次触发此函数
+        if (schema && schema.itemProps && !schema.itemProps.autoLink) {
           validateFields([key]).catch((_) => {});
         }
-        emit('field-value-change', key, value);
       }
 
       function handleEnterPress(e: KeyboardEvent) {

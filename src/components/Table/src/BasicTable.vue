@@ -75,6 +75,7 @@
   import { warn } from '/@/utils/log';
 
   export default defineComponent({
+    name: 'BasicTable',
     components: {
       Table,
       BasicForm,
@@ -258,6 +259,7 @@
         // if (slots.expandedRowRender) {
         //   propsData = omit(propsData, 'scroll');
         // }
+
         propsData = omit(propsData, ['class', 'onChange']);
         return propsData;
       });

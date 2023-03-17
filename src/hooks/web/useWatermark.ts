@@ -4,10 +4,15 @@ import { addResizeListener, removeResizeListener } from '/@/utils/event';
 import { isDef } from '/@/utils/is';
 
 const domSymbol = Symbol('watermark-dom');
+const sourceMap = new WeakMap<HTMLElement, {}>();
 
 export function useWatermark(
   appendEl: Ref<HTMLElement | null> = ref(document.body) as Ref<HTMLElement>,
 ) {
+  const appendElRaw = unref(appendEl);
+  if (appendElRaw && sourceMap.has(appendElRaw)) {
+    return sourceMap.get(appendElRaw);
+  }
   const func = useRafThrottle(function () {
     const el = unref(appendEl);
     if (!el) return;
@@ -34,13 +39,12 @@ export function useWatermark(
 
     const cans = can.getContext('2d');
     if (cans) {
+      cans.rotate((-20 * Math.PI) / 120);
       cans.font = '15px Vedana';
       cans.fillStyle = 'rgba(0, 0, 0, 0.15)';
-      cans.textAlign = 'center';
+      cans.textAlign = 'left';
       cans.textBaseline = 'middle';
-      cans.translate(300 / 2, 240 / 2);
-      cans.rotate((-30 * Math.PI) / 180);
-      cans.fillText(str, 0, 0);
+      cans.fillText(str, width / 20, height);
     }
     return can.toDataURL('image/png');
   }
@@ -83,6 +87,7 @@ export function useWatermark(
     const { clientHeight: height, clientWidth: width } = el;
     updateWatermark({ str, width, height });
     el.appendChild(div);
+    sourceMap.set(el, { setWatermark, clear });
     return id;
   };
 

@@ -33,7 +33,7 @@ export function downloadByBase64(buf: string, filename: string, mime?: string, b
  * @param {*} mime
  * @param {*} bom
  */
-export function downloadByData(data: BlobPart, filename?: string, mime?: string, bom?: BlobPart) {
+export function downloadByData(data: BlobPart, filename: string, mime?: string, bom?: BlobPart) {
   const blobData = typeof bom !== 'undefined' ? [bom, data] : [data];
   const blob = new Blob(blobData, { type: mime || 'application/octet-stream' });
 

@@ -2,7 +2,9 @@
   <Footer :class="prefixCls" v-if="getShowLayoutFooter" ref="footerRef">
     <div :class="`${prefixCls}__links`">
       <a @click="openWindow(SITE_URL)">{{ t('layout.footer.onlinePreview') }}</a>
+
       <GithubFilled @click="openWindow(GITHUB_URL)" :class="`${prefixCls}__github`" />
+
       <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>
     </div>
     <div>ICP主体备案号: &copy;陕ICP备2022011327号</div>

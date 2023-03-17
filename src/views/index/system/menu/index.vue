@@ -1,74 +1,93 @@
 <template>
   <div>
-    <BasicTable
-      @register="registerTable"
-      @fetch-success="onFetchSuccess"
-      :rowSelection="{ type: 'checkbox' }"
-    >
-      <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              ifShow: hasPermission('system.menu:update'),
-              icon: 'mdi:file-edit-outline',
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              ifShow: hasPermission('system.menu:delete'),
-              color: 'error',
-              icon: 'mdi:delete-outline',
-              popConfirm: {
-                title: '是否删除？',
-                confirm: handleDelete.bind(null, record),
-              },
-            },
-          ]"
-        />
+    <VxeBasicTable ref="tableRef" v-bind="gridOptions">
+      <template #action="{ row }">
+        <TableAction outside :actions="createActions(row)" />
       </template>
-      <template #toolbar>
-        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.menu:add')"
-          >添加</a-button
-        >
-      </template>
-    </BasicTable>
+    </VxeBasicTable>
     <MenuDrawer @register="register" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
+  import { ActionItem, TableAction } from '/@/components/Table';
+  import {
+    BasicTableProps,
+    VxeBasicTable,
+    VxeGridInstance,
+    VxeGridPropTypes,
+    VxeFormItemProps,
+  } from '/@/components/VxeTable';
   import { doMenuPage, doMenuRemove, doPrivilegeRemove } from '/@/api/sys/menu';
-  import { h, nextTick } from 'vue';
+  import { h, ref, reactive } from 'vue';
   import { Tag } from 'ant-design-vue';
   import { Icon } from '/@/components/Icon';
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
   import { usePermission } from '/@/hooks/web/usePermission';
+
+  const tableRef = ref<VxeGridInstance>();
   const { hasPermission } = usePermission();
   const [register, { openDrawer }] = useDrawer();
 
-  const [registerTable, { reload, expandAll }] = useTable({
-    title: '菜单列表',
-    api: doMenuPage,
-    columns: getBasicColumns(),
-    formConfig: getFormConfig(),
-    isTreeTable: true,
-    pagination: false,
-    striped: false,
-    defaultExpandAllRows: true,
-    useSearchForm: true,
-    showTableSetting: true,
-    bordered: true,
-    tableSetting: { fullScreen: true },
-    showIndexColumn: false,
-    canResize: false,
-    rowKey: 'id',
-    actionColumn: {
-      width: 160,
-      title: '操作',
-      dataIndex: 'action',
-      slots: { customRender: 'action' },
+  const gridOptions = reactive<BasicTableProps>({
+    id: 'VxeTable',
+    keepSource: true,
+    showOverflow: true,
+    //height: 'auto',
+    stripe:false,
+    //loading: true,
+    editConfig: { trigger: 'click', mode: 'row', showStatus: true },
+    scrollY:{enabled: false},
+    rowConfig:{keyField: 'id'},
+    checkboxConfig: { labelField: 'id' },
+    treeConfig: {
+      transform: false,
+      accordion: true,
+      rowField: 'id',
+      parentField: 'parentId',
+      children:'children',
     },
+    proxyConfig: {
+      props:{
+        list:'data'
+      },
+      ajax: {
+        query: async ({ page, form }) => {
+          return await doMenuPage({
+            pageNum: page.currentPage,
+            pageSize: page.pageSize,
+            ...form,
+          });
+        }
+      },
+    },
+    pagerConfig:{
+      enabled: false,
+    },
+    toolbarConfig: {
+      buttons: [
+        {
+          content: '添加',
+          buttonRender: {
+            name: 'AButton',
+            props: {
+              type: 'primary',
+              //preIcon: 'mdi:page-next-outline',
+            },
+            events: {
+              click: () => handleAdd(),
+            },
+          },
+        },
+      ],
+    },
+    formConfig: {
+      enabled: true,
+      items: getFormConfig(),
+    },
+    columns: getBasicColumns(),
   });
+
   function handleAdd() {
     //3为权限  1丶2 为菜单
     openDrawer(true, { id: undefined, isUpdate: false });
@@ -83,7 +102,7 @@
   }
   const handleSuccess = () => {
     //刷新表单
-    reload();
+    tableRef.value?.refreshColumn();
   };
 
   async function handleDelete(record: Recordable) {
@@ -95,114 +114,161 @@
       await doMenuRemove({ id: record.id });
     }
     //刷新表单
-    reload();
+    handleSuccess();
   }
 
-  function getFormConfig(): Partial<FormProps> {
-    return {
-      labelWidth: 100,
-      autoSubmitOnEnter: true,
-      schemas: [
-        {
-          field: `menuName`,
-          label: `菜单名称`,
-          component: 'Input',
-          colProps: {
-            xl: 6,
-            xxl: 5,
-          },
-        },
-      ],
-    };
-  }
-  function onFetchSuccess() {
-    // 演示默认展开所有表项
-    nextTick(expandAll);
-  }
-  function getBasicColumns(): BasicColumn[] {
+  function getFormConfig(): VxeFormItemProps[] {
     return [
       {
+        field: 'menuName',
         title: '菜单名称',
-        dataIndex: 'menuName',
+        itemRender: {
+          name: 'AInput',
+        },
+        span: 6,
+      },
+      {
+        span: 18,
+        align: 'right',
+        className: '!pr-0',
+        itemRender: {
+          name: 'AButtonGroup',
+          children: [
+            {
+              props: { type: 'primary', htmlType: 'submit', content: '查询' },
+              //attrs: { class: 'mr-2' },
+            },
+            { props: { type: 'default', htmlType: 'reset', content: '重置' } },
+          ],
+        },
+      },
+    ];
+  }
+
+  function getBasicColumns(): VxeGridPropTypes.Columns {
+    return [
+    {
+        title: '菜单编号',
         fixed: 'left',
+        treeNode: true,
+        type: 'seq',
+        field: 'id',
+        width: 150,
+      },
+      {
+        title: '菜单名称',
+        field: 'menuName',
+        fixed: 'left',
+        showOverflow: 'tooltip',
         width: 150,
       },
       {
         title: '类型',
-        dataIndex: 'type',
+        field: 'type',
         fixed: 'left',
         width: 100,
-        customRender: ({ record }) => {
-          const status = record.type;
-          const enable = ~~status;
-          const color = enable === 1 ? '#BBFF66' : enable === 2 ? '#FF8888' : '#FFDD55';
-          const text = enable === 1 ? '父级菜单' : enable === 2 ? '子级菜单' : '菜单权限';
-          return h(Tag, { color: color }, () => text);
+        slots: {
+          default: ({ row }) => {
+            const status = row.type;
+            const enable = ~~status;
+            const color = enable === 1 ? '#BBFF66' : enable === 2 ? '#FF8888' : '#FFDD55';
+            const text = enable === 1 ? '父级菜单' : enable === 2 ? '子级菜单' : '菜单权限';
+            return h(Tag, { color: color }, () => text);
+          },
         },
       },
-      {
-        title: '菜单编号',
-        dataIndex: 'id',
-        width: 100,
-      },
+      
       {
         title: '图标',
-        dataIndex: 'icon',
+        field: 'icon',
         width: 100,
-        customRender: ({ record }) => {
-          return h(Icon, { icon: record.icon });
+        slots: {
+          default: ({ row }) => {
+            return h(Icon, { icon: row.icon });
+          },
         },
       },
       {
         title: '级别',
-        dataIndex: 'level',
+        field: 'level',
         width: 100,
       },
       {
         title: '是否启用',
-        dataIndex: 'isOpen',
+        field: 'isOpen',
         width: 100,
-        customRender: ({ record }) => {
-          const status = record.isOpen;
-          const enable = ~~status === 1;
-          const color = enable ? 'green' : 'red';
-          const text = enable ? '启用' : '停用';
-          return h(Tag, { color: color }, () => text);
+        slots: {
+          default: ({ row }) => {
+            const status = row.isOpen;
+            const enable = ~~status === 1;
+            const color = enable ? 'green' : 'red';
+            const text = enable ? '启用' : '停用';
+            return h(Tag, { color: color }, () => text);
+          },
         },
       },
       {
         title: '是否隐藏',
-        dataIndex: 'hideMenu',
+        field: 'hideMenu',
         width: 100,
-        customRender: ({ record }) => {
-          const status = record.hideMenu;
-          const enable = ~~status === 1;
-          const color = enable ? 'green' : 'red';
-          const text = enable ? '启用' : '停用';
-          return h(Tag, { color: color }, () => text);
+        slots: {
+          default: ({ row }) => {
+            const status = row.hideMenu;
+            const enable = ~~status === 1;
+            const color = enable ? 'green' : 'red';
+            const text = enable ? '启用' : '停用';
+            return h(Tag, { color: color }, () => text);
+          },
         },
       },
       {
         title: '跳转路径',
-        dataIndex: 'path',
+        field: 'path',
         width: 200,
       },
       {
         title: '页面路由',
-        dataIndex: 'viewPath',
+        field: 'viewPath',
         width: 200,
       },
 
       {
         title: '序号',
-        dataIndex: 'num',
+        field: 'num',
         width: 200,
       },
       {
         title: '备注',
-        dataIndex: 'memo',
+        field: 'memo',
         width: 200,
+      },
+      {
+        width: 160,
+        title: '操作',
+        align: 'center',
+        slots: { default: 'action' },
+        fixed: 'right',
       },
     ];
   }
+  // 操作按钮（权限控制）
+  const createActions = (record) => {
+    const actions: ActionItem[] = [
+      {
+        ifShow: hasPermission('system.menu:update'),
+        icon: 'mdi:file-edit-outline',
+        onClick: handleEdit.bind(null, record),
+      },
+      {
+        ifShow: hasPermission('system.menu:delete'),
+        color: 'error',
+        icon: 'mdi:delete-outline',
+        popConfirm: {
+          title: '是否删除？',
+          confirm: handleDelete.bind(null, record),
+        },
+      },
+    ];
+    return actions;
+  };
 </script>

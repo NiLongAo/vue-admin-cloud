@@ -23,7 +23,6 @@ export function useTable(tableProps?: Props): [
   const tableRef = ref<Nullable<TableActionType>>(null);
   const loadedRef = ref<Nullable<boolean>>(false);
   const formRef = ref<Nullable<UseTableMethod>>(null);
-  const loadedReload = ref<Nullable<boolean>>(false);
 
   let stopWatch: WatchStopHandle;
 

@@ -180,16 +180,17 @@ export function useTree(treeDataRef: Ref<TreeDataItem[]>, getFieldNames: Compute
   // Get selected node
   function getSelectedNode(key: KeyType, list?: TreeItem[], selectedNode?: TreeItem | null) {
     if (!key && key !== 0) return null;
+    const treeData = list || unref(treeDataRef);
     const { key: keyField, children: childrenField } = unref(getFieldNames);
-    const treeData = cloneDeep(unref(list)) || cloneDeep(unref(treeDataRef));
+    if (!keyField) return;
     treeData.forEach((item) => {
       if (selectedNode?.key || selectedNode?.key === 0) return selectedNode;
-      if (item[keyField as any] === key) {
+      if (item[keyField] === key) {
         selectedNode = item;
         return;
       }
-      if (item.children && item.children.length) {
-        selectedNode = getSelectedNode(key, item.children, selectedNode);
+      if (item[childrenField!] && item[childrenField!].length) {
+        selectedNode = getSelectedNode(key, item[childrenField!], selectedNode);
       }
     });
     return selectedNode || null;

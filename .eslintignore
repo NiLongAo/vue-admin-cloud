@@ -4,7 +4,6 @@ node_modules
 *.md
 *.woff
 *.ttf
-*.zip
 .vscode
 .idea
 dist
@@ -12,6 +11,5 @@ dist
 /docs
 .husky
 .local
-.lock
 /bin
 Dockerfile

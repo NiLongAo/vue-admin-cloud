@@ -9,7 +9,11 @@
   import { BasicHelp } from '/@/components/Basic';
   import { isBoolean, isFunction, isNull } from '/@/utils/is';
   import { getSlot } from '/@/utils/helper/tsxHelper';
-  import { createPlaceholderMessage, setComponentRuleType } from '../helper';
+  import {
+    createPlaceholderMessage,
+    NO_AUTO_LINK_COMPONENTS,
+    setComponentRuleType,
+  } from '../helper';
   import { cloneDeep, upperFirst } from 'lodash-es';
   import { useItemLabelWidth } from '../hooks/useLabelWidth';
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -35,7 +39,7 @@
         default: () => ({}),
       },
       setFormModel: {
-        type: Function as PropType<(key: string, value: any) => void>,
+        type: Function as PropType<(key: string, value: any, schema: FormSchema) => void>,
         default: null,
       },
       tableAction: {
@@ -80,10 +84,14 @@
           componentProps = componentProps({ schema, tableAction, formModel, formActionType }) ?? {};
         }
         if (schema.component === 'Divider') {
-          componentProps = Object.assign({ type: 'horizontal' }, componentProps, {
-            orientation: 'left',
-            plain: true,
-          });
+          componentProps = Object.assign(
+            { type: 'horizontal' },
+            {
+              orientation: 'left',
+              plain: true,
+            },
+            componentProps,
+          );
         }
         return componentProps as Recordable;
       });
@@ -253,7 +261,7 @@
             }
             const target = e ? e.target : null;
             const value = target ? (isCheck ? target.checked : target.value) : e;
-            props.setFormModel(field, value);
+            props.setFormModel(field, value, props.schema);
           },
         };
         const Comp = componentMap.get(component) as ReturnType<typeof defineComponent>;
@@ -342,6 +350,15 @@
 
           const showSuffix = !!suffix;
           const getSuffix = isFunction(suffix) ? suffix(unref(getValues)) : suffix;
+
+          // TODO 自定义组件验证会出现问题，因此这里框架默认将自定义组件设置手动触发验证，如果其他组件还有此问题请手动设置autoLink=false
+          if (NO_AUTO_LINK_COMPONENTS.includes(component)) {
+            props.schema &&
+              (props.schema.itemProps! = {
+                autoLink: false,
+                ...props.schema.itemProps,
+              });
+          }
 
           return (
             <Form.Item

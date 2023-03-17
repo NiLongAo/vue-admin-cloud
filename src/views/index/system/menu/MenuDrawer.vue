@@ -129,6 +129,11 @@
     const treeData = await doMenuTree({ topName: '默认', isShowPrivilege: 0 });
     updateMenuSchema([
       {
+        field: 'id',
+        show: !unref(isUpdate),
+        componentProps: { disabled: unref(isUpdate) },
+      },
+      {
         field: 'parentId',
         componentProps: { treeData, disabled: unref(isUpdate) },
       },
@@ -150,6 +155,11 @@
     const treeData = await doMenuTree({ topName: '默认' });
 
     updatePrivilegeSchema([
+      {
+        field: 'id',
+        show: !unref(isUpdate),
+        componentProps: { disabled: unref(isUpdate) },
+      },
       {
         field: 'menuId',
         componentProps: { treeData, disabled: unref(isUpdate) },
