@@ -34,22 +34,22 @@
     keepSource: true,
     showOverflow: true,
     //height: 'auto',
-    stripe:false,
+    stripe: false,
     //loading: true,
     editConfig: { trigger: 'click', mode: 'row', showStatus: true },
-    scrollY:{enabled: false},
-    rowConfig:{keyField: 'id'},
+    scrollY: { enabled: false },
+    rowConfig: { keyField: 'id' },
     checkboxConfig: { labelField: 'id' },
     treeConfig: {
       transform: false,
       accordion: true,
       rowField: 'id',
       parentField: 'parentId',
-      children:'children',
+      children: 'children',
     },
     proxyConfig: {
-      props:{
-        list:'data'
+      props: {
+        list: 'data',
       },
       ajax: {
         query: async ({ page, form }) => {
@@ -58,10 +58,10 @@
             pageSize: page.pageSize,
             ...form,
           });
-        }
+        },
       },
     },
-    pagerConfig:{
+    pagerConfig: {
       enabled: false,
     },
     toolbarConfig: {
@@ -147,7 +147,7 @@
 
   function getBasicColumns(): VxeGridPropTypes.Columns {
     return [
-    {
+      {
         title: '菜单编号',
         fixed: 'left',
         treeNode: true,
@@ -177,7 +177,6 @@
           },
         },
       },
-      
       {
         title: '图标',
         field: 'icon',
