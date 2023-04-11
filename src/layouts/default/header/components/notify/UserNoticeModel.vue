@@ -26,7 +26,7 @@
   import { doConfigDetail } from '/@/api/sys/config';
   import { MINIO_PATH } from '/@/enums/commonEnum';
   import { PublicNoticeEntity } from '/@/api/notice/model/publicNoticeModel';
-  import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
+  import { useWindowSizeFn } from '@vben/hooks';
   import { useLayoutHeight } from '/@/layouts/default/content/useContentViewHeight';
 
   const emit = defineEmits(['afterClose', 'register']);
@@ -43,8 +43,7 @@
     path: '',
   });
 
-  useWindowSizeFn(calcHeight, 150, { immediate: true });
-
+  useWindowSizeFn(calcHeight, { wait: 150 });
   const getWrapStyle = computed((): CSSProperties => {
     return {
       height: `${unref(heightRef) - 200}px`,
@@ -81,11 +80,11 @@
 </script>
 <style lang="less" scoped>
   .iframeClass {
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: @component-background;
     border: 0;
-    box-sizing: border-box;
+    background-color: @component-background;
   }
 </style>
