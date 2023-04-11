@@ -77,7 +77,7 @@
           {{ t('sys.login.qrSignInFormTitle') }}
         </Button>
       </ACol>
-      <ACol :md="7" :xs="24">
+      <ACol :md="6" :xs="24">
         <Button block @click="setLoginState(LoginStateEnum.REGISTER)">
           {{ t('sys.login.registerButton') }}
         </Button>
@@ -204,7 +204,7 @@
     } catch (error) {
       createErrorModal({
         title: t('sys.api.errorTip'),
-        content: error.message || t('sys.api.networkExceptionMsg'),
+        content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
         getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
       });
     } finally {

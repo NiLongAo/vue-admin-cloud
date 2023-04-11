@@ -60,36 +60,36 @@ export const useUserStore = defineStore({
     checkUrl: undefined,
   }),
   getters: {
-    getUserInfo(): UserInfo {
-      return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
+    getUserInfo(state): UserInfo {
+      return state.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
-    getToken(): string {
-      return this.token || getAuthCache<string>(TOKEN_KEY);
+    getToken(state): string {
+      return state.token || getAuthCache<string>(TOKEN_KEY);
     },
-    getRefreshToken(): string {
-      return this.refresh_token || getAuthCache<string>(REFRESH_TOKEN_KEY);
+    getRefreshToken(state): string {
+      return state.refresh_token || getAuthCache<string>(REFRESH_TOKEN_KEY);
     },
-    getRoleList(): Array<number> {
-      return this.roleList && this.roleList.length > 0
-        ? this.roleList
+    getRoleList(state): Array<number> {
+      return state.roleList && state.roleList.length > 0
+        ? state.roleList
         : getAuthCache<Array<number>>(ROLES_KEY);
     },
-    getAbilityList(): Array<string> {
-      return this.abilityList && this.abilityList.length > 0
+    getAbilityList(state): Array<string> {
+      return state.abilityList && state.abilityList.length > 0
         ? this.abilityList
         : getAuthCache<Array<string>>(ABILITY_KEY);
     },
-    getSessionTimeout(): boolean {
-      return !!this.sessionTimeout;
+    getSessionTimeout(state): boolean {
+      return !!state.sessionTimeout;
     },
-    getLastUpdateTime(): number {
-      return this.lastUpdateTime;
+    getLastUpdateTime(state): number {
+      return state.lastUpdateTime;
     },
-    getCheckUrl(): string | undefined {
-      return this.checkUrl;
+    getCheckUrl(state): string | undefined {
+      return state.checkUrl;
     },
-    getSearchTenant(): string | number | undefined {
-      return this.searchTenant;
+    getSearchTenant(state): string | number | undefined {
+      return state.searchTenant;
     },
   },
   actions: {

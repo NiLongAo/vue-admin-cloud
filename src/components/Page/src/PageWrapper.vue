@@ -33,9 +33,17 @@
   </div>
 </template>
 <script lang="ts">
-  import { CSSProperties, PropType, provide } from 'vue';
+  import {
+    CSSProperties,
+    PropType,
+    provide,
+    defineComponent,
+    computed,
+    watch,
+    ref,
+    unref,
+  } from 'vue';
 
-  import { defineComponent, computed, watch, ref, unref } from 'vue';
   import PageFooter from './PageFooter.vue';
 
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -148,7 +156,6 @@
       return {
         getContentStyle,
         wrapperRef,
-        contentHeight,
         headerRef,
         contentRef,
         footerRef,

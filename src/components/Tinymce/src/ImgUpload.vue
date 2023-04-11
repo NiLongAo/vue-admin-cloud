@@ -138,9 +138,9 @@
 
   .@{prefix-cls} {
     position: absolute;
+    z-index: 20;
     top: 4px;
     right: 10px;
-    z-index: 20;
 
     &.fullscreen {
       position: fixed;

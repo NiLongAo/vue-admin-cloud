@@ -50,8 +50,8 @@
   .@{prefix-cls} {
     .ant-input-group-addon {
       padding-right: 0;
-      background-color: transparent;
       border: none;
+      background-color: transparent;
 
       button {
         font-size: 14px;

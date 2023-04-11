@@ -20,7 +20,7 @@
   import { doMenuPage, doMenuRemove, doPrivilegeRemove } from '/@/api/sys/menu';
   import { h, ref, reactive } from 'vue';
   import { Tag } from 'ant-design-vue';
-  import { Icon } from '/@/components/Icon';
+  import Icon from '/@/components/Icon/Icon.vue';
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
   import { usePermission } from '/@/hooks/web/usePermission';
