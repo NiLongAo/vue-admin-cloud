@@ -8,10 +8,10 @@
 
 <script lang="ts" setup>
   import { ConfigProvider } from 'ant-design-vue';
-  import { AppProvider } from '/@/components/Application';
-  import { useTitle } from '/@/hooks/web/useTitle';
+  import { AppProvider } from '@/components/Application';
+  import { useTitle } from '@/hooks/web/useTitle';
   import { useSocket } from '/@/hooks/socket';
-  import { useLocale } from '/@/locales/useLocale';
+  import { useLocale } from '@/locales/useLocale';
 
   import 'dayjs/locale/zh-cn';
   // support Multi-language

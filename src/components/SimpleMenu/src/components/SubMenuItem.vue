@@ -78,7 +78,7 @@
   import Icon from '@/components/Icon/Icon.vue';
   import { Popover } from 'ant-design-vue';
   import { isBoolean, isObject } from '/@/utils/is';
-  import mitt from '/@/utils/mitt';
+  import { mitt } from '/@/utils/mitt';
 
   const DELAY = 200;
   export default defineComponent({

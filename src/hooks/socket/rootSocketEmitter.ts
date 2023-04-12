@@ -1,4 +1,4 @@
-import mitt from '/@/utils/mitt';
+import { mitt } from '/@/utils/mitt';
 
 const rootSocketEmitter = mitt();
 

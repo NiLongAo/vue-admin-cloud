@@ -13,6 +13,7 @@ import { AxiosCanceler } from './axiosCancel';
 import { isFunction } from '/@/utils/is';
 import { cloneDeep } from 'lodash-es';
 import { ContentTypeEnum, RequestEnum } from '/@/enums/httpEnum';
+import { omit } from 'lodash-es';
 
 export * from './axiosTransform';
 
