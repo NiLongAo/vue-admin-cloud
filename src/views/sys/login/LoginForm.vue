@@ -1,7 +1,7 @@
 <template>
   <LoginFormTitle v-show="getShow" class="enter-x" />
   <Form
-    class="p-4 enter-x"
+    :class=" `${prefixCls}-from p-4 enter-x`"
     :model="formData"
     :rules="getFormRules"
     ref="formRef"
@@ -212,3 +212,12 @@
     }
   }
 </script>
+<style lang="less">
+  @prefix-cls: ~'@{namespace}-login-from';
+  
+  .@{prefix-cls} {
+    .ant-input-group-addon {
+      padding: 0;
+    }
+  }
+</style>

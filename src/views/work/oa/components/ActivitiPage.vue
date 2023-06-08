@@ -2,6 +2,7 @@
   <Card
     :tab-list="tabListTitle"
     v-bind="$attrs"
+    :class="`${prefixCls} h-full`"
     :active-tab-key="tableRef.activeKey"
     @tabChange="onTabChange"
   >
@@ -25,8 +26,10 @@
   import { tabListTitle, tableDate } from './data';
   import { nextTick } from 'vue';
   import { useGo } from '/@/hooks/web/usePage';
+  import { useDesign } from '/@/hooks/web/useDesign';
   import { OAIndex } from '/@/api/oa/activiti';
   const go = useGo();
+  const { prefixCls } = useDesign('activiti');
 
   const tableRef = reactive({
     activeKey: 'need',
@@ -129,3 +132,12 @@
     handleSuccess();
   };
 </script>
+<style lang="less">
+  @prefix-cls: ~'@{namespace}-activiti';
+  
+  .@{prefix-cls} {
+    .ant-card-body {
+      padding: 0;
+    }
+  }
+</style>

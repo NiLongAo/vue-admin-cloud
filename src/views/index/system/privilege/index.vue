@@ -1,6 +1,6 @@
 <template>
   <PageWrapper ref="PageWrapperT" dense contentFullHeight fixedHeight>
-    <Row class="relative" :style="`height:` + state.rowHeightVal + `px`">
+    <Row class="relative h-full">
       <Col :span="5"> <PrivilegeTree @select="handleSelect" :tenant="state.tenant" /></Col>
       <Col :span="19">
         <PrivilegeCheckbox
@@ -13,12 +13,12 @@
     </Row>
   </PageWrapper>
 </template>
-<script ang="ts" setup>
+<script lang="ts" setup>
   import { PageWrapper } from '/@/components/Page';
   import { Row, Col } from 'ant-design-vue';
   import PrivilegeTree from './PrivilegeTree.vue';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
-  import { ref, unref, reactive, onMounted, nextTick } from 'vue';
+  import { ref, unref, reactive } from 'vue';
   import { doTenantMenuPrivilegeTree, doMenuPrivilegeTree } from '/@/api/sys/menu';
   import { useMessage } from '/@/hooks/web/useMessage';
   import {
@@ -33,7 +33,6 @@
   const { createMessage } = useMessage();
   const { error } = createMessage;
   const PageWrapperT = ref();
-  const rowHeight = ref();
   const treeData = ref();
   const checkedList = ref();
   const selectType = ref();
@@ -97,11 +96,4 @@
       await doRolePrivilegeSave({ roleId: unref(selectId), privilegeList: checkIdList });
     }
   };
-
-  onMounted(() => {
-    nextTick(() => {
-      const rowHeightEl = unref(rowHeight)?.$el;
-      state.rowHeightVal = unref(PageWrapperT).contentHeight - (rowHeightEl?.clientHeight || 0);
-    });
-  });
 </script>
