@@ -17,7 +17,7 @@ export default defineApplicationConfig({
     server: {
       proxy: {
         '/basic-api': {
-          target: 'https://www.nilongao.cn/basic-api',
+          target: 'https://www.nilongao.cn/basic-api',//http://192.168.1.26:9190
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(new RegExp(`^/basic-api`), ''),
