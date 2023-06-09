@@ -4,7 +4,7 @@
       toolbar
       search
       ref="asyncExpandTreeRef"
-      :fieldNames="{ key: 'channelId', title: 'name' }"
+      :fieldNames="{ key: 'id', title: 'name' }"
       :clickRowToExpand="false"
       :treeData="treeData"
       @select="handleSelect"
