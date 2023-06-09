@@ -1,6 +1,5 @@
 <template>
-  <div class="bg-white m-4 mr-0 overflow-hidden">
-    <BasicTree
+  <BasicTree
       title="设备通道"
       toolbar
       search
@@ -10,7 +9,6 @@
       :treeData="treeData"
       @select="handleSelect"
     />
-  </div>
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, unref } from 'vue';
