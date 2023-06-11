@@ -1,7 +1,7 @@
 <template>
-  <div :class="`${prefixCls} relative w-full h-full m-auto `"  id="containerRef" ref="containerRef">
+  <video :class="`${prefixCls} relative w-full h-full m-auto `" controls autoplay id="containerRef" ref="containerRef">
     Your browser is too old which doesn't support HTML5 video.
-  </div>
+  </video>
 </template>
 <script lang="ts" setup>
   import { isEmpty } from '/@/utils/is';
@@ -89,9 +89,7 @@
     if(isEmpty(stats.videoUrl)){
       stats.videoUrl =props.videoUrl;
     }
-    nextTick(()=>{
-      createVideoDom(stats.videoUrl);
-    });
+    createVideoDom(stats.videoUrl);
   }
   /**
    * 暂停 事件 false 暂停 true 继续
