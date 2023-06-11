@@ -21,9 +21,11 @@
 </template>
 <script lang="ts" setup>
   import { ref, unref, defineProps, watch } from 'vue';
-  import MyCheckBox, { CheckboxGroupEntity } from './MyCheckBox.vue';
+  import { CheckboxGroupEntity } from './model/privilege';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { ScrollContainer } from '/@/components/Container/index';
+  import MyCheckBox from './MyCheckBox.vue';
+
   const { hasPermission } = usePermission();
   const props = defineProps({
     treeData: {

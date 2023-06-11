@@ -50,20 +50,11 @@
 
 <script lang="ts" setup>
   import { Checkbox } from 'ant-design-vue';
-
+  import { CheckboxGroupEntity } from './model/privilege';
   import { defineProps, computed } from 'vue';
 
   const emit = defineEmits(['subset']);
 
-  interface CheckboxGroupEntity {
-    parentId?: string;
-    k: string;
-    type: number;
-    indeterminate?: boolean;
-    checked?: boolean;
-    v: string;
-    children: Array<CheckboxGroupEntity>;
-  }
 
   const props = defineProps({
     treeData: {
