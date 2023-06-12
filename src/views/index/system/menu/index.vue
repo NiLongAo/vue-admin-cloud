@@ -18,7 +18,7 @@
     VxeFormItemProps,
   } from '/@/components/VxeTable';
   import { doMenuPage, doMenuRemove, doPrivilegeRemove } from '/@/api/sys/menu';
-  import { h, ref, reactive } from 'vue';
+  import { h, ref,unref, reactive } from 'vue';
   import { Tag } from 'ant-design-vue';
   import Icon from '/@/components/Icon/Icon.vue';
   import { useDrawer } from '/@/components/Drawer';
@@ -91,6 +91,7 @@
   function handleAdd() {
     //3为权限  1丶2 为菜单
     openDrawer(true, { id: undefined, isUpdate: false });
+    unref(tableRef)?.commitProxy('reload');
   }
   function handleEdit(record: Recordable) {
     //3为权限  1丶2 为菜单
@@ -102,7 +103,7 @@
   }
   const handleSuccess = () => {
     //刷新表单
-    tableRef.value?.refreshColumn();
+    unref(tableRef)?.commitProxy('reload');
   };
 
   async function handleDelete(record: Recordable) {

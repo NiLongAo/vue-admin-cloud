@@ -28,7 +28,8 @@ export const TREE_TYPE_ENUM = 'TREE_TYPE_ENUM';
 export const GEO_COORD_SYS_TYPE_ENUM = 'GEO_COORD_SYS_TYPE_ENUM';
 //设备状态
 export const DEVICE_TYPE_ENUM = 'DEVICE_TYPE_ENUM';
-
+//云台类型
+export const PTZ_TYPE_ENUM = 'PTZ_TYPE_ENUM';
 
 //********************系统配置key********************** */
 /**

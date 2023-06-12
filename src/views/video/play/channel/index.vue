@@ -40,13 +40,13 @@
   import { TableAction } from '/@/components/Table';
   import { PageWrapper } from '/@/components/Page';
   import { usePermission } from '/@/hooks/web/usePermission';
-  import { computed, reactive,h ,ref} from 'vue';
+  import { computed, reactive,h ,ref,unref} from 'vue';
   import { useDrawer } from '/@/components/Drawer';
   import { Tag } from 'ant-design-vue';
   import { useSystemStore } from '/@/store/modules/system';
   import { useRoute } from 'vue-router';
-  import { DEVICE_TYPE_ENUM } from '/@/enums/commonEnum';
-  import { doDeviceChannelPage } from '/@/api/video/deviceChannel';
+  import { DEVICE_TYPE_ENUM,PTZ_TYPE_ENUM } from '/@/enums/commonEnum';
+  import { doDeviceChannelPage ,doDelDeviceChannel} from '/@/api/video/deviceChannel';
   import DeviceChannelDrawer from './DeviceChannelDrawer.vue';
 
   const tableRef = ref<VxeGridInstance>();
@@ -129,23 +129,28 @@
 
 
   function handleAdd() {
-    openDrawer(true, { id: undefined, isUpdate: false });
+    openDrawer(true, { 
+      deviceId:formData.deviceId,
+      channelId: undefined, 
+      isUpdate: false 
+    });
   }
   function handleEdit(record: Recordable) {
     openDrawer(true, {
-      deviceId: record.deviceId,
+      channelId: record.channelId,
+      deviceId:formData.deviceId,
       isUpdate: true,
     });
   }
   const handleSuccess = () => {
    //刷新表单
-   tableRef.value?.refreshColumn();
+   unref(tableRef)?.commitProxy('reload');
   };
   async function handleDelete(record: Recordable) {
     //删除
-    //await doDelDeviceId({ deviceId: record.deviceId });
+    await doDelDeviceChannel({ deviceId: record.deviceId ,channelId: record.channelId});
      //刷新表单
-   tableRef.value?.refreshColumn();
+    unref(tableRef)?.commitProxy('reload');
   }
 
   function getFormConfig(): VxeFormItemProps[] {
@@ -202,7 +207,7 @@
         width: 200,
       },
       {
-        title: '通道名',
+        title: '通道名称',
         field: 'name',
         width: 100,
       },
@@ -221,7 +226,47 @@
         },
       },
       {
-        title: '生产厂商',
+        title: '音频状态',
+        field: 'hasAudio',
+        width: 100,
+        slots: {
+          default: ({ row }) => {
+            const status = row.hasAudio;
+            const enable = ~~status === 1;
+            const color = enable ? 'green' : 'red';
+            const text = enable ? '开启' : '关闭';
+            return h(Tag, { color: color }, () => text);
+          },
+        },
+      },
+      {
+        title: '云台类型',
+        field: 'ptzType',
+        width: 100,
+        slots: {
+          default: ({row})=>{
+            const template = systemStore.getDictMap[PTZ_TYPE_ENUM];
+            return h(Tag, { color: 'green' }, () => template[row.ptzType]);
+          },
+        },
+      },
+      {
+        title: '位置',
+        field: 'longitude',
+        width: 150,
+        slots: {
+          default: ({row})=>{
+            return row.latitude+','+row.longitude
+          },
+        },
+      },
+      {
+        title: '安装地址',
+        field: 'address',
+        width: 100,
+      },
+      {
+        title: '厂商',
         field: 'manufacture',
         width: 150,
       },
@@ -234,21 +279,6 @@
         title: '设备归属',
         field: 'owner',
         width: 150,
-      },
-      {
-        title: '行政区域',
-        field: 'civilCode',
-        width: 100,
-      },
-      {
-        title: '警区',
-        field: 'block',
-        width: 100,
-      },
-      {
-        title: '安装地址',
-        field: 'address',
-        width: 100,
       },
       {
         minWidth:100,

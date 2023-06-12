@@ -17,32 +17,28 @@
   import { ref, computed, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM,GEO_COORD_SYS_TYPE_ENUM,STREAM_MODE_TYPE_ENUM} from '/@/enums/commonEnum';
+  import { PTZ_TYPE_ENUM } from '/@/enums/commonEnum';
   import { useSystemStore } from '/@/store/modules/system';
-  import { doFindDeviceId,doSaveDevice } from '/@/api/video/device';
+  import { doDetailDeviceChannel,doSaveDeviceChannel } from '/@/api/video/deviceChannel';
 
   const emit = defineEmits(['success', 'register']);
   const isUpdate = ref(true);
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增设备' : '编辑设备'));
+  const getTitle = computed(() => (!unref(isUpdate) ? '新增通道' : '编辑通道'));
   const systemStore = useSystemStore();
 
 
   const handleOk = async () => {
     try {
-      const { ssrcCheck, asMessageChannel, ...values } = await validate();
+      const {...values } = await validate();
       if (!unref(isUpdate)) {
         //新增
-        await doSaveDevice({
-            ...values,
-            ssrcCheck: ssrcCheck === true ? 1 : 0,
-            asMessageChannel: asMessageChannel === true ? 1 : 0,
+        await doSaveDeviceChannel({
+            ...values
           });
       } else {
         //修改
-        await doSaveDevice({
-          ...values,
-          ssrcCheck: ssrcCheck === true ? 1 : 0,
-          asMessageChannel: asMessageChannel === true ? 1 : 0,
+        await doSaveDeviceChannel({
+          ...values
         });
       }
       setDrawerProps({ confirmLoading: true });
@@ -53,40 +49,8 @@
     }
   };
 
-  const transportTypes = computed(() => {
-    const template = systemStore.getDictMap[TRANSPORT_TYPE_ENUM];
-    const types = [] as any;
-    Object.keys(template).forEach((key) => {
-      types.push({ label: template[key], value: Number(key), key: Number(key) });
-    });
-    return types;
-  });
-  const charsetTypes = computed(() => {
-    const template = systemStore.getDictMap[CHARSET_TYPE_ENUM];
-    const types = [] as any;
-    Object.keys(template).forEach((key) => {
-      types.push({ label: template[key], value: Number(key), key: Number(key) });
-    });
-    return types;
-  });
-  const treeTypes = computed(() => {
-    const template = systemStore.getDictMap[TREE_TYPE_ENUM];
-    const types = [] as any;
-    Object.keys(template).forEach((key) => {
-      types.push({ label: template[key], value: Number(key), key: Number(key) });
-    });
-    return types;
-  });
-  const geoCoordSysTypes = computed(() => {
-    const template = systemStore.getDictMap[GEO_COORD_SYS_TYPE_ENUM];
-    const types = [] as any;
-    Object.keys(template).forEach((key) => {
-      types.push({ label: template[key], value: Number(key), key: Number(key) });
-    });
-    return types;
-  });
-  const streamModeTypes = computed(() => {
-    const template = systemStore.getDictMap[STREAM_MODE_TYPE_ENUM];
+  const ptzTypes = computed(() => {
+    const template = systemStore.getDictMap[PTZ_TYPE_ENUM];
     const types = [] as any;
     Object.keys(template).forEach((key) => {
       types.push({ label: template[key], value: Number(key), key: Number(key) });
@@ -96,197 +60,83 @@
   
   const schemasDevice: FormSchema[] = [
     {
-      field: 'id',
-      show: false,
+      field: 'parentId',
       component: 'Input',
-      label: '编号',
+      label: '父级编号',
       colProps: {
         span: 12,
       },
+      componentProps:{
+        disabled:true,
+      }
     },
     {
       field: 'deviceId',
       component: 'Input',
-      label: '设备国标编号',
+      label: '设备编号',
+      colProps: {
+        span: 12,
+      },
+      componentProps:{
+        disabled:true,
+      }
+    },
+    {
+      field: 'channelId',
+      component: 'Input',
+      label: '通道国标编号',
       colProps: {
         span: 12,
       },
       required: true,
+    },
+    {
+      field: 'civilCode',
+      component: 'Input',
+      label: '行政区域',
+      colProps: {
+        span: 12,
+      },
     },
     {
       field: 'name',
       component: 'Input',
-      label: '设备名',
+      label: '通道名',
       colProps: {
         span: 12,
       },
-      required: true,
     },
     {
-      field: 'transport',
+      field: 'address',
+      component: 'Input',
+      label: '安装地址',
+      colProps: {
+        span: 12,
+      },
+    },
+    {
+      field: 'ptzType',
       component: 'Select',
-      label: '传输协议',
+      label: '云台类型',
       colProps: {
         span: 12,
       },
       componentProps: {
-        options: transportTypes,
+        options: ptzTypes,
       },
       required: true,
-      defaultValue: 1,
+      defaultValue:0
     },
     {
       field: 'password',
       component: 'Input',
-      label: '设备密码',
-      colProps: {
-        span: 12,
-      },
-    },
-    {
-      field: 'sdpIp',
-      component: 'Input',
-      label: '收流IP',
-      colProps: {
-        span: 12,
-      },
-    },
-    {
-      field: 'charset',
-      component: 'Select',
-      label: '字符集',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        options: charsetTypes,
-      },
-      defaultValue: 2,
-      required: true,
-    },
-    {
-      field: 'treeType',
-      component: 'Select',
-      label: '设备类型',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        options: treeTypes,
-      },
-      defaultValue: 215,
-      required: true,
-    },
-    {
-      field: 'geoCoordSys',
-      component: 'Select',
-      label: '地理坐标系',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        options: geoCoordSysTypes,
-      },
-      defaultValue: 1,
-      required: true,
-    },
-    {
-      field: 'streamMode',
-      component: 'Select',
-      label: '数据流传输模式',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        options: streamModeTypes,
-      },
-      defaultValue: 1,
-      required: true,
-    },
-    {
-      field: 'keepaliveIntervalTime',
-      component: 'InputNumber',
-      label: '心跳间隔(s)',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        min: 30,
-      },
-      defaultValue: 30,
-      required: true,
-    },
-    {
-      field: 'mobilePositionSubmissionInterval',
-      component: 'InputNumber',
-      label: '位置上报周期(s)',
+      label: '密码',
       colProps: {
         span: 12,
       },
       componentProps: {
         min: 0,
       },
-      defaultValue: 0,
-      required: true,
-    },
-    {
-      field: 'subscribeCycleForCatalog',
-      component: 'InputNumber',
-      label: '目录订阅周期(s)',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        min: 0,
-      },
-      defaultValue: 0,
-      required: true,
-    },
-    {
-      field: 'subscribeCycleForMobilePosition',
-      component: 'InputNumber',
-      label: '位置订阅周期(s)',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        min: 0,
-      },
-      defaultValue: 0,
-      required: true,
-    },
-    {
-      field: 'subscribeCycleForAlarm',
-      component: 'InputNumber',
-      label: '报警订阅周期(s)',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        min: 0,
-      },
-      defaultValue: 0,
-      required: true,
-    },
-    {
-      field: 'ssrcCheck',
-      component: 'Switch',
-      label: '开启ssrc校验',
-      colProps: {
-        span: 12,
-      },
-      defaultValue: false,
-      required: true,
-    },
-    {
-      field: 'asMessageChannel',
-      component: 'Switch',
-      label: '是否为消息通道',
-      colProps: {
-        span: 12,
-      },
-      defaultValue: false,
-      required: true,
     },
   ];
 
@@ -296,19 +146,22 @@
     showActionButtonGroup: false,
   });
 
-    //初始化页面
-    const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
-    resetFields();
-    setDrawerProps({ confirmLoading: false });
-    isUpdate.value = !!data?.isUpdate;
-    if (unref(isUpdate)) {
-      const { ssrcCheck,asMessageChannel, ...entity } = await doFindDeviceId({ deviceId: data.deviceId });
-      setFieldsValue({
-        ...entity,
-        ssrcCheck: ssrcCheck === true ? 1 : 0,
-        asMessageChannel: asMessageChannel === true ? 1 : 0,
-      });
-    }
+  //初始化页面
+  const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+  resetFields();
+  setDrawerProps({ confirmLoading: false });
+  isUpdate.value = !!data?.isUpdate;
+  if (unref(isUpdate)) {
+    const {  ...entity } = await doDetailDeviceChannel({ channelId: data.channelId });
+    setFieldsValue({
+      ...entity
+    });
+  }else{
+    setFieldsValue({
+      parentId:data.deviceId,
+      deviceId:data.deviceId,
+    });
+  }
   });
 
 </script>
