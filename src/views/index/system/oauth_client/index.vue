@@ -2,11 +2,7 @@
   <div>
     <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox' }">
       <template #authorizedType="{ record }">
-        <Tag
-          v-for="(item, index) in record.authorizedGrantTypes.split(',')"
-          :key="index"
-          color="green"
-        >
+        <Tag :key="index"  color="green" v-for ="(item, index) in (record.authorizedGrantTypes.split(','))">
           {{ systemStore.getDictMap[DITE_AUTHORIZED_KEY][item] }}
         </Tag>
       </template>

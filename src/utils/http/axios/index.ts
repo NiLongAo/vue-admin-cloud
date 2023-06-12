@@ -110,7 +110,7 @@ const transform: AxiosTransform = {
     const params = config.params || {};
     const data = config.data || false;
     formatDate && data && !isString(data) && formatRequestDate(data);
-    if (config.method?.toUpperCase() === RequestEnum.GET) {
+    if (config.method?.toUpperCase() === RequestEnum.GET || config.method?.toUpperCase() === RequestEnum.DELETE) {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
         config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));

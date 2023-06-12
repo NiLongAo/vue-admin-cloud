@@ -16,7 +16,7 @@
         <div :class="`inline-grid ${state.num===4?'grid-cols-2':state.num===9?'grid-cols-3':''}  gap-0.5 w-full h-full`" >
           <div :class="`bg-black border-2 ${state.checkIndex ===i?' border-pink-700':''} flex items-center`" v-for="i in state.num" @click="checkVideo(i)">
               <p v-if="isEmpty(state.videoUrl[i-1])" class="w-full text-center font-semibold text-xl m-0 text-gray-50">{{i}}</p>
-              <VideoZlmRtcPlay v-else :videoUrl="state.videoUrl[i-1]"/>
+              <VideoJessibucaPlay v-else :videoUrl="state.videoUrl[i-1]"/>
           </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
 <script lang="ts" setup>
   import { useDesign } from '/@/hooks/web/useDesign';
   import { PageWrapper } from '/@/components/Page';
-  import { VideoDeviceChannelTree ,VideoJessibucaPlay,VideoZlmRtcPlay} from '/@/components/Video';
+  import { VideoDeviceChannelTree ,VideoJessibucaPlay} from '/@/components/Video';
   import Icon from '@/components/Icon/Icon.vue';
   import { doPlayStart } from '/@/api/video/paly';
   import { isEmpty } from '/@/utils/is';
