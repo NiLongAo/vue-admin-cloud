@@ -6,6 +6,18 @@
           :actions="[
             {
               ifShow: hasPermission('system.tenant:update'),
+              tooltip: '播放',
+              icon: 'ic-outline-play-circle',
+              onClick: handlePlay.bind(null, row),
+            },
+            {
+              ifShow: hasPermission('system.tenant:update'),
+              tooltip: '历史回放',
+              icon: 'ic-round-history',
+              onClick: handlePlay.bind(null, row),
+            },
+            {
+              ifShow: hasPermission('system.tenant:update'),
               tooltip: '编辑',
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, row),
@@ -25,6 +37,7 @@
       </template>
     </VxeBasicTable>
     <DeviceChannelDrawer @register="register" @success="handleSuccess" />
+    <PlayModel @register="registerModal" />
   </PageWrapper>
 </template>
 
@@ -42,12 +55,14 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import { computed, reactive,h ,ref,unref} from 'vue';
   import { useDrawer } from '/@/components/Drawer';
+  import { useModal } from '/@/components/Modal';
   import { Tag } from 'ant-design-vue';
   import { useSystemStore } from '/@/store/modules/system';
   import { useRoute } from 'vue-router';
   import { DEVICE_TYPE_ENUM,PTZ_TYPE_ENUM } from '/@/enums/commonEnum';
   import { doDeviceChannelPage ,doDelDeviceChannel} from '/@/api/video/deviceChannel';
   import DeviceChannelDrawer from './DeviceChannelDrawer.vue';
+  import {PlayModel} from '/@/components/Video/index';
 
   const tableRef = ref<VxeGridInstance>();
   const { hasPermission } = usePermission();
@@ -66,6 +81,7 @@
     return types;
   });
   const [register, { openDrawer }] = useDrawer();
+  const [registerModal, { openModal }] = useModal();
 
   const gridOptions = reactive<BasicTableProps>({
     id: 'VxeTable',
@@ -126,7 +142,10 @@
     },
     columns: getBasicColumns(),
   });
-
+  //播放
+  const handlePlay = (deviceId:string,channelId:string)=>{
+    openModal(true, null);
+  }
 
   function handleAdd() {
     openDrawer(true, { 
