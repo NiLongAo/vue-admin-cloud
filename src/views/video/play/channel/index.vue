@@ -14,7 +14,7 @@
               ifShow: hasPermission('system.tenant:update'),
               tooltip: '历史回放',
               icon: 'ic-round-history',
-              onClick: handlePlay.bind(null, row),
+              onClick: handleRecord.bind(null, row),
             },
             {
               ifShow: hasPermission('system.tenant:update'),
@@ -60,6 +60,7 @@
   import { useSystemStore } from '/@/store/modules/system';
   import { useRoute } from 'vue-router';
   import { DEVICE_TYPE_ENUM,PTZ_TYPE_ENUM } from '/@/enums/commonEnum';
+  import { doPlayStart} from '/@/api/video/paly';
   import { doDeviceChannelPage ,doDelDeviceChannel} from '/@/api/video/deviceChannel';
   import DeviceChannelDrawer from './DeviceChannelDrawer.vue';
   import {PlayModel} from '/@/components/Video/index';
@@ -143,10 +144,14 @@
     columns: getBasicColumns(),
   });
   //播放
-  const handlePlay = (deviceId:string,channelId:string)=>{
-    openModal(true, null);
+  const handlePlay = async(data)=>{
+    //const values = await doPlayStart({ deviceId:data.deviceId,channelId:data.channelId});
+    openModal(true, {});
   }
-
+  //历史回放
+  const handleRecord = (data) =>{
+    go('/video/play/record/'+data.deviceId+'/'+data.channelId);
+  }
   function handleAdd() {
     openDrawer(true, { 
       deviceId:formData.deviceId,

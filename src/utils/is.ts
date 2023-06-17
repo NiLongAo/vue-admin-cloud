@@ -15,6 +15,9 @@ export function isUnDef<T = unknown>(val?: T): val is T {
 export function isObject(val: any): val is Record<any, any> {
   return val !== null && is(val, 'Object');
 }
+export function isNotEmpty(val: any): val is Record<any, any> {
+  return !isEmpty(val);
+}
 
 export function isEmpty<T = unknown>(val: T): val is T {
   if (isArray(val) || isString(val)) {
