@@ -1,9 +1,9 @@
 <template>
   <PageWrapper dense fixedHeight contentFullHeight  @back="goBack" :title="`国标录像：` + stats.deviceId +`/`+stats.channelId">
     <div :class="`${prefixCls} flex flex-row h-full`">
-      <div :class="`${prefixCls}-left bg-white w-66 my-4 ml-4 flex flex-col`">
+      <div :class="`${prefixCls}-left bg-white w-66 my-4 ml-4 flex flex-col min-w-60`">
         <div>
-          <DatePicker v-model:value="stats.recodeDate" @change="onDatePickerChange"/>
+          <DatePicker :class="`${prefixCls}-left-date-picker`" v-model:value="stats.recodeDate" value-format="YYYY-MM-DD" @change="onDatePickerChange"/>
         </div>
         <div :class="`${prefixCls}-left-list grow`" class="" v-if="stats.recordDateList.length > 0" >
           <List class="h-full" size="small" bordered :dataSource="stats.recordDateList">
@@ -16,21 +16,32 @@
           <span class="text-xl font-medium text-stone-400">暂无数据</span>
         </div>
       </div>
-      <div :class="`${prefixCls}-righ grow flex flex-col m-4 space-y-2 `">
+      <div :class="`${prefixCls}-righ grow flex flex-col m-4 space-y-2 min-w-240`">
           <div :class="`${prefixCls}-right-top grow bg-black`">
             <VideoJessibucaPlay :videoUrl="stats.videoUrl"/>
           </div>
-          <div :class="`${prefixCls}-right-bom h-30 bg-white px-6 flex items-center `">
-              <div class="w-full">
+          <div :class="`${prefixCls}-right-bom h-30 bg-white px-6 flex flex-col `">
+              <div class="h-15 w-full flex items-center">
+                <TimeRangePicker 
+                v-model:value="stats.rangePickerDate" 
+                value-format="HH:mm:ss" 
+                size="small"
+                :disabledTime="disabledTime"
+                />
+              </div>
+              <div class="h-15 w-full flex items-center ">
                 <Slider 
-                  v-model:value="sliderDate"
+                  v-model:value="stats.sliderDate"
+                  class="w-full"
                   range
                   :disabled="(isEmpty(stats.recordDateList)?true:false)"
-                  :marks="stats.marks" 
+                  :marks="stats.marks"
                   :min="stats.minSliderDate" 
                   :max="stats.maxSliderDate" 
-                  :tipFormatter="tipFormatter"
+                  tooltip-placement="bottom"
                   :tooltip-visible="true"
+                  :tipFormatter="tipFormatter"
+                  @change="changeSlider"
                 />
               </div>
           </div>
@@ -40,9 +51,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { DatePicker,Slider,List,ListItem,Tag} from 'ant-design-vue';
+  import { DatePicker,Slider,List,ListItem,Tag,TimeRangePicker} from 'ant-design-vue';
   import { useRoute } from 'vue-router';
-  import { reactive,ref,onMounted} from 'vue';
+  import { reactive,onMounted} from 'vue';
   import { useGo } from '/@/hooks/web/usePage';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { PageWrapper } from '/@/components/Page';
@@ -51,21 +62,20 @@
   import { RecordItem } from '/@/api/video/model/recordModel';
   import { VideoJessibucaPlay } from  '/@/components/Video/index';
   import { 
-    stringToTime,
     formatToDateTime,
     stringToFormatString,
     formatToDate,
     tipFormatter,
     stringFormatTime,
     DATE_TIME_FORMAT,
-    DATE_FORMAT,DATE_TIME
+    DATE_FORMAT,
+    DATE_TIME
   } from '/@/utils/dateUtil';
 
-
+  import { debounce } from 'lodash-es';
   const { prefixCls } = useDesign('video-record-play');
   const go = useGo();
   const route = useRoute();
-  const sliderDate = ref<number[] | any>([0,86400]);
   const stats = reactive({
     deviceId: route.params?.deviceId as string,
     channelId: route.params?.channelId as string,
@@ -73,6 +83,8 @@
     clickListItme:"",//选中的录像数据列表key 处理选中状态
     recodeDate: null as any,//查询录像时间
     recordDateList:[] as Array<RecordItem>,//返回录像数据列表
+    sliderDate:[0,86399]  as any,//滑块默认时间
+    rangePickerDate:['00:00:00','23:59:59']  as any,//时间范围选择器 时间
     minSliderDate:0,//最小滑块值
     maxSliderDate:86400,//最大滑块值
     //视频相关
@@ -112,16 +124,47 @@
   }
   //选择录像时间段
   const listItemClick = (item:RecordItem) =>{
-    stats.clickListItme=item.recorderId;
-    handleTime(item.startTime,item.endTime);
+    let startTime ,endTime;
+    if(stats.clickListItme === item.recorderId){
+      stats.clickListItme = "";
+      startTime = 0;
+      endTime = 86399;
+    }else{
+      stats.clickListItme = item.recorderId;
+      startTime = stringFormatTime(item.startTime);
+      endTime = stringFormatTime(item.endTime);
+    }
+    stats.minSliderDate=startTime;
+    stats.maxSliderDate=endTime;
+    handleTime(startTime,endTime);
     //触发播放事件
-    
   }
-  //触发时间相关事件(YYYY-MM-DD hh-mm-ss)
-  const handleTime = async (startTime:string,endTime:string) =>{
-    const start = await stringFormatTime(startTime)
-    const end = await stringFormatTime(endTime)
-    sliderDate.value=[start,end];
+  //触发滑块播放事件 0坐标 开始时间 1坐标 结束时间 debounce防抖动函数
+  const changeSlider = debounce((val:[] | any)=>{
+    const date = formatToDateTime(stats.recodeDate,DATE_FORMAT);
+    const startTime = date+' '+tipFormatter(val[0]);
+    const endTime = date+' '+tipFormatter(val[1]);
+    //触发播放事件 //延迟执行
+  },1000)
+  const disabledTime =(_val,type)=>{
+    // 将当前可选的时间转换为秒数
+    console.log(type);
+    const min = tipFormatter(stats.minSliderDate);
+    const max = tipFormatter(stats.maxSliderDate);
+    const minList= min?.split(':') as Array<String>;
+    const maxList= max?.split(':') as Array<String>;
+    return {
+      disabledHours: () =>[...Array.from({ length: Number(minList[0]) }, (_, i) => i),...Array.from({ length: 24 - Number(maxList[0]) + 1 }, (_, i) => Number(maxList[0]) + i)],
+      //disabledMinutes: () => [...Array(Number(minList[1])).keys()],
+      //disabledSeconds: () => [...Array(Number(minList[2])).keys()],
+    };
+  }
+
+  //触发时间相关事件(hh-mm-ss)
+  const handleTime = async (startTime:number,endTime:number) =>{
+    stats.sliderDate=[startTime,endTime];
+
+    stats.rangePickerDate=[tipFormatter(startTime),tipFormatter(endTime)];
   }
 
   //获取录像信息请求接口
@@ -163,7 +206,7 @@
   }
 
   onMounted( async()=>{
-    stats.recodeDate = stringToTime(formatToDateTime(),DATE_FORMAT);
+    stats.recodeDate = formatToDateTime();
     onDatePickerChange(null,formatToDate());
   })
   
@@ -174,6 +217,11 @@
   &-left{
     .ant-picker{
       width: 100%;
+    }
+    &-date-picker{
+      .ant-picker-input input{
+        text-align: center;
+      }
     }
     &-list{
       .ant-tag{

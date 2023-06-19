@@ -305,7 +305,7 @@
         width: 150,
       },
       {
-        minWidth:100,
+        minWidth:160,
         title: '操作',
         align: 'center',
         slots: { default: 'action' },
