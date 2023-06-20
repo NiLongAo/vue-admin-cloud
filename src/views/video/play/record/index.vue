@@ -73,6 +73,7 @@
   } from '/@/utils/dateUtil';
 
   import { debounce } from 'lodash-es';
+import { array } from 'vue-types';
   const { prefixCls } = useDesign('video-record-play');
   const go = useGo();
   const route = useRoute();
@@ -146,24 +147,50 @@
     const endTime = date+' '+tipFormatter(val[1]);
     //触发播放事件 //延迟执行
   },1000)
-  const disabledTime =(_val,type)=>{
-    // 将当前可选的时间转换为秒数
-    console.log(type);
-    const min = tipFormatter(stats.minSliderDate);
-    const max = tipFormatter(stats.maxSliderDate);
-    const minList= min?.split(':') as Array<String>;
-    const maxList= max?.split(':') as Array<String>;
+  //时间区域限制
+  const disabledTime = (date, type) => {
+    const val = formatToDateTime(stats.recodeDate,DATE_FORMAT);
+    //取值只能去在开始丶结束时间之间
+    const startTime = val+' '+tipFormatter(stats.sliderDate[0]);//开始时间
+    const endTime = val+' '+tipFormatter(stats.sliderDate[1]);//结束时间
     return {
-      disabledHours: () =>[...Array.from({ length: Number(minList[0]) }, (_, i) => i),...Array.from({ length: 24 - Number(maxList[0]) + 1 }, (_, i) => Number(maxList[0]) + i)],
-      //disabledMinutes: () => [...Array(Number(minList[1])).keys()],
-      //disabledSeconds: () => [...Array(Number(minList[2])).keys()],
-    };
+        disabledHours: () => {
+          const startHour = new Date(startTime).getHours();
+          const endHour = new Date(endTime).getHours();
+          return [...Array(24).keys()].filter(h => h < startHour || h > endHour);
+        },
+        disabledMinutes: (hour) => {
+          const startMinute = new Date(startTime).getMinutes();
+          const endMinute = new Date(endTime).getMinutes();
+          let disabled1 = [] as Array<number>;
+          let disabled2 = [] as Array<number>;
+          if (hour === new Date(startTime).getHours()) {
+            disabled1 = [...Array(60).keys()].filter(m => m < startMinute || m >= 60);
+          }
+          if (hour === new Date(endTime).getHours()) {
+            disabled2 = [...Array(60).keys()].filter(m => m > endMinute);
+          }
+          return [...disabled1,...disabled2];
+        },
+        disabledSeconds: (hour,minute) => {
+          const startSecond = new Date(startTime).getSeconds();
+          const endSecond = new Date(endTime).getSeconds();
+          let disabled1 = [] as Array<number>;
+          let disabled2 = [] as Array<number>;
+          if (minute === new Date(startTime).getMinutes() && hour === new Date(startTime).getHours() ) {
+            disabled1 = [...Array(60).keys()].filter(s => s < startSecond || s >= 60);
+          }
+          if (minute === new Date(endTime).getMinutes() && hour === new Date(endTime).getHours() ) {
+            disabled2 = [...Array(60).keys()].filter(m => m > endSecond);
+          }
+          return [...disabled1,...disabled2];
+        },
+      };
   }
 
   //触发时间相关事件(hh-mm-ss)
   const handleTime = async (startTime:number,endTime:number) =>{
     stats.sliderDate=[startTime,endTime];
-
     stats.rangePickerDate=[tipFormatter(startTime),tipFormatter(endTime)];
   }
 
