@@ -21,15 +21,32 @@
             <VideoJessibucaPlay :videoUrl="stats.videoUrl"/>
           </div>
           <div :class="`${prefixCls}-right-bom h-30 bg-white px-6 flex flex-col `">
-              <div class="h-15 w-full flex items-center">
+              <div class="h-10 w-full flex items-center justify-center">
                 <TimeRangePicker 
-                v-model:value="stats.rangePickerDate" 
-                value-format="HH:mm:ss" 
-                size="small"
-                :disabledTime="disabledTime"
+                  v-model:value="stats.rangePickerDate" 
+                  value-format="HH:mm:ss"
+                  size="small"
+                  :disabledTime="disabledTime"
                 />
+                <ButtonGroup>
+                  <Button size="small" @click="handleRecordPlay">播放</Button>
+                  <Button size="small" @click="handleRecordPause">暂停</Button>
+                  <Dropdown>
+                    <template #overlay>
+                      <Menu @click="handleRecordScale">
+                        <MenuItem key="0.25">0.25倍速</MenuItem>
+                        <MenuItem key="0.5">0.5倍速</MenuItem>
+                        <MenuItem key="1.0">1倍速</MenuItem>
+                        <MenuItem key="2.0">2倍速</MenuItem>
+                        <MenuItem key="4.0">4倍速</MenuItem>
+                      </Menu>
+                    </template>
+                    <Button size="small">倍速</Button>
+                  </Dropdown>
+                  <Button size="small" @click="handleRecordDownload">下载录像</Button>
+                </ButtonGroup>
               </div>
-              <div class="h-15 w-full flex items-center ">
+              <div class="h-20 w-full flex items-center ">
                 <Slider 
                   v-model:value="stats.sliderDate"
                   class="w-full"
@@ -51,9 +68,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { DatePicker,Slider,List,ListItem,Tag,TimeRangePicker} from 'ant-design-vue';
+  import { DatePicker,Slider,List,ListItem,Tag,TimeRangePicker,ButtonGroup,Button,Dropdown,Menu,MenuItem} from 'ant-design-vue';
   import { useRoute } from 'vue-router';
-  import { reactive,onMounted} from 'vue';
+  import { reactive,onMounted,watch} from 'vue';
   import { useGo } from '/@/hooks/web/usePage';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { PageWrapper } from '/@/components/Page';
@@ -73,7 +90,6 @@
   } from '/@/utils/dateUtil';
 
   import { debounce } from 'lodash-es';
-import { array } from 'vue-types';
   const { prefixCls } = useDesign('video-record-play');
   const go = useGo();
   const route = useRoute();
@@ -142,17 +158,15 @@ import { array } from 'vue-types';
   }
   //触发滑块播放事件 0坐标 开始时间 1坐标 结束时间 debounce防抖动函数
   const changeSlider = debounce((val:[] | any)=>{
-    const date = formatToDateTime(stats.recodeDate,DATE_FORMAT);
-    const startTime = date+' '+tipFormatter(val[0]);
-    const endTime = date+' '+tipFormatter(val[1]);
-    //触发播放事件 //延迟执行
-  },1000)
+    handleTime(val[0],val[1]);
+    //触发播放事件
+    
+  },500)
   //时间区域限制
   const disabledTime = (date, type) => {
-    const val = formatToDateTime(stats.recodeDate,DATE_FORMAT);
     //取值只能去在开始丶结束时间之间
-    const startTime = val+' '+tipFormatter(stats.sliderDate[0]);//开始时间
-    const endTime = val+' '+tipFormatter(stats.sliderDate[1]);//结束时间
+    const startTime = stats.recodeDate+' '+tipFormatter(stats.sliderDate[0]);//开始时间
+    const endTime = stats.recodeDate+' '+tipFormatter(stats.sliderDate[1]);//结束时间
     return {
         disabledHours: () => {
           const startHour = new Date(startTime).getHours();
@@ -186,6 +200,29 @@ import { array } from 'vue-types';
           return [...disabled1,...disabled2];
         },
       };
+  }
+  //监听事件范围选择框值是否改变
+  watch(
+    () => stats.rangePickerDate,
+    () => {
+      handleTime(stringFormatTime(stats.rangePickerDate[0],DATE_TIME),stringFormatTime(stats.rangePickerDate[1],DATE_TIME));
+    }
+  );
+  //播放事件
+  const handleRecordPlay = () =>{
+    
+  }
+  //暂停事件
+  const handleRecordPause = () =>{
+    
+  }
+  //倍速事件
+  const handleRecordScale = (val) =>{
+    
+  }
+  //下载事件
+  const handleRecordDownload = () =>{
+    
   }
 
   //触发时间相关事件(hh-mm-ss)
@@ -233,7 +270,7 @@ import { array } from 'vue-types';
   }
 
   onMounted( async()=>{
-    stats.recodeDate = formatToDateTime();
+    stats.recodeDate = formatToDateTime(new Date(),DATE_FORMAT);
     onDatePickerChange(null,formatToDate());
   })
   

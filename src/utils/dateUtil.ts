@@ -32,10 +32,13 @@ export function stringToTime(date: string | undefined = undefined, format = DATE
 }
 
 //将字符串时间转化为 时分秒 时间戳
-export function stringFormatTime(val:string,format = DATE_TIME_FORMAT):number{
-  const timeString = dayjs(val).startOf('day');
-  const seconds =  dayjs(val).diff(timeString,'second');
-  return seconds;
+export function stringFormatTime(date:string,format = DATE_TIME_FORMAT):number{
+  const obj = stringToTime(date, format);
+  const hour = obj.hour();
+  const minute = obj.minute();
+  const second = obj.second();
+  const timestamp = hour * 3600 + minute * 60 + second;
+  return timestamp;
 }
 
 //将时分秒时间戳转化为字符串小时时间
