@@ -29,8 +29,8 @@
                   :disabledTime="disabledTime"
                 />
                 <ButtonGroup>
-                  <Button size="small" @click="handleRecordPlay">播放</Button>
-                  <Button size="small" @click="handleRecordPause">暂停</Button>
+                  <Button size="small" :disabled="(isEmpty(stats.streamId)?false:true)" @click="handleRecordPlay">播放</Button>
+                  <Button size="small" :disabled="(isEmpty(stats.streamId)?true:false)" @click="handleRecordPause">暂停</Button>
                   <Dropdown>
                     <template #overlay>
                       <Menu @click="handleRecordScale">
@@ -41,15 +41,15 @@
                         <MenuItem key="4.0">4倍速</MenuItem>
                       </Menu>
                     </template>
-                    <Button size="small">倍速</Button>
+                    <Button :disabled="(isEmpty(stats.streamId)?true:false)" size="small">倍速</Button>
                   </Dropdown>
-                  <Button size="small" @click="handleRecordDownload">下载录像</Button>
+                  <Button :disabled="(isEmpty(stats.streamId)?true:false)" size="small" @click="handleRecordDownload">下载录像</Button>
                 </ButtonGroup>
               </div>
-              <div class="h-20 w-full flex items-center ">
+              <div class="h-20 w-full flex items-center relative ">
                 <Slider 
                   v-model:value="stats.sliderDate"
-                  class="w-full"
+                  :class="`${prefixCls}-right-bom-slide`"
                   range
                   :disabled="(isEmpty(stats.recordDateList)?true:false)"
                   :marks="stats.marks"
@@ -60,6 +60,9 @@
                   :tipFormatter="tipFormatter"
                   @change="changeSlider"
                 />
+                <div :class="`${prefixCls}-right-bom-slider-box`" v-if="isEmpty(stats.clickListItme)">
+                  <div :class="`${prefixCls}-right-bom-slider-box-val`" :key="index" v-for="(record,index) in stats.recordDateList" :style="`width:`+getWidth(record)+`%; left:`+getLeft(record)+`%;`"></div>
+                </div>
               </div>
           </div>
       </div>
@@ -74,7 +77,7 @@
   import { useGo } from '/@/hooks/web/usePage';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { PageWrapper } from '/@/components/Page';
-  import { doRecordList } from '/@/api/video/record';
+  import { doRecordList,doRecordStartPlay ,doRecordStopPlay,doRecordSpeed,doRecordDownloadStart} from '/@/api/video/record';
   import { isEmpty } from '/@/utils/is';
   import { RecordItem } from '/@/api/video/model/recordModel';
   import { VideoJessibucaPlay } from  '/@/components/Video/index';
@@ -96,6 +99,7 @@
   const stats = reactive({
     deviceId: route.params?.deviceId as string,
     channelId: route.params?.channelId as string,
+    streamId:"",
     //组件相关
     clickListItme:"",//选中的录像数据列表key 处理选中状态
     recodeDate: null as any,//查询录像时间
@@ -103,7 +107,7 @@
     sliderDate:[0,86399]  as any,//滑块默认时间
     rangePickerDate:['00:00:00','23:59:59']  as any,//时间范围选择器 时间
     minSliderDate:0,//最小滑块值
-    maxSliderDate:86400,//最大滑块值
+    maxSliderDate:86399,//最大滑块值
     //视频相关
     videoUrl:'',//录像播放地址
     //滑块时间范围
@@ -209,58 +213,73 @@
     }
   );
   //播放事件
-  const handleRecordPlay = () =>{
-    
+  const handleRecordPlay = async() =>{
+     const {app,stream,flv,wsFlv} = await doRecordStartPlay({
+      deviceId:stats.deviceId,
+      channelId:stats.channelId,
+      startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
+      endTime:stats.recodeDate+' '+stats.rangePickerDate[1]
+     });
+     stats.videoUrl = flv?.url;
+     stats.streamId =stream;
   }
   //暂停事件
-  const handleRecordPause = () =>{
-    
+  const handleRecordPause = async() =>{
+    await doRecordStopPlay({
+      deviceId:stats.deviceId,
+      channelId:stats.channelId,
+      streamId:stats.streamId,
+     });
+     stats.streamId ="";
   }
   //倍速事件
-  const handleRecordScale = (val) =>{
-    
+  const handleRecordScale = async(val) =>{
+    await doRecordSpeed({
+      streamId:stats.streamId,
+      speed:val
+    })
   }
   //下载事件
-  const handleRecordDownload = () =>{
-    
+  const handleRecordDownload = async() =>{
+    await doRecordDownloadStart({
+      deviceId:stats.deviceId,
+      channelId:stats.channelId,
+      startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
+      endTime:stats.recodeDate+' '+stats.rangePickerDate[1],
+      downloadSpeed:4
+    })
+  }
+  //获取进度宽度
+  const getWidth = (item) =>{
+    const {startTime,endTime} = item;
+    return((stringFormatTime(endTime)-stringFormatTime(startTime))/(stats.maxSliderDate-stats.minSliderDate)*100);
+  }
+
+  const getLeft = (item) =>{
+    const {startTime} = item;
+    return ((stringFormatTime(startTime)-stringFormatTime(stats.recodeDate+' 00:00:00'))/(stats.maxSliderDate-stats.minSliderDate)*100);
   }
 
   //触发时间相关事件(hh-mm-ss)
-  const handleTime = async (startTime:number,endTime:number) =>{
+  const handleTime = (startTime:number,endTime:number) =>{
     stats.sliderDate=[startTime,endTime];
-    stats.rangePickerDate=[tipFormatter(startTime),tipFormatter(endTime)];
+    if(stats.rangePickerDate[0] != tipFormatter(startTime) || stats.rangePickerDate[1] != tipFormatter(endTime)){
+      stats.rangePickerDate=[tipFormatter(startTime),tipFormatter(endTime)];
+    }
+    if(!isEmpty(stats.streamId)){
+      handleRecordPlay()
+    }
   }
 
   //获取录像信息请求接口
   const getDataList = async(startTime:string,endTime:string) =>{
-    // const {recordList} = await doRecordList({
-    //   deviceGbId:stats.deviceId,
-    //   channelId:stats.channelId,
-    //   startTime:startTime,
-    //   endTime:endTime,
-    // })
-    // stats.recordDateList = recordList;
-    //返回数据格式
-    stats.recordDateList = [
-      {
-        recorderId:'1',
-        deviceId:stats.deviceId,
-        startTime:'2023-06-18 08:00:33',
-        endTime:'2023-06-18 09:00:37',
-      },
-      {
-        recorderId:'2',
-        deviceId:stats.deviceId,
-        startTime:'2023-06-18 11:00:33',
-        endTime:'2023-06-18 13:00:37',
-      },
-      {
-        recorderId:'3',
-        deviceId:stats.deviceId,
-        startTime:'2023-06-18 15:00:33',
-        endTime:'2023-06-18 17:00:37',
-      },
-    ]
+    const {recordList} = await doRecordList({
+      deviceGbId:stats.deviceId,
+      channelId:stats.channelId,
+      startTime:startTime,
+      endTime:endTime,
+    })
+    stats.recordDateList = recordList;
   }
   
   // 此处可以得到用户ID
@@ -295,8 +314,30 @@
     }
   }
   &-right{
-    &-top{
-
+    &-bom{
+      &-slide{
+        width: 100%;
+        position: absolute; 
+        .ant-slider-step{
+          z-index: 2;
+        }
+        .ant-slider-handle.ant-tooltip-open{
+          z-index: 2;
+        }
+      }
+      &-slider-box{
+        width: 100%;
+        top: 29px;
+        margin: 0 6px;
+        box-sizing: border-box;
+        position: absolute;
+        &-val{
+          z-index: 1;
+          height: 4px;
+          background-color: #007CFF;
+          position: absolute;
+        }
+      }
     }
   }
  }
