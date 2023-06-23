@@ -214,7 +214,7 @@
   );
   //播放事件
   const handleRecordPlay = async() =>{
-     const {app,stream,flv,wsFlv} = await doRecordStartPlay({
+     const {stream,flv} = await doRecordStartPlay({
       deviceId:stats.deviceId,
       channelId:stats.channelId,
       startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
