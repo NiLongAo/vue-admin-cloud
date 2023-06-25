@@ -305,8 +305,8 @@
       const { ssrcCheck,asMessageChannel, ...entity } = await doFindDeviceId({ deviceId: data.deviceId });
       setFieldsValue({
         ...entity,
-        ssrcCheck: ssrcCheck === true ? 1 : 0,
-        asMessageChannel: asMessageChannel === true ? 1 : 0,
+        ssrcCheck: ssrcCheck ===  1 ? true : false,
+        asMessageChannel: asMessageChannel ===  1 ? true : false,
       });
     }
   });

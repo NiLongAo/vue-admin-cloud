@@ -47,8 +47,8 @@
           <!-- 方向控制 -->
           <div :class="`${prefixCls}-right-direction`">
             <Divider>方向控制</Divider>
-            <div class="flex flex-row">
-              <div class="grow flex items-center justify-center h-35 relative">
+            <div class="flex relative">
+              <div class="grow flex items-center justify-center h-35 relative ">
                 <div class=" grid grid-cols-2 gap-4 place-content-stretch h-36 w-36 rotate-45 z-0">
                   <div class="relative border-solid border-1 border-blue-600  rounded-tl-full  cursor-pointer" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
                     <div class="absolute bottom-0 right-0 w-9 h-9 border-t-1 border-l-1  border-solid border-blue-600 rounded-tl-full"></div>
@@ -72,7 +72,7 @@
                   <Icon class="cursor-pointer " :icon="`${!stats.playing?'ri:play-fill':'ic-sharp-pause'}`" size="40" color="#3b82f6"/>
                 </div>
               </div>
-              <div class=" flex flex-col  ">
+              <div class=" flex flex-col relative">
                 <div class="flex-1 flex items-center ">
                   <Icon class="cursor-pointer" size="26" icon="solar-magnifer-zoom-in-outline" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')"/>
                 </div>
@@ -91,78 +91,78 @@
             <div class="flex flex-col space-y-3">
               <div class="flex flex-col space-y-1">
                 <div>
-                  <InputNumber v-model:value="stats.presetPositionNo" :min="1" :max="255">
+                  <InputNumber v-model:value="stats.presetPositionNo" :min="1" :max="255" size="small">
                     <template #addonBefore >
                       预设位编号
                     </template>
                     <template #addonAfter>
-                      <Button @click="ptzCommand(129,0,1,0)">设置</Button>
+                      <Button size="small" @click="ptzCommand(129,0,1,0)">设置</Button>
                     </template>
                   </InputNumber>
                 </div>
                 <div class="flex flex-row">
-                  <Button class="flex-1" @click="ptzCommand(131,0,1,0)">删除</Button>
-                  <Button type="primary" class="flex-1" @click="ptzCommand(130,0,1,0)">调用</Button>
+                  <Button class="flex-1" @click="ptzCommand(131,0,1,0)" size="small">删除</Button>
+                  <Button type="primary" class="flex-1" @click="ptzCommand(130,0,1,0)" size="small">调用</Button>
                 </div>
               </div>
               <div class="flex flex-col space-y-1">
                 <div>
-                  <InputNumber v-model:value="stats.ruiseSpeed" :min="1" :max="4095">
+                  <InputNumber v-model:value="stats.ruiseSpeed" :min="1" :max="4095" size="small">
                     <template #addonBefore >
                       巡航速度
                     </template>
                     <template #addonAfter>
-                      <Button @click="ptzCommand(134,stats.cruiseGroupNo,(stats.ruiseSpeed % 256),(Math.floor(stats.ruiseSpeed / 256) * 16))">设置</Button>
+                      <Button size="small" @click="ptzCommand(134,stats.cruiseGroupNo,(stats.ruiseSpeed % 256),(Math.floor(stats.ruiseSpeed / 256) * 16))">设置</Button>
                     </template>
                   </InputNumber>
-                  <InputNumber v-model:value="stats.ruiseResidenceTime" :min="1" :max="4095">
+                  <InputNumber v-model:value="stats.ruiseResidenceTime" :min="1" :max="4095" size="small">
                     <template #addonBefore >
                       停留时间
                     </template>
                     <template #addonAfter>
-                      <Button @click="ptzCommand(135,stats.cruiseGroupNo,(stats.ruiseResidenceTime % 256),(Math.floor(stats.ruiseResidenceTime / 256) * 16))">设置</Button>
+                      <Button size="small" @click="ptzCommand(135,stats.cruiseGroupNo,(stats.ruiseResidenceTime % 256),(Math.floor(stats.ruiseResidenceTime / 256) * 16))">设置</Button>
                     </template>
                   </InputNumber>
-                  <InputNumber v-model:value="stats.cruiseGroupNo" :min="1" :max="255">
+                  <InputNumber v-model:value="stats.cruiseGroupNo" :min="1" :max="255" size="small">
                     <template #addonBefore >
                       巡航组编号
                     </template>
                   </InputNumber>
                 </div>
                 <div class="flex flex-row">
-                  <Button class="flex-1" @click="ptzCommand(132,stats.cruiseGroupNo,stats.presetPositionNo,0)">添加点</Button>
-                  <Button class="flex-1" @click="ptzCommand(133,stats.cruiseGroupNo,stats.presetPositionNo,0)"> 删除点</Button>
-                  <Button class="flex-1" @click="ptzCommand(133,stats.cruiseGroupNo,0,0)">删除组</Button>
-                  <Button type="primary" class="flex-1" @click="ptzCommand(136,stats.cruiseGroupNo,0,0)">巡航</Button>
+                  <Button class="flex-1" size="small" @click="ptzCommand(132,stats.cruiseGroupNo,stats.presetPositionNo,0)">添加点</Button>
+                  <Button class="flex-1" size="small" @click="ptzCommand(133,stats.cruiseGroupNo,stats.presetPositionNo,0)"> 删除点</Button>
+                  <Button class="flex-1" size="small" @click="ptzCommand(133,stats.cruiseGroupNo,0,0)">删除组</Button>
+                  <Button type="primary" size="small" class="flex-1" @click="ptzCommand(136,stats.cruiseGroupNo,0,0)">巡航</Button>
                 </div>
               </div>
               <div class="flex flex-col space-y-1">
                 <div>
-                  <InputNumber v-model:value="stats.scanSpeed" :min="1" :max="4095">
+                  <InputNumber v-model:value="stats.scanSpeed" :min="1" :max="4095" size="small">
                     <template #addonBefore >
                       扫描速度
                     </template>
                     <template #addonAfter>
-                      <Button @click="ptzCommand(138,stats.scanGroupNo,(stats.scanSpeed % 256),(Math.floor(stats.scanSpeed / 256) * 16))">设置</Button>
+                      <Button size="small" @click="ptzCommand(138,stats.scanGroupNo,(stats.scanSpeed % 256),(Math.floor(stats.scanSpeed / 256) * 16))">设置</Button>
                     </template>
                   </InputNumber>
-                  <InputNumber v-model:value="stats.scanGroupNo" :min="1" :max="255">
+                  <InputNumber v-model:value="stats.scanGroupNo" :min="1" :max="255" size="small">
                     <template #addonBefore >
                       扫描组编号
                     </template>
                   </InputNumber>
                 </div>
                 <div class="flex flex-row">
-                  <Button class="flex-1" @click="ptzCommand(137,stats.cruiseGroupNo,1,0)">左边界</Button>
-                  <Button class="flex-1" @click="ptzCommand(137,stats.cruiseGroupNo,2,0)" >右边界</Button>
-                  <Button type="primary" class="flex-1" @click="ptzCommand(137,stats.cruiseGroupNo,0,0)">扫描</Button>
-                  <Button type="primary" danger class="flex-1" @click="ptzCamera('stop')">停止</Button>
+                  <Button class="flex-1" size="small" @click="ptzCommand(137,stats.cruiseGroupNo,1,0)">左边界</Button>
+                  <Button class="flex-1" size="small" @click="ptzCommand(137,stats.cruiseGroupNo,2,0)" >右边界</Button>
+                  <Button type="primary" size="small" class="flex-1" @click="ptzCommand(137,stats.cruiseGroupNo,0,0)">扫描</Button>
+                  <Button type="primary" size="small" danger class="flex-1" @click="ptzCamera('stop')">停止</Button>
                 </div>
               </div>
             </div>
           </div>
           <!-- 流信息 -->
-          <div :class="`${prefixCls}-right-stream overflow-y-auto h-58`">
+          <div :class="`${prefixCls}-right-stream overflow-y-auto`">
             <Divider>流信息</Divider>
             <p v-if="isEmpty(stats.tracks)">暂无数据</p>
             <Descriptions title="视频1" size="small" :column="1" v-if="isNotEmpty(stats.tracks)">
@@ -254,7 +254,7 @@
   //复制触发
   const handleCopy=(value)=>{
     if (!value) {
-      createMessage.warning('请输入要拷贝的内容！');
+      createMessage.warning('未获取要拷贝的内容！');
       return;
     }
     clipboardRef.value = value;
@@ -328,7 +328,7 @@
 <style lang="less">
  @prefix-cls: ~'@{namespace}-video-play-model';
 .@{prefix-cls} {
-  min-height: 780px;
+  min-height: 680px;
   &-left{
     min-width: 600px;
     &-bot{
@@ -360,23 +360,21 @@
     min-width: 300px;
     &-ptz{
       .ant-input-number-group-addon:first-child {
-          width: 93px;
+          width: 83px;
           border-right: 0;
       }
       .ant-input-number-group-addon:last-child {
           border-left: 0;
           border: none;
-          height: 30px;
           padding:0
       }
     }
     &-stream{
-      .ant-divider-horizontal{
-        margin: 2px 0;
-      }
+      min-height: 186px;
+      height: 186px;
     }
     .ant-divider-with-text-center{
-      margin: 8px 0;
+      margin: 5px 0;
     }
   }
 }
