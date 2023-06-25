@@ -105,20 +105,26 @@
         onChange:(val) =>{
           let {serverGbId:serverId,catalogId,administrativeDivision,serverGbDomain} = getFieldsValue();
           const serverGbId= val?.target?.value;
+          if(val === serverId){
+            return;
+          }
           if(isEmpty(catalogId) || catalogId === serverId){
-            catalogId = serverGbId;
+            setFieldsValue({
+              catalogId:serverGbId,
+            });
           }
           if(isEmpty(administrativeDivision) || administrativeDivision === serverId){
-            administrativeDivision = serverGbId.length >=6 ?serverGbId.slice(0, 6):val?.target?.value;
+            administrativeDivision = serverGbId?.length >=6 ?serverGbId.slice(0, 6):val?.target?.value;
+            setFieldsValue({
+              administrativeDivision:administrativeDivision,
+            });
           }
           if(isEmpty(serverGbDomain) || serverGbDomain === serverId){
-            serverGbDomain = serverGbId.length >=6 ?serverGbId.slice(0, 6):val?.target?.value;
+            serverGbDomain = serverGbId?.length >=6 ?serverGbId.slice(0, 6):val?.target?.value;
+            setFieldsValue({
+              serverGbDomain:serverGbDomain,
+            });
           }
-          setFieldsValue({
-            catalogId:catalogId,
-            administrativeDivision:administrativeDivision,
-            serverGbDomain:serverGbDomain,
-          });
         }
       },
       required: true,
@@ -273,7 +279,7 @@
       },
       componentProps: {
         min:30,
-        max:43200
+        max:68400
       },
       defaultValue: 30,
       required: true,
