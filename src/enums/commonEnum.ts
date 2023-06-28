@@ -16,8 +16,10 @@ export const TRANSPORT_TYPE_ENUM = 'TRANSPORT_TYPE_ENUM';
 export const CHARSET_TYPE_ENUM = 'CHARSET_TYPE_ENUM';
 //SIP报警方式
 export const DEVICE_ALARM_METHOD_ENUM = 'DEVICE_ALARM_METHOD_ENUM';
-//拉流默认方式
+//拉流类型
 export const PROXY_TYPE_ENUM = 'PROXY_TYPE_ENUM';
+//拉流方式
+export const PROXY_RTP_TYPE_ENUM = 'PROXY_RTP_TYPE_ENUM';
 //数据流传输模式
 export const STREAM_MODE_TYPE_ENUM = 'STREAM_MODE_TYPE_ENUM';
 //国标流类型

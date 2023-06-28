@@ -103,6 +103,15 @@
       autoSubmitOnEnter: true,
       schemas: [
         {
+          field:"query",
+          label:"IP地址",
+          component:"Input",
+          colProps: {
+            xl: 6,
+            xxl: 5,
+          },
+        },
+        {
           field: `status`,
           label: `状态`,
           component: 'Select',
