@@ -5,13 +5,13 @@
         <TableAction outside
           :actions="[
             {
-              ifShow: hasPermission('system.tenant:update'),
+              ifShow: hasPermission('system.tenant:update') && row.status === 1,
               tooltip: '播放',
               icon: 'ic-outline-play-circle',
               onClick: handlePlay.bind(null, row),
             },
             {
-              ifShow: hasPermission('system.tenant:update'),
+              ifShow: hasPermission('system.tenant:update') && row.status === 1,
               tooltip: '历史回放',
               icon: 'ic-round-history',
               onClick: handleRecord.bind(null, row),
