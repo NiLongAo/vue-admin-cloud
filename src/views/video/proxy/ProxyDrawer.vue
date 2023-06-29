@@ -86,13 +86,12 @@
       required: true,
     },
     {
-      field: 'name',
+      field: 'gbId',
       component: 'Input',
-      label: '名称',
+      label: '国标编号',
       colProps: {
         span: 12,
       },
-      required: true,
     },
     {
       field: 'name',
@@ -102,6 +101,14 @@
         span: 12,
       },
       required: true,
+    },
+    {
+      field: 'ffmpegCmdKey',
+      component: 'Input',
+      label: 'ffmpeg模板KEY',
+      colProps: {
+        span: 12,
+      },
     },
     {
       field: 'url',

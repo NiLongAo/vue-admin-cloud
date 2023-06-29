@@ -14,14 +14,29 @@
       <template #action="{ record }">
         <TableAction
           :actions="[
+             {
+              ifShow: hasPermission('system.tenant:update'),
+              color:( record.status === 1?'error':undefined),
+              tooltip: record.status === 1?'停用':'启用',
+              icon: record.status === 1?'ic:outline-toggle-off':'ic:outline-toggle-on',
+              onClick: handleEnable.bind(null, record),
+            },
+            {
+              ifShow: hasPermission('system.tenant:update') && (record.status === 1),
+              tooltip: '播放',
+              icon: 'ic-outline-play-circle',
+              onClick: handlePlay.bind(null, record),
+            },
             {
               ifShow: hasPermission('system.role:update'),
+              tooltip: '编辑',
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
               ifShow: hasPermission('system.role:delete'),
               color: 'error',
+              tooltip: '删除',
               icon: 'mdi:delete-outline',
               popConfirm: {
                 title: '是否删除？',
@@ -38,6 +53,7 @@
       </template>
     </BasicTable>
     <ProxyDrawer @register="register" @success="handleSuccess" />
+    <PlayModel @register="registerModal" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -46,12 +62,15 @@
   import { useSystemStore } from '/@/store/modules/system';
   import { PROXY_TYPE_ENUM,PROXY_RTP_TYPE_ENUM } from '/@/enums/commonEnum';
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doProxyPage, doProxyRemove } from '/@/api/video/proxy';
+  import { doProxyPage, doProxyRemove,doProxyStart,doProxyStop,doProxyGetPlayUrl } from '/@/api/video/proxy';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { useModal } from '/@/components/Modal';
   import { useDrawer } from '/@/components/Drawer';
+  import {PlayModel} from '/@/components/Video';
   import ProxyDrawer from './ProxyDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
   const { hasPermission } = usePermission();
+  const [registerModal, { openModal }] = useModal();
   const systemStore = useSystemStore();
 
   const [registerTable, { reload }] = useTable({
@@ -91,6 +110,24 @@
     //刷新表单
     reload();
   }
+  //启用 禁用 
+  const handleEnable = async(val) =>{
+    const {id,status} = val;
+    if(status ===1){
+      await doProxyStop({id})
+    }else{
+      await doProxyStart({id})
+    }
+    //刷新表单
+    reload();
+  }
+  //播放
+  const handlePlay = async(val) =>{
+    const {id} = val;
+     const data = await doProxyGetPlayUrl({id});
+     openModal(data);
+  }
+
 
   function getFormConfig(): Partial<FormProps> {
     return {
@@ -138,6 +175,7 @@
 
   function getBasicColumns(): BasicColumn[] {
     return [
+      
       {
         title: '应用名',
         dataIndex: 'app',
@@ -178,6 +216,11 @@
           const text = enable ? '在线' : '离线';
           return h(Tag, { color: color }, () => text);
         },
+      },
+      {
+        title: '国标编号',
+        dataIndex: 'gbId',
+        width: 200,
       },
       {
         title: '流媒体编号',

@@ -16,6 +16,8 @@ enum Api {
   doProxyStart = '/webapi/video/stream/proxy/start',
   //停用代理
   doProxyStop = '/webapi/video/stream/proxy/stop',
+  //停用代理
+  doProxyGetPlayUrl = '/webapi/video/stream/proxy/get_play_url',
 }
 
 export function doProxyPage(params: ProxyParams) {
@@ -41,4 +43,7 @@ export function doProxyStart(params: Recordable) {
 }
 export function doProxyStop(params: Recordable) {
   return defHttp.get({ url: Api.doProxyStop, params });
+}
+export function doProxyGetPlayUrl(params: Recordable) {
+  return defHttp.get({ url: Api.doProxyGetPlayUrl, params });
 }

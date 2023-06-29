@@ -200,7 +200,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import Icon from '@/components/Icon/Icon.vue';
   import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
-  import {doPtzPtz,doPtzFrontEndCommand,doPtzPresetQuery} from '/@/api/video/ptz';
+  import {doPtzPtz,doPtzFrontEndCommand} from '/@/api/video/ptz';
   import { Input,InputNumber,Descriptions,DescriptionsItem, Button ,Divider ,Slider,Dropdown,Menu,MenuItem} from 'ant-design-vue';
 
   const { prefixCls } = useDesign('video-play-model');
@@ -289,7 +289,7 @@
     });
   }
 
-  const [registerModal, { setModalProps, closeModal }] = useModalInner((data) => {
+  const [registerModal, { setModalProps }] = useModalInner((data) => {
       setModalProps({ confirmLoading: false });
       if(!data){
           return

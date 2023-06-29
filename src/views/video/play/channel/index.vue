@@ -145,8 +145,8 @@
   });
   //播放
   const handlePlay = async(data)=>{
-    //const values = await doPlayStart({ deviceId:data.deviceId,channelId:data.channelId});
-    openModal(true, {});
+    const values = await doPlayStart({ deviceId:data.deviceId,channelId:data.channelId});
+    openModal(true, values);
   }
   //历史回放
   const handleRecord = (data) =>{
