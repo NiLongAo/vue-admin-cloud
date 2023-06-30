@@ -19,7 +19,7 @@ interface RecordInfo {
 interface RecordItem {
   //设备国标编号
   deviceId:string;
-  name?:string;
+  name:string;
   filePath?:string;
   fileSize?:string;
   address?:string;

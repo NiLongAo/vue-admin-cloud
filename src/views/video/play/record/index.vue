@@ -5,10 +5,10 @@
         <div>
           <DatePicker :class="`${prefixCls}-left-date-picker`" v-model:value="stats.recodeDate" value-format="YYYY-MM-DD" @change="onDatePickerChange"/>
         </div>
-        <div :class="`${prefixCls}-left-list grow`" class="" v-if="stats.recordDateList.length > 0" >
-          <List class="h-full" size="small" bordered :dataSource="stats.recordDateList">
+        <div :class="`${prefixCls}-left-list grow overflow-y-scroll`" class="" v-if="stats.recordDateList.length > 0" >
+          <List class=" h-full" size="small" bordered :dataSource="stats.recordDateList">
               <template #renderItem ="{item}">
-                  <ListItem ><Tag class="cursor-pointer text-center w-full " :color="`${ stats.clickListItme ===item.recorderId?'#108ee9' :''}`" @click="listItemClick(item)">{{ stringToFormatString(item.startTime,DATE_TIME_FORMAT,DATE_TIME)}} - {{ stringToFormatString(item.endTime,DATE_TIME_FORMAT,DATE_TIME)}}</Tag></ListItem>
+                  <ListItem><Tag class="cursor-pointer text-center w-full " :color="`${ stats.clickListItme ===item.name?'#108ee9' :''}`" @click="listItemClick(item)">{{ stringToFormatString(item.startTime,DATE_TIME_FORMAT,DATE_TIME)}} - {{ stringToFormatString(item.endTime,DATE_TIME_FORMAT,DATE_TIME)}}</Tag></ListItem>
               </template>
           </List>
         </div>
@@ -146,12 +146,12 @@
   //选择录像时间段
   const listItemClick = (item:RecordItem) =>{
     let startTime ,endTime;
-    if(stats.clickListItme === item.recorderId){
+    if(stats.clickListItme === item.name){
       stats.clickListItme = "";
       startTime = 0;
       endTime = 86399;
     }else{
-      stats.clickListItme = item.recorderId;
+      stats.clickListItme = item.name;
       startTime = stringFormatTime(item.startTime);
       endTime = stringFormatTime(item.endTime);
     }

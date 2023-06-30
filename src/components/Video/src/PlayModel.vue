@@ -1,192 +1,192 @@
 <template>
   <BasicModal v-bind="$attrs" @register="registerModal" title="播放器" width="1200px" :footer="null">
-      <div :class="` ${prefixCls} flex flex-row gap-x-px `">
-        <div :class="`${prefixCls}-left  basis-16/20 grid grid-rows-16 grid-cols-1`">
-          <!-- 选择器 :footer="{ disabled: true }"-->
-          <div :class="`${prefixCls}-left-top row-span-1`">
-              <RadioButtonGroup :value="stats.selectPlay" :options="stats.options" @change="handleSelectPlay"/>
-          </div>
-          <!-- 播放器 -->
-          <div :class=" `${prefixCls}-left-video bg-black grid row-span-15`">
-              <VideoJessibucaPlay v-if="stats.selectPlay === 'Jessibuca'" :videoUrl='stats.jessibucaMap[stats.playType]?.value' />
-              <VideoZlmRtcPlay v-if="stats.selectPlay === 'ZlmRtc'" :videoUrll='stats.zlmRtcUrl?.value'/>
-          </div>
-           <!-- 播放地址 -->
-          <div :class="`${prefixCls}-left-bot mt-2 row-span-0 space-y-2`" v-if="stats.selectPlay === 'Jessibuca'">
-            <Input v-model:value="payUrl" disabled>
-              <template #addonBefore > 
-                <Dropdown trigger="click" :overlayClassName="`${prefixCls}-left-dropdown`">
-                  <template #overlay >
-                    <Menu @click="handleMenuClick">
-                      <MenuItem :key="val" v-for="val in Object.keys(stats.jessibucaMap)">
-                        <Input :defaultValue="stats.jessibucaMap[val].value" disabled>
-                          <template #addonBefore >
-                            {{stats.jessibucaMap[val].name}} 
-                          </template>
-                          <template #addonAfter>
-                            <Button :class="`${prefixCls}-left-bot-cope`" @click="handleCopy(stats.jessibucaMap[val].value)">复制</Button>
-                          </template>
-                        </Input>
-                      </MenuItem>
-                    </Menu>
-                  </template>
-                  <Button :class="`${prefixCls}-left-bot-cope`">
-                    更多地址
-                    <Icon class="cursor-pointer" icon="ic-baseline-keyboard-arrow-down" />
-                  </Button>
-                </Dropdown>
-              </template>
-              <template #addonAfter>
-                <Button :class="`${prefixCls}-left-bot-cope`" @click="handleCopy(stats.jessibucaMap[stats.playType].value)">复制</Button>
-              </template>
-            </Input>
-          </div>
+    <div :class="` ${prefixCls} flex flex-row gap-x-px `">
+      <div :class="`${prefixCls}-left  basis-16/20 grid grid-rows-16 grid-cols-1`">
+        <!-- 选择器 :footer="{ disabled: true }"-->
+        <div :class="`${prefixCls}-left-top row-span-1`">
+            <RadioButtonGroup :value="stats.selectPlay" :options="stats.options" @change="handleSelectPlay"/>
         </div>
-        <Divider style="height: auto;background-color: #fff;" type="vertical" dashed />
-        <div  :class="`${prefixCls}-right basis-4/20 row-span-3 flex flex-col `">
-          <!-- 方向控制 -->
-          <div :class="`${prefixCls}-right-direction`">
-            <Divider>方向控制</Divider>
-            <div class="flex relative">
-              <div class="grow flex items-center justify-center h-35 relative ">
-                <div class=" grid grid-cols-2 gap-4 place-content-stretch h-36 w-36 rotate-45 z-0">
-                  <div class="relative border-solid border-1 border-blue-600  rounded-tl-full  cursor-pointer" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
-                    <div class="absolute bottom-0 right-0 w-9 h-9 border-t-1 border-l-1  border-solid border-blue-600 rounded-tl-full"></div>
-                    <Icon class="absolute cursor-pointer  bottom-6.5 right-6.5 z-3 -rotate-45" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
-                  </div>
-                  <div class="relative  border-solid border-1 border-blue-600 rounded-tr-full cursor-pointer" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
-                    <div class="absolute bottom-0 left-0 w-9 h-9  border-t-1 border-r-1 border-solid border-blue-600 rounded-tr-full"></div>
-                    <Icon class="absolute cursor-pointer  bottom-6.5 left-6.5 z-3 rotate-45" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
-                  </div>
-                  <div class="relative  border-solid border-1 border-blue-600 rounded-bl-full cursor-pointer" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
-                    <div class="absolute top-0 right-0 w-9 h-9 border-b-1 border-l-1 border-solid border-blue-600 rounded-bl-full"></div>
-                    <Icon class="absolute cursor-pointer  top-6.5 right-6.5 z-3 rotate-225" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
-                  </div>
-                  <div class="relative  border-solid border-1 border-blue-600 rounded-br-full cursor-pointer" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
-                    <div class="absolute top-0 left-0 w-9 h-9 border-b-1 border-r-1 border-solid  border-blue-600 rounded-br-full"></div>
-                    <Icon class="absolute cursor-pointer  top-6.5 left-6.5 z-3 rotate-135" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
-                  </div>
-                </div>
-                <div class="absolute bg-white h-22 w-22 border-solid rounded-full z-1"></div>
-                <div class="absolute z-2  h-15 w-15 border-solid rounded-full border-1 border-blue-600 flex items-center justify-center cursor-pointer">
-                  <Icon class="cursor-pointer " :icon="`${!stats.playing?'ri:play-fill':'ic-sharp-pause'}`" size="40" color="#3b82f6"/>
-                </div>
-              </div>
-              <div class=" flex flex-col relative">
-                <div class="flex-1 flex items-center ">
-                  <Icon class="cursor-pointer" size="26" icon="solar-magnifer-zoom-in-outline" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')"/>
-                </div>
-                <div class="flex-1 flex items-center ">
-                  <Icon class="cursor-pointer" size="26" icon="solar-magnifer-zoom-out-linear" @mousedown="ptzCamera('zoomout')" @mouseup="ptzCamera('stop')"/>
-                </div>
-              </div>
-            </div>
-            <div>
-              <Slider v-model:value="stats.directionSpeed" :min="0" :max="255"/>
-            </div>
-          </div>
-          <!-- 云台控制 -->
-          <div :class="`${prefixCls}-right-ptz grow `">
-            <Divider>云台控制</Divider>
-            <div class="flex flex-col space-y-3">
-              <div class="flex flex-col space-y-1">
-                <div>
-                  <InputNumber v-model:value="stats.presetPositionNo" :min="1" :max="255" size="small">
-                    <template #addonBefore >
-                      预设位编号
-                    </template>
-                    <template #addonAfter>
-                      <Button size="small" @click="ptzCommand(129,0,1,0)">设置</Button>
-                    </template>
-                  </InputNumber>
-                </div>
-                <div class="flex flex-row">
-                  <Button class="flex-1" @click="ptzCommand(131,0,1,0)" size="small">删除</Button>
-                  <Button type="primary" class="flex-1" @click="ptzCommand(130,0,1,0)" size="small">调用</Button>
-                </div>
-              </div>
-              <div class="flex flex-col space-y-1">
-                <div>
-                  <InputNumber v-model:value="stats.ruiseSpeed" :min="1" :max="4095" size="small">
-                    <template #addonBefore >
-                      巡航速度
-                    </template>
-                    <template #addonAfter>
-                      <Button size="small" @click="ptzCommand(134,stats.cruiseGroupNo,(stats.ruiseSpeed % 256),(Math.floor(stats.ruiseSpeed / 256) * 16))">设置</Button>
-                    </template>
-                  </InputNumber>
-                  <InputNumber v-model:value="stats.ruiseResidenceTime" :min="1" :max="4095" size="small">
-                    <template #addonBefore >
-                      停留时间
-                    </template>
-                    <template #addonAfter>
-                      <Button size="small" @click="ptzCommand(135,stats.cruiseGroupNo,(stats.ruiseResidenceTime % 256),(Math.floor(stats.ruiseResidenceTime / 256) * 16))">设置</Button>
-                    </template>
-                  </InputNumber>
-                  <InputNumber v-model:value="stats.cruiseGroupNo" :min="1" :max="255" size="small">
-                    <template #addonBefore >
-                      巡航组编号
-                    </template>
-                  </InputNumber>
-                </div>
-                <div class="flex flex-row">
-                  <Button class="flex-1" size="small" @click="ptzCommand(132,stats.cruiseGroupNo,stats.presetPositionNo,0)">添加点</Button>
-                  <Button class="flex-1" size="small" @click="ptzCommand(133,stats.cruiseGroupNo,stats.presetPositionNo,0)"> 删除点</Button>
-                  <Button class="flex-1" size="small" @click="ptzCommand(133,stats.cruiseGroupNo,0,0)">删除组</Button>
-                  <Button type="primary" size="small" class="flex-1" @click="ptzCommand(136,stats.cruiseGroupNo,0,0)">巡航</Button>
-                </div>
-              </div>
-              <div class="flex flex-col space-y-1">
-                <div>
-                  <InputNumber v-model:value="stats.scanSpeed" :min="1" :max="4095" size="small">
-                    <template #addonBefore >
-                      扫描速度
-                    </template>
-                    <template #addonAfter>
-                      <Button size="small" @click="ptzCommand(138,stats.scanGroupNo,(stats.scanSpeed % 256),(Math.floor(stats.scanSpeed / 256) * 16))">设置</Button>
-                    </template>
-                  </InputNumber>
-                  <InputNumber v-model:value="stats.scanGroupNo" :min="1" :max="255" size="small">
-                    <template #addonBefore >
-                      扫描组编号
-                    </template>
-                  </InputNumber>
-                </div>
-                <div class="flex flex-row">
-                  <Button class="flex-1" size="small" @click="ptzCommand(137,stats.cruiseGroupNo,1,0)">左边界</Button>
-                  <Button class="flex-1" size="small" @click="ptzCommand(137,stats.cruiseGroupNo,2,0)" >右边界</Button>
-                  <Button type="primary" size="small" class="flex-1" @click="ptzCommand(137,stats.cruiseGroupNo,0,0)">扫描</Button>
-                  <Button type="primary" size="small" danger class="flex-1" @click="ptzCamera('stop')">停止</Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 流信息 -->
-          <div :class="`${prefixCls}-right-stream overflow-y-auto`">
-            <Divider>流信息</Divider>
-            <p v-if="isEmpty(stats.tracks)">暂无数据</p>
-            <Descriptions title="视频1" size="small" :column="1" v-if="isNotEmpty(stats.tracks)">
-              <template :key="index" v-for="(val,index) in stats.tracks">
-                <template v-if="val.codec_type == 0">
-                  <DescriptionsItem label="格式：">{{ val?.codec_id_name }}</DescriptionsItem>
-                  <DescriptionsItem label="类型：">视频</DescriptionsItem>
-                  <DescriptionsItem label="分辨率：">{{ val.width }} x {{ val.height }}</DescriptionsItem>
-                  <DescriptionsItem label="帧率：">{{ val.fps }}</DescriptionsItem>
+        <!-- 播放器 -->
+        <div :class=" `${prefixCls}-left-video bg-black grid row-span-15`">
+            <VideoJessibucaPlay v-if="stats.selectPlay === 'Jessibuca'" :videoUrl='stats.jessibucaMap[stats.playType]?.value' />
+            <VideoZlmRtcPlay v-if="stats.selectPlay === 'ZlmRtc'" :videoUrll='stats.zlmRtcUrl?.value'/>
+        </div>
+          <!-- 播放地址 -->
+        <div :class="`${prefixCls}-left-bot mt-2 row-span-0 space-y-2`" v-if="stats.selectPlay === 'Jessibuca'">
+          <Input v-model:value="payUrl" disabled>
+            <template #addonBefore > 
+              <Dropdown trigger="click" :overlayClassName="`${prefixCls}-left-dropdown`">
+                <template #overlay >
+                  <Menu @click="handleMenuClick">
+                    <MenuItem :key="val" v-for="val in Object.keys(stats.jessibucaMap)">
+                      <Input :defaultValue="stats.jessibucaMap[val].value" disabled>
+                        <template #addonBefore >
+                          {{stats.jessibucaMap[val].name}} 
+                        </template>
+                        <template #addonAfter>
+                          <Button :class="`${prefixCls}-left-bot-cope`" @click="handleCopy(stats.jessibucaMap[val].value)">复制</Button>
+                        </template>
+                      </Input>
+                    </MenuItem>
+                  </Menu>
                 </template>
-                <template v-if="val.codec_type == 1">>
-                  <DescriptionsItem label="格式：">{{ val.codec_id_name }}</DescriptionsItem>
-                  <DescriptionsItem label="类型：">音频</DescriptionsItem>
-                  <DescriptionsItem label="采样位数：">{{ val.sample_bit }}</DescriptionsItem>
-                  <DescriptionsItem label="采样率：">{{ val.sample_rate }}</DescriptionsItem>
-                </template>
-                <template v-if="index < stats.tracks.length">
-                  <DescriptionsItem ><Divider/></DescriptionsItem>
-                </template>
-              </template>
-            </Descriptions>
-          </div>
+                <Button :class="`${prefixCls}-left-bot-cope`">
+                  更多地址
+                  <Icon class="cursor-pointer" icon="ic-baseline-keyboard-arrow-down" />
+                </Button>
+              </Dropdown>
+            </template>
+            <template #addonAfter>
+              <Button :class="`${prefixCls}-left-bot-cope`" @click="handleCopy(stats.jessibucaMap[stats.playType].value)">复制</Button>
+            </template>
+          </Input>
         </div>
       </div>
+      <Divider style="height: auto;background-color: #fff;" type="vertical" dashed />
+      <div  :class="`${prefixCls}-right basis-4/20 row-span-3 flex flex-col `">
+        <!-- 方向控制 -->
+        <div :class="`${prefixCls}-right-direction`">
+          <Divider>方向控制</Divider>
+          <div class="flex relative">
+            <div class="grow flex items-center justify-center h-35 relative ">
+              <div class=" grid grid-cols-2 gap-4 place-content-stretch h-36 w-36 rotate-45 z-0">
+                <div class="relative border-solid border-1 border-blue-600  rounded-tl-full  cursor-pointer" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute bottom-0 right-0 w-9 h-9 border-t-1 border-l-1  border-solid border-blue-600 rounded-tl-full"></div>
+                  <Icon class="absolute cursor-pointer  bottom-6.5 right-6.5 z-3 -rotate-45" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
+                </div>
+                <div class="relative  border-solid border-1 border-blue-600 rounded-tr-full cursor-pointer" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute bottom-0 left-0 w-9 h-9  border-t-1 border-r-1 border-solid border-blue-600 rounded-tr-full"></div>
+                  <Icon class="absolute cursor-pointer  bottom-6.5 left-6.5 z-3 rotate-45" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
+                </div>
+                <div class="relative  border-solid border-1 border-blue-600 rounded-bl-full cursor-pointer" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute top-0 right-0 w-9 h-9 border-b-1 border-l-1 border-solid border-blue-600 rounded-bl-full"></div>
+                  <Icon class="absolute cursor-pointer  top-6.5 right-6.5 z-3 rotate-225" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
+                </div>
+                <div class="relative  border-solid border-1 border-blue-600 rounded-br-full cursor-pointer" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute top-0 left-0 w-9 h-9 border-b-1 border-r-1 border-solid  border-blue-600 rounded-br-full"></div>
+                  <Icon class="absolute cursor-pointer  top-6.5 left-6.5 z-3 rotate-135" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
+                </div>
+              </div>
+              <div class="absolute bg-white h-22 w-22 border-solid rounded-full z-1"></div>
+              <div class="absolute z-2  h-15 w-15 border-solid rounded-full border-1 border-blue-600 flex items-center justify-center cursor-pointer">
+                <Icon class="cursor-pointer " :icon="`${!stats.playing?'ri:play-fill':'ic-sharp-pause'}`" size="40" color="#3b82f6"/>
+              </div>
+            </div>
+            <div class=" flex flex-col relative">
+              <div class="flex-1 flex items-center ">
+                <Icon class="cursor-pointer" size="26" icon="solar-magnifer-zoom-in-outline" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')"/>
+              </div>
+              <div class="flex-1 flex items-center ">
+                <Icon class="cursor-pointer" size="26" icon="solar-magnifer-zoom-out-linear" @mousedown="ptzCamera('zoomout')" @mouseup="ptzCamera('stop')"/>
+              </div>
+            </div>
+          </div>
+          <div>
+            <Slider v-model:value="stats.directionSpeed" :min="0" :max="255"/>
+          </div>
+        </div>
+        <!-- 云台控制 -->
+        <div :class="`${prefixCls}-right-ptz grow `">
+          <Divider>云台控制</Divider>
+          <div class="flex flex-col space-y-3">
+            <div class="flex flex-col space-y-1">
+              <div>
+                <InputNumber v-model:value="stats.presetPositionNo" :min="1" :max="255" size="small">
+                  <template #addonBefore >
+                    预设位编号
+                  </template>
+                  <template #addonAfter>
+                    <Button size="small" @click="ptzCommand(129,0,1,0)">设置</Button>
+                  </template>
+                </InputNumber>
+              </div>
+              <div class="flex flex-row">
+                <Button class="flex-1" @click="ptzCommand(131,0,1,0)" size="small">删除</Button>
+                <Button type="primary" class="flex-1" @click="ptzCommand(130,0,1,0)" size="small">调用</Button>
+              </div>
+            </div>
+            <div class="flex flex-col space-y-1">
+              <div>
+                <InputNumber v-model:value="stats.ruiseSpeed" :min="1" :max="4095" size="small">
+                  <template #addonBefore >
+                    巡航速度
+                  </template>
+                  <template #addonAfter>
+                    <Button size="small" @click="ptzCommand(134,stats.cruiseGroupNo,(stats.ruiseSpeed % 256),(Math.floor(stats.ruiseSpeed / 256) * 16))">设置</Button>
+                  </template>
+                </InputNumber>
+                <InputNumber v-model:value="stats.ruiseResidenceTime" :min="1" :max="4095" size="small">
+                  <template #addonBefore >
+                    停留时间
+                  </template>
+                  <template #addonAfter>
+                    <Button size="small" @click="ptzCommand(135,stats.cruiseGroupNo,(stats.ruiseResidenceTime % 256),(Math.floor(stats.ruiseResidenceTime / 256) * 16))">设置</Button>
+                  </template>
+                </InputNumber>
+                <InputNumber v-model:value="stats.cruiseGroupNo" :min="1" :max="255" size="small">
+                  <template #addonBefore >
+                    巡航组编号
+                  </template>
+                </InputNumber>
+              </div>
+              <div class="flex flex-row">
+                <Button class="flex-1" size="small" @click="ptzCommand(132,stats.cruiseGroupNo,stats.presetPositionNo,0)">添加点</Button>
+                <Button class="flex-1" size="small" @click="ptzCommand(133,stats.cruiseGroupNo,stats.presetPositionNo,0)"> 删除点</Button>
+                <Button class="flex-1" size="small" @click="ptzCommand(133,stats.cruiseGroupNo,0,0)">删除组</Button>
+                <Button type="primary" size="small" class="flex-1" @click="ptzCommand(136,stats.cruiseGroupNo,0,0)">巡航</Button>
+              </div>
+            </div>
+            <div class="flex flex-col space-y-1">
+              <div>
+                <InputNumber v-model:value="stats.scanSpeed" :min="1" :max="4095" size="small">
+                  <template #addonBefore >
+                    扫描速度
+                  </template>
+                  <template #addonAfter>
+                    <Button size="small" @click="ptzCommand(138,stats.scanGroupNo,(stats.scanSpeed % 256),(Math.floor(stats.scanSpeed / 256) * 16))">设置</Button>
+                  </template>
+                </InputNumber>
+                <InputNumber v-model:value="stats.scanGroupNo" :min="1" :max="255" size="small">
+                  <template #addonBefore >
+                    扫描组编号
+                  </template>
+                </InputNumber>
+              </div>
+              <div class="flex flex-row">
+                <Button class="flex-1" size="small" @click="ptzCommand(137,stats.cruiseGroupNo,1,0)">左边界</Button>
+                <Button class="flex-1" size="small" @click="ptzCommand(137,stats.cruiseGroupNo,2,0)" >右边界</Button>
+                <Button type="primary" size="small" class="flex-1" @click="ptzCommand(137,stats.cruiseGroupNo,0,0)">扫描</Button>
+                <Button type="primary" size="small" danger class="flex-1" @click="ptzCamera('stop')">停止</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 流信息 -->
+        <div :class="`${prefixCls}-right-stream overflow-y-auto`">
+          <Divider>流信息</Divider>
+          <p v-if="isEmpty(stats.tracks)">暂无数据</p>
+          <Descriptions title="视频1" size="small" :column="1" v-if="isNotEmpty(stats.tracks)">
+            <template :key="index" v-for="(val,index) in stats.tracks">
+              <template v-if="val.codecType == 0">
+                <DescriptionsItem label="格式：">{{ val?.codecIdName }}</DescriptionsItem>
+                <DescriptionsItem label="类型：">视频</DescriptionsItem>
+                <DescriptionsItem label="分辨率：">{{ val.width }} x {{ val.height }}</DescriptionsItem>
+                <DescriptionsItem label="帧率：">{{ val.fps }}</DescriptionsItem>
+              </template>
+              <template v-if="val.codecType == 1">>
+                <DescriptionsItem label="格式：">{{ val.codecIdName }}</DescriptionsItem>
+                <DescriptionsItem label="类型：">音频</DescriptionsItem>
+                <DescriptionsItem label="采样位数：">{{ val.sampleBit }}</DescriptionsItem>
+                <DescriptionsItem label="采样率：">{{ val.sampleRate }}</DescriptionsItem>
+              </template>
+              <template v-if="index < stats.tracks.length">
+                <DescriptionsItem ><Divider/></DescriptionsItem>
+              </template>
+            </template>
+          </Descriptions>
+        </div>
+      </div>
+    </div>
   </BasicModal>
 </template>
 <script lang="ts" setup>
@@ -249,6 +249,7 @@
     }
   })
   const handleSelectPlay=(val)=>{
+    console.log(val);
     stats.selectPlay = val;
   }
   //复制触发
@@ -304,7 +305,7 @@
       stats.jessibucaMap={
         flv:{
           name:"flv地址",
-          value:flv?.ur
+          value:flv?.url
         },
         wsFlv:{
           name:"wsFlv地址",

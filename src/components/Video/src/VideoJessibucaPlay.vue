@@ -180,18 +180,23 @@
    * 播放事件
    */
   const play =() =>{
-    if(isEmpty(stats.videoUrl)){
-      stats.videoUrl =props.videoUrl;
-    }
-    if(jessibucaPlayer.hasLoaded()){
-      jessibucaPlayer.play(props.videoUrl);
-      stats.videoUrl=props.videoUrl;
-    }else{
-      jessibucaPlayer.on("load",()=>{
+    nextTick(()=>{
+      if(isEmpty(stats.videoUrl)){
+        stats.videoUrl =props.videoUrl;
+      }
+      if(!jessibucaPlayer){
+        return;
+      }
+      if(jessibucaPlayer.hasLoaded()){
         jessibucaPlayer.play(props.videoUrl);
         stats.videoUrl=props.videoUrl;
-      })
-    }
+      }else{
+        jessibucaPlayer.on("load",()=>{
+          jessibucaPlayer.play(props.videoUrl);
+          stats.videoUrl=props.videoUrl;
+        })
+      }
+    })
   }
   /**
    * 暂停/继续 事件 false 暂停 true 继续
@@ -248,7 +253,8 @@
    * 销毁事件
    */
   const destroy = () =>{
-    if(jessibucaPlayer){
+    nextTick(()=>{
+      if(jessibucaPlayer){
       jessibucaPlayer?.destroy();
     }
     createVideoDom();
@@ -258,12 +264,15 @@
     stats.performance= "";
     stats.playing= false;
     stats.destroy= true;
+    })
   }
   //构建完成相关js后添加视频组件
   toPromise().then((msg)=>{
-    createVideoDom();
-    //进入直接播放
-    play();
+    nextTick(()=>{
+      createVideoDom();
+      //进入直接播放
+      play();
+    })
   })
   onMounted(()=>{
     stats.options = deepMerge(
@@ -323,7 +332,9 @@
   })
   
   onUnmounted(()=>{
-    jessibucaPlayer && jessibucaPlayer?.destroy();
+    nextTick(()=>{
+      jessibucaPlayer && jessibucaPlayer?.destroy();
+    })
   });
 </script>
 

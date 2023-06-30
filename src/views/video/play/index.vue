@@ -155,7 +155,7 @@
         fixed: 'left',
         width: 100,
         customRender: ({ record }) => {
-          const status = record.status;
+          const status = record.online;
           const enable = ~~status === 1;
           const color = enable ? 'green' : 'red';
           const text = enable ? '在线' : '离线';
