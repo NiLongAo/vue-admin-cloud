@@ -210,7 +210,7 @@
   const stats = reactive({
     //视频相关
     selectPlay:"Jessibuca",//选择的播放器
-    playType:"flv",//默认播放地址
+    playType:"wsFlv",//默认播放地址
     playing: true,//播放状态
     options:[
       {
