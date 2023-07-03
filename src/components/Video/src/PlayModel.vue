@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" title="播放器" width="1200px" :footer="null">
+  <BasicModal v-bind="$attrs" destroyOnClose @register="registerModal" title="播放器" width="1200px" :footer="null">
     <div :class="` ${prefixCls} flex flex-row gap-x-px `">
       <div :class="`${prefixCls}-left  basis-16/20 grid grid-rows-16 grid-cols-1`">
         <!-- 选择器 :footer="{ disabled: true }"-->
@@ -8,8 +8,8 @@
         </div>
         <!-- 播放器 -->
         <div :class=" `${prefixCls}-left-video bg-black grid row-span-15`">
-            <VideoJessibucaPlay v-if="stats.selectPlay === 'Jessibuca'" :videoUrl='stats.jessibucaMap[stats.playType]?.value' />
-            <VideoZlmRtcPlay v-if="stats.selectPlay === 'ZlmRtc'" :videoUrll='stats.zlmRtcUrl?.value'/>
+            <VideoJessibucaPlay v-if="stats.selectPlay === 'Jessibuca'" :videoUrl='payUrl' />
+            <VideoZlmRtcPlay v-if="stats.selectPlay === 'ZlmRtc'" :videoUrl='payUrl'/>
         </div>
           <!-- 播放地址 -->
         <div :class="`${prefixCls}-left-bot mt-2 row-span-0 space-y-2`" v-if="stats.selectPlay === 'Jessibuca'">
@@ -242,14 +242,16 @@
   })
   //获取播放地址
   const payUrl = computed(()=>{
+    let url ;
     if(stats.selectPlay === 'Jessibuca'){
-      return stats.jessibucaMap[stats.playType]?.value;
+      url = stats.jessibucaMap[stats.playType]?.value;
     }else{
-      return stats.zlmRtcUrl?.value;
+      url = stats.zlmRtcUrl?.value;
     }
+    return url;
   })
   const handleSelectPlay=(val)=>{
-    console.log(val);
+    
     stats.selectPlay = val;
   }
   //复制触发
@@ -321,8 +323,8 @@
         },
       }
       stats.zlmRtcUrl={
-        name:"rtc地址",
-        value:rtc?.url
+        name: "rtc地址",
+        value: rtc?.url
       }
   });
 </script>

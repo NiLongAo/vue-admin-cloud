@@ -41,6 +41,8 @@
   );
 
   const createVideoDom =(url:string)=>{
+    console.log("url"+url);
+    
     zlmRtcClient = new (window as any).ZLMRTCClient.Endpoint({
       element:containerRef.value,// video 标签
       debug: true,// 是否打印日志

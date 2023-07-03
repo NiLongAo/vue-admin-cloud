@@ -12,17 +12,17 @@ enum Api {
   //清除用户下载录像
   doRecordDownloadDel = '/webapi/video/gb/video/download/del',
   //播放视频回放
-  doRecordStartPlay = '/api/playback/start',
+  doRecordStartPlay = '/webapi/video/playback/start',
   //停止视频回放
-  doRecordStopPlay = '/api/playback/stop',
+  doRecordStopPlay = '/webapi/video/playback/stop',
   //暂停视频回放
-  doRecordSuspend = '/api/playback/suspend',
+  doRecordSuspend = '/webapi/video/playback/suspend',
   //暂停回放恢复
-  doRecordRestore = '/api/playback/restore',
+  doRecordRestore = '/webapi/video/playback/restore',
   //回放拖动播放
-  doRecordSeek = '/api/playback/seek',
+  doRecordSeek = '/webapi/video/playback/seek',
   //回放倍速播放
-  doRecordSpeed = '/api/playback/speed',
+  doRecordSpeed = '/webapi/video/playback/speed',
 }
 
 

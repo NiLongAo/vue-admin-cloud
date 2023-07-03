@@ -158,13 +158,10 @@
     stats.minSliderDate=startTime;
     stats.maxSliderDate=endTime;
     handleTime(startTime,endTime);
-    //触发播放事件
   }
   //触发滑块播放事件 0坐标 开始时间 1坐标 结束时间 debounce防抖动函数
   const changeSlider = debounce((val:[] | any)=>{
     handleTime(val[0],val[1]);
-    //触发播放事件
-    
   },500)
   //时间区域限制
   const disabledTime = (date, type) => {
@@ -214,13 +211,13 @@
   );
   //播放事件
   const handleRecordPlay = async() =>{
-     const {stream,flv} = await doRecordStartPlay({
+     const {stream,streamInfo} = await doRecordStartPlay({
       deviceId:stats.deviceId,
       channelId:stats.channelId,
       startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
       endTime:stats.recodeDate+' '+stats.rangePickerDate[1]
      });
-     stats.videoUrl = flv?.url;
+     stats.videoUrl = streamInfo?.wsFlv?.url;
      stats.streamId =stream;
   }
   //暂停事件
@@ -236,7 +233,7 @@
   const handleRecordScale = async(val) =>{
     await doRecordSpeed({
       streamId:stats.streamId,
-      speed:val
+      speed:val?.key,
     })
   }
   //下载事件
@@ -266,7 +263,7 @@
     if(stats.rangePickerDate[0] != tipFormatter(startTime) || stats.rangePickerDate[1] != tipFormatter(endTime)){
       stats.rangePickerDate=[tipFormatter(startTime),tipFormatter(endTime)];
     }
-    if(!isEmpty(stats.streamId)){
+    if(isEmpty(stats.streamId)){
       handleRecordPlay()
     }
   }
