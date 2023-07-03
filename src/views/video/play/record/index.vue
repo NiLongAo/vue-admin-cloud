@@ -43,7 +43,7 @@
                     </template>
                     <Button :disabled="(isEmpty(stats.streamId)?true:false)" size="small">倍速</Button>
                   </Dropdown>
-                  <Button :disabled="(isEmpty(stats.streamId)?true:false)" size="small" @click="handleRecordDownload">下载录像</Button>
+                  <Button :disabled="(isEmpty(stats.streamId)?true:false)" size="small" @click="handleRecordDownload">{{stats.downloadStatus?'取消下载':'下载录像' }}</Button>
                 </ButtonGroup>
               </div>
               <div class="h-20 w-full flex items-center relative ">
@@ -77,7 +77,16 @@
   import { useGo } from '/@/hooks/web/usePage';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { PageWrapper } from '/@/components/Page';
-  import { doRecordList,doRecordStartPlay ,doRecordStopPlay,doRecordSpeed,doRecordDownloadStart} from '/@/api/video/record';
+  import { 
+    doRecordList,
+    doRecordStartPlay ,
+    doRecordStopPlay,
+    doRecordSpeed,
+    doRecordDownloadStart,
+    doRecordDownloadStop,
+    doRecordDownloadList,
+    doRecordDownloadDel
+  } from '/@/api/video/record';
   import { isEmpty } from '/@/utils/is';
   import { RecordItem } from '/@/api/video/model/recordModel';
   import { VideoJessibucaPlay } from  '/@/components/Video/index';
@@ -100,6 +109,7 @@
     deviceId: route.params?.deviceId as string,
     channelId: route.params?.channelId as string,
     streamId:"",
+    downloadStatus :false,
     //组件相关
     clickListItme:"",//选中的录像数据列表key 处理选中状态
     recodeDate: null as any,//查询录像时间
@@ -210,8 +220,8 @@
     }
   );
   //播放事件
-  const handleRecordPlay = async() =>{
-     const {stream,streamInfo} = await doRecordStartPlay({
+  const handleRecordPlay = debounce(async()=>{
+    const {stream,streamInfo} = await doRecordStartPlay({
       deviceId:stats.deviceId,
       channelId:stats.channelId,
       startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
@@ -219,7 +229,7 @@
      });
      stats.videoUrl = streamInfo?.wsFlv?.url;
      stats.streamId =stream;
-  }
+  },500)
   //暂停事件
   const handleRecordPause = async() =>{
     await doRecordStopPlay({
@@ -238,13 +248,32 @@
   }
   //下载事件
   const handleRecordDownload = async() =>{
-    await doRecordDownloadStart({
-      deviceId:stats.deviceId,
-      channelId:stats.channelId,
-      startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
-      endTime:stats.recodeDate+' '+stats.rangePickerDate[1],
-      downloadSpeed:4
-    })
+    if(!stats.downloadStatus){
+      await doRecordDownloadStart({
+        deviceGbId:stats.deviceId,
+        channelId:stats.channelId,
+        startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
+        endTime:stats.recodeDate+' '+stats.rangePickerDate[1],
+        downloadSpeed:4
+      })
+      stats.downloadStatus = true;
+    }else{
+      const data = await doRecordDownloadList({});
+      data.forEach(async key => {
+        await doRecordDownloadStop({
+          deviceGbId:stats.deviceId,
+          channelId:stats.channelId,
+          stream:key?.stream,
+        })
+        await doRecordDownloadDel({
+          key:key?.stream,
+        });
+      });
+      stats.downloadStatus = false;
+    }
+    
+
+    
   }
   //获取进度宽度
   const getWidth = (item) =>{
