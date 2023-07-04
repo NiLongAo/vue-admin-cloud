@@ -26,13 +26,14 @@
 
   const handleOk = async () => {
     try {
-      const { sslStatus,autoConfig,rtpEnable,defaultServer, ...values } = await validate();
+      const { enable,sslStatus,autoConfig,rtpEnable,defaultServer, ...values } = await validate();
       await doMediaSave({
         ...values,
+        enable: enable === true ? 1 : 0,
         sslStatus: sslStatus === true ? 1 : 0,
-          autoConfig: autoConfig === true ? 1 : 0,
-          rtpEnable: rtpEnable === true ? 1 : 0,
-          defaultServer: defaultServer === true ? 1 : 0,
+        autoConfig: autoConfig === true ? 1 : 0,
+        rtpEnable: rtpEnable === true ? 1 : 0,
+        defaultServer: defaultServer === true ? 1 : 0,
       });
       setDrawerProps({ confirmLoading: true });
       closeDrawer();
@@ -210,6 +211,15 @@
       defaultValue:'035c73f7-bb6b-4889-a715-d9eb2d1925cc'
     },
     {
+      field: 'enable',
+      component: 'Switch',
+      label: '是否启用',
+      colProps: {
+        span: 12,
+      },
+      defaultValue:true,
+    },
+    {
       field: 'defaultServer',
       component: 'Switch',
       label: '默认ZLM',
@@ -260,9 +270,10 @@
     setDrawerProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      const { sslStatus,autoConfig,rtpEnable,defaultServer, ...entity } = await doMediaDetail({ id: data.id });
+      const { enable,sslStatus,autoConfig,rtpEnable,defaultServer, ...entity } = await doMediaDetail({ id: data.id });
       setFieldsValue({
         ...entity,
+        enable: enable === 1 ? true : false,
         sslStatus: sslStatus === 1 ? true : false,
         autoConfig: autoConfig === 1 ? true : false,
         rtpEnable: rtpEnable === 1 ? true : false,

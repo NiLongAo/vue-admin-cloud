@@ -182,6 +182,23 @@
         width: 200,
       },
       {
+        title: '心跳时间',
+        dataIndex: 'keepaliveTime',
+        width: 200,
+      },
+      {
+        title: '是否启用',
+        dataIndex: 'enable',
+        width: 200,
+        customRender: ({ record }) => {
+          const status = record.enable;
+          const enable = ~~status === 1;
+          const color = enable ? 'green' : 'red';
+          const text = enable ? '是' : '否';
+          return h(Tag, { color: color }, () => text);
+        },
+      },
+      {
         title: '自动配置',
         dataIndex: 'autoConfig',
         width: 200,
