@@ -19,15 +19,14 @@
   import Icon from '@/components/Icon/Icon.vue';
   import { isEmpty } from '/@/utils/is';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useScript } from '/@/hooks/web/useScript';
   import { deepMerge } from '/@/utils';
   import { type Jessibuca} from '/@/components/Video';
   import { ref, reactive,defineProps,onMounted,onUnmounted,watch,nextTick } from 'vue';
+  import '@/components/Video/script/jessibuca/jessibuca.js';
 
   /**
    * 此播放器只能播放 H264
    */
-  const {toPromise} =  useScript({src:"/src/components/Video/script/jessibuca/jessibuca.js"});
   const containerRef = ref();
   const buttonsBox = ref<HTMLElement | string>('');
   let jessibucaPlayer : Jessibuca;
@@ -266,14 +265,7 @@
     stats.destroy= true;
     })
   }
-  //构建完成相关js后添加视频组件
-  toPromise().then((msg)=>{
-    nextTick(()=>{
-      createVideoDom();
-      //进入直接播放
-      play();
-    })
-  })
+
   onMounted(()=>{
     stats.options = deepMerge(
         {
@@ -328,12 +320,16 @@
         jessibucaPlayer && jessibucaPlayer?.resize()
       });
       observer.observe(containerRef.value);
+      createVideoDom();
+      //进入直接播放
+      play();
     })
   })
   
   onUnmounted(()=>{
     nextTick(()=>{
       jessibucaPlayer && jessibucaPlayer?.destroy();
+      jessibucaPlayer = null as any;
     })
   });
 </script>

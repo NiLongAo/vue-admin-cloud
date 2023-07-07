@@ -6,13 +6,9 @@
 <script lang="ts" setup>
   import { isEmpty } from '/@/utils/is';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useScript } from '/@/hooks/web/useScript';
-  import { ref, reactive,defineProps,onUnmounted,watch,nextTick } from 'vue';
+  import { ref, reactive,defineProps,onMounted,onUnmounted,watch,nextTick } from 'vue';
+  import {ZLMRTCClient} from '@/components/Video/script/zlmRTC/ZLMRTCClient.js';
 
-  /**
-   * 此播放器只能播放 H264
-   */
-  const {toPromise} =  useScript({src:"/src/components/Video/script/zlmRTC/ZLMRTCClient.js"});
   const containerRef = ref();
   let zlmRtcClient;
   const { prefixCls } = useDesign('video-rtp-play');
@@ -41,9 +37,7 @@
   );
 
   const createVideoDom =(url:string)=>{
-    console.log("url"+url);
-    
-    zlmRtcClient = new (window as any).ZLMRTCClient.Endpoint({
+    zlmRtcClient = new ZLMRTCClient.Endpoint({
       element:containerRef.value,// video 标签
       debug: true,// 是否打印日志
       zlmsdpUrl: url,//流地址
@@ -103,10 +97,12 @@
     zlmRtcClient.close();
     zlmRtcClient = null;
   }
-  
-  //构建完成相关js后添加视频组件
-  toPromise().then((msg)=>{
-    play();
+
+  onMounted(()=>{
+    //构建完成相关js后添加视频组件
+    nextTick(()=>{
+      play();
+    })
   })
   
   onUnmounted(()=>{
