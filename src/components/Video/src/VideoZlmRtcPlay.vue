@@ -6,8 +6,11 @@
 <script lang="ts" setup>
   import { isEmpty } from '/@/utils/is';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { ref, reactive,defineProps,onMounted,onUnmounted,watch,nextTick } from 'vue';
-  import {ZLMRTCClient} from '@/components/Video/script/zlmRTC/ZLMRTCClient.js';
+  import { ref, reactive,defineProps,onUnmounted,watch,nextTick } from 'vue';
+  import { useScript } from '/@/hooks/web/useScript';
+
+  const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
+  const { toPromise } = useScript({src:publicPath+'script/zlmRTC/ZLMRTCClient.js'});
 
   const containerRef = ref();
   let zlmRtcClient;
@@ -29,15 +32,17 @@
   watch(
     () => props.videoUrl,
     () => {
-      //先注销
-      pause();
-      //然后播放
-      play();
+      nextTick(()=>{
+        //先注销
+        pause();
+        //然后播放
+        play();
+      })
     },
   );
 
   const createVideoDom =(url:string)=>{
-    zlmRtcClient = new ZLMRTCClient.Endpoint({
+    zlmRtcClient = new (window as any).ZLMRTCClient.Endpoint({
       element:containerRef.value,// video 标签
       debug: true,// 是否打印日志
       zlmsdpUrl: url,//流地址
@@ -98,15 +103,20 @@
     zlmRtcClient = null;
   }
 
-  onMounted(()=>{
-    //构建完成相关js后添加视频组件
+  toPromise().then(()=>{
     nextTick(()=>{
+      //进入直接播放
       play();
     })
-  })
-  
+  });
+
   onUnmounted(()=>{
-    stats.timer && clearTimeout(stats.timer);;
+    stats.timer && clearTimeout(stats.timer);
+    if(!zlmRtcClient){
+      return;
+    }
+    zlmRtcClient.close();
+    zlmRtcClient = null;
   });
 </script>
 

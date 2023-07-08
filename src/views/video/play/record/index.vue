@@ -227,7 +227,7 @@
       startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
       endTime:stats.recodeDate+' '+stats.rangePickerDate[1]
      });
-     stats.videoUrl = streamInfo?.wsFlv?.url;
+     stats.videoUrl = (streamInfo?.sslStatus == 0)?(streamInfo?.wsFlv?.url):(streamInfo?.wssFlv?.url);
      stats.streamId =stream;
   },500)
   //暂停事件

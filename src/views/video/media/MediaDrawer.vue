@@ -44,6 +44,14 @@
   };
   
   const schemasDevice: FormSchema[] = [
+  {
+      field: 'id',
+      show: false,
+      component: 'Input',
+      colProps: {
+        span: 12,
+      },
+    },
     {
       field: 'ip',
       component: 'Input',

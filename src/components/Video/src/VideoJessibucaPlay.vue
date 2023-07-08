@@ -19,17 +19,18 @@
   import Icon from '@/components/Icon/Icon.vue';
   import { isEmpty } from '/@/utils/is';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useScript } from '/@/hooks/web/useScript';
   import { deepMerge } from '/@/utils';
-  import { type Jessibuca} from '/@/components/Video';
   import { ref, reactive,defineProps,onMounted,onUnmounted,watch,nextTick } from 'vue';
-  import '@/components/Video/script/jessibuca/jessibuca.js';
-
   /**
    * 此播放器只能播放 H264
    */
+  const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
+  const { toPromise } = useScript({src:publicPath+'script/jessibuca/jessibuca.js'});
+
   const containerRef = ref();
   const buttonsBox = ref<HTMLElement | string>('');
-  let jessibucaPlayer : Jessibuca;
+  let jessibucaPlayer ;
   const { prefixCls } = useDesign('video-play');
   const props = defineProps({
     //播放url
@@ -65,7 +66,7 @@
     //是否已销毁
     destroy:true,
     //播放器所有参数
-    options:{} as Jessibuca.Config,
+    options:{},
   })
 
   watch(
@@ -195,6 +196,7 @@
           stats.videoUrl=props.videoUrl;
         })
       }
+     
     })
   }
   /**
@@ -266,6 +268,13 @@
     })
   }
 
+   toPromise().then(()=>{
+    nextTick(()=>{
+      createVideoDom();
+      //进入直接播放
+      play();
+    })
+   });
   onMounted(()=>{
     stats.options = deepMerge(
         {
@@ -273,13 +282,13 @@
           background: "",
           controlAutoHide: false,
           debug: false,
-          decoder: "/src/components/Video/script/jessibuca/decoder.js",
+          decoder: publicPath+"script/jessibuca/decoder.js",
           forceNoOffscreen: true,
           hasAudio: typeof (props.hasAudio) == "undefined" ? true : props.hasAudio,
           hasVideo: true,
-          heartTimeout: 10,
+          heartTimeout: 4,
           heartTimeoutReplay: true,
-          heartTimeoutReplayTimes: 3,
+          heartTimeoutReplayTimes:-1,
           hiddenAutoPause: false,
           hotKey: false,
           isFlv: false,
@@ -288,9 +297,9 @@
           isResize: false,
           keepScreenOn: false,
           loadingText: "请稍等, 视频加载中......",
-          loadingTimeout: 10,
+          loadingTimeout: 4,
           loadingTimeoutReplay: true,
-          loadingTimeoutReplayTimes: 3,
+          loadingTimeoutReplayTimes: -1,
           openWebglAlignment: false,
           operateBtns: {
             fullscreen: false,
@@ -303,12 +312,12 @@
           rotate: 0,
           showBandwidth: false,
           supportDblclickFullscreen: true,
-          timeout: 10,
+          timeout: 4,
           useMSE: location.hostname !== "localhost" && location.protocol !== "https:",
           useOffscreen: false,
           useWCS: location.hostname === "localhost" || location.protocol === "https",
           useWebFullScreen: false,
-          videoBuffer: 0.2,
+          videoBuffer: 0.3,
           wasmDecodeAudioSyncVideo: true,
           wasmDecodeErrorReplay: true,
           wcsUseVideoRender: true
@@ -320,11 +329,9 @@
         jessibucaPlayer && jessibucaPlayer?.resize()
       });
       observer.observe(containerRef.value);
-      createVideoDom();
-      //进入直接播放
-      play();
     })
   })
+  
   
   onUnmounted(()=>{
     nextTick(()=>{

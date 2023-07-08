@@ -8,8 +8,7 @@
         </div>
         <!-- 播放器 -->
         <div :class=" `${prefixCls}-left-video bg-black grid row-span-15`">
-            <VideoJessibucaPlay v-if="stats.selectPlay === 'Jessibuca'" :videoUrl='payUrl' />
-            <VideoZlmRtcPlay v-if="stats.selectPlay === 'ZlmRtc'" :videoUrl='payUrl'/>
+            <component :is="payComponent" :videoUrl='payUrl'/>
         </div>
           <!-- 播放地址 -->
         <div :class="`${prefixCls}-left-bot mt-2 row-span-0 space-y-2`" v-if="stats.selectPlay === 'Jessibuca'">
@@ -190,22 +189,28 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { reactive,unref,computed } from 'vue';
+  import { reactive,unref,computed,defineAsyncComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { RadioButtonGroup } from '/@/components/Form';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { isEmpty,isNotEmpty } from '/@/utils/is';
-  import VideoJessibucaPlay from './VideoJessibucaPlay.vue';
-  import VideoZlmRtcPlay from './VideoZlmRtcPlay.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import Icon from '@/components/Icon/Icon.vue';
   import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
   import {doPtzPtz,doPtzFrontEndCommand} from '/@/api/video/ptz';
   import { Input,InputNumber,Descriptions,DescriptionsItem, Button ,Divider ,Slider,Dropdown,Menu,MenuItem} from 'ant-design-vue';
-
+  const VideoJessibucaPlay = defineAsyncComponent(() => import('./VideoJessibucaPlay.vue'))
+  const VideoZlmRtcPlay = defineAsyncComponent(() => import('./VideoZlmRtcPlay.vue'))
   const { prefixCls } = useDesign('video-play-model');
   const { clipboardRef, copiedRef } = useCopyToClipboard();
   const { createMessage } = useMessage();
+  const payComponent : any = computed(()=>{
+    if(stats.selectPlay =="Jessibuca"){
+      return VideoJessibucaPlay;
+    }else if(stats.selectPlay =="ZlmRtc"){
+      return VideoZlmRtcPlay;
+    }
+  })
 
   const stats = reactive({
     //视频相关
@@ -297,7 +302,7 @@
       if(!data){
           return
       }
-      const {app,stream,deviceId,channelId,mediaServerId,tracks,flv,wsFlv,ts,wsTs,rtc} = data;
+      const {sslStatus,app,stream,deviceId,channelId,mediaServerId,tracks,flv,wsFlv,ts,wsTs,httpsFlv,wssFlv,httpsTs,wssTs,rtc} = data;
       stats.app = app;
       stats.stream = stream;
       stats.deviceId = deviceId;
@@ -307,19 +312,19 @@
       stats.jessibucaMap={
         flv:{
           name:"flv地址",
-          value:flv?.url
+          value:sslStatus==0?flv?.url:httpsFlv?.url
         },
         wsFlv:{
           name:"wsFlv地址",
-          value:wsFlv?.url
+          value:wsTs==0?flv?.url:wssFlv?.url
         },
         ts:{
           name:"ts地址",
-          value:ts?.url
+          value:sslStatus==0?ts?.url:httpsTs?.url
         },
         wsTs:{
           name:"wsTs地址",
-          value:wsTs?.url
+          value:sslStatus==0?wsTs?.url:wssTs?.url
         },
       }
       stats.zlmRtcUrl={
