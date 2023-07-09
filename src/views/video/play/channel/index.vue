@@ -37,7 +37,7 @@
       </template>
     </VxeBasicTable>
     <DeviceChannelDrawer @register="register" @success="handleSuccess" />
-    <PlayModel @register="registerModal" />
+    <PlayModel @register="registerModal" control/>
   </PageWrapper>
 </template>
 

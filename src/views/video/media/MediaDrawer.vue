@@ -44,8 +44,9 @@
   };
   
   const schemasDevice: FormSchema[] = [
-  {
+    {
       field: 'id',
+      label: 'id',
       show: false,
       component: 'Input',
       colProps: {
@@ -86,6 +87,22 @@
         span: 12,
       },
       required: true,
+    },
+    {
+      field: 'videoPlayPrefix',
+      component: 'Input',
+      label: '播放代理前缀',
+      colProps: {
+        span: 12,
+      },
+    },
+    {
+      field: 'videoHttpPrefix',
+      component: 'Input',
+      label: '请求代理前缀',
+      colProps: {
+        span: 12,
+      },
     },
     {
       field: 'httpPort',

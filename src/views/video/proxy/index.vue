@@ -53,13 +53,14 @@
       </template>
     </BasicTable>
     <ProxyDrawer @register="register" @success="handleSuccess" />
-    <PlayModel @register="registerModal" />
+    <PlayModel @register="registerModal" :auth="userStore.getToken"/>
   </div>
 </template>
 <script lang="ts" setup>
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
   import { useSystemStore } from '/@/store/modules/system';
+  import { useUserStoreWithOut } from '/@/store/modules/user';
   import { PROXY_TYPE_ENUM,PROXY_RTP_TYPE_ENUM } from '/@/enums/commonEnum';
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
   import { doProxyPage, doProxyRemove,doProxyStart,doProxyStop,doProxyGetPlayUrl } from '/@/api/video/proxy';
@@ -72,6 +73,7 @@
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
   const systemStore = useSystemStore();
+  const userStore = useUserStoreWithOut();
 
   const [registerTable, { reload }] = useTable({
     title: '拉流列表',
@@ -123,9 +125,9 @@
   }
   //播放
   const handlePlay = async(val) =>{
-    const {id} = val;
+     const {id} = val;
      const data = await doProxyGetPlayUrl({id});
-     openModal(data);
+     openModal(true,data);
   }
 
 

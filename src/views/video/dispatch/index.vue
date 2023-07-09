@@ -36,7 +36,7 @@
   const state = reactive({
     num : 1,
     checkIndex : 1,
-    videoUrl:[] as Array<String>,
+    videoUrl:[] as Array<string>,
   })
 
   /**

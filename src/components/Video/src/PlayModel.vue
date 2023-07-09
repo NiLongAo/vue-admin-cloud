@@ -1,7 +1,7 @@
 <template>
-  <BasicModal v-bind="$attrs" destroyOnClose @register="registerModal" title="播放器" width="1200px" :footer="null">
+  <BasicModal v-bind="$attrs" destroyOnClose :maskClosable="false" @register="registerModal" title="播放器" width="1200px" :footer="null">
     <div :class="` ${prefixCls} flex flex-row gap-x-px `">
-      <div :class="`${prefixCls}-left  basis-16/20 grid grid-rows-16 grid-cols-1`">
+      <div :class="props.control?`${prefixCls}-left grid grid-rows-16  grid-cols-1 basis-16/20`:`${prefixCls}-left grid grid-rows-16  grid-cols-1 grow`">
         <!-- 选择器 :footer="{ disabled: true }"-->
         <div :class="`${prefixCls}-left-top row-span-1`">
             <RadioButtonGroup :value="stats.selectPlay" :options="stats.options" @change="handleSelectPlay"/>
@@ -41,8 +41,8 @@
           </Input>
         </div>
       </div>
-      <Divider style="height: auto;background-color: #fff;" type="vertical" dashed />
-      <div  :class="`${prefixCls}-right basis-4/20 row-span-3 flex flex-col `">
+      <Divider  v-if="props.control" style="height: auto;background-color: #fff;" type="vertical" dashed />
+      <div v-if="props.control" :class="`${prefixCls}-right basis-4/20 row-span-3 flex flex-col `">
         <!-- 方向控制 -->
         <div :class="`${prefixCls}-right-direction`">
           <Divider>方向控制</Divider>
@@ -189,11 +189,12 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { reactive,unref,computed,defineAsyncComponent } from 'vue';
+  import { reactive,unref,computed,defineProps,defineAsyncComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { RadioButtonGroup } from '/@/components/Form';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { isEmpty,isNotEmpty } from '/@/utils/is';
+  import { setObjToUrlParams } from '/@/utils';
   import { useMessage } from '/@/hooks/web/useMessage';
   import Icon from '@/components/Icon/Icon.vue';
   import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
@@ -211,6 +212,18 @@
       return VideoZlmRtcPlay;
     }
   })
+
+  const props = defineProps({
+    //播放url
+    control: {
+        type: Boolean ,
+        default: false
+    },
+    auth: {
+        type: String ,
+        default: null
+    },
+  });
 
   const stats = reactive({
     //视频相关
@@ -296,13 +309,19 @@
       combindCode2:combindCode2
     });
   }
+  const authUrl= (url) =>{
+    if(isEmpty(props.auth)){
+        return url;
+    }
+    return setObjToUrlParams(url,{token:props.auth});
+  }
 
   const [registerModal, { setModalProps }] = useModalInner((data) => {
       setModalProps({ confirmLoading: false });
       if(!data){
           return
       }
-      const {sslStatus,app,stream,deviceId,channelId,mediaServerId,tracks,flv,wsFlv,ts,wsTs,httpsFlv,wssFlv,httpsTs,wssTs,rtc} = data;
+      const {sslStatus,app,stream,deviceId,channelId,mediaServerId,tracks,flv,wsFlv,ts,wsTs,httpsFlv,wssFlv,httpsTs,wssTs,rtc,rtcs} = data;
       stats.app = app;
       stats.stream = stream;
       stats.deviceId = deviceId;
@@ -312,24 +331,24 @@
       stats.jessibucaMap={
         flv:{
           name:"flv地址",
-          value:sslStatus==0?flv?.url:httpsFlv?.url
+          value:authUrl(sslStatus==0?flv?.url:httpsFlv?.url)
         },
         wsFlv:{
           name:"wsFlv地址",
-          value:wsTs==0?flv?.url:wssFlv?.url
+          value:authUrl(sslStatus==0?wsFlv?.url:wssFlv?.url)
         },
         ts:{
           name:"ts地址",
-          value:sslStatus==0?ts?.url:httpsTs?.url
+          value:authUrl(sslStatus==0?ts?.url:httpsTs?.url)
         },
         wsTs:{
           name:"wsTs地址",
-          value:sslStatus==0?wsTs?.url:wssTs?.url
+          value:authUrl(sslStatus==0?wsTs?.url:wssTs?.url)
         },
       }
       stats.zlmRtcUrl={
         name: "rtc地址",
-        value: rtc?.url
+        value: authUrl(sslStatus==0?rtc?.url:rtcs?.url)
       }
   });
 </script>

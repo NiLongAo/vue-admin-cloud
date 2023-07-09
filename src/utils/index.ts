@@ -25,12 +25,13 @@ export function getPopupContainer(node?: HTMLElement): HTMLElement {
  *  ==>www.baidu.com?a=3&b=4
  */
 export function setObjToUrlParams(baseUrl: string, obj: any): string {
-  let parameters = '';
+  const url = new URL(baseUrl);
+  const params = new URLSearchParams(url.search);
   for (const key in obj) {
-    parameters += key + '=' + encodeURIComponent(obj[key]) + '&';
+    params.set(key, String(obj[key]));
   }
-  parameters = parameters.replace(/&$/, '');
-  return /\?$/.test(baseUrl) ? baseUrl + parameters : baseUrl.replace(/\/?$/, '?') + parameters;
+  url.search = params.toString();
+  return url.toString();
 }
 
 /**
