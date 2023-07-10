@@ -91,7 +91,7 @@
   // );
 
   const createVideoDom =()=>{
-    jessibucaPlayer = new (window as any).Jessibuca({...{container: containerRef.value},...stats.options}) as Jessibuca;
+    jessibucaPlayer = new (window as any).Jessibuca({...{container: containerRef.value},...stats.options});
     jessibucaPlayer.on("load", function () {
       console.log("on load init");
     });

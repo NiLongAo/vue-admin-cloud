@@ -14,18 +14,23 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, unref } from 'vue';
+  import { ref, unref, computed,reactive } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM,GEO_COORD_SYS_TYPE_ENUM,STREAM_MODE_TYPE_ENUM} from '/@/enums/commonEnum';
   import { useSystemStore } from '/@/store/modules/system';
   import { doFindDeviceId,doSaveDevice } from '/@/api/video/device';
+  import { doMediaPage } from '/@/api/video/mediaServer';
+  import { debounce } from 'lodash-es';
 
   const emit = defineEmits(['success', 'register']);
   const isUpdate = ref(true);
   const getTitle = computed(() => (!unref(isUpdate) ? '新增设备' : '编辑设备'));
   const systemStore = useSystemStore();
 
+  const stats = reactive({
+    query:"",
+  });
 
   const handleOk = async () => {
     try {
@@ -120,7 +125,30 @@
       colProps: {
         span: 12,
       },
-      required: true,
+    },
+    {
+      field: 'mediaServerId',
+      label: '流媒体',
+      colProps: {
+        span: 12,
+      },
+      component: 'ApiSelect',
+      componentProps: {
+        api: doMediaPage,
+        filterable: true,
+        multiple: true,
+        allowCreate: true,
+        showSearch: true,
+        filterOption: false,
+        params: computed(()=> {return { query: stats.query, pageSize: 20 }}),
+        onSearch: debounce((value)=>{
+          return stats.query = value;
+        },300),
+        onChange: ()=>{stats.query = '';},
+        resultField:'data',
+        labelField: 'ip',
+        valueField: 'id',
+      },
     },
     {
       field: 'transport',
