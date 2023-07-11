@@ -175,6 +175,15 @@
       required: true,
     },
     {
+      field: 'rtpPortRange',
+      component: 'Input',
+      label: 'RTP端口范围',
+      colProps: {
+        span: 12,
+      },
+      required: true,
+    },
+    {
       field: 'rtspPort',
       component: 'InputNumber',
       label: 'RTSP端口',
@@ -200,15 +209,6 @@
         max:65535
       },
       defaultValue: 0,
-      required: true,
-    },
-    {
-      field: 'rtpPortRange',
-      component: 'Input',
-      label: 'RTP端口范围',
-      colProps: {
-        span: 12,
-      },
       required: true,
     },
     {
