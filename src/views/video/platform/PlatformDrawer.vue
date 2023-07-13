@@ -92,7 +92,6 @@
       colProps: {
         span: 12,
       },
-      required: true,
     },
     {
       field: 'serverGbId',

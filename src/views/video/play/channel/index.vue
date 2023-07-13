@@ -5,18 +5,6 @@
         <TableAction outside
           :actions="[
             {
-              ifShow: hasPermission('system.tenant:update') && row.status === 1,
-              tooltip: '播放',
-              icon: 'ic-outline-play-circle',
-              onClick: handlePlay.bind(null, row),
-            },
-            {
-              ifShow: hasPermission('system.tenant:update') && row.status === 1,
-              tooltip: '历史回放',
-              icon: 'ic-round-history',
-              onClick: handleRecord.bind(null, row),
-            },
-            {
               ifShow: hasPermission('system.tenant:update'),
               tooltip: '编辑',
               icon: 'mdi:file-edit-outline',
@@ -33,11 +21,32 @@
               },
             },
           ]"
+          :dropDownActions="[
+            {
+              ifShow: hasPermission('system.tenant:update') && row.status === 1,
+              label: '播放',
+              icon: 'ic-outline-play-circle',
+              onClick: handlePlay.bind(null, row),
+            },
+            {
+              ifShow: hasPermission('system.tenant:update') && isNotEmpty(row.streamId),
+              label:'暂停',
+              color: 'error',
+              icon: 'ic-outline-stop-circle',
+              onClick: handleStop.bind(null, row),
+            },
+            {
+              ifShow: hasPermission('system.tenant:update') && row.status === 1,
+              label: '历史回放',
+              icon: 'ic-round-history',
+              onClick: handleRecord.bind(null, row),
+            },
+          ]"
         />
       </template>
     </VxeBasicTable>
     <DeviceChannelDrawer @register="register" @success="handleSuccess" />
-    <PlayModel @register="registerModal" control/>
+    <PlayModel @register="registerModal" control @cancel="handleSuccess" />
   </PageWrapper>
 </template>
 
@@ -49,6 +58,7 @@
     VxeGridPropTypes,
     VxeFormItemProps,
   } from '/@/components/VxeTable';
+  import { isNotEmpty } from '/@/utils/is';
   import { useGo } from '/@/hooks/web/usePage';
   import { TableAction } from '/@/components/Table';
   import { PageWrapper } from '/@/components/Page';
@@ -60,7 +70,7 @@
   import { useSystemStore } from '/@/store/modules/system';
   import { useRoute } from 'vue-router';
   import { DEVICE_TYPE_ENUM,PTZ_TYPE_ENUM } from '/@/enums/commonEnum';
-  import { doPlayStart} from '/@/api/video/paly';
+  import { doPlayStart,doPlayStop} from '/@/api/video/paly';
   import { doDeviceChannelPage ,doDelDeviceChannel} from '/@/api/video/deviceChannel';
   import DeviceChannelDrawer from './DeviceChannelDrawer.vue';
   import {PlayModel} from '/@/components/Video/index';
@@ -148,6 +158,12 @@
     const values = await doPlayStart({ deviceId:data.deviceId,channelId:data.channelId});
     openModal(true, values);
   }
+ //暂停
+  const handleStop = async(data)=>{
+    await doPlayStop({ deviceId:data.deviceId,channelId:data.channelId});
+    handleSuccess();
+  }
+  
   //历史回放
   const handleRecord = (data) =>{
     go('/video/play/record/'+data.deviceId+'/'+data.channelId);
@@ -305,7 +321,7 @@
         width: 150,
       },
       {
-        minWidth:160,
+        minWidth:120,
         title: '操作',
         align: 'center',
         slots: { default: 'action' },
