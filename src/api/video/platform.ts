@@ -12,6 +12,16 @@ enum Api {
   doPlatformUpdate =  '/webapi/video/parent/platform/update',
   //移除
   doPlatformRemove = '/webapi/video/parent/platform/remove',
+  //级联国标目录数
+  doPlatformCatalogTree = '/webapi/video/platform/catalog/tree',
+  //级联国标目录新增
+  doPlatformCatalogInsert = '/webapi/video/platform/catalog/insert',
+  //级联国标目录修改
+  doPlatformCatalogUpdate = '/webapi/video/platform/catalog/update',
+  //级联国标目录删除
+  doPlatformCatalogDelete = '/webapi/video/platform/catalog/delete',
+  //级联国标目录删除关联
+  doPlatformCatalogDeleteRelation = '/webapi/video/platform/catalog/delete_relation',
 }
 
 export function doPlatformPage(params: PlatformParams) {
