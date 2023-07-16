@@ -6,6 +6,7 @@
       ref="asyncExpandTreeRef"
       :fieldNames="{ key: 'id', title: 'name' }"
       :clickRowToExpand="false"
+      :selectedKeys="defaultKey"
       :treeData="treeData"
       @select="handleSelect"
     />
@@ -29,8 +30,9 @@
     }
   };
 
-  const handleSelect = (keys) => {
-    emit('select', unref(asyncExpandTreeRef)?.getSelectedNode(keys[0]));
+  const handleSelect = (_,info) => {
+    defaultKey.value = [info.node.key];
+    emit('select', unref(asyncExpandTreeRef)?.getSelectedNode(info.node.key));
   };
 
   defineExpose({ fetch });

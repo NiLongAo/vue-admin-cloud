@@ -21,13 +21,21 @@
           :actions="[
             {
               ifShow: hasPermission('system.role:update'),
+              icon: 'ic-round-join-left',
+              tooltip: '关联国标',
+              onClick: handleJoinGb.bind(null, record),
+            },
+            {
+              ifShow: hasPermission('system.role:update'),
               icon: 'mdi:file-edit-outline',
+              tooltip: '编辑',
               onClick: handleEdit.bind(null, record),
             },
             {
               ifShow: hasPermission('system.role:delete'),
               color: 'error',
               icon: 'mdi:delete-outline',
+              tooltip: '删除',
               popConfirm: {
                 title: '是否删除？',
                 confirm: handleDelete.bind(null, record),
@@ -43,6 +51,7 @@
       </template>
     </BasicTable>
     <PlatformDrawer @register="register" @success="handleSuccess" />
+    <PlatformJoinGbModel @register="registerModal" @success="handleSuccess"/>
   </div>
 </template>
 <script lang="ts" setup>
@@ -54,8 +63,11 @@
   import { doPlatformPage, doPlatformRemove } from '/@/api/video/platform';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useDrawer } from '/@/components/Drawer';
+  import { useModal } from '/@/components/Modal';
   import PlatformDrawer from './PlatformDrawer.vue';
-  const [register, { openDrawer }] = useDrawer();
+  import PlatformJoinGbModel from './PlatformJoinGbModel.vue';
+  const [ register, { openDrawer }] = useDrawer();
+  const [ registerModal, { openModal }] = useModal();
   const { hasPermission } = usePermission();
   const systemStore = useSystemStore();
 
@@ -77,6 +89,9 @@
       slots: { customRender: 'action' },
     },
   });
+  function handleJoinGb(record: Recordable) {
+    openModal(true, record);
+  }
   function handleAdd() {
     openDrawer(true, { isUpdate:false,id: undefined });
   }

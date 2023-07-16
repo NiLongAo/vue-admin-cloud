@@ -4,6 +4,7 @@
       title="字典类型"
       toolbar
       search
+      :selectedKeys="defaultKey"
       ref="asyncExpandTreeRef"
       :fieldNames="{ key: 'typeId', title: 'name' }"
       :clickRowToExpand="false"
@@ -34,8 +35,9 @@
     emit('select', unref(defaultKey)[0]);
   };
 
-  const handleSelect = (keys) => {
-    emit('select', keys[0]);
+  const handleSelect = (_,info) => {
+    defaultKey.value = [info.node.key];
+    emit('select', info.node.key);
   };
 
   const getRightMenuList = (node: any): ContextMenuItem[] => {

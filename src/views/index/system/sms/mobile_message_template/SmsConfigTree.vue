@@ -5,6 +5,7 @@
       toolbar
       search
       ref="asyncExpandTreeRef"
+      :selectedKeys="defaultKey"
       :fieldNames="{ key: 'id', title: 'configName' }"
       :clickRowToExpand="false"
       :treeData="treeData"
@@ -31,8 +32,9 @@
     emit('select', unref(defaultKey)[0]);
   };
 
-  const handleSelect = (keys) => {
-    emit('select', keys[0]);
+  const handleSelect = (_,info) => {
+    defaultKey.value = [info.node.key];
+    emit('select', info.node.key);
   };
 
   defineExpose({ fetch });

@@ -16,6 +16,7 @@
       toolbar
       showLine
       search
+      :selectedKeys="defaultKey"
       ref="asyncExpandTreeRef"
       :fieldNames="{ key: ketFields, title: titleFields }"
       :clickRowToExpand="false"
@@ -56,7 +57,7 @@
   const positionData = ref<TreeItem[]>([]);
   const roleData = ref<TreeItem[]>([]);
   const treeData = ref<TreeItem[]>([]);
-  const defaultKey = ref();
+  const defaultKey = ref([]) as any;
 
   function getTree() {
     const tree = unref(asyncExpandTreeRef);
@@ -175,8 +176,9 @@
     });
   };
 
-  const handleSelect = (keys) => {
+  const handleSelect = (keys,info) => {
     nextTick(() => {
+      defaultKey.value = [info.node.key];
       const node: any = getTree().getSelectedNode(keys[0]);
       if (node) {
         emit('select', unref(type), node[unref(ketFields)], node?.tenantId);

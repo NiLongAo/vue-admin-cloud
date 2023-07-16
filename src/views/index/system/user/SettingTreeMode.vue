@@ -93,7 +93,7 @@
       dataData.value = [];
       type.value = data.type;
       if (unref(type) === 1) {
-        const roleList = await doAll();
+        const roleList = await doAll({});
         //角色信息
         dataData.value = transformation('roleId', 'roleName', roleList);
       } else if (unref(type) === 2) {

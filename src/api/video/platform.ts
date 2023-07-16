@@ -12,6 +12,7 @@ enum Api {
   doPlatformUpdate =  '/webapi/video/parent/platform/update',
   //移除
   doPlatformRemove = '/webapi/video/parent/platform/remove',
+
   //级联国标目录数
   doPlatformCatalogTree = '/webapi/video/platform/catalog/tree',
   //级联国标目录新增
@@ -22,6 +23,21 @@ enum Api {
   doPlatformCatalogDelete = '/webapi/video/platform/catalog/delete',
   //级联国标目录删除关联
   doPlatformCatalogDeleteRelation = '/webapi/video/platform/catalog/delete_relation',
+
+  //级联国标通道分页接口
+  doPlatformGbChannelTree = '/webapi/video/platform/gb_channel/device_channel_tree',
+  //级联国标通道分页接口
+  doPlatformGbChannelInsert = '/webapi/video/platform/gb_channel/insert',
+  //级联国标通道分页接口
+  doPlatformGbChannelDelete = '/webapi/video/platform/gb_channel/delete',
+
+  //级联国标流分页接口
+  doPlatformGbStreamTree = '/webapi/video/platform/gb_stream/gb_stream_list',
+  //级联国标流分页接口
+  doPlatformGbStreamInsert = '/webapi/video/platform/gb_stream/add',
+  //级联国标流分页接口
+  doPlatformGbStreamDelete = '/webapi/video/platform/gb_stream/del',
+
 }
 
 export function doPlatformPage(params: PlatformParams) {
@@ -41,4 +57,41 @@ export function doPlatformDetail(params: Recordable) {
 }
 export function doPlatformRemove(params: Recordable) {
   return defHttp.delete({ url: Api.doPlatformRemove, params });
+}
+
+export function doPlatformCatalogTree(params: Recordable) {
+  return defHttp.get({ url: Api.doPlatformCatalogTree, params });
+}
+export function doPlatformCatalogInsert(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformCatalogInsert, params });
+}
+export function doPlatformCatalogUpdate(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformCatalogUpdate, params });
+}
+export function doPlatformCatalogDelete(params: Recordable) {
+  return defHttp.delete({ url: Api.doPlatformCatalogDelete, params });
+}
+export function doPlatformCatalogDeleteRelation(params: Recordable) {
+  return defHttp.delete({ url: Api.doPlatformCatalogDeleteRelation, params });
+}
+
+
+export function doPlatformGbChannelTree(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformGbChannelTree, params });
+}
+export function doPlatformGbChannelInsert(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformGbChannelInsert, params });
+}
+export function doPlatformGbChannelDelete(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformGbChannelDelete, params });
+}
+
+export function doPlatformGbStreamTree(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformGbStreamTree, params });
+}
+export function doPlatformGbStreamInsert(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformGbStreamInsert, params });
+}
+export function doPlatformGbStreamDelete(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformGbStreamDelete, params });
 }
