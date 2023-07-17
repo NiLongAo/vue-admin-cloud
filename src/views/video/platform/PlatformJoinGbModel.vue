@@ -29,20 +29,18 @@
           :active-tab-key="stats.activeKey"
           @tabChange="onTabChange"
         >
-         <Transfer :show-select-all="false" >
-          <template #children="{direction,selectedKeys,onItemSelectAll}">
+         <Transfer 
+         :show-select-all="false" 
+         :data-source="stats.dataData"
+         :target-keys="stats.idList"
+         @change="onChange"
+         >
+          <template #children="{direction,disabled,selectedKeys,filteredItems,onItemSelect,onItemSelectAll}">
             <BasicTable  
-              v-if="direction === 'left'" 
-              :rowSelection="{ 
-                columnWidth:'5px',
-                type: 'checkbox',
-                selectedRowKeys: stats.selectedRowKeys,
-                onChange:(selectedRowKeys,selectedRows)=>{
-                  stats.selectedRowKeys =selectedRowKeys,
-                  onItemSelectAll(selectedRowKeys);
-                  onTableChange(selectedKeys)
-                }
-              }"
+              :rowSelection="getRowSelection(disabled,selectedKeys,onItemSelectAll,onItemSelect)"
+              :data-source="(direction=='left'?stats.dataData:filteredItems)"
+              :rowKey="stats.tabListTitle[stats.activeKey].rowKey"
+              :columns=stats.tabListTitle[stats.activeKey].columns
               size="small"
               :isTreeTable="true"
               :striped="false"
@@ -51,40 +49,6 @@
               :showIndexColumn="false"
               :canResize="false"
               :pagination="false"
-              :rowKey="stats.tabListTitle[stats.activeKey].rowKey"
-              :api=stats.tabListTitle[stats.activeKey].api
-              :columns=stats.tabListTitle[stats.activeKey].columns
-              :searchInfo="{
-                platformId:stats.data?.serverGbId,
-                isOn:0,
-                catalogId:isEmpty(defaultKey)?'':defaultKey[0]
-              }"
-            />
-            <BasicTable  
-              v-if="direction === 'right'" 
-              :rowSelection="{ 
-                columnWidth:'5px',
-                type: 'checkbox',
-                onChange:(selectedRowKeys,selectedRows)=>{
-                  // 
-                }
-              }"
-              size="small"
-              :isTreeTable="true"
-              :striped="false"
-              :defaultExpandAllRows= "true"
-              :bordered="true"
-              :showIndexColumn="false"
-              :canResize="false"
-              :pagination="false"
-              :rowKey="stats.tabListTitle[stats.activeKey].rowKey"
-              :api=stats.tabListTitle[stats.activeKey].api
-              :columns=stats.tabListTitle[stats.activeKey].columns
-              :searchInfo="{
-                platformId:stats.data?.serverGbId,
-                isOn:1,
-                catalogId:isEmpty(defaultKey)?'':defaultKey[0]
-              }"
             />
           </template>
         </Transfer>
@@ -101,7 +65,13 @@
   import { isEmpty } from '/@/utils/is';
   import { BasicTree, TreeItem, TreeActionType } from '/@/components/Tree';
   import { Tag ,Card,Transfer} from 'ant-design-vue';
-  import {doPlatformCatalogTree,doPlatformGbChannelTree,doPlatformGbStreamTree} from '/@/api/video/platform';
+  import {
+    doPlatformCatalogTree,
+    doPlatformGbChannelList,
+    doPlatformChannelBindKey,
+    doPlatformGbStreamList,
+    doPlatformStreamBindKey
+  } from '/@/api/video/platform';
 
   const { prefixCls } = useDesign('platform-join-model');
   const platformJoinTree = ref<Nullable<TreeActionType>>(null);
@@ -128,14 +98,17 @@
       },
     ],
     selectedRowKeys:[] as any,
+    idList:[],
+    dataData:[],
     tabListTitle:{
       gbChannel:{
-        rowKey:'channelId',
-        api: doPlatformGbChannelTree,
+        rowKey:'id',
+        apiList: doPlatformGbChannelList,
+        apiBind: doPlatformChannelBindKey,
         columns:[
           {
             title: '通道编号',
-            dataIndex: 'channelId',
+            dataIndex: 'id',
             width: 10,
           },
           {
@@ -158,7 +131,8 @@
         ]
       },
       gbStream:{
-        api: doPlatformGbStreamTree,
+        apiList: doPlatformGbStreamList,
+        apiBind: doPlatformStreamBindKey,
         columns:[
           {
             title: '流编号',
@@ -195,22 +169,44 @@
       defaultKey.value = [unref(treeData)[0]['id']];
       unref(platformJoinTree)?.setSelectedKeys(unref(defaultKey));
     }
+    await onTabChange(stats.activeKey);
   };
 
   const handleSelect = (_,info) => {
     defaultKey.value = [info.node.key];
   };
 
-  const onTabChange = (key)=>{
+  const onTabChange = async (key)=>{
     stats.activeKey = key;
-
+    stats.dataData = await stats.tabListTitle[stats.activeKey].apiList()
+    stats.idList = await stats.tabListTitle[stats.activeKey].apiBind({
+      platformId:stats.data?.serverGbId,
+      catalogId:(isEmpty(unref(defaultKey))?'':unref(defaultKey)[0]),
+      isSub:1,
+    });
   }
 
-  const onTableChange = (selectedKeys)=>{
-    console.log(selectedKeys);
-    
+  const getRowSelection  = (disabled,selectedKeys,onItemSelectAll,onItemSelect)=>{
+    return {
+        type: 'checkbox',
+        checkStrictly:false,
+        columnWidth:'5px',
+        getCheckboxProps: (item: Record<string, string | boolean>) => ({
+          disabled: disabled || item.disabled,
+        }),
+        onSelectAll(selected: boolean, selectedRows: Record<string, string | boolean>[]) {
+          const treeSelectedKeys = selectedRows.filter(item => !item.disabled).map(({ key }) => key);
+          onItemSelectAll(treeSelectedKeys, selected);
+        },
+        onSelect({ key }: Record<string, string>, selected: boolean) {
+          onItemSelect(key, selected);
+        },
+        selectedRowKeys: selectedKeys,
+      };
   }
-
+  const onChange = (keys) => {
+    stats.idList = keys;
+  };
 
   const [registerModal] = useModalInner(async (data) => {
     console.log(data);
@@ -218,7 +214,7 @@
       return;
     }
     stats.data = data;
-    fetch()
+    await fetch();
   });
 </script>
 <style lang="less">

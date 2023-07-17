@@ -24,15 +24,19 @@ enum Api {
   //级联国标目录删除关联
   doPlatformCatalogDeleteRelation = '/webapi/video/platform/catalog/delete_relation',
 
-  //级联国标通道分页接口
-  doPlatformGbChannelTree = '/webapi/video/platform/gb_channel/device_channel_tree',
+  //国标级联通道列表
+  doPlatformGbChannelList = '/webapi/video/platform/gb_channel/device_channel_list',
+  //国标级联绑定的通道key集合
+  doPlatformChannelBindKey = '/webapi/video/platform/gb_channel/channel_bind_key',
   //级联国标通道分页接口
   doPlatformGbChannelInsert = '/webapi/video/platform/gb_channel/insert',
   //级联国标通道分页接口
   doPlatformGbChannelDelete = '/webapi/video/platform/gb_channel/delete',
 
-  //级联国标流分页接口
-  doPlatformGbStreamTree = '/webapi/video/platform/gb_stream/gb_stream_list',
+  //级联国标流列表
+  doPlatformGbStreamList = '/webapi/video/platform/gb_stream/gb_stream_list',
+  //级联国标流列表
+  doPlatformStreamBindKey = '/webapi/video/platform/gb_stream/stream_bind_key',
   //级联国标流分页接口
   doPlatformGbStreamInsert = '/webapi/video/platform/gb_stream/add',
   //级联国标流分页接口
@@ -76,8 +80,11 @@ export function doPlatformCatalogDeleteRelation(params: Recordable) {
 }
 
 
-export function doPlatformGbChannelTree(params: Recordable) {
-  return defHttp.post({ url: Api.doPlatformGbChannelTree, params });
+export function doPlatformGbChannelList() {
+  return defHttp.get({ url: Api.doPlatformGbChannelList });
+}
+export function doPlatformChannelBindKey(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformChannelBindKey, params });
 }
 export function doPlatformGbChannelInsert(params: Recordable) {
   return defHttp.post({ url: Api.doPlatformGbChannelInsert, params });
@@ -86,8 +93,11 @@ export function doPlatformGbChannelDelete(params: Recordable) {
   return defHttp.post({ url: Api.doPlatformGbChannelDelete, params });
 }
 
-export function doPlatformGbStreamTree(params: Recordable) {
-  return defHttp.post({ url: Api.doPlatformGbStreamTree, params });
+export function doPlatformGbStreamList() {
+  return defHttp.get({ url: Api.doPlatformGbStreamList });
+}
+export function doPlatformStreamBindKey(params: Recordable) {
+  return defHttp.post({ url: Api.doPlatformStreamBindKey, params });
 }
 export function doPlatformGbStreamInsert(params: Recordable) {
   return defHttp.post({ url: Api.doPlatformGbStreamInsert, params });
