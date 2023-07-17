@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox' }">
+    <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox', columnWidth:20, }">
       <template #action="{ record }">
         <TableAction
           :actions="[

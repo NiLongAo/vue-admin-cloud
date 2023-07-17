@@ -8,10 +8,11 @@
     width="90%"
   >
     <div :class="`${prefixCls} flex flex-row`">
-      <div class="w-60">
+      <div class="min-w-60">
           <BasicTree 
             toolbar
             search
+            size="small"
             title="目录"
             defaultExpandAll
             ref="platformJoinTree"
@@ -28,16 +29,28 @@
           :active-tab-key="stats.activeKey"
           @tabChange="onTabChange"
         >
-        <Transfer>
+         <Transfer :show-select-all="false" >
           <template #children="{direction,selectedKeys,onItemSelectAll}">
             <BasicTable  
               v-if="direction === 'left'" 
               :rowSelection="{ 
-                type: 'checkbox', 
+                columnWidth:'5px',
+                type: 'checkbox',
+                selectedRowKeys: stats.selectedRowKeys,
                 onChange:(selectedRowKeys,selectedRows)=>{
-                  onTableChange(onItemSelectAll,selectedRowKeys,selectedRows);
+                  stats.selectedRowKeys =selectedRowKeys,
+                  onItemSelectAll(selectedRowKeys);
+                  onTableChange(selectedKeys)
                 }
               }"
+              size="small"
+              :isTreeTable="true"
+              :striped="false"
+              :defaultExpandAllRows= "true"
+              :bordered="true"
+              :showIndexColumn="false"
+              :canResize="false"
+              :pagination="false"
               :rowKey="stats.tabListTitle[stats.activeKey].rowKey"
               :api=stats.tabListTitle[stats.activeKey].api
               :columns=stats.tabListTitle[stats.activeKey].columns
@@ -49,7 +62,21 @@
             />
             <BasicTable  
               v-if="direction === 'right'" 
-              :rowSelection="{ type: 'checkbox' }"
+              :rowSelection="{ 
+                columnWidth:'5px',
+                type: 'checkbox',
+                onChange:(selectedRowKeys,selectedRows)=>{
+                  // 
+                }
+              }"
+              size="small"
+              :isTreeTable="true"
+              :striped="false"
+              :defaultExpandAllRows= "true"
+              :bordered="true"
+              :showIndexColumn="false"
+              :canResize="false"
+              :pagination="false"
               :rowKey="stats.tabListTitle[stats.activeKey].rowKey"
               :api=stats.tabListTitle[stats.activeKey].api
               :columns=stats.tabListTitle[stats.activeKey].columns
@@ -100,25 +127,26 @@
         tab: '国标流',
       },
     ],
+    selectedRowKeys:[] as any,
     tabListTitle:{
       gbChannel:{
         rowKey:'channelId',
         api: doPlatformGbChannelTree,
         columns:[
           {
-            title: '通道国标编号',
+            title: '通道编号',
             dataIndex: 'channelId',
-            width: 200,
+            width: 10,
           },
           {
             title: '通道名称',
             dataIndex: 'name',
-            width: 100,
+            width: 10,
           },
           {
             title: '通道状态',
             dataIndex: 'status',
-            width: 100,
+            width: 10,
             customRender: ({ record }) => {
               const status = record.status;
               const enable = ~~status === 1;
@@ -133,19 +161,19 @@
         api: doPlatformGbStreamTree,
         columns:[
           {
-            title: '通道国标编号',
+            title: '流编号',
             dataIndex: 'channelId',
-            width: 200,
+            width: 10,
           },
           {
-            title: '通道名称',
+            title: '流名称',
             dataIndex: 'name',
-            width: 100,
+            width: 10,
           },
           {
             title: '通道状态',
             dataIndex: 'status',
-            width: 100,
+            width: 10,
             customRender: ({ record }) => {
               const status = record.status;
               const enable = ~~status === 1;
@@ -178,8 +206,9 @@
 
   }
 
-  const onTableChange = (onItemSelectAll,selectedRowKeys,selectedRows)=>{
-    onItemSelectAll(selectedRowKeys,true);
+  const onTableChange = (selectedKeys)=>{
+    console.log(selectedKeys);
+    
   }
 
 
