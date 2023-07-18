@@ -44,7 +44,6 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { CheckEvent } from 'ant-design-vue/es/tree/Tree';
   import { Transfer } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTree, TreeActionType } from '/@/components/Tree';
@@ -150,7 +149,7 @@
 
   const onChecked = (
     _: Record<string, string[]>,
-    e: CheckEvent,
+    e,
     checkedKeys: string[],
     onItemSelect: (n: any, c: boolean) => void,
   ) => {

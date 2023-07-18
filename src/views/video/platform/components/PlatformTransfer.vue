@@ -35,6 +35,8 @@
     doPlatformStreamBindKey
   } from '/@/api/video/platform';
 
+  const emit = defineEmits(['select', 'register']);
+
   const props = defineProps({
     serverGbId: {
       type: String,
@@ -84,12 +86,13 @@
         ]
       },
       gbStream:{
+        rowKey:'gbId',
         apiList: doPlatformGbStreamList,
         apiBind: doPlatformStreamBindKey,
         columns:[
           {
-            title: '流编号',
-            dataIndex: 'channelId',
+            title: '国标编号',
+            dataIndex: 'gbId',
             width: 10,
           },
           {
@@ -98,16 +101,14 @@
             width: 10,
           },
           {
-            title: '通道状态',
-            dataIndex: 'status',
+            title: '应用名',
+            dataIndex: 'app',
             width: 10,
-            customRender: ({ record }) => {
-              const status = record.status;
-              const enable = ~~status === 1;
-              const color = enable ? 'green' : 'red';
-              const text = enable ? '在线' : '离线';
-              return h(Tag, { color: color }, () => text);
-            },
+          },
+          {
+            title: '流编号',
+            dataIndex: 'stream',
+            width: 10,
           },
         ]
       },
@@ -116,8 +117,7 @@
 
   const onChange = (keys) => {
     stats.idList = keys;
-    
-    console.log(keys);
+    emit('select', stats.idList);
   };
 
   //数据转换
@@ -152,7 +152,7 @@
       if (item.children) {
         tree1 = handleTreeData(item.children, targetKeys);
       }
-      return { ...item, disabled: targetKeys.includes(item.id), children: tree1 };
+      return { ...item, disabled: targetKeys.includes(item[stats.tabListTitle[props.activeKey].rowKey]), children: tree1 };
     });
     return tree;
   };
@@ -160,8 +160,10 @@
   const buildTree = (data,parentId =null) =>{
     const tree = [] as Array<Object>;
     data.forEach(item => {
-      if(item.hasOwnProperty('parentId') && item?.parentId == parentId){
-        const children = buildTree(data, item.id);
+      if(!item.hasOwnProperty('parentId')){
+        tree.push(item);
+      }else if(item?.parentId == parentId){
+        const children = buildTree(data, item[stats.tabListTitle[props.activeKey].rowKey]);
         if (children.length) {
           item.children = children;
         }
@@ -194,8 +196,9 @@
     if(isEmpty(activeKey)){
       return;
     } 
+    stats.idList=[];
     const obj = stats.tabListTitle[activeKey] as any;
-    stats.dataData = await obj.apiList()
+    stats.dataData = await obj.apiList();
   }
 
   const fetchBind = async (activeKey)=>{
@@ -212,7 +215,6 @@
   watch(() => props.activeKey,
     () => {
       fetchList(props.activeKey);
-      
     },
   );
   watch(() => props.catalogId,

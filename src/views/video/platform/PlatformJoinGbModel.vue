@@ -17,7 +17,7 @@
           :active-tab-key="stats.activeKey"
           @tabChange="onTabChange"
         >
-          <PlatformTransfer :server-gb-id="stats.data?.serverGbId" :active-key="stats.activeKey" :catalog-id="stats.catalogId"/>
+          <PlatformTransfer :server-gb-id="stats.data?.serverGbId" :active-key="stats.activeKey" :catalog-id="stats.catalogId" @select="handleSelect"/>
         </Card>
       </div>
     </div>
