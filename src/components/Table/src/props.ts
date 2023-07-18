@@ -97,6 +97,10 @@ export const basicProps = {
     default: null,
   },
   ellipsis: { type: Boolean, default: true },
+  customRow: {
+    type:Function as PropType<Fn>,
+    default: null,
+  },
   isCanResizeParent: { type: Boolean, default: false },
   canResize: { type: Boolean, default: true },
   clearSelectOnPageChange: propTypes.bool,
