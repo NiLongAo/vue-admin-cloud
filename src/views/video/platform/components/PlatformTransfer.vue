@@ -198,6 +198,7 @@
     if(isEmpty(activeKey)){
       return;
     } 
+    stats.dataData = [];
     stats.targetKeys=[];
     const obj = stats.tabListTitle[activeKey] as any;
     stats.dataData = await obj.apiList();
