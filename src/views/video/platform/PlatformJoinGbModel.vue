@@ -8,16 +8,18 @@
     width="90%"
   >
     <div :class="`${prefixCls} flex flex-row`">
-      <div class="min-w-60">
-          <PlatformTree :server-gb-id="stats.data?.serverGbId" @select="handleSelect"/>
-      </div>
+      <PlatformTree 
+        :class="`${prefixCls}-tree  min-w-60`"
+        :server-gb-id="stats.data?.serverGbId" 
+        @select="handleTreeSelect"
+      />
       <div class="grow">
         <Card
           :tab-list="stats.cardTabList"
           :active-tab-key="stats.activeKey"
           @tabChange="onTabChange"
         >
-          <PlatformTransfer :server-gb-id="stats.data?.serverGbId" :active-key="stats.activeKey" :catalog-id="stats.catalogId" @select="handleSelect"/>
+          <PlatformTransfer :server-gb-id="stats.data?.serverGbId" :active-key="stats.activeKey" :catalog-id="stats.catalogId"/>
         </Card>
       </div>
     </div>
@@ -35,6 +37,7 @@
   const stats = reactive({
     data : {} as any,
     catalogId:'',
+    keys:[],
     activeKey:'gbChannel',
     cardTabList:[
       {
@@ -48,25 +51,30 @@
     ],
   });
 
-  const handleSelect = (val) => {
-    stats.catalogId = val[0];
+  const handleTreeSelect = (val) => {
+    stats.catalogId = val;
   };
 
   const onTabChange = async (key)=>{
     stats.activeKey = key;
   }
 
+
   const [registerModal] = useModalInner(async (data) => {
-    console.log(data);
     if (!data) {
       return;
     }
     stats.data = data;
     await onTabChange(stats.activeKey);
   });
+  
 </script>
 <style lang="less">
  @prefix-cls: ~'@{namespace}-platform-join-model';
-
+ .@{prefix-cls}{
+    &-tree{
+      
+    }
+ }
 
 </style>

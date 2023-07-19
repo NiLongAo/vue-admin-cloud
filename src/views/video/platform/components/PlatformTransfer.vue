@@ -1,15 +1,15 @@
 <template>
   <Transfer
     :rowKey="(record)=>(record[stats.tabListTitle[props.activeKey].rowKey])"
-    :target-keys="stats.idList" 
+    :target-keys="stats.targetKeys" 
     :show-select-all="false" 
-    :data-source="dataSource"
+    :data-source="stats.dataData"
     @change="onChange"
   >
     <template #children="{direction,disabled:listDisabled,selectedKeys,filteredItems,onItemSelect,onItemSelectAll}">
       <BasicTable  
         :row-selection="onRowSelection(direction,listDisabled,selectedKeys,onItemSelect,onItemSelectAll)"
-        :data-source="(direction=='left'?tableData:buildTree(filteredItems))"
+        :data-source="(direction=='left'?buildTree(tableData):buildTree(filteredItems))"
         :rowKey="stats.tabListTitle[props.activeKey].rowKey"
         :columns=stats.tabListTitle[props.activeKey].columns
         size="small"
@@ -31,11 +31,13 @@
   import {
     doPlatformGbChannelList,
     doPlatformChannelBindKey,
+    doPlatformGbChannelInsert,
+    doPlatformGbChannelDelete,
     doPlatformGbStreamList,
-    doPlatformStreamBindKey
+    doPlatformStreamBindKey,
+    doPlatformGbStreamInsert,
+    doPlatformGbStreamDelete
   } from '/@/api/video/platform';
-
-  const emit = defineEmits(['select', 'register']);
 
   const props = defineProps({
     serverGbId: {
@@ -53,13 +55,15 @@
 
 
   const stats  = reactive({
-    idList:[],
+    targetKeys:[],
     dataData:[],
     tabListTitle:{
       gbChannel:{
         rowKey:'id',
         apiList: doPlatformGbChannelList,
         apiBind: doPlatformChannelBindKey,
+        apiInsert:doPlatformGbChannelInsert,
+        apiDelete:doPlatformGbChannelDelete,
         columns:[
           {
             title: '通道编号',
@@ -89,6 +93,8 @@
         rowKey:'gbId',
         apiList: doPlatformGbStreamList,
         apiBind: doPlatformStreamBindKey,
+        apiInsert:doPlatformGbStreamInsert,
+        apiDelete:doPlatformGbStreamDelete,
         columns:[
           {
             title: '国标编号',
@@ -115,35 +121,31 @@
     }
   })
 
-  const onChange = (keys) => {
-    stats.idList = keys;
-    emit('select', stats.idList);
+  const onChange = async (targetKeys,direction,moveKeys) => {
+    const obj = stats.tabListTitle[props.activeKey] as any;
+    if(direction === 'left'){
+     await obj.apiDelete({
+        platformId:props.serverGbId,
+        catalogId:props.catalogId,
+        isSub:0,
+        isAll:0,
+        gbIdList:moveKeys,
+      })
+    }else{
+      await obj.apiInsert({
+        platformId:props.serverGbId,
+        catalogId:props.catalogId,
+        isSub:0,
+        isAll:0,
+        gbIdList:moveKeys
+      })
+    }
+    stats.targetKeys = targetKeys;
   };
-
-  //数据转换
-  const dataSource = computed(() => {
-    const data = handleSourceData(stats.dataData);
-    return data;
-  });
 
   const tableData = computed(() => {
-    return handleTreeData(stats.dataData,stats.idList);
+    return handleTreeData(stats.dataData,stats.targetKeys);
   });
-
-  //转换eTreeData
-  const handleSourceData = (data) => {
-    const transferDataSource = [] as any;
-    data.map((item) => {
-      const { children, ...obj } = item;
-      let entity = [];
-      if (children) {
-        entity = handleSourceData(children);
-      }
-      transferDataSource.push(obj, ...entity);
-    });
-    
-    return transferDataSource;
-  };
 
   //转换eTreeData
   const handleTreeData = (data, targetKeys) => {
@@ -177,7 +179,7 @@
     return {
       checkStrictly:false,
       columnWidth:'5px',
-      selectedRowKeys: (direction=='left'?[...selectedKeys,...stats.idList]:selectedKeys),
+      selectedRowKeys: (direction=='left'?[...selectedKeys,...stats.targetKeys]:selectedKeys),
       getCheckboxProps: (item) => ({
         disabled: item.disabled,
       }),
@@ -196,7 +198,7 @@
     if(isEmpty(activeKey)){
       return;
     } 
-    stats.idList=[];
+    stats.targetKeys=[];
     const obj = stats.tabListTitle[activeKey] as any;
     stats.dataData = await obj.apiList();
   }
@@ -206,10 +208,10 @@
       return;
     }
     const obj = stats.tabListTitle[activeKey] as any;
-    stats.idList = await obj.apiBind({
+    stats.targetKeys = await obj.apiBind({
       platformId:props.serverGbId,
       catalogId:props.catalogId,
-      isSub:1,
+      isSub:0,
     });
   }
   watch(() => props.activeKey,

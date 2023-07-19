@@ -170,7 +170,7 @@
   .context-menu {
     display: block;
     position: fixed;
-    z-index: 200;
+    z-index: 1050;
     top: 0;
     left: 0;
     width: 156px;
