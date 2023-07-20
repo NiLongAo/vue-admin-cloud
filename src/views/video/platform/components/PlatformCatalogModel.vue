@@ -76,7 +76,6 @@
     const {isUpdate ,node} = data;
     stats.isUpdate = isUpdate;
     stats.data = node;
-    console.log(stats.data);
     if (isUpdate) {
       setFieldsValue({
         id: node.id,

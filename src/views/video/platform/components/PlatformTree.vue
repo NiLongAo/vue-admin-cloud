@@ -29,7 +29,7 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import PlatformCatalogModel from './PlatformCatalogModel.vue';
 
-  const emit = defineEmits(['select']);
+  const emit = defineEmits(['select','clean']);
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
 
@@ -100,6 +100,7 @@
         handler: async () => {
           await doPlatformCatalogDeleteRelation({id:node.id,type:0})
           fetch(props.serverGbId);
+          emit('clean');
         },
         icon: 'bx:bxs-folder-open',
       },
@@ -109,6 +110,7 @@
         handler: async () => {
           await doPlatformCatalogDelete({id:node.id})
           fetch(props.serverGbId);
+          emit('clean');
         },
         icon: 'bx:bxs-folder-open',
       },

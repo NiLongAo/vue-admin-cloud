@@ -1,7 +1,7 @@
 <template>
   <Transfer
     :rowKey="(record)=>(record[stats.tabListTitle[props.activeKey].rowKey])"
-    :target-keys="stats.targetKeys" 
+    :target-keys="stats.useCatalogGbIdList" 
     :show-select-all="false" 
     :data-source="stats.dataData"
     @change="onChange"
@@ -55,7 +55,8 @@
 
 
   const stats  = reactive({
-    targetKeys:[],
+    allGbIdList:[],
+    useCatalogGbIdList:[],
     dataData:[],
     tabListTitle:{
       gbChannel:{
@@ -140,11 +141,11 @@
         gbIdList:moveKeys
       })
     }
-    stats.targetKeys = targetKeys;
+    stats.useCatalogGbIdList = targetKeys;
   };
 
   const tableData = computed(() => {
-    return handleTreeData(stats.dataData,stats.targetKeys);
+    return handleTreeData(stats.dataData,stats.allGbIdList);
   });
 
   //转换eTreeData
@@ -179,7 +180,7 @@
     return {
       checkStrictly:false,
       columnWidth:'5px',
-      selectedRowKeys: (direction=='left'?[...selectedKeys,...stats.targetKeys]:selectedKeys),
+      selectedRowKeys: (direction=='left'?[...selectedKeys,...stats.useCatalogGbIdList]:selectedKeys),
       getCheckboxProps: (item) => ({
         disabled: item.disabled,
       }),
@@ -199,7 +200,8 @@
       return;
     } 
     stats.dataData = [];
-    stats.targetKeys=[];
+    stats.allGbIdList=[];
+    stats.useCatalogGbIdList=[];
     const obj = stats.tabListTitle[activeKey] as any;
     stats.dataData = await obj.apiList();
   }
@@ -209,15 +211,24 @@
       return;
     }
     const obj = stats.tabListTitle[activeKey] as any;
-    stats.targetKeys = await obj.apiBind({
+    const {allGbIdList,useCatalogGbIdList} = await obj.apiBind({
       platformId:props.serverGbId,
       catalogId:props.catalogId,
       isSub:0,
     });
+    stats.allGbIdList=allGbIdList;
+    stats.useCatalogGbIdList=useCatalogGbIdList;
   }
+
+  const refresh = () =>{
+    fetchList(props.activeKey);
+    fetchBind(props.activeKey);
+  }
+
   watch(() => props.activeKey,
     () => {
       fetchList(props.activeKey);
+      fetchBind(props.activeKey);
     },
   );
   watch(() => props.catalogId,
@@ -225,9 +236,11 @@
       fetchBind(props.activeKey);
     },
   );
+
+  
+
   onMounted(()=>{
     fetchList(props.activeKey);
-    fetchBind(props.activeKey);
   })
-
+  defineExpose({ refresh });
 </script>

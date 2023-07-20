@@ -12,6 +12,7 @@
         :class="`${prefixCls}-tree  min-w-60`"
         :server-gb-id="stats.data?.serverGbId" 
         @select="handleTreeSelect"
+        @clean="handleTreeclean"
       />
       <div class="grow">
         <Card
@@ -19,20 +20,26 @@
           :active-tab-key="stats.activeKey"
           @tabChange="onTabChange"
         >
-          <PlatformTransfer :server-gb-id="stats.data?.serverGbId" :active-key="stats.activeKey" :catalog-id="stats.catalogId"/>
+          <PlatformTransfer 
+            ref="platformTransfer"
+            :server-gb-id="stats.data?.serverGbId" 
+            :active-key="stats.activeKey" 
+            :catalog-id="stats.catalogId"
+          />
         </Card>
       </div>
     </div>
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { reactive} from 'vue';
+  import { ref,unref,reactive} from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { Card } from 'ant-design-vue';
   import PlatformTree from './components/PlatformTree.vue';
   import PlatformTransfer from './components/PlatformTransfer.vue';
 
+  const platformTransfer = ref();
   const { prefixCls } = useDesign('platform-join-model');
   const stats = reactive({
     data : {} as any,
@@ -58,8 +65,9 @@
   const onTabChange = async (key)=>{
     stats.activeKey = key;
   }
-
-
+  const handleTreeclean = () =>{
+    unref(platformTransfer).refresh();
+  }
   const [registerModal] = useModalInner(async (data) => {
     if (!data) {
       return;
