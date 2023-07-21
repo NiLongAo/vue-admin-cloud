@@ -11,7 +11,7 @@ enum Api {
   //编辑
   doPlatformUpdate =  '/webapi/video/parent/platform/update',
   //移除
-  doPlatformRemove = '/webapi/video/parent/platform/remove',
+  doPlatformRemove = '/webapi/video/parent/platform/delete',
 
   //级联国标目录数
   doPlatformCatalogTree = '/webapi/video/platform/catalog/tree',

@@ -21,6 +21,12 @@
           :actions="[
             {
               ifShow: hasPermission('system.tenant:update'),
+              tooltip: '刷新',
+              icon: 'solar:refresh-bold',
+              onClick: handleRefresh.bind(null, record),
+            },
+            {
+              ifShow: hasPermission('system.tenant:update'),
               tooltip: '设备通道',
               icon: 'carbon:devices',
               onClick: handleChannel.bind(null, record),
@@ -62,6 +68,7 @@
   import { Tag } from 'ant-design-vue';
   import { useDrawer } from '/@/components/Drawer';
   import { doDevicePage ,doDelDeviceId} from '/@/api/video/device';
+  import { doSyncDeviceChannel ,doSyncStatusDeviceChannel} from '/@/api/video/deviceChannel';
   import DeviceDrawer from './DeviceDrawer.vue';
   import { useSystemStore } from '/@/store/modules/system';
   import { TRANSPORT_TYPE_ENUM ,STREAM_MODE_TYPE_ENUM,TREE_TYPE_ENUM} from '/@/enums/commonEnum';
@@ -90,6 +97,9 @@
       slots: { customRender: 'action' },
     },
   });
+  const handleRefresh = async (record: Recordable)=>{
+    await doSyncDeviceChannel({deviceId:record.deviceId})
+  }
   function handleChannel(record: Recordable) {
     go('/video/play/channel/' + record.deviceId);
   }

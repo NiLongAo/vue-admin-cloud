@@ -23,20 +23,20 @@
           ]"
           :dropDownActions="[
             {
-              ifShow: hasPermission('system.tenant:update') && row.status === 1,
+              ifShow: hasPermission('system.tenant:update') && row.status === 1 && row.subCount === 0,
               label: '播放',
               icon: 'ic-outline-play-circle',
               onClick: handlePlay.bind(null, row),
             },
             {
-              ifShow: hasPermission('system.tenant:update') && isNotEmpty(row.streamId),
+              ifShow: hasPermission('system.tenant:update') && isNotEmpty(row.streamId) && row.subCount === 0,
               label:'暂停',
               color: 'error',
               icon: 'ic-outline-stop-circle',
               onClick: handleStop.bind(null, row),
             },
             {
-              ifShow: hasPermission('system.tenant:update') && row.status === 1,
+              ifShow: hasPermission('system.tenant:update') && row.status === 1 && row.subCount === 0,
               label: '历史回放',
               icon: 'ic-round-history',
               onClick: handleRecord.bind(null, row),
