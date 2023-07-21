@@ -141,7 +141,7 @@
         gbIdList:moveKeys
       })
     }
-    stats.useCatalogGbIdList = targetKeys;
+    refresh();
   };
 
   const tableData = computed(() => {
