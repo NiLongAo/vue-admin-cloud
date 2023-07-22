@@ -221,13 +221,13 @@
   );
   //播放事件
   const handleRecordPlay = debounce(async()=>{
-    const {stream,streamInfo} = await doRecordStartPlay({
+    const {stream,sslStatus,wsFlv,wssFlv} = await doRecordStartPlay({
       deviceId:stats.deviceId,
       channelId:stats.channelId,
       startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
       endTime:stats.recodeDate+' '+stats.rangePickerDate[1]
      });
-     stats.videoUrl = (streamInfo?.sslStatus == 0)?(streamInfo?.wsFlv?.url):(streamInfo?.wssFlv?.url);
+     stats.videoUrl = (sslStatus == 0)?(wsFlv?.url):(wssFlv?.url);
      stats.streamId =stream;
   },500)
   //暂停事件
