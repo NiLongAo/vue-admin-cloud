@@ -56,7 +56,8 @@
         >
       </template>
     </BasicTable>
-    <DeviceDrawer @register="register" @success="handleSuccess" />
+    <DeviceDrawer @register="registerDrawer" @success="handleSuccess" />
+    <DeviceChannelSyncModel @register="registerModel"/>
   </PageWrapper>
 </template>
 
@@ -67,9 +68,11 @@
   import { h } from 'vue';
   import { Tag } from 'ant-design-vue';
   import { useDrawer } from '/@/components/Drawer';
+  import { useModal } from '/@/components/Modal';
   import { doDevicePage ,doDelDeviceId} from '/@/api/video/device';
-  import { doSyncDeviceChannel ,doSyncStatusDeviceChannel} from '/@/api/video/deviceChannel';
+  import { doSyncDeviceChannel } from '/@/api/video/deviceChannel';
   import DeviceDrawer from './DeviceDrawer.vue';
+  import DeviceChannelSyncModel from './channel/DeviceChannelSyncModel.vue';
   import { useSystemStore } from '/@/store/modules/system';
   import { TRANSPORT_TYPE_ENUM ,STREAM_MODE_TYPE_ENUM,TREE_TYPE_ENUM} from '/@/enums/commonEnum';
   import { useGo } from '/@/hooks/web/usePage';
@@ -77,7 +80,10 @@
 
   const systemStore = useSystemStore();
   const { hasPermission } = usePermission();
-  const [register, { openDrawer }] = useDrawer();
+  const [ registerDrawer, { openDrawer }] = useDrawer();
+  const [ registerModel, { openModal }] = useModal();
+
+
 
   const [registerTable, { reload }] = useTable({
     title: '国标设备',
@@ -99,14 +105,15 @@
   });
   const handleRefresh = async (record: Recordable)=>{
     await doSyncDeviceChannel({deviceId:record.deviceId})
+    openModal(true,{deviceId:record.deviceId})
   }
-  function handleChannel(record: Recordable) {
+  const handleChannel = (record: Recordable) => {
     go('/video/play/channel/' + record.deviceId);
   }
-  function handleAdd() {
+  const handleAdd = () => {
     openDrawer(true, { id: undefined, isUpdate: false });
   }
-  function handleEdit(record: Recordable) {
+  const handleEdit = (record: Recordable) => {
     openDrawer(true, {
       deviceId: record.deviceId,
       isUpdate: true,
@@ -116,7 +123,7 @@
     //刷新表单
     reload();
   };
-  async function handleDelete(record: Recordable) {
+  const handleDelete = async(record: Recordable) => {
     //删除
     await doDelDeviceId({ deviceId: record.deviceId });
     //刷新表单
