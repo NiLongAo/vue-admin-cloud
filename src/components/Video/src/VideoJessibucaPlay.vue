@@ -78,17 +78,6 @@
       play();
     },
   );
-  
-  // watch(
-  //   () => props.options,
-  //   () => {
-  //     //先注销
-  //     destroy();
-  //     //然后播放
-  //     play();
-  //   },
-  //   { immediate: true },
-  // );
 
   const createVideoDom =()=>{
     jessibucaPlayer = new (window as any).Jessibuca({...{container: containerRef.value},...stats.options});
@@ -185,7 +174,7 @@
         stats.videoUrl =props.videoUrl;
       }
       if(!jessibucaPlayer){
-        return;
+        createVideoDom();
       }
       if(jessibucaPlayer.hasLoaded()){
         jessibucaPlayer.play(props.videoUrl);
@@ -254,23 +243,20 @@
    * 销毁事件
    */
   const destroy = () =>{
-    nextTick(()=>{
-      if(jessibucaPlayer){
+    if(jessibucaPlayer){
       jessibucaPlayer?.destroy();
     }
-    createVideoDom();
     stats.videoUrl=null;
     stats.kBps  = 0;
     stats.isMute=  false;
     stats.performance= "";
     stats.playing= false;
     stats.destroy= true;
-    })
+    jessibucaPlayer = null;
   }
 
    toPromise().then(()=>{
     nextTick(()=>{
-      createVideoDom();
       //进入直接播放
       play();
     })
@@ -332,13 +318,11 @@
     })
   })
   
-  
+
   onUnmounted(()=>{
-    nextTick(()=>{
-      jessibucaPlayer && jessibucaPlayer?.destroy();
-      jessibucaPlayer = null as any;
-    })
+    destroy();
   });
+  defineExpose({ destroy });
 </script>
 
 <style lang="less" scoped>

@@ -103,6 +103,15 @@
     zlmRtcClient = null;
   }
 
+  const destroy = () =>{
+    stats.timer && clearTimeout(stats.timer);
+    if(!zlmRtcClient){
+      return;
+    }
+    zlmRtcClient.close();
+    zlmRtcClient = null;
+  }
+
   toPromise().then(()=>{
     nextTick(()=>{
       //进入直接播放
@@ -111,13 +120,10 @@
   });
 
   onUnmounted(()=>{
-    stats.timer && clearTimeout(stats.timer);
-    if(!zlmRtcClient){
-      return;
-    }
-    zlmRtcClient.close();
-    zlmRtcClient = null;
+    destroy();
   });
+
+  defineExpose({ destroy });
 </script>
 
 <style lang="less" scoped>

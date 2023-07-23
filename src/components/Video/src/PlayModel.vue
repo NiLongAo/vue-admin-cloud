@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" destroyOnClose :maskClosable="false" @register="registerModal" title="播放器" width="1200px" :footer="null">
+  <BasicModal v-bind="$attrs" :maskClosable="false" @register="registerModal" title="播放器" @cancel="handleCancel" width="1200px" :footer="null">
     <div :class="` ${prefixCls} flex flex-row gap-x-px `">
       <div :class="props.control?`${prefixCls}-left grid grid-rows-16  grid-cols-1 basis-16/20`:`${prefixCls}-left grid grid-rows-16  grid-cols-1 grow`">
         <!-- 选择器 :footer="{ disabled: true }"-->
@@ -8,7 +8,7 @@
         </div>
         <!-- 播放器 -->
         <div :class=" `${prefixCls}-left-video bg-black grid row-span-15`">
-            <component :is="payComponent" :videoUrl='payUrl'/>
+            <component ref="payVideo" :is="payComponent" :videoUrl='payUrl'/>
         </div>
           <!-- 播放地址 -->
         <div :class="`${prefixCls}-left-bot mt-2 row-span-0 space-y-2`" v-if="stats.selectPlay === 'Jessibuca'">
@@ -189,7 +189,7 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { reactive,unref,computed,defineProps,defineAsyncComponent } from 'vue';
+  import { reactive,ref,unref,computed,defineProps,defineAsyncComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { RadioButtonGroup } from '/@/components/Form';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -200,6 +200,8 @@
   import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
   import {doPtzPtz,doPtzFrontEndCommand} from '/@/api/video/ptz';
   import { Input,InputNumber,Descriptions,DescriptionsItem, Button ,Divider ,Slider,Dropdown,Menu,MenuItem} from 'ant-design-vue';
+
+  const payVideo = ref();
   const VideoJessibucaPlay = defineAsyncComponent(() => import('./VideoJessibucaPlay.vue'))
   const VideoZlmRtcPlay = defineAsyncComponent(() => import('./VideoZlmRtcPlay.vue'))
   const { prefixCls } = useDesign('video-play-model');
@@ -316,6 +318,10 @@
     return setObjToUrlParams(url,{token:props.auth});
   }
 
+  const handleCancel = () =>{
+    unref(payVideo).destroy();
+  }
+
   const [registerModal, { setModalProps }] = useModalInner((data) => {
       setModalProps({ confirmLoading: false });
       if(!data){
@@ -351,6 +357,7 @@
         value: authUrl(sslStatus==0?rtc?.url:rtcs?.url)
       }
   });
+
 </script>
 <style lang="less">
  @prefix-cls: ~'@{namespace}-video-play-model';

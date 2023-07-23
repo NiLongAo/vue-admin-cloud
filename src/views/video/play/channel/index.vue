@@ -106,8 +106,9 @@
     rowConfig: { keyField: 'id' },
     checkboxConfig: { labelField: 'id' },
     treeConfig: {
+      expandAll: true,
       transform: false,
-      accordion: true,
+      accordion: false,
       rowField: 'channelId',
       parentField: 'parentId',
       children: 'children',
