@@ -53,7 +53,7 @@
      * deviceId 设备编号
      * channelId 通道编号
      */
-    const {type,isChildren,parentId:deviceId,id:channelId} = obj;
+    const {type,isChildren,deviceId,id:channelId} = obj;
     if(type == 1 || isChildren || !deviceId){
       return;
     }
