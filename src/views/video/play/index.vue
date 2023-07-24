@@ -158,7 +158,7 @@
         title: '国标编号',
         dataIndex: 'deviceId',
         fixed: 'left',
-        width: 100,
+        width: 180,
       },
       {
         title: '设备名',
@@ -182,11 +182,16 @@
       {
         title: '注册时间',
         dataIndex: 'registerTime',
-        width: 100,
+        width: 150,
       },
       {
         title: '心跳时间',
         dataIndex: 'keepaliveTime',
+        width: 150,
+      },
+      {
+        title: '心跳间隔(秒)',
+        dataIndex: 'keepaliveIntervalTime',
         width: 100,
       },
       {

@@ -102,10 +102,15 @@
       },
       componentProps:{
         onChange:(val) =>{
-          let {serverGbId:serverId,catalogId,administrativeDivision,serverGbDomain} = getFieldsValue();
+          let {serverGbId:serverId,catalogId,username,administrativeDivision,serverGbDomain} = getFieldsValue();
           const serverGbId= val?.target?.value;
           if(val === serverId){
             return;
+          }
+          if(isEmpty(username) || username === serverId){
+            setFieldsValue({
+              username:serverGbId,
+            });
           }
           if(isEmpty(catalogId) || catalogId === serverId){
             setFieldsValue({
@@ -119,7 +124,7 @@
             });
           }
           if(isEmpty(serverGbDomain) || serverGbDomain === serverId){
-            serverGbDomain = serverGbId?.length >=6 ?serverGbId.slice(0, 6):val?.target?.value;
+            serverGbDomain =serverGbId?.length >=10 ?serverGbId.slice(0, 10):val?.target?.value;
             setFieldsValue({
               serverGbDomain:serverGbDomain,
             });
@@ -162,12 +167,12 @@
     },
     {
       field: 'username',
+      helpMessage:'默认SIP国标编码',
       component: 'Input',
       label: 'SIP认证账号',
       colProps: {
         span: 12,
       },
-      required: true,
     },
     {
       field: 'password',
@@ -181,7 +186,7 @@
     {
       field: 'name',
       component: 'Input',
-      label: 'SIP服务名称',
+      label: '服务名称',
       colProps: {
         span: 12,
       },
@@ -198,6 +203,7 @@
     {
       field: 'catalogId',
       component: 'Input',
+      helpMessage:'默认SIP国标编码',
       label: '目录编号',
       colProps: {
         span: 12,
@@ -280,7 +286,7 @@
         min:30,
         max:68400
       },
-      defaultValue: 30,
+      defaultValue: 3600,
       required: true,
     },
     {

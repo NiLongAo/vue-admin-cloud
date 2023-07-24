@@ -232,19 +232,6 @@
       required: true,
     },
     {
-      field: 'keepaliveIntervalTime',
-      component: 'InputNumber',
-      label: '心跳间隔(s)',
-      colProps: {
-        span: 12,
-      },
-      componentProps: {
-        min: 30,
-      },
-      defaultValue: 30,
-      required: true,
-    },
-    {
       field: 'mobilePositionSubmissionInterval',
       component: 'InputNumber',
       label: '位置上报周期(s)',
