@@ -20,7 +20,7 @@
       {{ btnText ? btnText : t('component.cropper.selectImage') }}
     </a-button>
 
-    <CopperModal
+    <CropperModal
       @register="register"
       @upload-success="handleUploadSuccess"
       :uploadApi="uploadApi"
@@ -39,7 +39,7 @@
     watch,
     PropType,
   } from 'vue';
-  import CopperModal from './CopperModal.vue';
+  import CropperModal from './CropperModal.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -58,7 +58,7 @@
 
   export default defineComponent({
     name: 'CropperAvatar',
-    components: { CopperModal, Icon },
+    components: { CropperModal, Icon },
     props,
     emits: ['update:value', 'change'],
     setup(props, { emit, expose }) {
@@ -91,9 +91,9 @@
         },
       );
 
-      function handleUploadSuccess({ data }) {
-        sourceValue.value = data.fullPath;
-        emit('change', data);
+      function handleUploadSuccess({ source, data }) {
+        sourceValue.value = source;
+        emit('change', { source, data });
         createMessage.success(t('component.cropper.uploadSuccess'));
       }
 

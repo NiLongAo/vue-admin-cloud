@@ -9,7 +9,7 @@
       />
     </template>
 
-    <template #title v-if="!$slots.title && getMergeProps.title">
+    <template #title v-if="!$slots.title">
       <ModalHeader
         :helpMessage="getProps.helpMessage"
         :title="getMergeProps.title"

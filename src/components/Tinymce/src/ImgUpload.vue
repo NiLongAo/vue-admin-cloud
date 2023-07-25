@@ -95,7 +95,7 @@
         return false;
       }
 
-      function handleChange(info: Recordable) {
+      function handleChange(info: Record<string, any>) {
         const file = info.file;
         const status = file?.status;
         const name = file?.name;

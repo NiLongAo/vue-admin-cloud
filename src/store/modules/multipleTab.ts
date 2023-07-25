@@ -320,6 +320,7 @@ export const useMultipleTabStore = defineStore({
       }
       this.bulkCloseTabs(pathList);
       this.updateCacheTab();
+      Persistent.setLocal(MULTIPLE_TABS_KEY, this.tabList, true);
       handleGotoPage(router);
     },
 

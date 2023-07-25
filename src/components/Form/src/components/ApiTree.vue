@@ -1,12 +1,12 @@
 <template>
-  <ATree v-bind="getAttrs" @change="handleChange">
+  <a-tree v-bind="getAttrs" @change="handleChange">
     <template #[item]="data" v-for="item in Object.keys($slots)">
       <slot :name="item" v-bind="data || {}"></slot>
     </template>
     <template #suffixIcon v-if="loading">
       <LoadingOutlined spin />
     </template>
-  </ATree>
+  </a-tree>
 </template>
 
 <script lang="ts">
