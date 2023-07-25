@@ -14,10 +14,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, unref } from 'vue';
+  import { ref, reactive,computed, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doPlatformDetail, doPlatformInsert,doPlatformUpdate } from '/@/api/video/platform';
+  import { doPlatformSipList,doPlatformDetail, doPlatformInsert,doPlatformUpdate } from '/@/api/video/platform';
   import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM} from '/@/enums/commonEnum';
   import { useSystemStore } from '/@/store/modules/system';
   import { isEmpty } from '/@/utils/is';
@@ -25,8 +25,11 @@
   const emit = defineEmits(['success', 'register']);
   const systemStore = useSystemStore();
   const isUpdate = ref(true);
-  const getTitle = computed(() => (!unref(isUpdate) ? '新增平台' : '编辑平台'));
-
+  const getTitle = computed(() => (!unref(isUpdate) ? '新增国标级联' : '编辑国标级联'));
+  const stats = reactive({
+    sipList :[] as any,
+    sipMap :{},
+  });
 
   const handleOk = async () => {
     try {
@@ -57,6 +60,9 @@
       setDrawerProps({ confirmLoading: false });
     }
   };
+  const sipListTypes = computed(() => {
+    return stats.sipList;
+  });
 
   const transportTypes = computed(() => {
     const template = systemStore.getDictMap[TRANSPORT_TYPE_ENUM];
@@ -184,23 +190,6 @@
       required: true,
     },
     {
-      field: 'name',
-      component: 'Input',
-      label: '服务名称',
-      colProps: {
-        span: 12,
-      },
-      required: true,
-    },
-    {
-      field: 'administrativeDivision',
-      component: 'Input',
-      label: '行政区划',
-      colProps: {
-        span: 12,
-      },
-    },
-    {
       field: 'catalogId',
       component: 'Input',
       helpMessage:'默认SIP国标编码',
@@ -244,34 +233,39 @@
       required: true,
     },
     {
-      field: 'deviceIp',
+      field: 'name',
       component: 'Input',
-      label: '设备IP',
+      label: '服务名称',
       colProps: {
         span: 12,
       },
       required: true,
     },
     {
-      field: 'devicePort',
-      component: 'InputNumber',
-      label: '设备端口',
+      field: 'administrativeDivision',
+      component: 'Input',
+      label: '行政区划',
+      colProps: {
+        span: 12,
+      },
+    },
+    {
+      field: 'deviceGbId',
+      component: 'Select',
+      label: '设备国标编号',
       colProps: {
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
-      },
-      defaultValue: 0,
-      required: true,
-    },
-    {
-      field: 'deviceGbId',
-      component: 'Input',
-      label: '设备国标编号',
-      colProps: {
-        span: 12,
+        options: sipListTypes,
+        onSelect:(val) =>{
+          setFieldsValue({
+            deviceIp:stats.sipMap[val].ip,
+          });
+          setFieldsValue({
+            devicePort:stats.sipMap[val].port,
+          });
+        }
       },
       required: true,
     },
@@ -288,6 +282,29 @@
       },
       defaultValue: 3600,
       required: true,
+    },
+    {
+      field: 'deviceIp',
+      component: 'Input',
+      label: '设备IP',
+      colProps: {
+        span: 12,
+      },
+      componentProps: {
+        disabled:true,
+      },
+    },
+    {
+      field: 'devicePort',
+      component: 'Input',
+      label: '设备端口',
+      colProps: {
+        span: 12,
+      },
+      componentProps: {
+        disabled:true,
+      },
+      defaultValue: 0,
     },
     {
       field: 'keepTimeout',
@@ -399,6 +416,15 @@
   const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     resetFields();
     setDrawerProps({ confirmLoading: false });
+    const list = await doPlatformSipList({});
+    stats.sipList = [];
+    stats.sipMap = {};
+    list.forEach((obj)=>{
+      const {gbId,...val} = obj;
+      stats.sipList.push({ label: obj.gbId, value: obj.gbId, key: obj.gbId });
+      stats.sipMap[obj.gbId]=val;
+    })
+    console.log(JSON.stringify(stats.sipList));
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
       const { enable,rtcp,ptz,startOfflinePush,asMessageChannel, ...entity } = await doPlatformDetail({ id: data.id });

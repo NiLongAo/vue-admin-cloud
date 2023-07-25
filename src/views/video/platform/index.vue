@@ -72,7 +72,7 @@
   const systemStore = useSystemStore();
 
   const [registerTable, { reload }] = useTable({
-    title: '上级平台列表',
+    title: '国标级联列表',
     api: doPlatformPage,
     columns: getBasicColumns(),
     formConfig: getFormConfig(),

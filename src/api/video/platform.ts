@@ -2,6 +2,8 @@ import { defHttp } from '/@/utils/http/axios';
 import {PlatformParams,PlatformPageResultModel} from './model/platformModel';
 
 enum Api {
+  //获取注册到本服务的所有sip服务
+  doPlatformSipList = '/webapi/video/parent/platform/sip_list',
   //分页
   doPlatformPage = '/webapi/video/parent/platform/page',
   //详情
@@ -43,7 +45,9 @@ enum Api {
   doPlatformGbStreamDelete = '/webapi/video/platform/gb_stream/del',
 
 }
-
+export function doPlatformSipList(params: Recordable) {
+  return defHttp.get({ url: Api.doPlatformSipList, params });
+}
 export function doPlatformPage(params: PlatformParams) {
   return defHttp.post<PlatformPageResultModel>({
     url: Api.doPlatformPage,

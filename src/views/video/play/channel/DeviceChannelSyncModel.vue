@@ -51,7 +51,7 @@
   watch(
     () => stats.deviceId ,
      ()=>{
-      fetch();
+      fetch(true);
     }
   )
 
@@ -59,7 +59,7 @@
     stats.deviceId = '';
   }
 
-  const fetch = async() =>{
+  const fetch = async(circulate:boolean) =>{
     if(isEmpty(stats.deviceId)){
         return;
     }
@@ -80,7 +80,10 @@
     }else{
       stats.massage = current+"/"+total;
       //开启循环任务
-      stats.timer = setInterval(() => fetch(), 500);
+      if(!circulate){
+          return;
+      }
+      stats.timer = setInterval(() => fetch(false), 800);
     }
   }
 
