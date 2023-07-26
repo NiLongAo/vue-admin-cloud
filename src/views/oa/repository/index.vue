@@ -31,7 +31,7 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.role:add')"
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('oa.repository:add')"
           >添加</a-button
         >
       </template>
