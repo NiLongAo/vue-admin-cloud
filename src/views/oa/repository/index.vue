@@ -5,12 +5,12 @@
         <TableAction
           :actions="[
             {
-              ifShow: hasPermission('system.role:update'),
+              ifShow: hasPermission('oa.repository:deploy'),
               label: '部署',
               onClick: handleEdit.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.role:update'),
+              ifShow: hasPermission('oa.repository:pending'),
               label: !record.isSuspended ? '挂起' : '激活',
               color: !record.isSuspended ? 'error' : 'success',
               popConfirm: {
@@ -19,7 +19,7 @@
               },
             },
             {
-              ifShow: hasPermission('system.role:delete'),
+              ifShow: hasPermission('oa.repository:delete'),
               color: 'error',
               label: '删除',
               popConfirm: {

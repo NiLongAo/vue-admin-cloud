@@ -13,7 +13,7 @@
     <!-- 按钮 -->
     <template #rightFooter>
       <!-- 部署按钮 -->
-      <Button style="margin-right: 10px" type="primary" @click="deploy()">部署</Button>
+      <Button style="margin-right: 10px" type="primary" @click="deploy()" v-if="hasPermission('oa.deploy:deploy')">部署</Button>
       <!-- 取消按钮 -->
       <Button style="margin-right: 10px" @click="close()">取消</Button>
     </template>
@@ -22,6 +22,7 @@
 <script lang="ts" setup>
   import { PageWrapper } from '/@/components/Page';
   import Modeler from '/@/components/Activiti/Modeler';
+  import { usePermission } from '/@/hooks/web/usePermission';
   import Panel from '/@/components/Activiti/panel';
   import BpmnActions from '/@/components/Activiti/bpmn-actions';
   import { useRoute } from 'vue-router';
@@ -30,6 +31,9 @@
   import { useTabs } from '/@/hooks/web/useTabs';
   import { doFindRepositoryXml, doDeployProcessParameter } from '/@/api/oa/activiti';
   import { useGo } from '/@/hooks/web/usePage';
+
+  
+  const { hasPermission } = usePermission();
   const go = useGo();
   const route = useRoute();
   const { setTitle, closeCurrent } = useTabs();

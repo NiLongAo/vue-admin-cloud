@@ -20,19 +20,19 @@
         <TableAction
           :actions="[
             {
-              ifShow: hasPermission('system.role:update'),
+              ifShow: hasPermission('video.platform:join'),
               icon: 'ic-round-join-left',
               tooltip: '关联国标',
               onClick: handleJoinGb.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.role:update'),
+              ifShow: hasPermission('video.platform:update'),
               icon: 'mdi:file-edit-outline',
               tooltip: '编辑',
               onClick: handleEdit.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.role:delete'),
+              ifShow: hasPermission('video.platform:delete'),
               color: 'error',
               icon: 'mdi:delete-outline',
               tooltip: '删除',
@@ -45,7 +45,7 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.role:add')"
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('video.platform:add')"
           >添加</a-button
         >
       </template>

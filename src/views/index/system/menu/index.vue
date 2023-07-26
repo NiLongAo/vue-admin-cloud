@@ -68,6 +68,7 @@
       buttons: [
         {
           content: '添加',
+          disabled: hasPermission('system.menu:add'),
           buttonRender: {
             name: 'AButton',
             props: {

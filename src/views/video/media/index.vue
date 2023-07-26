@@ -5,12 +5,12 @@
         <TableAction
           :actions="[
             {
-              ifShow: hasPermission('system.role:update'),
+              ifShow: hasPermission('video.media:update'),
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.role:delete'),
+              ifShow: hasPermission('video.media:delete'),
               color: 'error',
               icon: 'mdi:delete-outline',
               popConfirm: {
@@ -22,7 +22,7 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.role:add')"
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('video.media:add')"
           >添加</a-button
         >
       </template>

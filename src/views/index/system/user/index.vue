@@ -37,7 +37,7 @@
         <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.user:add')"
           >添加</a-button
         >
-        <a-button type="primary" @click="handleExport" v-if="hasPermission('system.user:add')"
+        <a-button type="primary" @click="handleExport" v-if="hasPermission('system.user:export')"
           >导出</a-button
         >
       </template>

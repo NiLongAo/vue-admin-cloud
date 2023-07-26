@@ -34,8 +34,9 @@
   import { doSyncStatusDeviceChannel} from '/@/api/video/deviceChannel';
   import { useDesign } from '/@/hooks/web/useDesign';
 
+  const emit = defineEmits(['close', 'register']);
   const { prefixCls } = useDesign('device-channel-model');
-
+  
   const stats = reactive({
     deviceId:'',
     massage:"同步中",
@@ -69,8 +70,9 @@
       if(isEmpty(errorMsg)){
         stats.massage = "同步完成";
         setTimeout(function () {
-          closeModal();
           stats.deviceId = '';
+          closeModal();
+          emit('close');
         },1500);
       }else{
         stats.massage = errorMsg;

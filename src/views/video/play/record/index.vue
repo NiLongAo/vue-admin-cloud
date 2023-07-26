@@ -29,8 +29,8 @@
                   :disabledTime="disabledTime"
                 />
                 <ButtonGroup>
-                  <Button size="small" :disabled="(isEmpty(stats.streamId)?false:true)" @click="handleRecordPlay">播放</Button>
-                  <Button size="small" :disabled="(isEmpty(stats.streamId)?true:false)" @click="handleRecordPause">暂停</Button>
+                  <Button size="small" :disabled="(isEmpty(stats.streamId)?false:true) || hasPermission('video.play.record:play') " @click="handleRecordPlay">播放</Button>
+                  <Button size="small" :disabled="(isEmpty(stats.streamId)?true:false) || hasPermission('video.play.record:suspend') " @click="handleRecordPause">暂停</Button>
                   <Dropdown>
                     <template #overlay>
                       <Menu @click="handleRecordScale">
@@ -100,8 +100,10 @@
     DATE_FORMAT,
     DATE_TIME
   } from '/@/utils/dateUtil';
-
   import { debounce } from 'lodash-es';
+  import { usePermission } from '/@/hooks/web/usePermission';
+
+  const { hasPermission } = usePermission();
   const { prefixCls } = useDesign('video-record-play');
   const go = useGo();
   const route = useRoute();
@@ -292,7 +294,7 @@
     if(stats.rangePickerDate[0] != tipFormatter(startTime) || stats.rangePickerDate[1] != tipFormatter(endTime)){
       stats.rangePickerDate=[tipFormatter(startTime),tipFormatter(endTime)];
     }
-    if(isEmpty(stats.streamId)){
+    if(isEmpty(stats.streamId) && hasPermission('video.play.record:play')){
       handleRecordPlay()
     }
   }

@@ -31,6 +31,8 @@
   import { doPlayStart } from '/@/api/video/paly';
   import { isEmpty } from '/@/utils/is';
   import { reactive } from 'vue';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  const { hasPermission } = usePermission();
 
   const { prefixCls } = useDesign('video-dispatch');
   const state = reactive({
@@ -60,15 +62,17 @@
     //state.videoUrl[state.checkIndex-1]="https://sf1-hscdn-tos.pstatp.com/obj/media-fe/xgplayer_doc_video/flv/xgplayer-demo-360p.flv";
     //state.videoUrl[state.checkIndex-1]="http://192.168.1.130:8080/index/api/webrtc?app=app&stream=chient&type=play";
     //开始播放接口 flv http地址 wsFlv ws播放地址
-    const {wssFlv} = await doPlayStart({deviceId,channelId});
-    state.videoUrl[state.checkIndex-1] = wssFlv.url
-    if(state.checkIndex >= state.num){
-      state.checkIndex = 1;
-    }else{
-      state.checkIndex = state.checkIndex +1;
+    if(hasPermission('video.dispatch:play')){
+      const {wssFlv} = await doPlayStart({deviceId,channelId});
+      state.videoUrl[state.checkIndex-1] = wssFlv.url
+      if(state.checkIndex >= state.num){
+        state.checkIndex = 1;
+      }else{
+        state.checkIndex = state.checkIndex +1;
+      }
     }
   };
-/**
+ /**
    * 点击字典类型事件
    * @param typeId 
    */

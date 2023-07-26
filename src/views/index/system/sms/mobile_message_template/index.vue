@@ -6,7 +6,7 @@
         <a-button
           type="primary"
           @click="handleCreate"
-          v-if="hasPermission('system.dictionary:add_item')"
+          v-if="hasPermission('system.sms.mobile_message_template:add')"
           >新增模板</a-button
         >
       </template>
@@ -19,12 +19,12 @@
         <TableAction
           :actions="[
             {
-              ifShow: hasPermission('system.dictionary:update_item'),
+              ifShow: hasPermission('system.sms.mobile_message_template:update'),
               icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.dictionary:delete_item'),
+              ifShow: hasPermission('system.sms.mobile_message_template:delete'),
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {

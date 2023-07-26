@@ -5,13 +5,13 @@
         <TableAction outside
           :actions="[
             {
-              ifShow: hasPermission('system.tenant:update'),
+              ifShow: hasPermission('video.play.channel:update'),
               tooltip: '编辑',
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, row),
             },
             {
-              ifShow: hasPermission('system.tenant:delete'),
+              ifShow: hasPermission('video.play.channel:delete'),
               color: 'error',
               icon: 'mdi:delete-outline',
               tooltip: '删除',
@@ -23,20 +23,20 @@
           ]"
           :dropDownActions="[
             {
-              ifShow: hasPermission('system.tenant:update') && row.status === 1 && row.subCount === 0,
+              ifShow: hasPermission('video.play.channel:play') && row.status === 1 && row.subCount === 0,
               label: '播放',
               icon: 'ic-outline-play-circle',
               onClick: handlePlay.bind(null, row),
             },
             {
-              ifShow: hasPermission('system.tenant:update') && isNotEmpty(row.streamId) && row.subCount === 0,
+              ifShow: hasPermission('video.play.channel:suspend') && isNotEmpty(row.streamId) && row.subCount === 0,
               label:'暂停',
               color: 'error',
               icon: 'ic-outline-stop-circle',
               onClick: handleStop.bind(null, row),
             },
             {
-              ifShow: hasPermission('system.tenant:update') && row.status === 1 && row.subCount === 0,
+              ifShow: hasPermission('video.play.channel:playback') && row.status === 1 && row.subCount === 0,
               label: '历史回放',
               icon: 'ic-round-history',
               onClick: handleRecord.bind(null, row),
@@ -121,7 +121,7 @@
         query: async ({ page, form }) => {
           return await doDeviceChannelPage({
             deviceId:formData.deviceId,
-            pageNum: page.currentPage,
+            pageNumber: page.currentPage,
             pageSize: page.pageSize,
             ...form,
           });
@@ -135,6 +135,7 @@
       buttons: [
         {
           content: '添加',
+          disabled: hasPermission('video.play.channel:add'),
           buttonRender: {
             name: 'AButton',
             props: {

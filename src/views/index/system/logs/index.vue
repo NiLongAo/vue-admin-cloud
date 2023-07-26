@@ -6,6 +6,7 @@
           <TableAction
             :actions="[
               {
+                ifShow: hasPermission('system.logs:detail'),
                 icon: 'clarity:info-standard-line',
                 tooltip: '详情',
                 onClick: handleDetail.bind(null, record),
@@ -27,7 +28,9 @@
   import { LOGS_TYPE_ENUM } from '/@/enums/commonEnum';
   import { h, computed } from 'vue';
   import { Tag } from 'ant-design-vue';
+  import { usePermission } from '/@/hooks/web/usePermission';
 
+  const { hasPermission } = usePermission();
   const [register, { openDrawer }] = useDrawer();
   const systemStore = useSystemStore();
 

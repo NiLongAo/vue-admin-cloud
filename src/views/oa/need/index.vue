@@ -5,19 +5,19 @@
         <TableAction
           :actions="[
             {
-              ifShow: hasPermission('system.config:update'),
+              ifShow: hasPermission('oa.need:detail'),
               icon: 'clarity:info-standard-line',
               onClick: handleView.bind(null, record),
             },
           ]"
           :dropDownActions="[
             {
-              ifShow: hasPermission('system.config:update'),
+              ifShow: hasPermission('oa.need:sign_for'),
               label: '签收',
               onClick: handleClaim.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.config:update'),
+              ifShow: hasPermission('oa.need:pending'),
               label: !record.isSuspended ? '挂起' : '激活',
               color: !record.isSuspended ? 'error' : 'success',
               popConfirm: {
@@ -26,7 +26,7 @@
               },
             },
             {
-              ifShow: hasPermission('system.config:update'),
+              ifShow: hasPermission('oa.need:reject'),
               label: '驳回',
               popConfirm: {
                 title: '是否驳回上一节点？',

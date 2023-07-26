@@ -5,7 +5,7 @@
         <TableAction
           :actions="[
             {
-              ifShow: hasPermission('system.config:update'),
+              ifShow: hasPermission('oa.historic:detail'),
               icon: 'clarity:info-standard-line',
               onClick: handleView.bind(null, record),
             },

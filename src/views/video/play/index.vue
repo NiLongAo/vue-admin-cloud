@@ -20,25 +20,25 @@
         <TableAction
           :actions="[
             {
-              ifShow: hasPermission('system.tenant:update'),
+              ifShow: hasPermission('video.play:refresh'),
               tooltip: '刷新',
               icon: 'solar:refresh-bold',
               onClick: handleRefresh.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.tenant:update'),
+              ifShow: hasPermission('video.play:channel'),
               tooltip: '设备通道',
               icon: 'carbon:devices',
               onClick: handleChannel.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.tenant:update'),
+              ifShow: hasPermission('video.play:update'),
               tooltip: '编辑',
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.tenant:delete'),
+              ifShow: hasPermission('video.play:delete'),
               color: 'error',
               icon: 'mdi:delete-outline',
               tooltip: '删除',
@@ -51,13 +51,13 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.tenant:add')"
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('video.play:add')"
           >添加</a-button
         >
       </template>
     </BasicTable>
     <DeviceDrawer @register="registerDrawer" @success="handleSuccess" />
-    <DeviceChannelSyncModel @register="registerModel"/>
+    <DeviceChannelSyncModel @register="registerModel" @close="handleSuccess" />
   </PageWrapper>
 </template>
 
@@ -163,13 +163,16 @@
       {
         title: '设备名',
         dataIndex: 'name',
-        fixed: 'left',
+        width: 100,
+      },
+      {
+        title: '通道数',
+        dataIndex: 'channelCount',
         width: 100,
       },
       {
         title: '设备状态',
         dataIndex: 'online',
-        fixed: 'left',
         width: 100,
         customRender: ({ record }) => {
           const status = record.online;
