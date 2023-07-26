@@ -49,9 +49,9 @@ async function createPlugins({ isBuild, root, enableMock, compress, enableAnalyz
   }
 
   // vite-plugin-mock
-  if (enableMock) {
-    vitePlugins.push(configMockPlugin({ isBuild }));
-  }
+  // if (enableMock) {
+  //   vitePlugins.push(configMockPlugin({ isBuild }));
+  // }
 
   return vitePlugins;
 }
