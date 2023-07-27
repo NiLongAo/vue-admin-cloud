@@ -88,14 +88,14 @@
   const setUpSchema: DescItem[] = [
     {
       field: 'isAdmin',
-      label: '是否系统管理员',
+      label: '系统管理员',
       render: (curVal) => {
         return curVal === 1 ? '是' : '否';
       },
     },
     {
       field: 'isEnabled',
-      label: '是否禁用',
+      label: '启用状态',
       render: (curVal) => {
         return curVal === 1 ? '是' : '否';
       },
