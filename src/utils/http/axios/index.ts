@@ -201,6 +201,8 @@ const transform: AxiosTransform = {
           } else {
             return axiosInstance(res.config);
           }
+        }else{
+          userStore.logout(true);
         }
         break;
     }

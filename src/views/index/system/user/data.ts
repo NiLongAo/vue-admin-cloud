@@ -147,7 +147,7 @@ export const baseSetschemas: FormSchema[] = [
   {
     field: 'isEnabled',
     component: 'Switch',
-    label: '是否禁止登录',
+    label: '启用状态',
     colProps: {
       span: 18,
     },
@@ -301,7 +301,7 @@ export const insertSetschemas: FormSchema[] = [
   {
     field: 'isEnabled',
     component: 'Switch',
-    label: '是否禁止登录',
+    label: '启用状态',
     colProps: {
       span: 18,
     },

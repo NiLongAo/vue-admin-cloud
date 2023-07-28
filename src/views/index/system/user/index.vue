@@ -132,7 +132,7 @@
   };
   async function handleDelete(record: Recordable) {
     //删除
-    await doDelete({ id: record.userId });
+    await doDelete({ id: record.id });
     //刷新表单
     reload();
   }
