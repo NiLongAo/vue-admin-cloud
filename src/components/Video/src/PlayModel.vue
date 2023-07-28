@@ -189,7 +189,7 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { reactive,ref,unref,computed,defineAsyncComponent } from 'vue';
+  import { reactive,ref,unref,computed,nextTick,defineAsyncComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { RadioButtonGroup } from '/@/components/Form';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -355,7 +355,11 @@
         name: "rtc地址",
         value: authUrl(sslStatus==0?rtc?.url:rtcs?.url)
       }
-      unref(payVideo).play();
+      nextTick(()=>{
+        //先注销
+        unref(payVideo).play();
+      })
+      
   });
 
 </script>

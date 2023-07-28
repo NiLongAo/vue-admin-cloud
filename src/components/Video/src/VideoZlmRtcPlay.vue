@@ -123,7 +123,7 @@
     destroy();
   });
 
-  defineExpose({ destroy });
+  defineExpose({ play,destroy });
 </script>
 
 <style lang="less" scoped>
