@@ -8,7 +8,7 @@
         <div :class="`${prefixCls}-left-list grow overflow-y-scroll`" class="" v-if="stats.recordDateList.length > 0" >
           <List class=" h-full" size="small" bordered :dataSource="stats.recordDateList">
               <template #renderItem ="{item}">
-                  <ListItem><Tag class="cursor-pointer text-center w-full " :color="`${ stats.clickListItme ===item.name?'#108ee9' :''}`" @click="listItemClick(item)">{{ stringToFormatString(item.startTime,DATE_TIME_FORMAT,DATE_TIME)}} - {{ stringToFormatString(item.endTime,DATE_TIME_FORMAT,DATE_TIME)}}</Tag></ListItem>
+                  <ListItem><Tag class="cursor-pointer text-center w-full " :color="`${ stats.clickListItme ===item.startTime?'#108ee9' :''}`" @click="listItemClick(item)">{{ stringToFormatString(item.startTime,DATE_TIME_FORMAT,DATE_TIME)}} - {{ stringToFormatString(item.endTime,DATE_TIME_FORMAT,DATE_TIME)}}</Tag></ListItem>
               </template>
           </List>
         </div>
@@ -29,8 +29,8 @@
                   :disabledTime="disabledTime"
                 />
                 <ButtonGroup>
-                  <Button size="small" :disabled="(isEmpty(stats.streamId)?false:true) || hasPermission('video.play.record:play') " @click="handleRecordPlay">播放</Button>
-                  <Button size="small" :disabled="(isEmpty(stats.streamId)?true:false) || hasPermission('video.play.record:suspend') " @click="handleRecordPause">暂停</Button>
+                  <Button size="small" :disabled="(isEmpty(stats.streamId)?false:true) && hasPermission('video.play.record:play') " @click="handleRecordPlay">播放</Button>
+                  <Button size="small" :disabled="(isEmpty(stats.streamId)?true:false) && hasPermission('video.play.record:suspend') " @click="handleRecordPause">暂停</Button>
                   <Dropdown>
                     <template #overlay>
                       <Menu @click="handleRecordScale">
@@ -158,12 +158,12 @@
   //选择录像时间段
   const listItemClick = (item:RecordItem) =>{
     let startTime ,endTime;
-    if(stats.clickListItme === item.name){
+    if(stats.clickListItme === item.startTime){
       stats.clickListItme = "";
       startTime = 0;
       endTime = 86399;
     }else{
-      stats.clickListItme = item.name;
+      stats.clickListItme = item.startTime;
       startTime = stringFormatTime(item.startTime);
       endTime = stringFormatTime(item.endTime);
     }

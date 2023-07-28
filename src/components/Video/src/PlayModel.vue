@@ -95,13 +95,13 @@
                     预设位编号
                   </template>
                   <template #addonAfter>
-                    <Button size="small" @click="ptzCommand(129,0,1,0)">设置</Button>
+                    <Button size="small" @click="ptzCommand(129,0,stats.presetPositionNo,0)">设置</Button>
                   </template>
                 </InputNumber>
               </div>
               <div class="flex flex-row">
-                <Button class="flex-1" @click="ptzCommand(131,0,1,0)" size="small">删除</Button>
-                <Button type="primary" class="flex-1" @click="ptzCommand(130,0,1,0)" size="small">调用</Button>
+                <Button class="flex-1" @click="ptzCommand(131,0,stats.presetPositionNo,0)" size="small">删除</Button>
+                <Button type="primary" class="flex-1" @click="ptzCommand(130,0,stats.presetPositionNo,0)" size="small">调用</Button>
               </div>
             </div>
             <div class="flex flex-col space-y-1">
@@ -189,7 +189,7 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { reactive,ref,unref,computed,defineProps,defineAsyncComponent } from 'vue';
+  import { reactive,ref,unref,computed,defineAsyncComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { RadioButtonGroup } from '/@/components/Form';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -271,7 +271,6 @@
     return url;
   })
   const handleSelectPlay=(val)=>{
-    
     stats.selectPlay = val;
   }
   //复制触发
@@ -356,6 +355,7 @@
         name: "rtc地址",
         value: authUrl(sslStatus==0?rtc?.url:rtcs?.url)
       }
+      unref(payVideo).play();
   });
 
 </script>

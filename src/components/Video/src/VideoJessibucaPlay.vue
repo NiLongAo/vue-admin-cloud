@@ -21,12 +21,13 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useScript } from '/@/hooks/web/useScript';
   import { deepMerge } from '/@/utils';
-  import { ref, reactive,defineProps,onMounted,onUnmounted,watch,nextTick } from 'vue';
+  import { ref, reactive,onMounted,onUnmounted,watch,nextTick } from 'vue';
+import { unref } from 'vue';
   /**
    * 此播放器只能播放 H264
    */
   const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
-  const { toPromise } = useScript({src:publicPath+'script/jessibuca/jessibuca.js'});
+  const { success } = useScript({src:publicPath+'script/jessibuca/jessibuca.js'});
 
   const containerRef = ref();
   const buttonsBox = ref<HTMLElement | string>('');
@@ -67,17 +68,10 @@
     destroy:true,
     //播放器所有参数
     options:{},
+    // 播放器循环任务
+    playTimer:null as any,
   })
 
-  watch(
-    () => props.videoUrl,
-    () => {
-      //先注销
-      destroy();
-      //然后播放
-      play();
-    },
-  );
 
   const createVideoDom =()=>{
     jessibucaPlayer = new (window as any).Jessibuca({...{container: containerRef.value},...stats.options});
@@ -163,29 +157,42 @@
 
     });
   }
-  
-
    /**
    * 播放事件
    */
-  const play =() =>{
-    nextTick(()=>{
-      if(isEmpty(stats.videoUrl)){
-        stats.videoUrl =props.videoUrl;
+  const play = () =>{
+    const sucs = unref(success); //true表示已加载静态文件
+    if(sucs){
+      console.log("静态文件加载完成");
+      stats.playTimer && clearInterval(stats.playTimer);
+    }else{
+      if(!stats.playTimer){
+        console.log("静态文件加载中...");
+        stats.playTimer = setInterval(() => play(), 800);
       }
+      return;
+    }
+    nextTick(()=>{
       if(!jessibucaPlayer){
         createVideoDom();
       }
+      if(isEmpty(props.videoUrl)){
+         return;
+      }else if(props.videoUrl == stats.videoUrl && jessibucaPlayer.isPlaying()){
+         return;
+      }
+      stats.videoUrl =props.videoUrl;
       if(jessibucaPlayer.hasLoaded()){
-        jessibucaPlayer.play(props.videoUrl);
-        stats.videoUrl=props.videoUrl;
+        jessibucaPlayer.play(stats.videoUrl);
       }else{
         jessibucaPlayer.on("load",()=>{
-          jessibucaPlayer.play(props.videoUrl);
-          stats.videoUrl=props.videoUrl;
+          jessibucaPlayer.play(stats.videoUrl);
         })
       }
-     
+      const observer = new ResizeObserver((entries)=>{
+        jessibucaPlayer && jessibucaPlayer?.resize()
+      });
+      observer.observe(containerRef.value);
     })
   }
   /**
@@ -255,12 +262,16 @@
     jessibucaPlayer = null;
   }
 
-   toPromise().then(()=>{
-    nextTick(()=>{
-      //进入直接播放
-      play();
-    })
-   });
+   watch(
+    () => props.videoUrl,
+    () => {
+      nextTick(()=>{
+        //播放
+        play();
+      })
+    },
+    {immediate: true,},
+  );
   onMounted(()=>{
     stats.options = deepMerge(
         {
@@ -310,19 +321,13 @@
         },
         props?.options || {},
     ) as any;
-    nextTick(()=>{
-      const observer = new ResizeObserver((entries)=>{
-        jessibucaPlayer && jessibucaPlayer?.resize()
-      });
-      observer.observe(containerRef.value);
-    })
   })
   
 
   onUnmounted(()=>{
     destroy();
   });
-  defineExpose({ destroy });
+  defineExpose({play,destroy });
 </script>
 
 <style lang="less" scoped>

@@ -34,6 +34,7 @@ export function useScript(opts: ScriptOptions) {
   });
 
   onUnmounted(() => {
+    success.value = false;
     script && script.remove();
   });
 
