@@ -21,7 +21,7 @@ enum Api {
 export function doTreeDeviceChannel() {
   return defHttp.get({ url: Api.tree });
 }
-export function doDeviceChannelPage(params: DeviceChannelParams) {
+export function doDeviceChannelPage(params: Recordable) {
   return defHttp.post<DeviceChannelPageResultModel>({
     url: Api.page,
     params,

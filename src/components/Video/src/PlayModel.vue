@@ -356,8 +356,7 @@
         value: authUrl(sslStatus==0?rtc?.url:rtcs?.url)
       }
       nextTick(()=>{
-        //先注销
-        unref(payVideo).play();
+        unref(payVideo)?.play();
       })
       
   });

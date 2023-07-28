@@ -6,7 +6,7 @@
 <script lang="ts" setup>
   import { isEmpty } from '/@/utils/is';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { ref, reactive,defineProps,onUnmounted,watch,nextTick } from 'vue';
+  import { ref, reactive,onUnmounted,watch,nextTick } from 'vue';
   import { useScript } from '/@/hooks/web/useScript';
 
   const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
