@@ -46,7 +46,7 @@
       </template>
     </VxeBasicTable>
     <DeviceChannelDrawer @register="register" @success="handleSuccess" />
-    <PlayModel @register="registerModal" control @cancel="handleSuccess" />
+    <PlayModel @register="registerModal" control :auth="userStore.getToken" @cancel="handleSuccess" />
   </PageWrapper>
 </template>
 
@@ -74,8 +74,10 @@
   import { doDeviceChannelPage ,doDelDeviceChannel} from '/@/api/video/deviceChannel';
   import DeviceChannelDrawer from './DeviceChannelDrawer.vue';
   import {PlayModel} from '/@/components/Video/index';
+  import { useUserStoreWithOut } from '/@/store/modules/user';
 
   const tableRef = ref<VxeGridInstance>();
+  const userStore = useUserStoreWithOut();
   const { hasPermission } = usePermission();
   const systemStore = useSystemStore();
   const route = useRoute();
