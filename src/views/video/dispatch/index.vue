@@ -27,12 +27,15 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { PageWrapper } from '/@/components/Page';
   import { VideoDeviceChannelTree ,VideoJessibucaPlay} from '/@/components/Video';
+  import { useUserStoreWithOut } from '/@/store/modules/user';
   import Icon from '@/components/Icon/Icon.vue';
   import { doPlayStart } from '/@/api/video/paly';
   import { isEmpty } from '/@/utils/is';
   import { reactive } from 'vue';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { setObjToUrlParams } from '/@/utils';
   const { hasPermission } = usePermission();
+  const userStore = useUserStoreWithOut();
 
   const { prefixCls } = useDesign('video-dispatch');
   const state = reactive({
@@ -40,6 +43,10 @@
     checkIndex : 1,
     videoUrl:[] as Array<string>,
   })
+
+  const authUrl= (url) =>{
+    return setObjToUrlParams(url,{token:userStore.getToken});
+  }
 
   /**
    * 点击字典类型事件
@@ -63,8 +70,8 @@
     //state.videoUrl[state.checkIndex-1]="http://192.168.1.130:8080/index/api/webrtc?app=app&stream=chient&type=play";
     //开始播放接口 flv http地址 wsFlv ws播放地址
     if(hasPermission('video.dispatch:play')){
-      const {wssFlv} = await doPlayStart({deviceId,channelId});
-      state.videoUrl[state.checkIndex-1] = wssFlv.url
+      const {sslStatus,wsFlv,wssFlv} = await doPlayStart({deviceId,channelId});
+      state.videoUrl[state.checkIndex-1] = authUrl(sslStatus==0?wsFlv?.url:wssFlv?.url)
       if(state.checkIndex >= state.num){
         state.checkIndex = 1;
       }else{

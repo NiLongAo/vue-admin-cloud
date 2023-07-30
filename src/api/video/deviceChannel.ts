@@ -14,8 +14,10 @@ enum Api {
   sync = '/webapi/video/device/channel/sync',
   //获取通道同步进度
   syncStatus = '/webapi/video/device/channel/sync_status',
-  //获取通道同步进度
+  //删除通道
   del = '/webapi/video/device/channel/del',
+  //获取语音对讲推流地址
+  findAudioPushPath = '/webapi/video/device/channel/audio_push_path',
 }
 
 export function doTreeDeviceChannel() {
@@ -41,4 +43,7 @@ export function doSyncDeviceChannel(params: Recordable) {
 }
 export function doSyncStatusDeviceChannel(params: Recordable) {
   return defHttp.get({ url: Api.syncStatus, params });
+}
+export function doAudioPushPath(params: Recordable) {
+  return defHttp.get({ url: Api.findAudioPushPath,params});
 }

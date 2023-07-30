@@ -46,7 +46,7 @@
       </template>
     </VxeBasicTable>
     <DeviceChannelDrawer @register="register" @success="handleSuccess" />
-    <PlayModel @register="registerModal" control :auth="userStore.getToken" @cancel="handleSuccess" />
+    <PlayModel @register="registerModal" control :auth="userStore.getToken" :audio-push-api="doAudioPushPath" @cancel="handleSuccess" />
   </PageWrapper>
 </template>
 
@@ -71,7 +71,7 @@
   import { useRoute } from 'vue-router';
   import { DEVICE_TYPE_ENUM,PTZ_TYPE_ENUM } from '/@/enums/commonEnum';
   import { doPlayStart,doPlayStop} from '/@/api/video/paly';
-  import { doDeviceChannelPage ,doDelDeviceChannel} from '/@/api/video/deviceChannel';
+  import { doDeviceChannelPage ,doDelDeviceChannel,doAudioPushPath} from '/@/api/video/deviceChannel';
   import DeviceChannelDrawer from './DeviceChannelDrawer.vue';
   import {PlayModel} from '/@/components/Video/index';
   import { useUserStoreWithOut } from '/@/store/modules/user';

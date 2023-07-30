@@ -67,8 +67,8 @@
                 </div>
               </div>
               <div class="absolute bg-white h-22 w-22 border-solid rounded-full z-1"></div>
-              <div class="absolute z-2  h-15 w-15 border-solid rounded-full border-1 border-blue-600 flex items-center justify-center cursor-pointer">
-                <Icon class="cursor-pointer " :icon="`${!stats.playing?'ri:play-fill':'ic-sharp-pause'}`" size="40" color="#3b82f6"/>
+              <div class="absolute z-2  h-15 w-15 border-solid rounded-full border-1 border-blue-600 flex items-center justify-center cursor-pointer" @click="voiceIntercom">
+                <Icon class="cursor-pointer " :icon="`ic-outline-keyboard-voice`" size="40" color="#3b82f6"/>
               </div>
             </div>
             <div class=" flex flex-col relative">
@@ -193,7 +193,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { RadioButtonGroup } from '/@/components/Form';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { isEmpty,isNotEmpty } from '/@/utils/is';
+  import { isEmpty,isNotEmpty,isFunction } from '/@/utils/is';
   import { setObjToUrlParams } from '/@/utils';
   import { useMessage } from '/@/hooks/web/useMessage';
   import Icon from '@/components/Icon/Icon.vue';
@@ -223,6 +223,11 @@
     },
     auth: {
         type: String ,
+        default: null
+    },
+    //推流地址
+    audioPushApi: {
+        type: Function as PropType<PromiseFn>,
         default: null
     },
   });
@@ -309,6 +314,14 @@
       parameter2:parameter2,
       combindCode2:combindCode2
     });
+  }
+  //语音对讲
+  const voiceIntercom = async () =>{
+    if(isFunction(props.audioPushApi)){
+      return;
+    }
+    //const path =  await props.audioPushApi({deviceId:stats.deviceId,channelId:stats.channelId});
+    
   }
   const authUrl= (url) =>{
     if(isEmpty(props.auth)){
