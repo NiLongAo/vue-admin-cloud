@@ -226,8 +226,13 @@
         type: String ,
         default: null
     },
-    //推流地址
+    //获取推流地址
     audioPushApi: {
+        type: Function as PropType<PromiseFn>,
+        default: null
+    },
+    //广播推流地址
+    broadcastApi: {
         type: Function as PropType<PromiseFn>,
         default: null
     },
@@ -268,6 +273,8 @@
     onAudio:0 as number,//语音对讲状态 0.关闭中 1.加载中 2.加载完成
     audioTimer:null as any,//语音加载检测器
     audioTimeout:null as any,//语音加载检测器
+    broadcastTimer:null as any,//语音广播加载检测器
+    broadcastTimeout:null as any,//语音广播加载检测器
   })
   const pushStats = reactive({
     zlmsdpUrl: '',
@@ -337,7 +344,7 @@
     });
   }
   //语音对讲
-  const {success,destroy} = useZlmRtc(pushStats);//加载 webrtc 语音对讲配置
+  const {success,localSteam,destroy} = useZlmRtc(pushStats);//加载 webrtc 语音对讲配置
   const audioIntercom = async () =>{
     if(!isFunction(props.audioPushApi)){
       return;
@@ -363,6 +370,8 @@
             stats.onAudio = 0;
             stats.audioTimer && clearInterval(stats.audioTimer);
             stats.audioTimer = null;
+            clearInterval(stats.audioTimeout);
+            stats.audioTimeout = null;
           },5000);
         }
         return;
@@ -373,6 +382,8 @@
       stats.audioTimeout && clearInterval(stats.audioTimeout);
       stats.audioTimer = null;
       stats.audioTimeout = null;
+      //加载完成后准备开始语音广播
+      initBroadcast();
     }else{
       stats.onAudio = 0;
       pushStats.zlmsdpUrl="";
@@ -380,6 +391,28 @@
       destroy();
       console.log("语音组件销毁完成...");
     }
+  }
+
+  const initBroadcast = () =>{
+    //查看流是否已加载
+    if(!unref(localSteam)){
+      console.log("语音流加载中...");
+      if(!stats.broadcastTimer){
+        stats.broadcastTimer = setInterval(() => initBroadcast(), 500);
+        stats.broadcastTimeout = setTimeout(()=>{
+          stats.broadcastTimer && clearInterval(stats.audioTimer);
+          stats.broadcastTimer = null;
+          clearInterval(stats.broadcastTimeout);
+          stats.broadcastTimeout = null;
+        },5000);
+      }
+      return;
+    }
+    stats.broadcastTimer && clearInterval(stats.audioTimer);
+    stats.broadcastTimer = null;
+    stats.broadcastTimeout && clearInterval(stats.broadcastTimeout);
+    stats.broadcastTimeout = null;
+    props.broadcastApi({deviceId:stats.deviceId,channelId:stats.channelId});
   }
 
   const authUrl= (url) =>{

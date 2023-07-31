@@ -16,8 +16,6 @@ enum Api {
   syncStatus = '/webapi/video/device/channel/sync_status',
   //删除通道
   del = '/webapi/video/device/channel/del',
-  //获取语音对讲推流地址
-  findAudioPushPath = '/webapi/video/device/channel/audio_push_path',
 }
 
 export function doTreeDeviceChannel() {
@@ -43,7 +41,4 @@ export function doSyncDeviceChannel(params: Recordable) {
 }
 export function doSyncStatusDeviceChannel(params: Recordable) {
   return defHttp.get({ url: Api.syncStatus, params });
-}
-export function doAudioPushPath(params: Recordable) {
-  return defHttp.get({ url: Api.findAudioPushPath,params});
 }

@@ -9,8 +9,7 @@ enum Api {
   convert = '/webapi/video/play/convert',
   //结束转码
   convertStop = '/webapi/video/play/convert_stop',
-  //语音广播命令
-  broadcast = '/webapi/video/play/broadcast',
+
 }
 export function doPlayStart(params: Recordable) {
   return defHttp.get({ url: Api.start, params });
@@ -23,7 +22,4 @@ export function doPlayConvert(params: Recordable) {
 }
 export function doPlayConvertStop(params: Recordable) {
   return defHttp.get({ url: Api.convertStop, params });
-}
-export function doPlayBroadcast(params: Recordable) {
-  return defHttp.get({ url: Api.broadcast, params });
 }

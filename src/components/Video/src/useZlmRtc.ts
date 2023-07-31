@@ -1,4 +1,4 @@
-import { unref,Ref,watch,nextTick } from 'vue';
+import { unref,ref,Ref,watch,nextTick } from 'vue';
 import { useScript } from '/@/hooks/web/useScript';
 import { isEmpty } from '/@/utils/is';
 import { deepMerge } from '/@/utils';
@@ -17,10 +17,10 @@ export interface RtcProps {
 
  export function useZlmRtc(rtcProps:RtcProps,container?:Ref){
   const { success } = useScript({src:publicPath+'script/zlmRTC/ZLMRTCClient.js'});
-
   let zlmRtcClient = null as any;
   let timer = null as any;
   let playTimer = null as any;
+  let localSteam = ref(false);
 
   //初始化video
   const createVideoDom = ()=>{
@@ -61,7 +61,8 @@ export interface RtcProps {
         }
     });
     zlmRtcClient.on('WEBRTC_ON_LOCAL_STREAM',(s)=>{// 获取到了本地流
-        eventcallbacK("LOCAL STREAM", "获取到了本地流")
+      localSteam.value = true;
+      eventcallbacK("LOCAL STREAM", "获取到了本地流")
     });
   }
   //播放
@@ -94,6 +95,7 @@ export interface RtcProps {
       return;
     }
     zlmRtcClient.close();
+    localSteam.value = false;
   }
   /**
    * 销毁事件
@@ -106,6 +108,7 @@ export interface RtcProps {
       return;
     }
     zlmRtcClient.close();
+    localSteam.value = false;
     zlmRtcClient = null;
     timer = null;
     playTimer = null;
@@ -132,5 +135,5 @@ export interface RtcProps {
   const eventcallbacK = (type:string,message:string) =>{
     console.log("RTC 事件回调 type:"+type +" message:" +message);
   }
-  return {zlmRtcClient,success,play,pause,destroy};
+  return {zlmRtcClient,success,localSteam,play,pause,destroy};
 }
