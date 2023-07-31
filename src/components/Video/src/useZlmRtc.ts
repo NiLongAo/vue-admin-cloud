@@ -1,11 +1,12 @@
 import { unref,Ref,watch,nextTick } from 'vue';
 import { useScript } from '/@/hooks/web/useScript';
 import { isEmpty } from '/@/utils/is';
+import { deepMerge } from '/@/utils';
 
 const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
 
 export interface RtcProps {
-  videoUrl?:string
+  zlmsdpUrl?:string
   debug?:boolean
   simulecast?:boolean
   useCamera?:boolean
@@ -23,18 +24,23 @@ export interface RtcProps {
 
   //初始化video
   const createVideoDom = ()=>{
-    if(isEmpty(unref(rtcProps.videoUrl))){
+    if(isEmpty(rtcProps.zlmsdpUrl)){
       return;
     }
     zlmRtcClient = new (window as any).ZLMRTCClient.Endpoint({
       element: unref(container) || '',// video 标签
-      debug: rtcProps.debug || false,// 是否打印日志
-      zlmsdpUrl: rtcProps.videoUrl || '',//播放流地址
-      simulecast: rtcProps.simulecast || false,
-      useCamera: rtcProps.useCamera || false,
-      audioEnable: rtcProps.audioEnable || false,
-      videoEnable: rtcProps.videoEnable || false,
-      recvOnly: rtcProps.recvOnly || true,
+      ...deepMerge(
+        {
+          zlmsdpUrl: '',//播放流地址
+          debug: false,// 是否打印日志
+          simulecast: false,
+          useCamera: false,
+          audioEnable: false,
+          videoEnable: false,
+          recvOnly:true,
+        },
+        rtcProps || {}
+      )
     });
     zlmRtcClient.on('WEBRTC_ICE_CANDIDATE_ERROR',(e)=>{// ICE 协商出错
       eventcallbacK("ICE ERROR", "ICE 协商出错")
@@ -60,7 +66,7 @@ export interface RtcProps {
   }
   //播放
   const play = ()=>{
-    if(isEmpty(rtcProps.videoUrl)){
+    if(isEmpty(rtcProps.zlmsdpUrl)){
       return;
     }
     if(unref(success)){
@@ -103,7 +109,6 @@ export interface RtcProps {
     zlmRtcClient = null;
     timer = null;
     playTimer = null;
-    rtcProps.videoUrl="";
   }
 
   watch(

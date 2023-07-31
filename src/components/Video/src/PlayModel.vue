@@ -186,9 +186,6 @@
         </div>
       </div>
     </div>
-    <div v-show="false">
-      <video ref="zlmRtcVideo" controls autoplay />
-    </div>
   </BasicModal>
 </template>
 <script lang="ts" setup>
@@ -208,7 +205,6 @@
   const VideoJessibucaPlay = defineAsyncComponent(() => import('./VideoJessibucaPlay.vue'))
   const VideoZlmRtcPlay = defineAsyncComponent(() => import('./VideoZlmRtcPlay.vue'))
   const payVideo = ref();
-  const zlmRtcVideo = ref();
   const { prefixCls } = useDesign('video-play-model');
   const { clipboardRef, copiedRef } = useCopyToClipboard();
   const { createMessage } = useMessage();
@@ -274,7 +270,7 @@
     audioTimeout:null as any,//语音加载检测器
   })
   const pushStats = reactive({
-    videoUrl: '',
+    zlmsdpUrl: '',
     audioEnable:true,
     recvOnly:false,
     debug:true
@@ -341,7 +337,7 @@
     });
   }
   //语音对讲
-  const {success,destroy} = useZlmRtc(pushStats,zlmRtcVideo);//加载 webrtc 语音对讲配置
+  const {success,destroy} = useZlmRtc(pushStats);//加载 webrtc 语音对讲配置
   const audioIntercom = async () =>{
     if(!isFunction(props.audioPushApi)){
       return;
@@ -351,7 +347,7 @@
       return;
     }else if(stats.onAudio == 0){//关闭时触发查询 并 初始化语音组件
       const data = await props.audioPushApi({deviceId:stats.deviceId,channelId:stats.channelId});
-      pushStats.videoUrl = authUrl(data);
+      pushStats.zlmsdpUrl = authUrl(data);
       console.log("语音组件参数：",pushStats);
     }
     initAudio();
@@ -379,6 +375,7 @@
       stats.audioTimeout = null;
     }else{
       stats.onAudio = 0;
+      pushStats.zlmsdpUrl="";
       //销毁对讲
       destroy();
       console.log("语音组件销毁完成...");

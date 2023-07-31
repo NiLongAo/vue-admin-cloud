@@ -18,7 +18,7 @@
   });
 
   const use =  reactive({
-    videoUrl:props.videoUrl,
+    zlmsdpUrl:props.videoUrl,
   });
 
   const {play,destroy} = useZlmRtc(use,containerRef);

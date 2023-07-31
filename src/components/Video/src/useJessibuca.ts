@@ -278,7 +278,6 @@ export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
     stats.performance= "";
     stats.playing= false;
     jessibucaPlayer = null;
-    jessibucaProps.videoUrl= "";
   }
 
   watch(
