@@ -49,26 +49,26 @@
           <div class="flex relative">
             <div class="grow flex items-center justify-center h-35 relative ">
               <div class=" grid grid-cols-2 gap-4 place-content-stretch h-36 w-36 rotate-45 z-0">
-                <div class="relative border-solid border-1 border-blue-600  rounded-tl-full  cursor-pointer" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
-                  <div class="absolute bottom-0 right-0 w-9 h-9 border-t-1 border-l-1  border-solid border-blue-600 rounded-tl-full"></div>
-                  <Icon class="absolute cursor-pointer  bottom-6.5 right-6.5 z-3 -rotate-45" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
+                <div class="relative border-solid border-1 border-sky-500  rounded-tl-full  cursor-pointer" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute bottom-0 right-0 w-9 h-9 border-t-1 border-l-1  border-solid border-sky-500 rounded-tl-full"></div>
+                  <Icon class="absolute cursor-pointer  bottom-6.5 right-6.5 z-3 -rotate-45" icon="teenyicons-triangle-solid"  color="#0ea5e9"/>
                 </div>
-                <div class="relative  border-solid border-1 border-blue-600 rounded-tr-full cursor-pointer" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
-                  <div class="absolute bottom-0 left-0 w-9 h-9  border-t-1 border-r-1 border-solid border-blue-600 rounded-tr-full"></div>
-                  <Icon class="absolute cursor-pointer  bottom-6.5 left-6.5 z-3 rotate-45" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
+                <div class="relative  border-solid border-1 border-sky-500 rounded-tr-full cursor-pointer" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute bottom-0 left-0 w-9 h-9  border-t-1 border-r-1 border-solid border-sky-500 rounded-tr-full"></div>
+                  <Icon class="absolute cursor-pointer  bottom-6.5 left-6.5 z-3 rotate-45" icon="teenyicons-triangle-solid"  color="#0ea5e9"/>
                 </div>
-                <div class="relative  border-solid border-1 border-blue-600 rounded-bl-full cursor-pointer" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
-                  <div class="absolute top-0 right-0 w-9 h-9 border-b-1 border-l-1 border-solid border-blue-600 rounded-bl-full"></div>
-                  <Icon class="absolute cursor-pointer  top-6.5 right-6.5 z-3 rotate-225" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
+                <div class="relative  border-solid border-1 border-sky-500 rounded-bl-full cursor-pointer" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute top-0 right-0 w-9 h-9 border-b-1 border-l-1 border-solid border-sky-500 rounded-bl-full"></div>
+                  <Icon class="absolute cursor-pointer  top-6.5 right-6.5 z-3 rotate-225" icon="teenyicons-triangle-solid"  color="#0ea5e9"/>
                 </div>
-                <div class="relative  border-solid border-1 border-blue-600 rounded-br-full cursor-pointer" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
-                  <div class="absolute top-0 left-0 w-9 h-9 border-b-1 border-r-1 border-solid  border-blue-600 rounded-br-full"></div>
-                  <Icon class="absolute cursor-pointer  top-6.5 left-6.5 z-3 rotate-135" icon="teenyicons-triangle-solid"  color="#3b82f6"/>
+                <div class="relative  border-solid border-1 border-sky-500 rounded-br-full cursor-pointer" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute top-0 left-0 w-9 h-9 border-b-1 border-r-1 border-solid  border-sky-500 rounded-br-full"></div>
+                  <Icon class="absolute cursor-pointer  top-6.5 left-6.5 z-3 rotate-135" icon="teenyicons-triangle-solid"  color="#0ea5e9"/>
                 </div>
               </div>
               <div class="absolute bg-white h-22 w-22 border-solid rounded-full z-1"></div>
-              <div class="absolute z-2  h-15 w-15 border-solid rounded-full border-1 border-blue-600 flex items-center justify-center cursor-pointer" @click="voiceIntercom">
-                <Icon class="cursor-pointer " :icon="`ic-outline-keyboard-voice`" size="40" color="#3b82f6"/>
+              <div :class="`${audioClickStyle} absolute z-2  h-15 w-15 border-solid rounded-full border-1 border-sky-500 flex items-center justify-center cursor-pointer`" @click="audioIntercom">
+                <Icon class="cursor-pointer " :icon="`ic-outline-keyboard-voice`" size="40" color="#0ea5e9"/>
               </div>
             </div>
             <div class=" flex flex-col relative">
@@ -199,11 +199,12 @@
   import Icon from '@/components/Icon/Icon.vue';
   import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
   import {doPtzPtz,doPtzFrontEndCommand} from '/@/api/video/ptz';
+  import { useZlmRtc } from '/@/components/Video';
   import { Input,InputNumber,Descriptions,DescriptionsItem, Button ,Divider ,Slider,Dropdown,Menu,MenuItem} from 'ant-design-vue';
 
-  const payVideo = ref();
   const VideoJessibucaPlay = defineAsyncComponent(() => import('./VideoJessibucaPlay.vue'))
   const VideoZlmRtcPlay = defineAsyncComponent(() => import('./VideoZlmRtcPlay.vue'))
+  const payVideo = ref();
   const { prefixCls } = useDesign('video-play-model');
   const { clipboardRef, copiedRef } = useCopyToClipboard();
   const { createMessage } = useMessage();
@@ -231,7 +232,6 @@
         default: null
     },
   });
-
   const stats = reactive({
     //视频相关
     selectPlay:"Jessibuca",//选择的播放器
@@ -264,7 +264,28 @@
     tracks:[] as any,// 流编码信息
     zlmRtcUrl:{}  as any,//zlmrtc播放地址
     jessibucaMap:{}  as any,//jessibuca播放地址
+    //语音对讲相关
+    onAudio:0 as number,//语音对讲状态 0.关闭中 1.加载中 2.加载完成
+    audioTimer:null as any,//语音加载检测器
+    audioTimeout:null as any,//语音加载检测器
   })
+  const pushStats = reactive({
+    videoUrl: '',
+    audioEnable:true,
+    recvOnly:false,
+    debug:true
+  })
+
+  const audioClickStyle = computed(()=>{
+    if(stats.onAudio===1){
+      return "bg-amber-200";
+    }else if(stats.onAudio===2){
+      return "bg-sky-300";
+    }
+    return "";
+  })
+
+
   //获取播放地址
   const payUrl = computed(()=>{
     let url ;
@@ -316,13 +337,50 @@
     });
   }
   //语音对讲
-  const voiceIntercom = async () =>{
-    if(isFunction(props.audioPushApi)){
+  const {success,destroy} = useZlmRtc(pushStats);//加载 webrtc 语音对讲配置
+  const audioIntercom = async () =>{
+    if(!isFunction(props.audioPushApi)){
       return;
     }
-    //const path =  await props.audioPushApi({deviceId:stats.deviceId,channelId:stats.channelId});
-    
+    if(stats.onAudio == 1){
+      console.log("组件加载中，防止重新点击");
+      return;
+    }else if(stats.onAudio == 0){//关闭时触发查询 并 初始化语音组件
+      const data = await props.audioPushApi({deviceId:stats.deviceId,channelId:stats.channelId});
+      pushStats.videoUrl = authUrl(data);
+      console.log("语音组件参数：",pushStats);
+    }
+    initAudio();
   }
+  const initAudio= () =>{
+    if(stats.onAudio == 0 || stats.onAudio == 1){
+      stats.onAudio = 1;
+      if(!unref(success)){
+        console.log("语音组件加载中...");
+        if(!stats.audioTimer){
+          stats.audioTimer = setInterval(() => initAudio(), 500);
+          stats.audioTimeout = setTimeout(()=>{
+            stats.onAudio = 0;
+            stats.audioTimer && clearInterval(stats.audioTimer);
+            stats.audioTimer = null;
+          },5000);
+        }
+        return;
+      }
+      console.log("语音组件加载完成...");
+      stats.onAudio = 2;
+      stats.audioTimer && clearInterval(stats.audioTimer);
+      stats.audioTimeout && clearInterval(stats.audioTimeout);
+      stats.audioTimer = null;
+      stats.audioTimeout = null;
+    }else{
+      stats.onAudio = 0;
+      //销毁对讲
+      destroy();
+      console.log("语音组件销毁完成...");
+    }
+  }
+
   const authUrl= (url) =>{
     if(isEmpty(props.auth)){
         return url;
@@ -335,43 +393,42 @@
   }
 
   const [registerModal, { setModalProps }] = useModalInner((data) => {
-      setModalProps({ confirmLoading: false });
-      if(!data){
-          return
-      }
-      const {sslStatus,app,stream,deviceId,channelId,mediaServerId,tracks,flv,wsFlv,ts,wsTs,httpsFlv,wssFlv,httpsTs,wssTs,rtc,rtcs} = data;
-      stats.app = app;
-      stats.stream = stream;
-      stats.deviceId = deviceId;
-      stats.channelId = channelId;
-      stats.mediaServerId = mediaServerId;
-      stats.tracks = tracks;
-      stats.jessibucaMap={
-        flv:{
-          name:"flv地址",
-          value:authUrl(sslStatus==0?flv?.url:httpsFlv?.url)
-        },
-        wsFlv:{
-          name:"wsFlv地址",
-          value:authUrl(sslStatus==0?wsFlv?.url:wssFlv?.url)
-        },
-        ts:{
-          name:"ts地址",
-          value:authUrl(sslStatus==0?ts?.url:httpsTs?.url)
-        },
-        wsTs:{
-          name:"wsTs地址",
-          value:authUrl(sslStatus==0?wsTs?.url:wssTs?.url)
-        },
-      }
-      stats.zlmRtcUrl={
-        name: "rtc地址",
-        value: authUrl(sslStatus==0?rtc?.url:rtcs?.url)
-      }
-      nextTick(()=>{
-        unref(payVideo)?.play();
-      })
-      
+    setModalProps({ confirmLoading: false });
+    if(!data){
+        return
+    }
+    const {sslStatus,app,stream,deviceId,channelId,mediaServerId,tracks,flv,wsFlv,ts,wsTs,httpsFlv,wssFlv,httpsTs,wssTs,rtc,rtcs} = data;
+    stats.app = app;
+    stats.stream = stream;
+    stats.deviceId = deviceId;
+    stats.channelId = channelId;
+    stats.mediaServerId = mediaServerId;
+    stats.tracks = tracks;
+    stats.jessibucaMap={
+      flv:{
+        name:"flv地址",
+        value:authUrl(sslStatus==0?flv?.url:httpsFlv?.url)
+      },
+      wsFlv:{
+        name:"wsFlv地址",
+        value:authUrl(sslStatus==0?wsFlv?.url:wssFlv?.url)
+      },
+      ts:{
+        name:"ts地址",
+        value:authUrl(sslStatus==0?ts?.url:httpsTs?.url)
+      },
+      wsTs:{
+        name:"wsTs地址",
+        value:authUrl(sslStatus==0?wsTs?.url:wssTs?.url)
+      },
+    }
+    stats.zlmRtcUrl={
+      name: "rtc地址",
+      value: authUrl(sslStatus==0?rtc?.url:rtcs?.url)
+    }
+    nextTick(()=>{
+      unref(payVideo)?.play();
+    })
   });
 
 </script>

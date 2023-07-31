@@ -19,7 +19,7 @@
   import Icon from '@/components/Icon/Icon.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useJessibuca } from './useJessibuca';
-  import { ref,onUnmounted,watch,nextTick } from 'vue';
+  import { ref,reactive,onUnmounted } from 'vue';
 
   const containerRef = ref();
   const { prefixCls } = useDesign('video-play');
@@ -41,26 +41,13 @@
       default: {}
     }
   });
-
-  const { stats,play,pause,refresh, screenshot,onMute,fullscreenSwich,destroy } = useJessibuca({
-    containerRef: containerRef,
+  const use =  reactive({
     videoUrl:props.videoUrl,
     options:{},
     hasAudio:false,
     isMute: false,
   });
-
-   watch(
-    () => props.videoUrl,
-    () => {
-      nextTick(()=>{
-        //播放
-        play(props.videoUrl);
-      })
-    },
-    {immediate: true,},
-  );
-  
+  const { stats,play,pause,refresh, screenshot,onMute,fullscreenSwich,destroy } = useJessibuca(containerRef,use);
   onUnmounted(()=>{
     destroy();
   });

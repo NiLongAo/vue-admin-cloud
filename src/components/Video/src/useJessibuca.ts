@@ -1,12 +1,21 @@
-import { unref,Ref,reactive ,nextTick} from 'vue';
+import { unref,Ref,reactive,watch ,nextTick} from 'vue';
 import { isEmpty } from '/@/utils/is';
 import { deepMerge } from '/@/utils';
 import { useScript } from '/@/hooks/web/useScript';
 
 
-export function useJessibuca(jessibucaProps:JessibucaProps){
+export interface JessibucaProps {
+  videoUrl?:string
+  options?:Recordable
+  hasAudio?:boolean
+  isMute?: boolean
+}
+
+
+export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
   let jessibucaPlayer = null as any;
   let playTimer= null as any;
+
   const stats =  reactive({
      destroy: true,
      playing : false,
@@ -70,7 +79,10 @@ export function useJessibuca(jessibucaProps:JessibucaProps){
   const { success } = useScript({src:publicPath+'script/jessibuca/jessibuca.js'});
 
   const createVideoDom =()=>{
-    jessibucaPlayer = new (window as any).Jessibuca({...{container: unref(jessibucaProps.containerRef)},...options});
+    if(isEmpty(jessibucaProps.videoUrl)){
+      return;
+    }
+    jessibucaPlayer = new (window as any).Jessibuca({...{container: unref(container)},...options});
     jessibucaPlayer.on("load", function () {
       console.log("on load init");
     });
@@ -157,17 +169,21 @@ export function useJessibuca(jessibucaProps:JessibucaProps){
   /**
    * 播放事件
    */
-  const play = (videoUrl?:string) =>{
+  const play = (url?:string) =>{
+    if(isEmpty(jessibucaProps.videoUrl)){
+      return;
+    }
     const sucs = unref(success); //true表示已加载静态文件
-    const plyUrl = isEmpty(videoUrl)?jessibucaProps.videoUrl:videoUrl;
-    console.log("播放事件 success:",sucs);
+    const plyUrl = isEmpty(url)?jessibucaProps.videoUrl:url;
     if(sucs){
-      console.log("静态文件加载完成");
       playTimer && clearInterval(playTimer);
     }else{
       if(!playTimer){
-        console.log("静态文件加载中...");
         playTimer = setInterval(() => play(plyUrl), 800);
+        setTimeout(()=>{
+          playTimer && clearInterval(playTimer)
+          playTimer = null;
+        },5000);
       }
       return;
     }
@@ -185,7 +201,7 @@ export function useJessibuca(jessibucaProps:JessibucaProps){
       const observer = new ResizeObserver((entries)=>{
         jessibucaPlayer && jessibucaPlayer?.resize()
       });
-      observer.observe(jessibucaProps.containerRef.value);
+      observer.observe(unref(container));
     })
   }
 
@@ -262,7 +278,19 @@ export function useJessibuca(jessibucaProps:JessibucaProps){
     stats.performance= "";
     stats.playing= false;
     jessibucaPlayer = null;
+    jessibucaProps.videoUrl= "";
   }
+
+  watch(
+    () => jessibucaProps,
+    () => {
+      nextTick(()=>{
+        //播放
+        play();
+      })
+    },
+    {immediate: true,deep: true,},
+  );
 
   return {
     stats,
@@ -274,12 +302,4 @@ export function useJessibuca(jessibucaProps:JessibucaProps){
     fullscreenSwich,
     destroy
   };
-}
-
-export interface JessibucaProps {
-  containerRef: Ref
-  videoUrl:string
-  options?:Recordable
-  hasAudio?:boolean
-  isMute?: boolean
 }

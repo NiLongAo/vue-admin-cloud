@@ -1,24 +1,34 @@
-import { unref,Ref } from 'vue';
+import { unref,Ref,watch,nextTick } from 'vue';
 import { useScript } from '/@/hooks/web/useScript';
+import { isEmpty } from '/@/utils/is';
 
-export function useZlmRtc(rtcProps:RtcProps){
-  let init = false;
-  let success = false;
+const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
+
+export interface RtcProps {
+  videoUrl?:string
+  debug?:boolean
+  simulecast?:boolean
+  useCamera?:boolean
+  audioEnable?:boolean
+  videoEnable?:boolean
+  recvOnly?:boolean
+}
+
+ export function useZlmRtc(rtcProps:RtcProps,container?:Ref){
+  const { success } = useScript({src:publicPath+'script/zlmRTC/ZLMRTCClient.js'});
+
   let zlmRtcClient = null as any;
   let timer = null as any;
   let playTimer = null as any;
-  let containerRef = rtcProps.containerRef;
-  const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
-  const {toPromise } = useScript({src:publicPath+'script/zlmRTC/ZLMRTCClient.js'});
-  toPromise().then(()=>{
-    createVideoDom();
-    init = true;
-  });
+
   //初始化video
-  const createVideoDom =()=>{
+  const createVideoDom = ()=>{
+    if(isEmpty(unref(rtcProps.videoUrl))){
+      return;
+    }
     zlmRtcClient = new (window as any).ZLMRTCClient.Endpoint({
-      element: unref(containerRef) || '',// video 标签
-      debug: rtcProps.debug || true,// 是否打印日志
+      element: unref(container) || '',// video 标签
+      debug: rtcProps.debug || false,// 是否打印日志
       zlmsdpUrl: rtcProps.videoUrl || '',//播放流地址
       simulecast: rtcProps.simulecast || false,
       useCamera: rtcProps.useCamera || false,
@@ -39,7 +49,6 @@ export function useZlmRtc(rtcProps:RtcProps){
         if (e.code ==-400 && e.msg=="流不存在"){
             console.log("流不存在")
             timer = setTimeout(()=>{
-              success = false;
               zlmRtcClient.close();
               createVideoDom();
             }, 100)
@@ -48,21 +57,26 @@ export function useZlmRtc(rtcProps:RtcProps){
     zlmRtcClient.on('WEBRTC_ON_LOCAL_STREAM',(s)=>{// 获取到了本地流
         eventcallbacK("LOCAL STREAM", "获取到了本地流")
     });
-    success = true;
   }
   //播放
-  const play = async ()=>{
-    if(init && success){
-      console.log("静态文件加载完成");
+  const play = ()=>{
+    if(isEmpty(rtcProps.videoUrl)){
+      return;
+    }
+    if(unref(success)){
+      if(!zlmRtcClient){
+        createVideoDom();
+      }
       playTimer && clearInterval(playTimer);
-      unref(containerRef).play();
+      playTimer = null;
+      setTimeout(()=>{unref(container)?.play()}, 250)
     }else{
       if(!playTimer){
-        console.log("静态文件加载中...");
-        if(init && !zlmRtcClient){
-          createVideoDom();
-        }
         playTimer = setInterval(() => play(), 800);
+        setTimeout(()=>{
+          playTimer && clearInterval(playTimer)
+          playTimer = null;
+        },5000);
       }
       return;
     }
@@ -89,8 +103,21 @@ export function useZlmRtc(rtcProps:RtcProps){
     zlmRtcClient = null;
     timer = null;
     playTimer = null;
-    success = false;
+    rtcProps.videoUrl="";
   }
+
+  watch(
+    () => rtcProps,
+    () => {
+      nextTick(()=>{
+        //先注销
+        pause();
+        //然后播放
+        play();
+      })
+    },
+    {immediate: true,deep: true,},
+  );
 
   /**
    * Rtc播放事件
@@ -100,17 +127,5 @@ export function useZlmRtc(rtcProps:RtcProps){
   const eventcallbacK = (type:string,message:string) =>{
     console.log("RTC 事件回调 type:"+type +" message:" +message);
   }
-  return {zlmRtcClient,play,pause,destroy};
-}
-
-
-export interface RtcProps {
-  containerRef?: Ref
-  videoUrl?:string
-  debug?:boolean
-  simulecast?:boolean
-  useCamera?:boolean
-  audioEnable?:boolean
-  videoEnable?:boolean
-  recvOnly?:boolean
+  return {zlmRtcClient,success,play,pause,destroy};
 }

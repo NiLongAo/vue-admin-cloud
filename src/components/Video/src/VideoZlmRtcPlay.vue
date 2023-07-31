@@ -5,7 +5,7 @@
 </template>
 <script lang="ts" setup>
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { ref,onUnmounted,watch,nextTick } from 'vue';
+  import { ref,reactive,onUnmounted } from 'vue';
   import { useZlmRtc } from './useZlmRtc';
   const containerRef = ref();
   const { prefixCls } = useDesign('video-rtp-play');
@@ -17,20 +17,11 @@
     }
   });
 
-  const {play,pause,destroy} = useZlmRtc({containerRef:containerRef,videoUrl:props.videoUrl});
+  const use =  reactive({
+    videoUrl:props.videoUrl,
+  });
 
-  watch(
-    () => props.videoUrl,
-    () => {
-      nextTick(()=>{
-        //先注销
-        pause();
-        //然后播放
-        play();
-      })
-    },
-    {immediate: true,},
-  );
+  const {play,destroy} = useZlmRtc(use,containerRef);
 
   onUnmounted(()=>{
     destroy();
