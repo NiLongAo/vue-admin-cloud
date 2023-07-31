@@ -353,7 +353,7 @@
       console.log("组件加载中，防止重新点击");
       return;
     }else if(stats.onAudio == 0){//关闭时触发查询 并 初始化语音组件
-      const data = await props.audioPushApi({deviceId:stats.deviceId,channelId:stats.channelId});
+      const data = await props.audioPushApi({deviceId:stats.deviceId});
       pushStats.zlmsdpUrl = authUrl(data);
       console.log("语音组件参数：",pushStats);
     }
@@ -395,24 +395,28 @@
 
   const initBroadcast = () =>{
     //查看流是否已加载
+    if(!isFunction(props.broadcastApi)){
+      return;
+    }
     if(!unref(localSteam)){
       console.log("语音流加载中...");
       if(!stats.broadcastTimer){
         stats.broadcastTimer = setInterval(() => initBroadcast(), 500);
         stats.broadcastTimeout = setTimeout(()=>{
-          stats.broadcastTimer && clearInterval(stats.audioTimer);
+          stats.broadcastTimer && clearInterval(stats.broadcastTimer);
           stats.broadcastTimer = null;
           clearInterval(stats.broadcastTimeout);
           stats.broadcastTimeout = null;
         },5000);
       }
       return;
+    }else{
+      stats.broadcastTimer && clearInterval(stats.broadcastTimer);
+      stats.broadcastTimer = null;
+      stats.broadcastTimeout && clearInterval(stats.broadcastTimeout);
+      stats.broadcastTimeout = null;
+      props.broadcastApi({deviceId:stats.deviceId});
     }
-    stats.broadcastTimer && clearInterval(stats.audioTimer);
-    stats.broadcastTimer = null;
-    stats.broadcastTimeout && clearInterval(stats.broadcastTimeout);
-    stats.broadcastTimeout = null;
-    props.broadcastApi({deviceId:stats.deviceId,channelId:stats.channelId});
   }
 
   const authUrl= (url) =>{
