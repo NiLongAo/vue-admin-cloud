@@ -186,6 +186,9 @@
         </div>
       </div>
     </div>
+    <div v-show="false">
+      <video ref="zlmRtcVideo" controls autoplay />
+    </div>
   </BasicModal>
 </template>
 <script lang="ts" setup>
@@ -205,6 +208,7 @@
   const VideoJessibucaPlay = defineAsyncComponent(() => import('./VideoJessibucaPlay.vue'))
   const VideoZlmRtcPlay = defineAsyncComponent(() => import('./VideoZlmRtcPlay.vue'))
   const payVideo = ref();
+  const zlmRtcVideo = ref();
   const { prefixCls } = useDesign('video-play-model');
   const { clipboardRef, copiedRef } = useCopyToClipboard();
   const { createMessage } = useMessage();
@@ -337,7 +341,7 @@
     });
   }
   //语音对讲
-  const {success,destroy} = useZlmRtc(pushStats);//加载 webrtc 语音对讲配置
+  const {success,destroy} = useZlmRtc(pushStats,zlmRtcVideo);//加载 webrtc 语音对讲配置
   const audioIntercom = async () =>{
     if(!isFunction(props.audioPushApi)){
       return;
