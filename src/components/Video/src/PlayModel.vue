@@ -355,7 +355,6 @@
     }else if(stats.onAudio == 0){//关闭时触发查询 并 初始化语音组件
       const data = await props.audioPushApi({deviceId:stats.deviceId});
       pushStats.zlmsdpUrl = authUrl(data);
-      console.log("语音组件参数：",pushStats);
     }
     initAudio();
   }

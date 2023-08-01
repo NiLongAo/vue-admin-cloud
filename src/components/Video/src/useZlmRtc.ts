@@ -20,6 +20,7 @@ export interface RtcProps {
   let zlmRtcClient = null as any;
   let timer = null as any;
   let playTimer = null as any;
+  let playTimeout = null as any;
   let localSteam = ref(false);
 
   //初始化video
@@ -28,7 +29,6 @@ export interface RtcProps {
       return;
     }
     zlmRtcClient = new (window as any).ZLMRTCClient.Endpoint({
-      element: unref(container) || '',// video 标签
       ...deepMerge(
         {
           zlmsdpUrl: '',//播放流地址
@@ -40,7 +40,8 @@ export interface RtcProps {
           recvOnly:true,
         },
         rtcProps || {}
-      )
+      ),
+      element: unref(container) || '',// video 标签
     });
     zlmRtcClient.on('WEBRTC_ICE_CANDIDATE_ERROR',(e)=>{// ICE 协商出错
       eventcallbacK("ICE ERROR", "ICE 协商出错")
@@ -64,6 +65,7 @@ export interface RtcProps {
       localSteam.value = true;
       eventcallbacK("LOCAL STREAM", "获取到了本地流")
     });
+    console.log(zlmRtcClient);
   }
   //播放
   const play = ()=>{
@@ -76,11 +78,13 @@ export interface RtcProps {
       }
       playTimer && clearInterval(playTimer);
       playTimer = null;
-      setTimeout(()=>{unref(container)?.play()}, 250)
+      playTimeout && clearInterval(playTimeout)
+      playTimeout = null;
+      setTimeout(()=>{unref(container)?.play()}, 350)
     }else{
       if(!playTimer){
         playTimer = setInterval(() => play(), 800);
-        setTimeout(()=>{
+        playTimeout= setTimeout(()=>{
           playTimer && clearInterval(playTimer)
           playTimer = null;
         },5000);
@@ -104,14 +108,17 @@ export interface RtcProps {
   const destroy = () =>{
     timer && clearTimeout(timer);
     playTimer && clearInterval(playTimer);
+    playTimeout && clearInterval(playTimeout)
+    localSteam.value = false;
+    timer = null;
+    playTimer = null;
+    playTimeout = null;
     if(!zlmRtcClient){
       return;
     }
     zlmRtcClient.close();
-    localSteam.value = false;
     zlmRtcClient = null;
-    timer = null;
-    playTimer = null;
+    
   }
 
   watch(
@@ -119,7 +126,7 @@ export interface RtcProps {
     () => {
       nextTick(()=>{
         //先注销
-        pause();
+        destroy();
         //然后播放
         play();
       })

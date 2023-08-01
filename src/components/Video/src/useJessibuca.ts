@@ -268,15 +268,15 @@ export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
    * 销毁事件
    */
   const destroy = () =>{
-    if(jessibucaPlayer){
-      jessibucaPlayer?.destroy();
-    }
     playTimer = null;
     stats.destroy = true;
     stats.kBps  = 0;
     stats.isMute=  false;
     stats.performance= "";
     stats.playing= false;
+    if(jessibucaPlayer){
+      jessibucaPlayer?.destroy();
+    }
     jessibucaPlayer = null;
   }
 
@@ -284,6 +284,8 @@ export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
     () => jessibucaProps,
     () => {
       nextTick(()=>{
+        //先销毁
+        destroy();
         //播放
         play();
       })
