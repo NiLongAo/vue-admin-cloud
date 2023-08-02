@@ -100,8 +100,12 @@
     DATE_FORMAT,
     DATE_TIME
   } from '/@/utils/dateUtil';
+  import { setObjToUrlParams } from '/@/utils';
   import { debounce } from 'lodash-es';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { useUserStoreWithOut } from '/@/store/modules/user';
+  const userStore = useUserStoreWithOut();
+
 
   const { hasPermission } = usePermission();
   const { prefixCls } = useDesign('video-record-play');
@@ -229,7 +233,7 @@
       startTime:stats.recodeDate+' '+stats.rangePickerDate[0],
       endTime:stats.recodeDate+' '+stats.rangePickerDate[1]
      });
-     stats.videoUrl = (sslStatus == 0)?(wsFlv?.url):(wssFlv?.url);
+     stats.videoUrl = setObjToUrlParams((sslStatus == 0)?(wsFlv?.url):(wssFlv?.url),{token:userStore.getToken});
      stats.streamId =stream;
   },500)
   //暂停事件
