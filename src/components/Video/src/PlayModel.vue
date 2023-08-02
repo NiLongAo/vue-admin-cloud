@@ -372,13 +372,13 @@
             stats.audioTimeout = null;
             //注销对讲器
             destroy();
-            createMessage.error("语音组件加载失败，请检查...")
+            createMessage.error("语音组件加载失败，请检查...");
           },5000);
         }
         return;
       }
       stats.onAudio = 1;
-      createMessage.loading("语音对讲开启中，请稍后...")
+      createMessage.loading("语音对讲开启中，请稍后...");
       stats.audioTimer && clearInterval(stats.audioTimer);
       stats.audioTimeout && clearInterval(stats.audioTimeout);
       stats.audioTimer = null;
@@ -390,7 +390,7 @@
       pushStats.zlmsdpUrl="";
       //销毁对讲
       destroy();
-      createMessage.success("语音对讲已关闭。")
+      createMessage.success("语音对讲已关闭。");
     }
   }
 
@@ -410,7 +410,7 @@
           //注销对讲器
           destroy();
           stats.onAudio = 0;
-          createMessage.error("语音对讲开启失败，请检查是否有麦克风....")
+          createMessage.error("语音对讲开启失败，请检查是否有麦克风....");
         },5000);
       }
       return;
@@ -419,9 +419,16 @@
       stats.broadcastTimer = null;
       stats.broadcastTimeout && clearInterval(stats.broadcastTimeout);
       stats.broadcastTimeout = null;
-      await props.broadcastApi({deviceId:stats.deviceId});
-      stats.onAudio = 2;
-      createMessage.success("语音对讲开启成功")
+      props.broadcastApi({deviceId:stats.deviceId})
+      .then(()=>{
+        stats.onAudio = 2;
+        createMessage.success("语音对讲开启成功")
+      }).catch((error)=>{
+          //注销对讲器
+          destroy();
+          stats.onAudio = 0;
+          createMessage.error("语音对讲开启失败,语音流推送失败");
+      })
     }
   }
 
