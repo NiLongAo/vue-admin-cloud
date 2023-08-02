@@ -46,37 +46,37 @@
         <!-- 方向控制 -->
         <div :class="`${prefixCls}-right-direction`">
           <Divider>方向控制</Divider>
-          <div class="flex relative">
-            <div class="grow flex items-center justify-center h-35 relative ">
-              <div class=" grid grid-cols-2 gap-4 place-content-stretch h-36 w-36 rotate-45 z-0">
-                <div class="relative border-solid border-1 border-sky-500  rounded-tl-full  cursor-pointer" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
-                  <div class="absolute bottom-0 right-0 w-9 h-9 border-t-1 border-l-1  border-solid border-sky-500 rounded-tl-full"></div>
+          <div class="flex">
+            <div class="grow relative flex items-center justify-center h-36">
+              <div class="absolute place-content-stretch h-36 w-36 rotate-45 z-0">
+                <div class="absolute top-0 left-0 h-16 w-16 active:bg-sky-300 border-solid border-1 border-sky-500  rounded-tl-full  cursor-pointer" @mousedown="ptzCamera('up')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute bottom-0 right-0 bg-white w-9 h-9 border-t-1 border-l-1  border-solid border-sky-500 border-b-white border-r-white rounded-tl-full"></div>
                   <Icon class="absolute cursor-pointer  bottom-6.5 right-6.5 z-3 -rotate-45" icon="teenyicons-triangle-solid"  color="#0ea5e9"/>
                 </div>
-                <div class="relative  border-solid border-1 border-sky-500 rounded-tr-full cursor-pointer" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
-                  <div class="absolute bottom-0 left-0 w-9 h-9  border-t-1 border-r-1 border-solid border-sky-500 rounded-tr-full"></div>
+                <div class="absolute top-0 right-0  h-16 w-16 active:bg-sky-300 border-solid border-1 border-sky-500 rounded-tr-full cursor-pointer" @mousedown="ptzCamera('right')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute bottom-0 left-0 bg-white w-9 h-9  border-t-1 border-r-1 border-solid border-sky-500 rounded-tr-full"></div>
                   <Icon class="absolute cursor-pointer  bottom-6.5 left-6.5 z-3 rotate-45" icon="teenyicons-triangle-solid"  color="#0ea5e9"/>
                 </div>
-                <div class="relative  border-solid border-1 border-sky-500 rounded-bl-full cursor-pointer" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
-                  <div class="absolute top-0 right-0 w-9 h-9 border-b-1 border-l-1 border-solid border-sky-500 rounded-bl-full"></div>
+                <div class="absolute bottom-0 left-0 h-16 w-16 active:bg-sky-300 border-solid border-1 border-sky-500 rounded-bl-full cursor-pointer" @mousedown="ptzCamera('left')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute top-0 right-0 bg-white w-9 h-9 border-b-1 border-l-1 border-solid border-sky-500 rounded-bl-full"></div>
                   <Icon class="absolute cursor-pointer  top-6.5 right-6.5 z-3 rotate-225" icon="teenyicons-triangle-solid"  color="#0ea5e9"/>
                 </div>
-                <div class="relative  border-solid border-1 border-sky-500 rounded-br-full cursor-pointer" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
-                  <div class="absolute top-0 left-0 w-9 h-9 border-b-1 border-r-1 border-solid  border-sky-500 rounded-br-full"></div>
+                <div class="absolute bottom-0 right-0 h-16 w-16 active:bg-sky-300 border-solid border-1 border-sky-500 rounded-br-full cursor-pointer" @mousedown="ptzCamera('down')" @mouseup="ptzCamera('stop')">
+                  <div class="absolute top-0 left-0 bg-white w-9 h-9 border-b-1 border-r-1 border-solid  border-sky-500 rounded-br-full"></div>
                   <Icon class="absolute cursor-pointer  top-6.5 left-6.5 z-3 rotate-135" icon="teenyicons-triangle-solid"  color="#0ea5e9"/>
                 </div>
               </div>
-              <div class="absolute bg-white h-22 w-22 border-solid rounded-full z-1"></div>
+              <div class="absolute bg-white  h-22 w-22 border-solid rounded-full z-1"></div>
               <div :class="`${audioClickStyle} absolute z-2  h-15 w-15 border-solid rounded-full border-1 border-sky-500 flex items-center justify-center cursor-pointer`" @click="audioIntercom">
                 <Icon class="cursor-pointer " :icon="`ic-outline-keyboard-voice`" size="40" color="#0ea5e9"/>
               </div>
             </div>
-            <div class=" flex flex-col relative">
+            <div class=" flex flex-col">
               <div class="flex-1 flex items-center ">
-                <Icon class="cursor-pointer" size="26" icon="solar-magnifer-zoom-in-outline" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')"/>
+                <Icon class="cursor-pointer" size="26"  color="#0ea5e9" icon="solar-magnifer-zoom-in-outline" @mousedown="ptzCamera('zoomin')" @mouseup="ptzCamera('stop')"/>
               </div>
               <div class="flex-1 flex items-center ">
-                <Icon class="cursor-pointer" size="26" icon="solar-magnifer-zoom-out-linear" @mousedown="ptzCamera('zoomout')" @mouseup="ptzCamera('stop')"/>
+                <Icon class="cursor-pointer" size="26"  color="#0ea5e9" icon="solar-magnifer-zoom-out-linear" @mousedown="ptzCamera('zoomout')" @mouseup="ptzCamera('stop')"/>
               </div>
             </div>
           </div>
@@ -164,7 +164,7 @@
         <div :class="`${prefixCls}-right-stream overflow-y-auto`">
           <Divider>流信息</Divider>
           <p v-if="isEmpty(stats.tracks)">暂无数据</p>
-          <Descriptions title="视频1" size="small" :column="1" v-if="isNotEmpty(stats.tracks)">
+          <Descriptions size="small" :column="1" v-if="isNotEmpty(stats.tracks)">
             <template :key="index" v-for="(val,index) in stats.tracks">
               <template v-if="val.codecType == 0">
                 <DescriptionsItem label="格式：">{{ val?.codecIdName }}</DescriptionsItem>
