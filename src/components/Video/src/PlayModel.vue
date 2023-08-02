@@ -362,21 +362,23 @@
     if(stats.onAudio == 0 || stats.onAudio == 1){
       stats.onAudio = 1;
       if(!unref(success)){
-        console.log("语音组件加载中...");
         if(!stats.audioTimer){
           stats.audioTimer = setInterval(() => initAudio(), 500);
           stats.audioTimeout = setTimeout(()=>{
             stats.onAudio = 0;
             stats.audioTimer && clearInterval(stats.audioTimer);
             stats.audioTimer = null;
-            clearInterval(stats.audioTimeout);
+            stats.audioTimeout && clearInterval(stats.audioTimeout);
             stats.audioTimeout = null;
+            //注销对讲器
+            destroy();
+            createMessage.error("语音组件加载失败，请检查...")
           },5000);
         }
         return;
       }
-      console.log("语音组件加载完成...");
-      stats.onAudio = 2;
+      stats.onAudio = 1;
+      createMessage.loading("语音对讲开启中，请稍后...")
       stats.audioTimer && clearInterval(stats.audioTimer);
       stats.audioTimeout && clearInterval(stats.audioTimeout);
       stats.audioTimer = null;
@@ -388,24 +390,27 @@
       pushStats.zlmsdpUrl="";
       //销毁对讲
       destroy();
-      console.log("语音组件销毁完成...");
+      createMessage.success("语音对讲已关闭。")
     }
   }
 
-  const initBroadcast = () =>{
+  const initBroadcast = async () =>{
     //查看流是否已加载
     if(!isFunction(props.broadcastApi)){
       return;
     }
     if(!unref(localSteam)){
-      console.log("语音流加载中...");
       if(!stats.broadcastTimer){
         stats.broadcastTimer = setInterval(() => initBroadcast(), 500);
         stats.broadcastTimeout = setTimeout(()=>{
           stats.broadcastTimer && clearInterval(stats.broadcastTimer);
           stats.broadcastTimer = null;
-          clearInterval(stats.broadcastTimeout);
+          stats.broadcastTimeout && clearInterval(stats.broadcastTimeout);
           stats.broadcastTimeout = null;
+          //注销对讲器
+          destroy();
+          stats.onAudio = 0;
+          createMessage.error("语音对讲开启失败，请检查是否有麦克风....")
         },5000);
       }
       return;
@@ -414,7 +419,9 @@
       stats.broadcastTimer = null;
       stats.broadcastTimeout && clearInterval(stats.broadcastTimeout);
       stats.broadcastTimeout = null;
-      props.broadcastApi({deviceId:stats.deviceId});
+      await props.broadcastApi({deviceId:stats.deviceId});
+      stats.onAudio = 2;
+      createMessage.success("语音对讲开启成功")
     }
   }
 
