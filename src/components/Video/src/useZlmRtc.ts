@@ -65,7 +65,6 @@ export interface RtcProps {
       localSteam.value = true;
       eventcallbacK("LOCAL STREAM", "获取到了本地流")
     });
-    console.log(zlmRtcClient);
   }
   //播放
   const play = ()=>{

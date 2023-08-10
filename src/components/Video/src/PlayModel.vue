@@ -366,6 +366,7 @@
           stats.audioTimer = setInterval(() => initAudio(), 500);
           stats.audioTimeout = setTimeout(()=>{
             stats.onAudio = 0;
+            pushStats.zlmsdpUrl="";
             stats.audioTimer && clearInterval(stats.audioTimer);
             stats.audioTimer = null;
             stats.audioTimeout && clearInterval(stats.audioTimeout);
@@ -410,6 +411,7 @@
           //注销对讲器
           destroy();
           stats.onAudio = 0;
+          pushStats.zlmsdpUrl="";
           createMessage.error("语音对讲开启失败，请检查是否有麦克风....");
         },5000);
       }
@@ -427,6 +429,7 @@
           //注销对讲器
           destroy();
           stats.onAudio = 0;
+          pushStats.zlmsdpUrl="";
           createMessage.error("语音对讲开启失败,语音流推送失败");
       })
     }
