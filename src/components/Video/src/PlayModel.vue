@@ -353,7 +353,7 @@
       console.log("组件加载中，防止重新点击");
       return;
     }else if(stats.onAudio == 0){//关闭时触发查询 并 初始化语音组件
-      const data = await props.audioPushApi({deviceId:stats.deviceId});
+      const data = await props.audioPushApi({deviceId:stats.deviceId,channelId:stats.channelId});
       pushStats.zlmsdpUrl = authUrl(data);
     }
     initAudio();
@@ -421,7 +421,7 @@
       stats.broadcastTimer = null;
       stats.broadcastTimeout && clearInterval(stats.broadcastTimeout);
       stats.broadcastTimeout = null;
-      props.broadcastApi({deviceId:stats.deviceId})
+      props.broadcastApi({deviceId:stats.deviceId,channelId:stats.channelId})
       .then(()=>{
         stats.onAudio = 2;
         createMessage.success("语音对讲开启成功")
