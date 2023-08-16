@@ -9,7 +9,7 @@
       </Col>
     </Row>
     <Divider dashed orientation="left">基本设置</Divider>
-    <Menu @click="handleMenuClick" :selectedKeys="key">
+    <Menu :selectedKeys="key" @click="handleClick">
       <MenuItem key="account_config" text="账号管理" />
       <MenuItem key="account_bind" text="账号绑定" />
       <MenuItem key="mail_config" disabled text="邮箱管理" />
@@ -36,7 +36,7 @@
     memoRef: userStore.getUserInfo.memo,
   });
 
-  const handleMenuClick = (e: { key: ButtonType }) => {
+  const handleClick = (e: { key: ButtonType } | any) => {
     key.value = [e.key];
     emit('handleMenuClick', e.key);
   };

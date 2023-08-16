@@ -34,7 +34,7 @@
     keepSource: true,
     showOverflow: true,
     //height: 'auto',
-    stripe: false,
+    stripe: true,
     //loading: true,
     editConfig: { trigger: 'click', mode: 'row', showStatus: true },
     scrollY: { enabled: false },
@@ -54,7 +54,7 @@
       ajax: {
         query: async ({ page, form }) => {
           return await doMenuPage({
-            pageNum: page.currentPage,
+            pageNumber: page.currentPage,
             pageSize: page.pageSize,
             ...form,
           });

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full box-border border-14 border-r-0 border-gray-100 overflow-hidden bg-white">
+  <div class="h-full m-4 m-r-0  overflow-hidden bg-white">
     <div>
       <RadioGroup
         v-model:value="type"

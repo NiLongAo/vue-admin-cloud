@@ -11,18 +11,17 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ref, shallowRef } from 'vue';
+  import { shallowRef } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
   import PersonalMenu, { ButtonType } from './components/PersonalMenu.vue';
+  import { useDesign } from '/@/hooks/web/useDesign';
   const AccountConfig = createAsyncComponent(
     () => import('./components/context/AccountConfig.vue'),
   );
   const AccountBind = createAsyncComponent(() => import('./components/context/AccountBind.vue'));
-
+  const { prefixCls } = useDesign('personal-center');
   let comp = shallowRef(AccountConfig);
-
-  const prefixCls = ref('personal-center');
 
   const handleClick = (k: ButtonType) => {
     switch (k) {
@@ -37,14 +36,15 @@
     }
   };
 </script>
-<style lang="less" scoped>
-  .personal-center {
+<style lang="less">
+ @prefix-cls: ~'@{namespace}-personal-center';
+ .@{prefix-cls} {
     &-menu {
-      background-color: @component-background;
+      background: @component-background;
     }
 
     &-context {
-      background-color: @component-background;
+      background: @component-background;
     }
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-full box-border border-14 border-gray-100 overflow-hidden bg-white px-10 py-10 absolute w-full"
+    class="h-full m-4  overflow-hidden bg-white px-10 py-10 absolute w-full"
   >
     <div class="flex justify-end">
       <a-button

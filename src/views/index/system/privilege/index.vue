@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper ref="PageWrapperT" dense contentFullHeight fixedHeight>
+  <PageWrapper dense contentFullHeight fixedHeight>
     <Row class="relative h-full">
       <Col :span="5"> <PrivilegeTree @select="handleSelect" :tenant="state.tenant" /></Col>
       <Col :span="19">
@@ -32,7 +32,6 @@
 
   const { createMessage } = useMessage();
   const { error } = createMessage;
-  const PageWrapperT = ref();
   const treeData = ref();
   const checkedList = ref();
   const selectType = ref();
@@ -56,7 +55,7 @@
   };
 
   //点击字典类型事件
-  const handleSelect = async (type = undefined, id = '', tenantId = '') => {
+  const handleSelect = async (type = undefined as any, id = '', tenantId = '') => {
     await handleCheckRef.value.onInit();
     let checked = [];
     if (!!id) {
