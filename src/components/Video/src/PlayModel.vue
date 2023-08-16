@@ -1,5 +1,13 @@
 <template>
-  <BasicModal v-bind="$attrs" :maskClosable="false" @register="registerModal" title="播放器" @cancel="handleCancel" width="1200px" :footer="null">
+  <BasicModal 
+    v-bind="$attrs" 
+    centered
+    :maskClosable="false" 
+    @register="registerModal" 
+    title="播放器" 
+    @cancel="handleCancel"
+    width="1200px" 
+    :footer="null">
     <div :class="` ${prefixCls} flex flex-row gap-x-px `">
       <div :class="props.control?`${prefixCls}-left grid grid-rows-16  grid-cols-1 basis-16/20`:`${prefixCls}-left grid grid-rows-16  grid-cols-1 grow`">
         <!-- 选择器 :footer="{ disabled: true }"-->
@@ -41,7 +49,7 @@
           </Input>
         </div>
       </div>
-      <Divider  v-if="props.control" style="height: auto;background-color: #fff;" type="vertical" dashed />
+      <Divider  v-if="props.control" style="height: inherit;" type="vertical"  />
       <div v-if="props.control" :class="`${prefixCls}-right basis-4/20 row-span-3 flex flex-col `">
         <!-- 方向控制 -->
         <div :class="`${prefixCls}-right-direction`">
@@ -178,7 +186,7 @@
                 <DescriptionsItem label="采样位数：">{{ val.sampleBit }}</DescriptionsItem>
                 <DescriptionsItem label="采样率：">{{ val.sampleRate }}</DescriptionsItem>
               </template>
-              <template v-if="index < stats.tracks.length">
+              <template v-if="index < stats.tracks.length-1">
                 <DescriptionsItem ><Divider/></DescriptionsItem>
               </template>
             </template>
@@ -533,6 +541,9 @@
     &-stream{
       min-height: 186px;
       height: 186px;
+      .ant-descriptions-item .ant-divider-horizontal{
+        margin: 5px 0;
+      }
     }
     .ant-divider-with-text-center{
       margin: 5px 0;
