@@ -7,7 +7,7 @@
       @edit="handleTypeEdit"
       @remove="handleTypeRemove"
     />
-    <BasicTable @register="registerTable" class="w-3/4 xl:w-4/5" :searchInfo="searchInfo">
+    <BasicTable @register="registerTable" class="w-3/4 xl:w-4/5">
       <template #toolbar>
         <a-button
           type="primary"
@@ -80,10 +80,12 @@
     formConfig: getFormConfig(),
     useSearchForm: true,
     bordered: true,
+    immediate:false,
     showTableSetting: true,
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
     rowKey: 'id',
+    searchInfo: searchInfo,
     actionColumn: {
       width: 160,
       title: 'Action',

@@ -1,16 +1,14 @@
 <template>
-  <div class="h-full m-4 m-r-0  overflow-hidden bg-white">
-    <div>
-      <RadioGroup
-        v-model:value="type"
-        style="margin: 10px 0; width: 100%; text-align: center"
-        button-style="solid"
-      >
-        <RadioButton :value="1">部门</RadioButton>
-        <RadioButton :value="2">职位</RadioButton>
-        <RadioButton :value="3">角色</RadioButton>
-      </RadioGroup>
-    </div>
+  <div class="bg-white m-4 mr-0 overflow-hidden">
+    <RadioGroup
+      v-model:value="type"
+      style="margin: 10px 0; width: 100%; text-align: center"
+      button-style="solid"
+    >
+      <RadioButton :value="1">部门</RadioButton>
+      <RadioButton :value="2">职位</RadioButton>
+      <RadioButton :value="3">角色</RadioButton>
+    </RadioGroup>
     <BasicTree
       :title="getTitle"
       toolbar

@@ -95,7 +95,7 @@ export function useTable(tableProps?: Props): [
       const columns = getTableInstance().getColumns({ ignoreIndex }) || [];
       return toRaw(columns);
     },
-    setColumns: (columns: BasicColumn[]) => {
+    setColumns: (columns: BasicColumn[] | string[]) => {
       getTableInstance().setColumns(columns);
     },
     setTableData: (values: any[]) => {
@@ -158,7 +158,7 @@ export function useTable(tableProps?: Props): [
     expandAll: () => {
       getTableInstance().expandAll();
     },
-    expandRows: (keys: string[]) => {
+    expandRows: (keys: string[] | number[]) => {
       getTableInstance().expandRows(keys);
     },
     collapseAll: () => {

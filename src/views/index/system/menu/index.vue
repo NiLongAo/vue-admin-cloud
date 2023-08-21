@@ -244,7 +244,6 @@
         width: 200,
       },
       {
-        width: 160,
         title: '操作',
         align: 'center',
         slots: { default: 'action' },

@@ -356,7 +356,7 @@ export function useDataSource(
     }
   }
 
-  function setTableData<T = Recordable>(values: T[]) {
+  function setTableData<T = Recordable>(values: Recordable[]) {
     dataSourceRef.value = values;
   }
 

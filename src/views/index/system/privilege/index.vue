@@ -1,21 +1,11 @@
 <template>
-  <PageWrapper dense contentFullHeight fixedHeight>
-    <Row class="relative h-full">
-      <Col :span="5"> <PrivilegeTree @select="handleSelect" :tenant="state.tenant" /></Col>
-      <Col :span="19">
-        <PrivilegeCheckbox
-          ref="handleCheckRef"
-          :treeData="treeData"
-          :checkedList="checkedList"
-          @save="handleSave"
-        />
-      </Col>
-    </Row>
+  <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
+    <PrivilegeTree class="w-50" @select="handleSelect" :tenant="state.tenant" />
+    <PrivilegeCheckbox ref="handleCheckRef" class="grow" :treeData="treeData" :checkedList="checkedList" @save="handleSave" />
   </PageWrapper>
 </template>
 <script lang="ts" setup>
   import { PageWrapper } from '/@/components/Page';
-  import { Row, Col } from 'ant-design-vue';
   import PrivilegeTree from './PrivilegeTree.vue';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
   import { ref, unref, reactive } from 'vue';

@@ -1,10 +1,8 @@
 <template>
-  <div
-    class="h-full m-4  overflow-hidden bg-white px-10 py-10 absolute w-full"
-  >
-    <div class="flex justify-end">
+  <div class="m-4 bg-white flex flex-col">
+    <div class="justify-end">
       <a-button
-        class="!ml-4"
+        class="float-right mt-4 mr-4"
         type="primary"
         @click="handleSave"
         v-if="hasPermission('system.privilege:save')"
@@ -12,11 +10,9 @@
         保存
       </a-button>
     </div>
-    <div class="h-full">
-      <ScrollContainer>
-        <MyCheckBox :treeData="tree" @subset="handleSubsetChange" />
-      </ScrollContainer>
-    </div>
+    <ScrollContainer class="grow overflow-hidden">
+      <MyCheckBox :treeData="tree" @subset="handleSubsetChange" />
+    </ScrollContainer>
   </div>
 </template>
 <script lang="ts" setup>
