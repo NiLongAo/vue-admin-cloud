@@ -45,11 +45,13 @@ export default {
   vxeTable: {
     table: {
       border: true,
+      align : 'center',
       stripe: true,
       columnConfig: {
         resizable: true,
         isCurrent: true,
         isHover: true,
+        minWidth:100,
       },
       rowConfig: {
         isCurrent: true,

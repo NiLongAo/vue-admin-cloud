@@ -195,6 +195,11 @@
         width: 100,
       },
       {
+        title: '序号',
+        field: 'num',
+        width: 100,
+      },
+      {
         title: '是否启用',
         field: 'isOpen',
         width: 100,
@@ -230,12 +235,6 @@
       {
         title: '页面路由',
         field: 'viewPath',
-        width: 200,
-      },
-
-      {
-        title: '序号',
-        field: 'num',
         width: 200,
       },
       {
