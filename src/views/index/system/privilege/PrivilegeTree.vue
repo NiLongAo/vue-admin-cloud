@@ -174,10 +174,10 @@
     });
   };
 
-  const handleSelect = (keys,info) => {
+  const handleSelect = (_,info) => {
     nextTick(() => {
       defaultKey.value = [info.node.key];
-      const node: any = getTree().getSelectedNode(keys[0]);
+      const node: any = getTree().getSelectedNode(info.node.key);
       if (node) {
         emit('select', unref(type), node[unref(ketFields)], node?.tenantId);
       } else {

@@ -40,7 +40,7 @@
     watch,
     PropType,
   } from 'vue';
-  import CropperModal from './CropperModal.vue';
+  import CropperModal,{apiFunParams} from './CropperModal.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -54,7 +54,7 @@
     showBtn: { type: Boolean, default: true },
     btnProps: { type: Object as PropType<ButtonProps> },
     btnText: { type: String, default: '' },
-    uploadApi: { type: Function as PropType<({ file: Blob, name: string }) => Promise<void>> },
+    uploadApi: { type: Function as PropType<(params: apiFunParams) => Promise<any>> },
     size: { type: Number, default: 5 },
   };
 
