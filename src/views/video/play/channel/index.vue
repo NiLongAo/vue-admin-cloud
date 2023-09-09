@@ -114,7 +114,7 @@
       accordion: false,
       rowField: 'channelId',
       parentField: 'parentId',
-      children: 'children',
+      childrenField: 'children',
     },
     proxyConfig: {
       props: {

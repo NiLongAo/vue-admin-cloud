@@ -60,7 +60,6 @@
   });
 
   const initModel = async () => {
-    console.log(props.userId);
     resetSchema(!!unref(props.userId) ? baseSetschemas : insertSetschemas);
     resetFields();
     if (!!props.userId) {

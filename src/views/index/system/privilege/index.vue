@@ -46,7 +46,6 @@
 
   //点击字典类型事件
   const handleSelect = async (type = undefined as any, id = '', tenantId = '') => {
-    console.log(type,"_",id,"_",tenantId);
     await handleCheckRef.value.onInit();
     let checked = [];
     if (!!id) {

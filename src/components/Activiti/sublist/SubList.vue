@@ -173,7 +173,6 @@
         recordList.map((attr: { editValueRefs: Recordable }) => {
           data.push(attr.editValueRefs);
         });
-        console.log(data);
         //TODO 此处将数据提交给服务器保存
         emit('update:value', data);
         // 保存之后提交编辑状态

@@ -52,6 +52,7 @@
     GetUserPosition,
     SaveUserPosition,
   } from '/@/api/sys/user';
+  defineEmits(['register','success']);
 
   const [registerTreeModal, { openModal: onTreeModel }] = useModal();
 

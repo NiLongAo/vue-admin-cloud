@@ -95,6 +95,7 @@
       field: 'id',
       order: 'descend',
     },
+    //pagination:false,
     actionColumn: {
       width: 160,
       title: 'Action',

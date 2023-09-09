@@ -45,7 +45,7 @@
       accordion: true,
       rowField: 'id',
       parentField: 'parentId',
-      children: 'children',
+      childrenField: 'children',
     },
     proxyConfig: {
       props: {

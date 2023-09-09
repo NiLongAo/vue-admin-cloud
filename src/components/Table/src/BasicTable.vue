@@ -428,7 +428,7 @@
       //}
     }
 
-    .ant-pagination {
+    .ant-table-pagination.ant-pagination {
       margin: 10px 0 0;
     }
 
