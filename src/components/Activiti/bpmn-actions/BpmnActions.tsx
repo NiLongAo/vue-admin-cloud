@@ -190,7 +190,7 @@ export default defineComponent({
         <ButtonRender {...buttonRenderProps} />
         <Drawer
           placement="left"
-          v-model:visible={this.previewActive}
+          v-model:open={this.previewActive}
           width="35%"
           height="100%"
           destroyOnClose={true}
