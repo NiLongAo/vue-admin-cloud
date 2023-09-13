@@ -1,4 +1,4 @@
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed, ref, unref } from 'vue';
 import { BasicTableProps } from './types';
 import { basicProps } from './props';
 import { ignorePropKeys } from './const';
@@ -16,7 +16,7 @@ import { Grid as VxeGrid } from 'vxe-table';
 
 import { extendSlots } from '/@/utils/helper/tsxHelper';
 import { gridComponentMethodKeys } from './methods';
-import { omit } from 'lodash-es';
+import { omit,cloneDeep } from 'lodash-es';
 
 export default defineComponent({
   name: 'VxeBasicTable',
@@ -56,9 +56,16 @@ export default defineComponent({
      *  1.部分属性需要和全局属性进行合并
      */
     const getBindValues = computed<BasicTableProps>(() => {
+    /**
+     * Tzy 如果是树结构不需要斑马线
+     */
+    const p = cloneDeep(props);
+      if(props.treeConfig){
+        p['stripe'] = false;
+      }
       const propsData: BasicTableProps = {
         ...attrs,
-        ...props,
+        ...p,
       };
 
       return propsData;

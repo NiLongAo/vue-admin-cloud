@@ -32,5 +32,12 @@ export default defineApplicationConfig({
         },
       },
     },
+    //解决  vue-i18n 报错 Failed to resolve entry for package "@intlify/shared" 后续版本修复后再克删除
+    // https://github.com/intlify/vue-i18n-next/issues/1521
+    resolve:{
+      alias: {
+        "vue-i18n": "vue-i18n/dist/vue-i18n.esm-bundler.js", // After modification
+      },
+    }
   },
 });

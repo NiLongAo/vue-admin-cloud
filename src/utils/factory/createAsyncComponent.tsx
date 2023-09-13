@@ -34,7 +34,7 @@ export function createAsyncComponent<
   T extends Component = {
     new (): ComponentPublicInstance;
   },
->(loader:  AsyncComponentLoader<T>, options: Options = {}) {
+>(loader: AsyncComponentLoader<T>, options: Options = {}) {
   const { size = 'small', delay = 100, timeout = 30000, loading = false, retry = true } = options;
   return defineAsyncComponent({
     loader,

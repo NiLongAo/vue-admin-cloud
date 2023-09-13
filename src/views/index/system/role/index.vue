@@ -44,6 +44,7 @@
     api: getRolePage,
     columns: getBasicColumns(),
     formConfig: getFormConfig(),
+    striped:true,
     bordered: true,
     useSearchForm: true,
     showTableSetting: true,
@@ -105,7 +106,6 @@
       {
         title: '角色名称',
         dataIndex: 'roleName',
-        fixed: 'left',
         width: 100,
       },
       {

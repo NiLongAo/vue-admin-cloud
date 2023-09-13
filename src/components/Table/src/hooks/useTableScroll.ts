@@ -75,18 +75,18 @@ export function useTableScroll(
   function caclPaginationHeight(tableEl: Element): number {
     const { pagination } = unref(propsRef);
     // Pager height
-    let paginationHeight = 2;
+    let paginationHeight = 10;
     if (!isBoolean(pagination)) {
       paginationEl = tableEl.querySelector('.ant-pagination') as HTMLElement;
       if (paginationEl) {
         const offsetHeight = paginationEl.offsetHeight;
-        paginationHeight += offsetHeight || 0;
+        paginationHeight += (offsetHeight || 0);
       } else {
-        // TODO First fix 24
+        // TODO First fix 24 margin 32
         paginationHeight += 24;
       }
     } else {
-      paginationHeight = -8;
+      paginationHeight = 0;
     }
     return paginationHeight;
   }
@@ -115,8 +115,8 @@ export function useTableScroll(
 
    function calcBottomAndPaddingHeight(tableEl: Element, headEl: Element) {
     const { pagination, isCanResizeParent, useSearchForm } = unref(propsRef);
-    // Table height from bottom height-custom offset
-    let paddingHeight = 30;
+    // Table height from bottom height-custom offset 16 + 6
+    let paddingHeight = 22;
     let bottomIncludeBody = 0;
     if (unref(wrapRef) && isCanResizeParent) {
       const tablePadding = 12;
@@ -139,8 +139,7 @@ export function useTableScroll(
         (tableEl.querySelector('.ant-table-title') as HTMLElement)?.offsetHeight ?? 0;
 
       console.log(wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin);
-      bottomIncludeBody =
-        wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin;
+      bottomIncludeBody = wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin;
     } else {
       // Table height from bottom
       bottomIncludeBody = getViewportOffset(headEl).bottomIncludeBody;
@@ -151,7 +150,11 @@ export function useTableScroll(
       bottomIncludeBody,
     };
   }
-
+  /**
+   * TZY
+   * 根据原基础 版本升级 高度优化
+   * @returns 
+   */
   async function calcTableHeight() {
     const { resizeHeightOffset, maxHeight } = unref(propsRef);
     const tableData = unref(getDataSourceRef);
