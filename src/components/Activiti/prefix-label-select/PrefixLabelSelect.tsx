@@ -12,18 +12,10 @@ const PrefixLabelSelect = defineComponent({
     searchName: propTypes.string.def('name'),
     isApi: propTypes.bool.def(false),
     //true: String,false:Number
-    isValueType: propTypes.bool.def(false),
     prefixTitle: propTypes.string.def(''),
   },
   emits: ['update:value'],
   setup(props, { emit, slots }) {
-    const computedModelValue = computed({
-      get: () =>
-        props.isValueType && !Number.isNaN(Number.parseInt(props.value))
-          ? Number(props.value)
-          : props.value,
-      set: (val) => emit('update:value', val),
-    });
     const stats = reactive({
       keyword: props.value,
       choose: true,
@@ -37,9 +29,6 @@ const PrefixLabelSelect = defineComponent({
     });
 
     const onBlur = () => {
-      if (stats.keyword && !stats.choose) {
-        computedModelValue.value = stats.keyword;
-      }
       stats.isblur = true;
     };
     const onSearch = debounce((value) => {
@@ -53,7 +42,7 @@ const PrefixLabelSelect = defineComponent({
 
     const onSelect = debounce((value) => {
       stats.choose = true;
-      computedModelValue.value = value;
+      stats.keyword = value;
     });
 
     if (props.showSearch) {
@@ -75,7 +64,6 @@ const PrefixLabelSelect = defineComponent({
             {...props}
             {...stats.select}
             optionFilterProp="label"
-            v-model:value={computedModelValue.value}
             v-slots={slots}
           />
         </div>
@@ -88,7 +76,6 @@ const PrefixLabelSelect = defineComponent({
             class="prefix-label-select"
             {...props}
             {...stats.select}
-            v-model:value={computedModelValue.value}
             v-slots={slots}
           />
         </div>

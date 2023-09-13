@@ -39,20 +39,16 @@ export default defineComponent({
       state.handingModel = props.value;
       state.flatFieldDefine = flatObject(props.fieldDefine, {});
     });
-
     //绑定转换函数赋值，然props有则用props的否则用默认的
-    const bindTransformer = props.bindTransformer || defaultTransformer;
-    const dataBindTransformer = function (key: string, value: unknown) {
-      return bindTransformer(state.handingModel, key, value);
+    const dataBindTransformer = function (key: string, value: FieldDefine,bindTransformer?:Function) {
+      return bindTransformer?bindTransformer(state.handingModel, key, value):defaultTransformer(state.handingModel, key, value);
     };
-
     return () => (
       <div class="dynamic-binder">
         {Object.keys(state.flatFieldDefine).map((key) => {
           const define = state.flatFieldDefine[key];
-
           if (define && predicate(define, toRaw(props.value))) {
-            const bindData = dataBindTransformer(key, define);
+            const bindData = dataBindTransformer(key, define,define.bindTransformer);
             //组件不能是代理对象，这里直接用目标对象
             const Component = toRaw(define.component);
             watch(

@@ -42,15 +42,7 @@ const BaseProperties = {
       predicate: (businessObject: ModdleElement): boolean => {
         return businessObject?.sourceRef?.$type !== 'bpmn:StartEvent';
       },
-      vSlots: {
-        default: (): JSX.Element => (
-          <>
-            {FLOW_TYPE_OPTIONS.map((item) => {
-              return <SelectOption value={item.value}>{item.label}</SelectOption>;
-            })}
-          </>
-        ),
-      },
+      options:FLOW_TYPE_OPTIONS,
       getValue(businessObject: ModdleElement): string {
         return getSequenceFlowType(businessObject);
       },
@@ -86,7 +78,7 @@ const BaseProperties = {
       component: Input,
       placeholder: '条件表达式',
       vSlots: {
-        prepend: (): JSX.Element => <div>条件表达式</div>,
+        addonBefore: (): JSX.Element => <div>条件表达式</div>,
       },
       predicate: (businessObject: ModdleElement): boolean => {
         return 'condition' === getSequenceFlowType(businessObject);

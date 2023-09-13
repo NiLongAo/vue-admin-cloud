@@ -9,12 +9,14 @@ import { GroupProperties } from '../index';
 import PrefixLabelLinkageSelect from '/@/components/Activiti/prefix-label-linkage-select';
 import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
 import PrefixLabelNumBer from '/@/components/Activiti/prefix-label-number';
+import {type FieldDefine} from '/@/components/Activiti/dynamic-binder';
 import { tenantObj } from '/@/settings/tenantSetting';
 import { Input, SelectOption } from 'ant-design-vue';
 import { getChoiceUserPage } from '/@/api/sys/user';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
-import { unref } from 'vue';
+import { resolve } from '/@/components/Activiti/utils/script-helper';
+import { unref,reactive,toRaw,computed } from 'vue';
 
 const TASK_EVENT_OPTIONS = [
   { label: '创建', value: 'create' },
@@ -28,24 +30,6 @@ const TaskListenerProperties = getElementTypeListenerProperties({
   name: '任务监听器',
   eventOptions: TASK_EVENT_OPTIONS,
 });
-
-const USER_OPTIONS = [
-  { label: '张三', value: '1' },
-  { label: '李四', value: '2' },
-  { label: '王五', value: '3' },
-];
-
-const UserOption: JSX.Element = (
-  <>
-    {USER_OPTIONS.map((item) => {
-      return (
-        <SelectOption value={item.value} key={item.label}>
-          {item.label}
-        </SelectOption>
-      );
-    })}
-  </>
-);
 
 /**
  * 用户任务属性配置
@@ -65,7 +49,6 @@ export const BpmnUserGroupProperties: GroupProperties = {
       labelField: 'userName',
       valueField: 'id',
       resultField: 'data',
-      isValueType: true,
       allowClear: true,
       params: {
         ...unref(tenantObj),
@@ -75,6 +58,20 @@ export const BpmnUserGroupProperties: GroupProperties = {
       showSearch: true,
       filterOption: false,
       prefixTitle: '处理人',
+      bindTransformer:(sourceModel: unknown, bindKey: string, bindDefine: FieldDefine)=>{
+        return reactive({
+          bindKey,
+          ...bindDefine,
+          sourceModel,
+          value: computed(()=>{
+            const val =bindDefine.getValue? bindDefine.getValue(toRaw(sourceModel)): resolve(bindKey, sourceModel) || '';
+            if(!Number.isNaN(Number.parseInt(val))){
+              return Number(val);
+            }
+            return val;
+          }),
+        });
+      }
     },
     /**
      * 候选人属性
@@ -225,14 +222,6 @@ const LOOP_OPTIONS = [
   { label: '时序多重事件', value: 'Sequential' },
   { label: '循环事件', value: 'StandardLoop' },
 ];
-
-const LoopOptions: JSX.Element = (
-  <>
-    {LOOP_OPTIONS.map((item) => {
-      return <SelectOption v-model:value={item.value}>{item.label}</SelectOption>;
-    })}
-  </>
-);
 /**
  * 任务的基本属性配置
  */
@@ -243,9 +232,7 @@ const BaseTaskProperties = {
     loopCharacteristics: {
       component: PrefixLabelSelect,
       prefixTitle: '回路特性',
-      vSlots: {
-        default: (): JSX.Element => LoopOptions,
-      },
+      options: LOOP_OPTIONS,
       getValue(businessObject: ModdleElement): string {
         const loopCharacteristics = businessObject.loopCharacteristics;
         if (!loopCharacteristics) {
