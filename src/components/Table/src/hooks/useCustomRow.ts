@@ -3,10 +3,11 @@ import type { BasicTableProps } from '../types/table';
 import { unref } from 'vue';
 import { ROW_KEY } from '../const';
 import { isString, isFunction } from '/@/utils/is';
+import type { Key } from 'ant-design-vue/lib/table/interface';
 
 interface Options {
-  setSelectedRowKeys: (keys: string[]) => void;
-  getSelectRowKeys: () => string[];
+  setSelectedRowKeys: (keys: Key[]) => void;
+  getSelectRowKeys: () => Key[];
   clearSelectedRowKeys: () => void;
   emit: EmitType;
   getAutoCreateKey: ComputedRef<boolean | undefined>;
@@ -40,7 +41,7 @@ export function useCustomRow(
         function handleClick() {
           const { rowSelection, rowKey, clickToRowSelect } = unref(propsRef);
           if (!rowSelection || !clickToRowSelect) return;
-          const keys = getSelectRowKeys() || [];
+          const keys = getSelectRowKeys() || [] as Key[];
           const key = getKey(record, rowKey, unref(getAutoCreateKey));
           if (key === null) return;
 

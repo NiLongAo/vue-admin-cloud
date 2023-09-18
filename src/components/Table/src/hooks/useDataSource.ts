@@ -212,7 +212,7 @@ export function useDataSource(
 
   function insertTableDataRecord(
     record: Recordable | Recordable[],
-    index: number,
+    index?: number,
   ): Recordable[] | undefined {
     // if (!dataSourceRef.value || dataSourceRef.value.length == 0) return;
     index = index ?? dataSourceRef.value?.length;
@@ -356,8 +356,8 @@ export function useDataSource(
     }
   }
 
-  function setTableData<T = Recordable>(values: Recordable[]) {
-    dataSourceRef.value = values;
+  function setTableData<T = Recordable>(values: T[]) {
+    dataSourceRef.value = values as Recordable[];
   }
 
   function getDataSource<T = Recordable>() {

@@ -31,7 +31,7 @@ interface UserState {
   searchTenant?: string | number | undefined;
   checkUrl?: string | undefined;
   refresh_token?: string;
-  roleList: Array<number>;
+  roleList: Array<string>;
   abilityList: Array<string>;
   sessionTimeout?: boolean;
   lastUpdateTime: number;
@@ -69,10 +69,10 @@ export const useUserStore = defineStore({
     getRefreshToken(state): string {
       return state.refresh_token || getAuthCache<string>(REFRESH_TOKEN_KEY);
     },
-    getRoleList(state): Array<number> {
+    getRoleList(state): Array<string> {
       return state.roleList && state.roleList.length > 0
         ? state.roleList
-        : getAuthCache<Array<number>>(ROLES_KEY);
+        : getAuthCache<Array<string>>(ROLES_KEY);
     },
     getAbilityList(state): Array<string> {
       return state.abilityList && state.abilityList.length > 0
@@ -103,7 +103,7 @@ export const useUserStore = defineStore({
       this.refresh_token = refresh_token ? refresh_token : ''; // for null or undefined value
       setAuthCache(REFRESH_TOKEN_KEY, refresh_token);
     },
-    setRoleList(roleList: Array<number>) {
+    setRoleList(roleList: Array<string>) {
       this.roleList = roleList;
       setAuthCache(ROLES_KEY, roleList);
     },

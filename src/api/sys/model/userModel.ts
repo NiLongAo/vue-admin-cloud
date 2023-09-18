@@ -128,15 +128,15 @@ export interface GetUserInfoModel {
   /**
    * 用户角色
    */
-  roleIdList?: Array<number>;
+  roleIdList?: Array<string>;
   /**
    * 用户职位
    */
-  positionIdList?: Array<number>;
+  positionIdList?: Array<string>;
   /**
    * 用户部门
    */
-  departmentIdList?: Array<number>;
+  departmentIdList?: Array<string>;
   /**
    * 用户权限
    */

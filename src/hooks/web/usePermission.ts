@@ -39,7 +39,7 @@ export function usePermission() {
 
   /**
    * Reset and regain authority resource information
-   * ÖØÖÃºÍÖØÐÂ»ñµÃÈ¨ÏÞ×ÊÔ´ÐÅÏ¢
+   * ï¿½ï¿½ï¿½Ãºï¿½ï¿½ï¿½ï¿½Â»ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Ï¢
    * @param id
    */
   async function resume() {
@@ -67,7 +67,7 @@ export function usePermission() {
 
     if ([PermissionModeEnum.ROUTE_MAPPING, PermissionModeEnum.ROLE].includes(permMode)) {
       if (!isArray(value)) {
-        return userStore.getRoleList?.includes(value as RoleEnum);
+        return userStore.getRoleList?.includes(value);
       }
       return (intersection(value, userStore.getRoleList) as RoleEnum[]).length > 0;
     }
@@ -75,6 +75,14 @@ export function usePermission() {
     if (PermissionModeEnum.BACK === permMode) {
       const allCodeList = permissionStore.getPermCodeList as string[];
       if (!isArray(value)) {
+        const splits = ['||', '&&'];
+        const splitName = splits.find((item) => value.includes(item));
+        if (splitName) {
+          const splitCodes = value.split(splitName);
+          return splitName === splits[0]
+            ? intersection(splitCodes, allCodeList).length > 0
+            : intersection(splitCodes, allCodeList).length === splitCodes.length;
+        }
         return allCodeList.includes(value);
       }
       return (intersection(value, allCodeList) as string[]).length > 0;

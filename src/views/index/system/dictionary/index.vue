@@ -85,6 +85,10 @@
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
     rowKey: 'id',
+    defSort:{
+      field: 'sort',
+      order: 'ascend',
+    },
     searchInfo: searchInfo,
     actionColumn: {
       width: 160,
@@ -180,7 +184,6 @@
   };
   //编辑条目
   const handleEdit = (record: Recordable) => {
-    console.log(record);
     openDrawer(true, { id: record.id, typeId: searchInfo.typeId });
     reload();
   };

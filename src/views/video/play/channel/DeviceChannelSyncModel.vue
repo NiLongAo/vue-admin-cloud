@@ -98,7 +98,11 @@
  @prefix-cls: ~'@{namespace}-device-channel-model';
  .@{prefix-cls}{
   .ant-modal .ant-modal-body > .scrollbar {
-    padding: 0px;
+    padding: 0;
+  }
+  .vben-basic-modal-close > span {
+    margin-left: 0;
+    padding: 3px;
   }
   .scroll-container .scrollbar__wrap {
     margin-bottom: 0px !important;

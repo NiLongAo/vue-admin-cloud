@@ -9,19 +9,22 @@
   >
     <CollapseContainer title="租户信息" :canExpan="false">
       <Row :gutter="24">
-        <Col :span="16">
-          <BasicForm @register="registerTenantForm">
-            <template #privilege="{ model, field }">
-              <BasicTree
-                v-model:value="model[field]"
-                :treeData="treeData"
-                :fieldNames="{ title: 'k', key: 'v' }"
-                checkable
-                toolbar
-                title="权限分配"
-              />
-            </template>
-          </BasicForm>
+        <Col :span="24">
+          <BasicForm @register="registerTenantForm" />
+        </Col>
+      </Row>
+    </CollapseContainer>
+    <CollapseContainer title="权限分配" :canExpan="false" v-if="isUpdate">
+      <Row :gutter="24">
+        <Col :span="24">
+          <BasicTree
+              ref="asyncTreeRef"
+              :treeData="treeData"
+              :selectedKeys="selectedKeys"
+              :fieldNames="{ title: 'k', key: 'v' }"
+              checkable
+              toolbar
+            />
         </Col>
       </Row>
     </CollapseContainer>
@@ -58,15 +61,17 @@
   import { doTenantDetail, doTenantInsert, doTenantUpdate } from '/@/api/sys/tenant';
   import { doMenuPrivilegeTree } from '/@/api/sys/menu';
   import { doTenantPrivilegeList, doTenantPrivilegeSave } from '/@/api/sys/privilege';
-  import { BasicTree, TreeItem } from '/@/components/Tree';
+  import { BasicTree, TreeItem,TreeActionType } from '/@/components/Tree';
   import headerImg from '/@/assets/images/header.jpg';
   import { SystemEnum } from '/@/enums/systemEnum';
   import { useSystemStore } from '/@/store/modules/system';
   import { CropperAvatar } from '/@/components/Cropper';
   import { insertSetschemas } from '/@/views/index/system/user/data';
   const emit = defineEmits(['success', 'register']);
+  const asyncTreeRef = ref<Nullable<TreeActionType>>(null);
   const treeData = ref<TreeItem[]>([]);
   const image = ref();
+  const selectedKeys = ref([] as string[]);
   const upload = uploadApi as any;
   const isUpdate = ref(true);
   const getTitle = computed(() => (!unref(isUpdate) ? '新增租户' : '编辑租户'));
@@ -75,7 +80,13 @@
   const avatar = computed(() => {
     return !!unref(image) ? staticPath + image.value : headerImg;
   });
-
+  function getTree() {
+    const tree = unref(asyncTreeRef);
+    if (!tree) {
+      throw new Error('tree is null!');
+    }
+    return tree;
+  }
   const schemasTenant: FormSchema[] = [
     {
       field: 'id',
@@ -117,16 +128,6 @@
       },
       defaultValue: true,
     },
-    {
-      label: ' ',
-      field: 'privilege',
-      show: () => {
-        return unref(isUpdate);
-      },
-      slot: 'privilege',
-      component: 'Input',
-      defaultValue: [],
-    },
   ];
   const [registerTenantForm, { setFieldsValue, validate: TenantValidate, resetFields }] = useForm({
     labelWidth: 120,
@@ -143,7 +144,7 @@
 
   const handleOk = async () => {
     try {
-      const { status, privilege, ...TenantValues } = await TenantValidate();
+      const { status, ...TenantValues } = await TenantValidate();
       if (!unref(isUpdate)) {
         const { isAdmin, isEnabled, areaList, ...UserValues } = await UserValidate();
         let map = {
@@ -165,9 +166,10 @@
           status: status === true ? 1 : 0,
           ...TenantValues,
         });
+        const keys= getTree().getCheckedKeys() as string[];
         await doTenantPrivilegeSave({
           tenantId: TenantValues.id,
-          privilegeList: getPrivilega(privilege),
+          privilegeList: getPrivilega(keys),
         });
       }
       setDrawerProps({ confirmLoading: true });
@@ -178,7 +180,7 @@
     }
   };
 
-  const getPrivilega = (privilega: []) => {
+  const getPrivilega = (privilega:string []) => {
     return privilega.filter((val: String) => val.match(/:/));
   };
 
@@ -190,10 +192,10 @@
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
       const { status, ...entity } = await doTenantDetail({ id: data.id });
-      const privilege = await doTenantPrivilegeList({ tenantId: data.id });
+      selectedKeys.value = await doTenantPrivilegeList({ tenantId: data.id });
+      getTree().setCheckedKeys(unref(selectedKeys));
       setFieldsValue({
         ...entity,
-        privilege,
         status: status === 0 ? false : true,
       });
     }
