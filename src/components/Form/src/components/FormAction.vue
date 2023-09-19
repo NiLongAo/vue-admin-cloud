@@ -14,7 +14,7 @@
         </Button>
         <slot name="submitBefore"></slot>
 
-        <Button type="primary" class="mr-2" v-bind="getSubmitBtnOptions" v-if="showSubmitButton">
+        <Button type="primary" class="mr-2" v-bind="getSubmitBtnOptions" @click="submitAction" v-if="showSubmitButton">
           {{ getSubmitBtnOptions.text }}
         </Button>
         <slot name="advanceBefore"></slot>
