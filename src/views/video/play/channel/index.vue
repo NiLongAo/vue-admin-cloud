@@ -114,7 +114,7 @@
       accordion: false,
       rowField: 'channelId',
       parentField: 'parentId',
-      childrenField: 'children',
+      children: 'children',
     },
     proxyConfig: {
       props: {
@@ -266,6 +266,20 @@
             const enable = ~~status === 1;
             const color = enable ? 'green' : 'red';
             const text = enable ? '在线' : '离线';
+            return h(Tag, { color: color }, () => text);
+          },
+        },
+      },
+      {
+        title: '录像状态',
+        field: 'hasAudio',
+        width: 100,
+        slots: {
+          default: ({ row }) => {
+            const status = row.hasRecord;
+            const enable = ~~status === 1;
+            const color = enable ? 'green' : 'red';
+            const text = enable ? '开启' : '关闭';
             return h(Tag, { color: color }, () => text);
           },
         },

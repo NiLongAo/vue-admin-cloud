@@ -138,6 +138,34 @@
         min: 0,
       },
     },
+    {
+      field: 'hasRecord',
+      component: 'Switch',
+      label: '录像状态',
+      colProps: {
+        span: 12,
+      },
+      componentProps: {
+        unCheckedValue:0,
+        checkedValue:1,
+      },
+      defaultValue: 0,
+      required: true,
+    },
+    {
+      field: 'hasAudio',
+      component: 'Switch',
+      label: '音频状态',
+      colProps: {
+        span: 12,
+      },
+      componentProps: {
+        unCheckedValue:0,
+        checkedValue:1,
+      },
+      defaultValue: 0,
+      required: true,
+    },
   ];
 
   const [registerDeviceForm, { setFieldsValue, validate,resetFields }] = useForm({
