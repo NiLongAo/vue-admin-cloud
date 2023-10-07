@@ -21,6 +21,7 @@
       :rowClassName="getRowClassName"
       v-show="getEmptyDataIsShowTable"
       @change="handleTableChange"
+      @resizeColumn="setColumnWidth"
     >
       <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
@@ -190,6 +191,7 @@
         getColumns,
         setCacheColumnsByField,
         setCacheColumns,
+        setColumnWidth,
         setColumns,
         getColumnsRef,
         getCacheColumns,
@@ -347,6 +349,7 @@
         handleSearchInfoChange,
         getEmptyDataIsShowTable,
         handleTableChange,
+        setColumnWidth,
         getRowClassName,
         wrapRef,
         tableAction,
@@ -432,7 +435,7 @@
       //}
     }
 
-    .ant-table-pagination.ant-pagination {
+    .ant-pagination {
       margin: 10px 0 0;
     }
 

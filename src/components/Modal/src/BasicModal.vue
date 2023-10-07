@@ -140,7 +140,8 @@
           ...unref(getMergeProps),
           open: unref(openRef),
         };
-        attr['wrapClassName'] = `${attr?.['wrapClassName'] || ''} ${unref(getWrapClassName)}` + 'vben-basic-modal-wrap';
+        attr['wrapClassName'] =
+          `${attr?.['wrapClassName'] || ''} ${unref(getWrapClassName)}` + 'vben-basic-modal-wrap';
         if (unref(fullScreenRef)) {
           return omit(attr, ['height', 'title']);
         }

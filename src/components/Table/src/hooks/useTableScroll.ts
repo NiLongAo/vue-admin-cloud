@@ -144,17 +144,13 @@ export function useTableScroll(
       // Table height from bottom
       bottomIncludeBody = getViewportOffset(headEl).bottomIncludeBody;
     }
-     
+
     return {
       paddingHeight,
       bottomIncludeBody,
     };
   }
-  /**
-   * TZY
-   * 根据原基础 版本升级 高度优化
-   * @returns 
-   */
+
   async function calcTableHeight() {
     const { resizeHeightOffset, maxHeight } = unref(propsRef);
     const tableData = unref(getDataSourceRef);
@@ -171,7 +167,7 @@ export function useTableScroll(
     }
 
     handleScrollBar(bodyEl, tableEl);
-    
+
     bodyEl!.style.height = 'unset';
 
     if (!unref(getCanResize) || !unref(tableData) || tableData.length === 0) return;
@@ -182,12 +178,12 @@ export function useTableScroll(
     const headEl = tableEl.querySelector('.ant-table-thead ');
 
     if (!headEl) return;
-    
+
     const paginationHeight = caclPaginationHeight(tableEl);
     const footerHeight = caclFooterHeight(tableEl);
     const headerHeight = calcHeaderHeight(headEl);
     const { paddingHeight, bottomIncludeBody } = calcBottomAndPaddingHeight(tableEl, headEl);
-    
+
     let height =
       bottomIncludeBody -
       (resizeHeightOffset || 0) -

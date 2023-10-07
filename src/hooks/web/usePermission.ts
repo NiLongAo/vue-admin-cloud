@@ -39,7 +39,7 @@ export function usePermission() {
 
   /**
    * Reset and regain authority resource information
-   * ���ú����»��Ȩ����Դ��Ϣ
+   * 重置和重新获得权限资源信息
    * @param id
    */
   async function resume() {
@@ -63,7 +63,7 @@ export function usePermission() {
       return def;
     }
 
-    const permMode = projectSetting.permissionMode;
+    const permMode = appStore.getProjectConfig.permissionMode;
 
     if ([PermissionModeEnum.ROUTE_MAPPING, PermissionModeEnum.ROLE].includes(permMode)) {
       if (!isArray(value)) {

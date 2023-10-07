@@ -16,6 +16,7 @@ export function useTableHeader(
     if (hideTitle && !isString(title)) {
       return {};
     }
+
     return {
       title: hideTitle
         ? null

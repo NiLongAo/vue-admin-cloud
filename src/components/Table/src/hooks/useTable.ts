@@ -117,7 +117,7 @@ export function useTable(tableProps?: Props): [
     clearSelectedRowKeys: () => {
       getTableInstance().clearSelectedRowKeys();
     },
-    setSelectedRowKeys: (keys:(string | number)[]) => {
+    setSelectedRowKeys: (keys: (string | number)[]) => {
       getTableInstance().setSelectedRowKeys(keys);
     },
     getPaginationRef: () => {
