@@ -19,20 +19,19 @@
 - **Mock 数据** 内置 Mock 数据方案
 - **权限** 内置完善的动态路由权限生成方案
 - **组件** 二次封装了多个常用的组件
+## 文档
+[文档地址](https://vvbin.cn/doc-next/)
 
 ## 预览
-
 - [nilongao](https://www.nilongao.cn) - 测试账号: nilongao/nilongao
 
 <p align="center">
-    <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview1.png">
-    <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview2.png">
-    <img alt="VbenAdmin Logo" width="100%" src="https://anncwb.github.io/anncwb/images/preview3.png">
+    <img alt="NiLongAo Logo" width="100%" src="https://nilongao.github.io/NiLongAo/images/home.jpg">
+    <img alt="NiLongAo Logo" width="100%" src="https://nilongao.github.io/NiLongAo/images/privilege.jpg">
 </p>
 
-## 文档
-
-[文档地址](https://vvbin.cn/doc-next/)
+## 后台整合示例
+- [spring-boot-cloud](https://github.com/NiLongAo/spring-boot-cloud) - 基于 SpringCloud Alibaba 的微服务中后台快速开发平台
 
 ## 准备
 
@@ -74,23 +73,10 @@ pnpm serve
 pnpm build
 ```
 
-
 ## 项目地址
 
 - [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) - 完整版
 - [vue-vben-admin-thin-next](https://github.com/anncwb/vben-admin-thin-next) - 简化版
-
-## 如何贡献
-
-非常欢迎你的加入！[提一个 Issue](https://github.com/anncwb/vue-vben-admin/issues/new/choose) 或者提交一个 Pull Request。
-
-**Pull Request:**
-
-1. Fork 代码!
-2. 创建自己的分支: `git checkout -b feat/xxxx`
-3. 提交你的修改: `git commit -am 'feat(function): add xxxxx'`
-4. 推送您的分支: `git push origin feat/xxxx`
-5. 提交`pull request`
 
 ## Git 贡献提交规范
 
@@ -131,9 +117,6 @@ pnpm build
 - [vite-plugin-imagemin](https://github.com/anncwb/vite-plugin-imagemin) - 用于打包压缩图片资源
 - [vite-plugin-compression](https://github.com/anncwb/vite-plugin-compression) - 用于打包输出.gz|.brotil 文件
 - [vite-plugin-svg-icons](https://github.com/anncwb/vite-plugin-svg-icons) - 用于快速生成 svg 雪碧图
-
-## 后台整合示例
-- [spring-boot-cloud](https://github.com/NiLongAo/spring-boot-cloud) - 基于 SpringCloud Alibaba 的微服务中后台快速开发平台
 
 ## 交流
 
