@@ -133,7 +133,7 @@ pnpm build
 - [vite-plugin-svg-icons](https://github.com/anncwb/vite-plugin-svg-icons) - 用于快速生成 svg 雪碧图
 
 ## 后台整合示例
-- [spring-boot-cloud](https://gitee.com/tong_zi_yong/spring-boot-cloud) - 基于 SpringCloud Alibaba 的微服务中后台快速开发平台
+- [spring-boot-cloud](https://github.com/Tong-Z-Y/spring-boot-cloud) - 基于 SpringCloud Alibaba 的微服务中后台快速开发平台
 
 ## 交流
 
