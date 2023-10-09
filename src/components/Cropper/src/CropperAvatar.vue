@@ -54,7 +54,7 @@
     showBtn: { type: Boolean, default: true },
     btnProps: { type: Object as PropType<ButtonProps> },
     btnText: { type: String, default: '' },
-    uploadApi: { type: Function as PropType<(params: apiFunParams) => Promise<any>> },
+    uploadApi: { type: Function as PropType<(params: apiFunParams) => Promise<void>> },
     size: { type: Number, default: 5 },
   };
 

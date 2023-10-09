@@ -205,7 +205,7 @@
   import { setObjToUrlParams } from '/@/utils';
   import { useMessage } from '/@/hooks/web/useMessage';
   import Icon from '@/components/Icon/Icon.vue';
-  import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
+  import { copyText } from '/@/utils/copyTextToClipboard';
   import {doPtzPtz,doPtzFrontEndCommand} from '/@/api/video/ptz';
   import { useZlmRtc } from '/@/components/Video';
   import { Input,InputNumber,Descriptions,DescriptionsItem, Button ,Divider ,Slider,Dropdown,Menu,MenuItem} from 'ant-design-vue';
@@ -214,7 +214,6 @@
   const VideoZlmRtcPlay = defineAsyncComponent(() => import('./VideoZlmRtcPlay.vue'))
   const payVideo = ref();
   const { prefixCls } = useDesign('video-play-model');
-  const { clipboardRef, copiedRef } = useCopyToClipboard();
   const { createMessage } = useMessage();
   const payComponent : any = computed(()=>{
     if(stats.selectPlay =="Jessibuca"){
@@ -320,10 +319,7 @@
       createMessage.warning('未获取要拷贝的内容！');
       return;
     }
-    clipboardRef.value = value;
-    if (unref(copiedRef)) {
-       createMessage.success('复制成功。');
-    }
+    copyText(value);
   }
   //下拉更多点击
   const handleMenuClick = (val)=>{
