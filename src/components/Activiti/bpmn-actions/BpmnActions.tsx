@@ -28,7 +28,6 @@ export default defineComponent({
         .getModeler()
         .get('canvas')
         .getRootElement();
-      console.log(rootElement);
       await bpmnContext
         .getXML()
         .then((response) => {

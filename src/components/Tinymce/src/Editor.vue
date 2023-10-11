@@ -163,9 +163,6 @@
           auto_focus: true,
           skin: skinName.value,
           skin_url: publicPath + 'resource/tinymce/skins/ui/' + skinName.value,
-          convert_usrl: true,
-          relative_urls: false,
-          remove_script_host: false,
           content_css:
             publicPath + 'resource/tinymce/skins/ui/' + skinName.value + '/content.min.css',
           ...options,
@@ -249,7 +246,7 @@
         bindHandlers(e, attrs, unref(editorRef));
       }
 
-      function setValue(editor: Record<string, any>, val: string, prevVal?: string) {
+      function setValue(editor: Record<string, any>, val?: string, prevVal?: string) {
         if (
           editor &&
           typeof val === 'string' &&
@@ -266,14 +263,14 @@
 
         watch(
           () => props.modelValue,
-          (val: string, prevVal: string) => {
+          (val, prevVal) => {
             setValue(editor, val, prevVal);
           },
         );
 
         watch(
           () => props.value,
-          (val: string, prevVal: string) => {
+          (val, prevVal) => {
             setValue(editor, val, prevVal);
           },
           {

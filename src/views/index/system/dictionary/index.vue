@@ -178,7 +178,6 @@
 
   //新增条目
   const handleCreate = (record: Recordable) => {
-    console.log(record);
     openDrawer(true, { id: undefined, typeId: searchInfo.typeId });
     reload();
   };
@@ -189,7 +188,6 @@
   };
   //删除条目
   const handleDelete = (record: Recordable) => {
-    console.log(record);
     doDictionaryItemRemove(record.id);
     reload();
   };

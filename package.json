@@ -78,9 +78,6 @@
     "@zxcvbn-ts/core": "^3.0.2",
     "ant-design-vue": "^4.0.3",
     "axios": "^1.4.0",
-    "bpmn-js": "^8.1.0",
-    "bpmn-js-properties-panel": "^0.39.0",
-    "socket.io-client": "^2.4.0",
     "codemirror": "^5.65.12",
     "cropperjs": "^1.5.13",
     "crypto-js": "^4.1.1",
@@ -110,7 +107,10 @@
     "vxe-table": "^4.4.5",
     "vxe-table-plugin-export-xlsx": "^3.0.4",
     "xe-utils": "^3.5.11",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "bpmn-js": "^8.1.0",
+    "bpmn-js-properties-panel": "^0.39.0",
+    "socket.io-client": "^2.4.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",

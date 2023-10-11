@@ -65,7 +65,6 @@
   const [basicRegister, { setDescProps }] = useDescription({});
 
   const [registerModal] = useModalInner(async (data) => {
-    console.log(data);
     const usetId = data?.id;
     if (!usetId) {
       return;
@@ -82,7 +81,6 @@
     });
     nextTick(() => {
       htmlElement.value = document.getElementById('myHtmlElement');
-      console.log(unref(htmlElement));
       const { setWatermark } = useWatermark(htmlElement);
       setWatermark(model.v);
     });

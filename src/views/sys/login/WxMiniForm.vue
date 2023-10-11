@@ -55,7 +55,8 @@
     });
   };
   onBeforeMount(() => {
-    rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_QR_CODE_EVENT, ({ code, message, data }) => {
+    rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_QR_CODE_EVENT, (val) => {
+      const { code, message, data } = val as Recordable;
       if (code != ResultEnum.SUCCESS) {
         createMessage.error(message || '获取消息错误');
         return;
@@ -66,14 +67,14 @@
         stats.scene = scene;
       }
     });
+    
     rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_INFO_EVENT, (val) => {
-      const { code, message, data } = val;
+      const { code, message, data } = val as Recordable;
       if (code == ResultEnum.OVERDUE) {
         qrCode();
         createMessage.info('二维码过期');
       } else if (code != ResultEnum.SUCCESS) {
         createMessage.error(message || '获取消息错误');
-        console.log(val);
         return;
       }
       const { access_token, refresh_token } = data;

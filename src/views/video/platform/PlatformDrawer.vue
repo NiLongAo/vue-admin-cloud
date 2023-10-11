@@ -424,7 +424,6 @@
       stats.sipList.push({ label: obj.gbId, value: obj.gbId, key: obj.gbId });
       stats.sipMap[obj.gbId]=val;
     })
-    console.log(JSON.stringify(stats.sipList));
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
       const { enable,rtcp,ptz,startOfflinePush,asMessageChannel, ...entity } = await doPlatformDetail({ id: data.id });

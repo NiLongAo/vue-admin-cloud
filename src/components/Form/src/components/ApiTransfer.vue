@@ -87,8 +87,6 @@
 
       function handleChange(keys: string[], direction: TransferDirection, moveKeys: string[]) {
         _targetKeys.value = keys;
-        console.log(direction);
-        console.log(moveKeys);
         emit('change', keys);
       }
 

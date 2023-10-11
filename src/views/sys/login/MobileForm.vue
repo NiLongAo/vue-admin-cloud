@@ -111,6 +111,5 @@
     } finally {
       loading.value = false;
     }
-    console.log(data);
   }
 </script>

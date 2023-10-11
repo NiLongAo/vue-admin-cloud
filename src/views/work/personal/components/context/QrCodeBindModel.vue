@@ -55,7 +55,6 @@
       const { code, message, data } = val;
       if (code != ResultEnum.SUCCESS) {
         createMessage.error(message || '获取消息错误');
-        console.log(val);
         return;
       }
       const { scene, type, img } = data;
@@ -73,7 +72,6 @@
         createMessage.info('二维码过期');
       } else if (code != ResultEnum.SUCCESS) {
         createMessage.error(message || '获取消息错误');
-        console.log(val);
         return;
       }
       createMessage.success('绑定成功');
