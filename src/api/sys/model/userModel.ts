@@ -24,6 +24,7 @@ export interface AuthorizationCodeParams {
 export interface CodeParams {
   username: string;
   password: string;
+  key: string;
   verificationCode: string;
 }
 export interface SmsParams {
