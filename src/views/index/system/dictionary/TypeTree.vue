@@ -16,7 +16,7 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, unref } from 'vue';
-  import { BasicTree, TreeItem, ContextMenuItem, TreeActionType } from '/@/components/Tree';
+  import { BasicTree, TreeItem, ContextMenuItem, TreeActionType,ContextMenuOptions } from '/@/components/Tree';
   import { doDictionaryTypeList } from '/@/api/sys/dictionary';
   import { usePermission } from '/@/hooks/web/usePermission';
   const defaultKey = ref();
@@ -40,8 +40,8 @@
     emit('select', info.node.key);
   };
 
-  const getRightMenuList = (node: any): ContextMenuItem[] => {
-    return [
+  const getRightMenuList = (node: any): Promise<ContextMenuItem[] | ContextMenuOptions> => {
+    const data = [
       {
         disabled: !hasPermission('system.dictionary:update_type'),
         label: '编辑',
@@ -59,6 +59,9 @@
         icon: 'bx:bxs-folder-open',
       },
     ];
+    return new Promise((resolve, reject) => {
+      resolve(data);
+    });
   };
   defineExpose({ fetch });
   onMounted(() => {

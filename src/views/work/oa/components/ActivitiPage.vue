@@ -16,7 +16,7 @@
 <script lang="ts" setup>
   import { unref, reactive } from 'vue';
   import { Card } from 'ant-design-vue';
-  import { BasicTable, useTable, TableAction, ActionItem } from '/@/components/Table';
+  import { BasicTable, useTable, TableAction, ActionItem} from '/@/components/Table';
   import {
     doClaim,
     doSuspendedInstance,
@@ -56,13 +56,13 @@
   function onTabChange(key) {
     tableRef.activeKey = key;
     tableRef.api = tableDate[unref(key)].api;
-    tableRef.columns = tableDate[unref(key)].columns;
+    tableRef.columns = tableDate[unref(key)].columns as any;
     tableRef.rowKey = tableDate[unref(key)].rowKey;
     nextTick(() => {
       reload();
     });
   }
-  const [registerTable, { reload }] = useTable(tableRef);
+  const [registerTable, { reload }] = useTable(tableRef as any);
 
   const actions = (record): ActionItem[] => {
     return [

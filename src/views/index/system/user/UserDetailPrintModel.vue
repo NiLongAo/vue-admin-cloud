@@ -11,7 +11,7 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref, nextTick, unref } from 'vue';
+  import { reactive, ref, nextTick } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { UserInfoApi } from '/@/api/sys/user';
   import { doConfigDetail } from '/@/api/sys/config';

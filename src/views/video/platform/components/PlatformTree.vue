@@ -20,7 +20,7 @@
   import { reactive,ref,unref,watch,onMounted,nextTick} from 'vue';
   import { useModal } from '/@/components/Modal';
   import { isEmpty } from '/@/utils/is';
-  import { BasicTree,TreeItem, TreeActionType,ContextMenuItem } from '/@/components/Tree';
+  import { BasicTree,TreeItem, TreeActionType,ContextMenuItem,ContextMenuOptions } from '/@/components/Tree';
   import { 
     doPlatformCatalogTree ,
     doPlatformCatalogDelete,
@@ -76,8 +76,8 @@
     
   }
 
-  const getRightMenuList = (node: any): ContextMenuItem[] =>{
-    return [
+  const getRightMenuList = (node: any):  Promise<ContextMenuItem[] | ContextMenuOptions> =>{
+    const data = [
       {
         disabled: !hasPermission('system.dictionary:delete_type'),
         label: '添加下级目录',
@@ -115,6 +115,9 @@
         icon: 'bx:bxs-folder-open',
       },
     ];
+    return new Promise((resolve, reject) => {
+      resolve(data);
+    });
   }
 
   const handleSelect = (_,info) =>{

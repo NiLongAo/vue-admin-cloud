@@ -46,7 +46,7 @@ export abstract class AxiosTransform {
   responseInterceptors?: (
     axiosInstance: AxiosInstance,
     res: AxiosResponse<any>,
-  ) => AxiosResponse<any, any>;
+  ) => Promise<AxiosResponse<any>>;
 
   /**
    * @description: 请求之前的拦截器错误处理
@@ -56,5 +56,5 @@ export abstract class AxiosTransform {
   /**
    * @description: 请求之后的拦截器错误处理
    */
-  responseInterceptorsCatch?: (axiosInstance: AxiosInstance, error: Error) => void;
+  responseInterceptorsCatch?: (axiosInstance: AxiosInstance, error: any) => void;
 }

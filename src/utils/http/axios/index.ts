@@ -181,7 +181,7 @@ const transform: AxiosTransform = {
    * @description: 响应拦截器处理
    * 无感token 刷新策略
    */
-  responseInterceptors: async (axiosInstance: AxiosInstance, res: AxiosResponse<any, any>) => {
+  responseInterceptors: async (axiosInstance: AxiosInstance, res: AxiosResponse<any>) => {
     const { t } = useI18n();
     const { data: resData } = res;
     if (!resData) {
@@ -197,12 +197,12 @@ const transform: AxiosTransform = {
           userStore.setToken(undefined, userStore.getRefreshToken);
           await userStore.refreshToken();
           if (userStore.getToken == undefined) {
-            userStore.logout(true);
+            await userStore.logout(true);
           } else {
-            return axiosInstance(res.config);
+            res = await axiosInstance(res.config);
           }
         }else{
-          userStore.logout(true);
+          await userStore.logout(true);
         }
         break;
     }
@@ -212,7 +212,7 @@ const transform: AxiosTransform = {
   /**
    * @description: 响应错误处理
    */
-  responseInterceptorsCatch: (axiosInstance: AxiosResponse, error: any) => {
+  responseInterceptorsCatch: (axiosInstance: AxiosInstance, error: any) => {
     const { t } = useI18n();
     const errorLogStore = useErrorLogStoreWithOut();
     errorLogStore.addAjaxErrorInfo(error);
@@ -246,7 +246,7 @@ const transform: AxiosTransform = {
       throw new Error(error as unknown as string);
     }
 
-    checkStatus(error?.response?.status, msg, errorMessageMode);
+    checkStatus(response?.status, msg, errorMessageMode);
 
     // 添加自动重试机制 保险起见 只针对GET请求
     const retryRequest = new AxiosRetry();
