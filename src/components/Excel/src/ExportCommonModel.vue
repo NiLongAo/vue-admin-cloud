@@ -38,7 +38,6 @@
     //传过来的数据
     searchParam: null,
   });
-
   const [registerModal, { closeModal, setModalProps }] = useModalInner(async (data) => {
     stats.searchParam = data.searchParam;
     setModalProps({ confirmLoading: false });
@@ -65,9 +64,7 @@
           disabled: !record.isDesensitized,
           checkedChildren: '已启用',
           unCheckedChildren: '已禁用',
-          onChange(checked: boolean) {
-            record.isDesensitized = checked;
-          },
+          onClick: (checked: boolean | string | number)=>{record.isDesensitized = checked},
         });
       },
     },
