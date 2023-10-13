@@ -22,6 +22,13 @@ declare global {
   //   __APP__: App<Element>;
   // }
 
+  // fix FullScreen type error
+  interface Document {
+    mozFullScreenElement?: Element;
+    msFullscreenElement?: Element;
+    webkitFullscreenElement?: Element;
+  }
+
   // vue
   declare type PropType<T> = VuePropType<T>;
   declare type VueNode = VNodeChild | JSX.Element;
@@ -61,7 +68,6 @@ declare global {
     VITE_PUBLIC_PATH: string;
     VITE_GLOB_APP_TITLE: string;
     VITE_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none';
-    VITE_SOCKET_URL: string;
   }
 
   declare function parseInt(s: string | number, radix?: number): number;
