@@ -144,7 +144,7 @@
 
   const handleOk = async () => {
     try {
-      const { status, ...TenantValues } = await TenantValidate();
+      const { status, ...TenantValues } :any= await TenantValidate();
       if (!unref(isUpdate)) {
         const { isAdmin, isEnabled, areaList, ...UserValues } = await UserValidate();
         let map = {

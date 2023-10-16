@@ -101,7 +101,7 @@
           provinceId: areaList[0],
           cityId: areaList[1],
           areaId: areaList[2],
-        });
+        },{successMessageMode:'message'});
       } else {
         //新增
         await doInsert({

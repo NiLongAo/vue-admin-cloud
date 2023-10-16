@@ -1,4 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
+import type { RequestOptions } from '/#/axios';
 import {
   LoginParams,
   LoginResultModel,
@@ -122,8 +123,8 @@ export function doInsert(params: Recordable) {
   return defHttp.post({ url: Api.insert, params });
 }
 
-export function doUpdate(params: Recordable) {
-  return defHttp.post({ url: Api.update, params });
+export function doUpdate(params: Recordable, options?: RequestOptions) {
+  return defHttp.post({ url: Api.update, params },options);
 }
 
 export function doUpdateLoginUserInfo(params: Recordable) {

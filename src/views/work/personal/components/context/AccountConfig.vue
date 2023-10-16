@@ -76,7 +76,7 @@
     return !!unref(image) ? staticPath + image.value : headerImg;
   });
 
-  const handleFileVal = (data) => {
+  const handleFileVal = ({source, data}) => {
     image.value = data.path;
     setFieldsValue({ imageUrl: data.path });
   };
