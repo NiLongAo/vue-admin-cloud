@@ -112,8 +112,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { AesEncryption } from '/@/utils/cipher';
-  import { SECRET_KEY, SECRET_IV } from '/@/enums/commonEnum';
+  import { EncryptionFactory } from '/@/utils/cipher';
   import { RememberLoing } from '/@/api/sys/model/userModel';
   import { getAuthCache, setAuthCache } from '/@/utils/auth';
   import { REMEMBER } from '/@/enums/cacheEnum';
@@ -128,7 +127,7 @@
   const { notification, createErrorModal } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
-  const encryption = new AesEncryption({ key: SECRET_KEY, iv: SECRET_IV });
+  const encryption = EncryptionFactory.createAesEncryption();
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
   const formRef = ref();
@@ -180,8 +179,8 @@
         toRaw({
           grantType: 'code',
           code: {
-            username: encryption.encryptByAES(data.username),
-            password: encryption.encryptByAES(data.password),
+            username: encryption.encrypt(data.username),
+            password: encryption.encrypt(data.password),
             key: formData.key,
             verificationCode: data.loginCode,
           },

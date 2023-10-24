@@ -46,7 +46,6 @@
   import { defineComponent, reactive, ref, toRefs, unref, computed, PropType } from 'vue';
   import { Upload, Alert } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  //   import { BasicTable, useTable } from '/@/components/Table';
   // hooks
   import { useUploadType } from './useUpload';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -165,14 +164,6 @@
         emit('delete', record);
       }
 
-      // 预览
-      // function handlePreview(record: FileItem) {
-      //   const { thumbUrl = '' } = record;
-      //   createImgPreview({
-      //     imageList: [thumbUrl],
-      //   });
-      // }
-
       async function uploadApiByItem(item: FileItem) {
         const { api } = props;
         if (!api || !isFunction(api)) {
@@ -202,6 +193,7 @@
             error: null,
           };
         } catch (e) {
+          console.log(e);
           item.status = UploadResultStatus.ERROR;
           return {
             success: false,
@@ -275,15 +267,14 @@
       }
 
       return {
-        columns: createTableColumns() as any[],
-        actionColumn: createActionColumn(handleRemove) as any,
+        columns: createTableColumns(),
+        actionColumn: createActionColumn(handleRemove),
         register,
         closeModal,
         getHelpText,
         getStringAccept,
         getOkButtonProps,
         beforeUpload,
-        // registerTable,
         fileListRef,
         state,
         isUploadingRef,

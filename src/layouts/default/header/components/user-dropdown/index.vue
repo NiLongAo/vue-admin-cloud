@@ -18,6 +18,12 @@
           v-if="getShowDoc"
         />
         <MenuDivider v-if="getShowDoc" />
+	<MenuItem
+          v-if="getShowApi"
+          key="api"
+          :text="t('layout.header.dropdownChangeApi')"
+          icon="ant-design:swap-outlined"
+        />
         <MenuItem
           key="personal"
           :text="t('layout.header.tooltipPersonalCenter')"
@@ -43,7 +49,8 @@
       </Menu>
     </template>
   </Dropdown>
-  <LockAction @register="registerLockAction" />
+  <LockAction @register="register" />
+  <ChangeApi @register="registerApi" />
   <TenantAction @register="registerTenantAction" :isSysTenant="isSysTenant" />
 </template>
 <script lang="ts">
@@ -67,7 +74,7 @@
   import { useGo } from '/@/hooks/web/usePage';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock' | 'tenant' | 'personal';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'api' | 'tenant' | 'personal';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -77,6 +84,7 @@
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
       MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
+      ChangeApi: createAsyncComponent(() => import('../ChangeApi/index.vue')),
       TenantAction: createAsyncComponent(() => import('../tenant/TenantModal.vue')),
     },
     props: {
@@ -86,7 +94,7 @@
       const { prefixCls } = useDesign('header-user-dropdown');
       const { t } = useI18n();
       const go = useGo();
-      const { getShowDoc, getUseLockPage } = useHeaderSetting();
+      const { getShowDoc, getUseLockPage ,getShowApi} = useHeaderSetting();
       const userStore = useUserStore();
       const getUserInfo = computed(() => {
         const { userName = '', imageUrl, tenantId } = userStore.getUserInfo || {};
@@ -101,13 +109,16 @@
         return sysTenantId == getUserInfo.value.tenantId;
       });
 
-      const [registerLockAction, { openModal: openModalLockAction }] = useModal();
+      const [register, { openModal }] = useModal();
+      const [registerApi, { openModal: openApiModal }] = useModal();
       const [registerTenantAction, { openModal: openModalTenantAction }] = useModal();
 
       function handleLock() {
-        openModalLockAction(true);
+        openModal(true);
       }
-
+      function handleApi() {
+        openApiModal(true, {});
+      }
       //  login out
       function handleLoginOut() {
         userStore.confirmLoginOut();
@@ -133,6 +144,9 @@
           case 'lock':
             handleLock();
             break;
+	  case 'api':
+            handleApi();
+            break;
           case 'tenant':
             handleTenant();
             break;
@@ -149,7 +163,9 @@
         getUserInfo,
         handleMenuClick,
         getShowDoc,
-        registerLockAction,
+ 	getShowApi,
+        register,
+	registerApi,
         registerTenantAction,
         getUseLockPage,
       };

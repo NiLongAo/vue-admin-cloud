@@ -1,7 +1,11 @@
 import type { VNodeChild } from 'vue';
 import type { PaginationProps } from './pagination';
 import type { FormProps } from '/@/components/Form';
-import type { TableRowSelection as ITableRowSelection,Key } from 'ant-design-vue/lib/table/interface';
+import type {
+  TableRowSelection as ITableRowSelection,
+  Key,
+} from 'ant-design-vue/lib/table/interface';
+
 import type { ColumnProps } from 'ant-design-vue/lib/table';
 
 import { ComponentType } from './componentType';
@@ -429,7 +433,7 @@ export interface BasicColumn extends ColumnProps<Recordable> {
   customTitle?: VueNode;
 
   slots?: Recordable;
-  
+
   // 自定义header渲染
   customHeaderRender?: (column: BasicColumn) => string | VNodeChild | JSX.Element;
   // Whether to hide the column by default, it can be displayed in the column configuration

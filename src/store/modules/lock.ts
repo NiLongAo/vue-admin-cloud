@@ -5,10 +5,8 @@ import { defineStore } from 'pinia';
 import { LOCK_INFO_KEY } from '/@/enums/cacheEnum';
 import { Persistent } from '/@/utils/cache/persistent';
 import { useUserStore } from './user';
-import { AesEncryption } from '/@/utils/cipher';
-import { SECRET_KEY, SECRET_IV } from '/@/enums/commonEnum';
+import { EncryptionFactory } from '/@/utils/cipher';
 
-const encryption = new AesEncryption({ key: SECRET_KEY, iv: SECRET_IV });
 
 interface LockState {
   lockInfo: Nullable<LockInfo>;
@@ -41,7 +39,7 @@ export const useLockStore = defineStore({
         return true;
       }
       const tryLogin = async () => {
-        return false;
+        const encryption = EncryptionFactory.createAesEncryption();
         // try {
         //   const loginAccount = userStore.getUserInfo?.loginAccount;
         //   const res = await userStore.login({
@@ -49,8 +47,8 @@ export const useLockStore = defineStore({
         //     goHome: false,
         //     mode: 'none', //不要默认的错误提示
         //     code: {
-        //       username: encryption.encryptByAES(loginAccount || ''),
-        //       password: encryption.encryptByAES(password!),
+        //       username: encryption.encrypt(loginAccount || ''),
+        //       password: encryption.encrypt(password!),
         //       key: '',
         //       verificationCode: '',
         //     },
@@ -62,6 +60,7 @@ export const useLockStore = defineStore({
         // } catch (error) {
         //   return false;
         // }
+        return false;
       };
       return await tryLogin();
     },

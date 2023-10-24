@@ -6,19 +6,19 @@
           :actions="[
             
             {
-              ifShow: hasPermission('system.push:play') && (record.pushIng === 1),
+              ifShow: hasPermission('video.push:play') && (record.pushIng === 1),
               tooltip: '播放',
               icon: 'ic-outline-play-circle',
               onClick: handlePlay.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.push:update'),
+              ifShow: hasPermission('video.push:update'),
               tooltip: '编辑',
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.push:delete'),
+              ifShow: hasPermission('video.push:delete'),
               color: 'error',
               tooltip: '删除',
               icon: 'mdi:delete-outline',
@@ -31,7 +31,7 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.push:add')"
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('video.push:add')"
           >添加</a-button
         >
       </template>

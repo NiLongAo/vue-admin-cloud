@@ -92,8 +92,8 @@ export function useTableScroll(
   }
 
   function caclFooterHeight(tableEl: Element): number {
-  const { pagination } = unref(propsRef);
-   let footerHeight = 0;
+    const { pagination } = unref(propsRef);
+    let footerHeight = 0;
     if (!isBoolean(pagination)) {
       if (!footerEl) {
         footerEl = tableEl.querySelector('.ant-table-footer') as HTMLElement;

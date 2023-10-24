@@ -15,26 +15,26 @@
         <TableAction
           :actions="[
              {
-              ifShow: hasPermission('system.proxy:enable'),
+              ifShow: hasPermission('video.proxy:enable'),
               color:( record.status === 1?'error':undefined),
               tooltip: record.status === 1?'停用':'启用',
               icon: record.status === 1?'ic:outline-toggle-off':'ic:outline-toggle-on',
               onClick: handleEnable.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.proxy:play') && (record.status === 1),
+              ifShow: hasPermission('video.proxy:play') && (record.status === 1),
               tooltip: '播放',
               icon: 'ic-outline-play-circle',
               onClick: handlePlay.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.proxy:update'),
+              ifShow: hasPermission('video.proxy:update'),
               tooltip: '编辑',
               icon: 'mdi:file-edit-outline',
               onClick: handleEdit.bind(null, record),
             },
             {
-              ifShow: hasPermission('system.proxy:delete'),
+              ifShow: hasPermission('video.proxy:delete'),
               color: 'error',
               tooltip: '删除',
               icon: 'mdi:delete-outline',
@@ -47,7 +47,7 @@
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd" v-if="hasPermission('system.proxy:add')"
+        <a-button type="primary" @click="handleAdd" v-if="hasPermission('video.proxy:add')"
           >添加</a-button
         >
       </template>

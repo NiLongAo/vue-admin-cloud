@@ -23,7 +23,7 @@ export interface MultipleTabState {
 
 function handleGotoPage(router: Router) {
   const go = useGo(router);
-  go(unref(router.currentRoute).path, true);
+  go(unref(router.currentRoute).fullPath, true);
 }
 
 const getToTarget = (tabItem: RouteLocationNormalized) => {
@@ -308,7 +308,7 @@ export const useMultipleTabStore = defineStore({
 
       for (const path of closePathList) {
         if (path !== route.fullPath) {
-          const closeItem = this.tabList.find((item) => item.path === path);
+          const closeItem = this.tabList.find((item) => item.fullPath === path);
           if (!closeItem) {
             continue;
           }

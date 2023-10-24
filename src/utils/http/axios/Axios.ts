@@ -205,9 +205,11 @@ export class VAxios {
     if (config.cancelToken) {
       conf.cancelToken = config.cancelToken;
     }
+    
     if (config.signal) {
       conf.signal = config.signal;
     }
+
     const transform = this.getTransform();
 
     const { requestOptions } = this.options;

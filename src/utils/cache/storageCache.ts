@@ -1,7 +1,7 @@
 import { cacheCipher } from '/@/settings/encryptionSetting';
 import type { EncryptionParams } from '/@/utils/cipher';
-import { AesEncryption } from '/@/utils/cipher';
 import { isNullOrUnDef } from '/@/utils/is';
+import { EncryptionFactory,Encryption } from '/@/utils/cipher';
 
 export interface CreateStorageParams extends EncryptionParams {
   prefixKey: string;
@@ -20,8 +20,7 @@ export const createStorage = ({
   if (hasEncrypt && [key.length, iv.length].some((item) => item !== 16)) {
     throw new Error('When hasEncrypt is true, the key or iv must be 16 bits!');
   }
-
-  const encryption = new AesEncryption({ key, iv });
+  const encryption = EncryptionFactory.createAesEncryption({ key, iv });
 
   /**
    * Cache class
@@ -32,7 +31,7 @@ export const createStorage = ({
   const WebStorage = class WebStorage {
     private storage: Storage;
     private prefixKey?: string;
-    private encryption: AesEncryption;
+    private encryption: Encryption;
     private hasEncrypt: boolean;
     /**
      *
@@ -63,7 +62,7 @@ export const createStorage = ({
         expire: !isNullOrUnDef(expire) ? new Date().getTime() + expire * 1000 : null,
       });
       const stringifyValue = this.hasEncrypt
-        ? this.encryption.encryptByAES(stringData)
+        ? this.encryption.encrypt(stringData)
         : stringData;
       this.storage.setItem(this.getKey(key), stringifyValue);
     }
@@ -79,7 +78,7 @@ export const createStorage = ({
       if (!val) return def;
 
       try {
-        const decVal = this.hasEncrypt ? this.encryption.decryptByAES(val) : val;
+        const decVal = this.hasEncrypt ? this.encryption.decrypt(val) : val;
         const data = JSON.parse(decVal);
         const { value, expire } = data;
         if (isNullOrUnDef(expire) || expire >= new Date().getTime()) {
