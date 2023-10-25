@@ -34,13 +34,14 @@
 
   const handleOk = async () => {
     try {
-      const { ssrcCheck, asMessageChannel, ...values } = await validate();
+      const { ssrcCheck, asMessageChannel,hasAdministrator, ...values } = await validate();
       if (!unref(isUpdate)) {
         //新增
         await doSaveDevice({
             ...values,
             ssrcCheck: ssrcCheck === true ? 1 : 0,
             asMessageChannel: asMessageChannel === true ? 1 : 0,
+            hasAdministrator: hasAdministrator === true ? 1 : 0,
           });
       } else {
         //修改
@@ -48,6 +49,7 @@
           ...values,
           ssrcCheck: ssrcCheck === true ? 1 : 0,
           asMessageChannel: asMessageChannel === true ? 1 : 0,
+          hasAdministrator: hasAdministrator === true ? 1 : 0,
         });
       }
       setDrawerProps({ confirmLoading: true });
@@ -303,6 +305,17 @@
       defaultValue: false,
       required: true,
     },
+    {
+      field: 'hasAdministrator',
+      helpMessage:'开启后普通用户无法看到当前设备',
+      component: 'Switch',
+      label: '是否开启超管权限',
+      colProps: {
+        span: 12,
+      },
+      defaultValue: false,
+      required: true,
+    },
   ];
 
   const [registerDeviceForm, { setFieldsValue, validate,resetFields }] = useForm({
@@ -317,11 +330,12 @@
     setDrawerProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      const { ssrcCheck,asMessageChannel, ...entity } = await doFindDeviceId({ deviceId: data.deviceId });
+      const { ssrcCheck,asMessageChannel,hasAdministrator, ...entity } = await doFindDeviceId({ deviceId: data.deviceId });
       setFieldsValue({
         ...entity,
         ssrcCheck: ssrcCheck ===  1 ? true : false,
         asMessageChannel: asMessageChannel ===  1 ? true : false,
+        hasAdministrator: hasAdministrator === 1 ? true : false,
       });
     }
   });
