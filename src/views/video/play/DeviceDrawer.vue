@@ -309,7 +309,7 @@
       field: 'hasAdministrator',
       helpMessage:'开启后普通用户无法看到当前设备',
       component: 'Switch',
-      label: '是否开启超管权限',
+      label: '开启数据限制',
       colProps: {
         span: 12,
       },
