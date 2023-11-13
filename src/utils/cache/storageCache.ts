@@ -1,7 +1,6 @@
 import { cacheCipher } from '/@/settings/encryptionSetting';
-import type { EncryptionParams } from '/@/utils/cipher';
-import { isNullOrUnDef } from '/@/utils/is';
-import { EncryptionFactory,Encryption } from '/@/utils/cipher';
+import { isNil } from '/@/utils/is';
+import { Encryption, EncryptionFactory, EncryptionParams } from '@/utils/cipher';
 
 export interface CreateStorageParams extends EncryptionParams {
   prefixKey: string;
@@ -9,6 +8,7 @@ export interface CreateStorageParams extends EncryptionParams {
   hasEncrypt: boolean;
   timeout?: Nullable<number>;
 }
+// TODO 移除此文件夹下全部代码
 export const createStorage = ({
   prefixKey = '',
   storage = sessionStorage,
@@ -20,8 +20,11 @@ export const createStorage = ({
   if (hasEncrypt && [key.length, iv.length].some((item) => item !== 16)) {
     throw new Error('When hasEncrypt is true, the key or iv must be 16 bits!');
   }
-  const encryption = EncryptionFactory.createAesEncryption({ key, iv });
 
+  const persistEncryption: Encryption = EncryptionFactory.createAesEncryption({
+    key: cacheCipher.key,
+    iv: cacheCipher.iv,
+  });
   /**
    * Cache class
    * Construction parameters can be passed into sessionStorage, localStorage,
@@ -40,7 +43,7 @@ export const createStorage = ({
     constructor() {
       this.storage = storage;
       this.prefixKey = prefixKey;
-      this.encryption = encryption;
+      this.encryption = persistEncryption;
       this.hasEncrypt = hasEncrypt;
     }
 
@@ -59,11 +62,9 @@ export const createStorage = ({
       const stringData = JSON.stringify({
         value,
         time: Date.now(),
-        expire: !isNullOrUnDef(expire) ? new Date().getTime() + expire * 1000 : null,
+        expire: !isNil(expire) ? new Date().getTime() + expire * 1000 : null,
       });
-      const stringifyValue = this.hasEncrypt
-        ? this.encryption.encrypt(stringData)
-        : stringData;
+      const stringifyValue = this.hasEncrypt ? this.encryption.encrypt(stringData) : stringData;
       this.storage.setItem(this.getKey(key), stringifyValue);
     }
 
@@ -81,7 +82,7 @@ export const createStorage = ({
         const decVal = this.hasEncrypt ? this.encryption.decrypt(val) : val;
         const data = JSON.parse(decVal);
         const { value, expire } = data;
-        if (isNullOrUnDef(expire) || expire >= new Date().getTime()) {
+        if (isNil(expire) || expire >= new Date().getTime()) {
           return value;
         }
         this.remove(key);

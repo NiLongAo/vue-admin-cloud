@@ -10,7 +10,7 @@ import { checkStatus } from './checkStatus';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
-import { isString, isNumber, isUnDef, isNull, isEmpty } from '/@/utils/is';
+import { isString, isNumber, isUndefined, isNull, isEmpty } from '/@/utils/is';
 import qs from 'qs';
 import { getToken } from '/@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
@@ -57,7 +57,7 @@ const transform: AxiosTransform = {
     if (hasSuccess) {
       let successMsg = message;
       if (isMessage) {
-        if (isNull(successMsg) || isUnDef(successMsg) || isEmpty(successMsg)) {
+        if (isNull(successMsg) || isUndefined(successMsg) || isEmpty(successMsg)) {
           successMsg = t(`sys.api.operationSuccess`);
         }
         if (options.successMessageMode === 'modal') {

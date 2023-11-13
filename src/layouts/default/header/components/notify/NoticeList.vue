@@ -58,7 +58,8 @@
   import { ListItem } from './data';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { List, Avatar, Tag, Typography } from 'ant-design-vue';
-    // types
+
+  // types
   import type { StyleValue } from '/@/utils/types';
   import type { FunctionalComponent } from 'vue';
   import type { ParagraphProps } from 'ant-design-vue/es/typography/Paragraph';
@@ -69,7 +70,7 @@
       [List.name]: List,
       [List.Item.name]: List.Item,
       AListItemMeta: List.Item.Meta,
-      ATypographyParagraph: Typography.Paragraph  as FunctionalComponent<
+      ATypographyParagraph: Typography.Paragraph as FunctionalComponent<
         ParagraphProps & {
           style?: StyleValue;
         }
@@ -86,8 +87,8 @@
         default: 5,
       },
       total: {
-        type: [Boolean, Number] as PropType<Boolean | Number>,
-        default: false,
+        type: [ Number ] as PropType<Number>,
+        default: 0,
       },
       currentPage: {
         type: Number,
@@ -129,7 +130,6 @@
           return {
             total,
             pageSize,
-            //size: 'small',
             current: unref(current),
             onChange(page) {
               current.value = page;
@@ -161,7 +161,7 @@
       display: inline-block !important;
     }
 
-    &-item {
+    .list-item {
       padding: 6px;
       overflow: hidden;
       transition: all 0.3s;
@@ -181,21 +181,21 @@
             margin-right: 0;
           }
         }
+      }
 
-        .avatar {
-          margin-top: 4px;
-        }
+      .avatar {
+        margin-top: 4px;
+      }
 
-        .description {
-          font-size: 12px;
-          line-height: 18px;
-        }
+      .description {
+        font-size: 12px;
+        line-height: 18px;
+      }
 
-        .datetime {
-          margin-top: 4px;
-          font-size: 12px;
-          line-height: 18px;
-        }
+      .datetime {
+        margin-top: 4px;
+        font-size: 12px;
+        line-height: 18px;
       }
     }
   }
