@@ -66,13 +66,11 @@
   .account-setting {
     margin: 12px;
     background-color: @component-background;
-
     .base-title {
       padding-left: 0;
     }
-
     .ant-tabs-tab-active {
-      background-color: @item-active-bg;
+      background-color: @app-content-background;
     }
   }
 </style>
