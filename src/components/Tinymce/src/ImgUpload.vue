@@ -30,108 +30,93 @@
     </Upload> -->
   </div>
 </template>
-<script lang="ts">
-  import { defineComponent, computed, reactive, watch, unref } from 'vue';
-  import { useMessage } from '/@/hooks/web/useMessage';
+<script lang="ts" setup>
+  import { computed, reactive, watch, unref } from 'vue';
+  import { useMessage } from '@/hooks/web/useMessage';
   import { Upload } from 'ant-design-vue';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { useGlobSetting } from '/@/hooks/setting';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useUserStore } from '/@/store/modules/user';
-  import { checkImgType, getBase64WithFile } from '/@/components/Upload/src/helper';
-
-  export default defineComponent({
-    name: 'TinymceImageUpload',
-    components: { Upload },
-    props: {
-      fullscreen: {
-        type: Boolean,
-      },
-      disabled: {
-        type: Boolean,
-        default: false,
-      },
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { useGlobSetting } from '@/hooks/setting';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useUserStore } from '@/store/modules/user';
+  //import { checkImgType, getBase64WithFile } from '@/components/Upload/src/helper';
+  
+  defineOptions({ name: 'TinymceImageUpload' });
+  const props = defineProps({
+    fullscreen: {
+      type: Boolean,
     },
-    emits: ['uploading', 'done', 'error'],
-    setup(props, { emit }) {
-      const { createMessage } = useMessage();
-      const error = createMessage.error!;
-      const stats = reactive<Recordable>({});
-      let uploading = false;
-      const userStore = useUserStore();
-      const { apiUrl, uploadUrl } = useGlobSetting();
-      const { t } = useI18n();
-      const { prefixCls } = useDesign('tinymce-img-upload');
-      watch(
-        () => userStore.getToken,
-        () => {
-          if (userStore.getToken) {
-            stats.headers = { Authorization: 'Bearer ' + userStore.getToken };
-          }
-        },
-        { immediate: true },
-      );
-
-      const getButtonProps = computed(() => {
-        const { disabled } = props;
-        return {
-          disabled,
-        };
-      });
-
-      // 上传前校验
-      function beforeUpload(file: File) {
-        // 生成图片缩略图
-        if (checkImgType(file)) {
-          // beforeUpload，如果异步会调用自带上传方法
-          // file.thumbUrl = await getBase64(file);
-          getBase64WithFile(file).then(async ({ result: thumbUrl }) => {
-            await emit('uploading', file?.name);
-            await emit('done', file?.name, thumbUrl);
-          });
-        } else {
-          createMessage.error('图片格式错误');
-        }
-        return false;
-      }
-
-      function handleChange(info: Record<string, any>) {
-        const file = info.file;
-        const status = file?.status;
-        const name = file?.name;
-        if (status === 'uploading') {
-          if (!uploading) {
-            emit('uploading', name);
-            uploading = true;
-          }
-        } else if (status === 'done') {
-          const response = unref(file?.response);
-          if (response?.code != 0) {
-            error('上传图片失败');
-            uploading = false;
-            return;
-          }
-          const url = response?.data[0].fullPath;
-          emit('done', name, url);
-          uploading = false;
-        } else if (status === 'error') {
-          emit('error');
-          uploading = false;
-        }
-      }
-
-      return {
-        prefixCls,
-        handleChange,
-        beforeUpload,
-        uploadUrl,
-        apiUrl,
-        stats,
-        t,
-        getButtonProps,
-      };
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   });
+
+  const emit = defineEmits(['uploading', 'done', 'error']);
+  const { createMessage } = useMessage();
+  const error = createMessage.error!;
+  const stats = reactive<Recordable>({});
+  let uploading = false;
+  const userStore = useUserStore();
+  const { apiUrl, uploadUrl } = useGlobSetting();
+  const { t } = useI18n();
+  const { prefixCls } = useDesign('tinymce-img-upload');
+  watch(
+    () => userStore.getToken,
+    () => {
+      if (userStore.getToken) {
+        stats.headers = { Authorization: 'Bearer ' + userStore.getToken };
+      }
+    },
+    { immediate: true },
+  );
+
+  const getButtonProps = computed(() => {
+    const { disabled } = props;
+    return {
+      disabled,
+    };
+  });
+
+  // 上传前校验
+  // function beforeUpload(file: File) {
+  //   // 生成图片缩略图
+  //   if (checkImgType(file)) {
+  //     // beforeUpload，如果异步会调用自带上传方法
+  //     // file.thumbUrl = await getBase64(file);
+  //     getBase64WithFile(file).then(async ({ result: thumbUrl }) => {
+  //       await emit('uploading', file?.name);
+  //       await emit('done', file?.name, thumbUrl);
+  //     });
+  //   } else {
+  //     createMessage.error('图片格式错误');
+  //   }
+  //   return false;
+  // }
+
+  function handleChange(info: Record<string, any>) {
+    const file = info.file;
+    const status = file?.status;
+    const name = file?.name;
+    if (status === 'uploading') {
+      if (!uploading) {
+        emit('uploading', name);
+        uploading = true;
+      }
+    } else if (status === 'done') {
+      const response = unref(file?.response);
+      if (response?.code != 0) {
+        error('上传图片失败');
+        uploading = false;
+        return;
+      }
+      const url = response?.data[0].fullPath;
+      emit('done', name, url);
+      uploading = false;
+    } else if (status === 'error') {
+      emit('error');
+      uploading = false;
+    }
+  }
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-tinymce-img-upload';

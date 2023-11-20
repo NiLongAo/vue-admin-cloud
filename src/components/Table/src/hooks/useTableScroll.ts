@@ -1,9 +1,9 @@
 import type { BasicTableProps, TableRowSelection, BasicColumn } from '../types/table';
 import { Ref, ComputedRef, ref, computed, unref, nextTick, watch } from 'vue';
-import { getViewportOffset } from '/@/utils/domUtils';
-import { isBoolean } from '/@/utils/is';
+import { getViewportOffset } from '@/utils/domUtils';
+import { isBoolean } from '@/utils/is';
 import { useWindowSizeFn, onMountedOrActivated } from '@vben/hooks';
-import { useModalContext } from '/@/components/Modal';
+import { useModalContext } from '@/components/Modal';
 import { useDebounceFn } from '@vueuse/core';
 
 export function useTableScroll(
@@ -113,7 +113,7 @@ export function useTableScroll(
     return headerHeight;
   }
 
-   function calcBottomAndPaddingHeight(tableEl: Element, headEl: Element) {
+  function calcBottomAndPaddingHeight(tableEl: Element, headEl: Element) {
     const { pagination, isCanResizeParent, useSearchForm } = unref(propsRef);
     // Table height from bottom height-custom offset 16 + 6
     let paddingHeight = 22;

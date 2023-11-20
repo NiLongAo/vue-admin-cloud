@@ -46,8 +46,8 @@ class AesEncryption implements Encryption{
     };
   }
 
-  encrypt(cipherText: string) {
-    return aesEncrypt(cipherText, this.key, this.getOptions).toString();
+  encrypt(plainText: string) {
+    return aesEncrypt(plainText, this.key, this.getOptions).toString();
   }
 
   decrypt(cipherText: string) {
