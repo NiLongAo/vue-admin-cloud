@@ -92,10 +92,10 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { useGo } from '/@/hooks/web/usePage';
-  import { useTabs } from '/@/hooks/web/useTabs';
-  import { PageWrapper } from '/@/components/Page';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
+  import { useGo } from '@/hooks/web/usePage';
+  import { useTabs } from '@/hooks/web/useTabs';
+  import { PageWrapper } from '@/components/Page';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
   import { reactive, computed, watch, unref } from 'vue';
   import { Card, Button, Tabs, Image, Steps } from 'ant-design-vue';
   import {
@@ -103,7 +103,7 @@
     doGetFlowImgByInstanceId,
     doFindInstanceIdDetail,
     doFindHistoricalInstanceIdList,
-  } from '/@/api/oa/activiti';
+  } from '@/api/oa/activiti';
 
   const Step = Steps.Step;
   const TabsPane = Tabs.TabPane;

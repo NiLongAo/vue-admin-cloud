@@ -14,12 +14,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doInsert, doUpdate, doDetail } from '/@/api/sys/mobileMessageTemplate';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doInsert, doUpdate, doDetail } from '@/api/sys/mobileMessageTemplate';
   import { ref, unref, computed } from 'vue';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { DITE_SMS_SEND_TYPE_KEY } from '/@/enums/commonEnum';
+  import { useSystemStore } from '@/store/modules/system';
+  import { DITE_SMS_SEND_TYPE_KEY } from '@/enums/commonEnum';
 
   const isUpdate = ref(true);
   const configId = ref();

@@ -35,15 +35,15 @@
 <script lang="ts" setup>
   import { reactive, ref, computed, unref, toRaw } from 'vue';
   import { Form, Input, Button } from 'ant-design-vue';
-  import { CountdownInput } from '/@/components/CountDown';
+  import { CountdownInput } from '@/components/CountDown';
   import LoginFormTitle from './LoginFormTitle.vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { useUserStore } from '/@/store/modules/user';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { useUserStore } from '@/store/modules/user';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
-  import { doSmsSendSave, SmsType } from '/@/api/sys/sms';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { isPhone } from '/@/utils/validate';
+  import { doSmsSendSave, SmsType } from '@/api/sys/sms';
+  import { useMessage } from '@/hooks/web/useMessage';
+  import { isPhone } from '@/utils/validate';
 
   const { notification, createErrorModal, createMessage } = useMessage();
   const userStore = useUserStore();

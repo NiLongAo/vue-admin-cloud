@@ -57,25 +57,25 @@
     VxeGridInstance,
     VxeGridPropTypes,
     VxeFormItemProps,
-  } from '/@/components/VxeTable';
-  import { isNotEmpty } from '/@/utils/is';
-  import { useGo } from '/@/hooks/web/usePage';
-  import { TableAction } from '/@/components/Table';
-  import { PageWrapper } from '/@/components/Page';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  } from '@/components/VxeTable';
+  import { isNotEmpty } from '@/utils/is';
+  import { useGo } from '@/hooks/web/usePage';
+  import { TableAction } from '@/components/Table';
+  import { PageWrapper } from '@/components/Page';
+  import { usePermission } from '@/hooks/web/usePermission';
   import { computed, reactive,h ,ref,unref} from 'vue';
-  import { useDrawer } from '/@/components/Drawer';
-  import { useModal } from '/@/components/Modal';
+  import { useDrawer } from '@/components/Drawer';
+  import { useModal } from '@/components/Modal';
   import { Tag } from 'ant-design-vue';
-  import { useSystemStore } from '/@/store/modules/system';
+  import { useSystemStore } from '@/store/modules/system';
   import { useRoute } from 'vue-router';
-  import { DEVICE_TYPE_ENUM,PTZ_TYPE_ENUM } from '/@/enums/commonEnum';
-  import { doPlayStart,doPlayStop} from '/@/api/video/paly';
-  import { doDeviceChannelPage ,doDelDeviceChannel} from '/@/api/video/deviceChannel';
-  import { doAudioPushPath ,doPlayBroadcast} from '/@/api/video/audioPush';
+  import { DEVICE_TYPE_ENUM,PTZ_TYPE_ENUM } from '@/enums/commonEnum';
+  import { doPlayStart,doPlayStop} from '@/api/video/paly';
+  import { doDeviceChannelPage ,doDelDeviceChannel} from '@/api/video/deviceChannel';
+  import { doAudioPushPath ,doPlayBroadcast} from '@/api/video/audioPush';
   import DeviceChannelDrawer from './DeviceChannelDrawer.vue';
-  import {PlayModel} from '/@/components/Video/index';
-  import { useUserStoreWithOut } from '/@/store/modules/user';
+  import {PlayModel} from '@/components/Video/index';
+  import { useUserStoreWithOut } from '@/store/modules/user';
 
   const tableRef = ref<VxeGridInstance>();
   const userStore = useUserStoreWithOut();

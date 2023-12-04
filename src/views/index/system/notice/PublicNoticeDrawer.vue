@@ -15,15 +15,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { stringToTime } from '/@/utils/dateUtil';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { stringToTime } from '@/utils/dateUtil';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
   import {
     doPublicNoticeInsert,
     doPublicNoticeUpdate,
     doPublicNoticeDetail,
-  } from '/@/api/notice/publicNotice';
-  import { Tinymce } from '/@/components/Tinymce/index';
+  } from '@/api/notice/publicNotice';
+  import { Tinymce } from '@/components/Tinymce/index';
   import { ref, unref, computed, h, onUnmounted } from 'vue';
 
   const emit = defineEmits(['success', 'register']);

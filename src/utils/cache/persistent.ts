@@ -1,9 +1,9 @@
-import type { LockInfo, UserInfo } from '/#/store';
-import type { ProjectConfig } from '/#/config';
+import type { LockInfo, UserInfo } from '#/store';
+import type { ProjectConfig } from '#/config';
 import type { RouteLocationNormalized } from 'vue-router';
-import { AreaEntity } from '/@/api/sys/model/systemModel';
-import { RememberLoing } from '/@/api/sys/model/userModel';
-import { createLocalStorage, createSessionStorage } from '/@/utils/cache';
+import { AreaEntity } from '@/api/sys/model/systemModel';
+import { RememberLoing } from '@/api/sys/model/userModel';
+import { createLocalStorage, createSessionStorage } from '@/utils/cache';
 import { Memory } from './memory';
 import {
   TOKEN_KEY,
@@ -21,8 +21,8 @@ import {
   DITC_KEY,
   REMEMBER,
   CHECK_URL_TOKEN_KEY,
-} from '/@/enums/cacheEnum';
-import { DEFAULT_CACHE_TIME } from '/@/settings/encryptionSetting';
+} from '@/enums/cacheEnum';
+import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting';
 import { toRaw } from 'vue';
 import { pick, omit } from 'lodash-es';
 

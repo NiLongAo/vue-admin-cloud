@@ -1,4 +1,4 @@
-import { defHttp } from '/@/utils/http/axios';
+import { defHttp } from '@/utils/http/axios';
 import { TenantParams, TenantPageResultModel, TenantModel } from './model/tenantModel';
 
 enum Api {

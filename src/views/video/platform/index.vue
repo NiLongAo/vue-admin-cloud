@@ -57,13 +57,13 @@
 <script lang="ts" setup>
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM} from '/@/enums/commonEnum';
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doPlatformPage, doPlatformRemove } from '/@/api/video/platform';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { useDrawer } from '/@/components/Drawer';
-  import { useModal } from '/@/components/Modal';
+  import { useSystemStore } from '@/store/modules/system';
+  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM} from '@/enums/commonEnum';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doPlatformPage, doPlatformRemove } from '@/api/video/platform';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { useDrawer } from '@/components/Drawer';
+  import { useModal } from '@/components/Modal';
   import PlatformDrawer from './PlatformDrawer.vue';
   import PlatformJoinGbModel from './PlatformJoinGbModel.vue';
   const [ register, { openDrawer }] = useDrawer();

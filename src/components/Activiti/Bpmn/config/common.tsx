@@ -1,7 +1,7 @@
 import { Input } from 'ant-design-vue';
-import { FieldDefine } from '/@/components/Activiti/dynamic-binder';
+import { FieldDefine } from '@/components/Activiti/dynamic-binder';
 import { PropertiesMap, GroupProperties } from './index';
-import SubList from '/@/components/Activiti/sublist/SubList.vue';
+import SubList from '@/components/Activiti/sublist/SubList.vue';
 import { ModdleElement } from '../type';
 import { BpmnStore } from '../store';
 

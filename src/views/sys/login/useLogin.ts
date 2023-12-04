@@ -1,7 +1,7 @@
 import type { FormInstance } from 'ant-design-vue/lib/form/Form';
 import type { RuleObject, NamePath,Rule as ValidationRule } from 'ant-design-vue/lib/form/interface';
 import { ref, computed, unref, Ref } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useI18n } from '@/hooks/web/useI18n';
 
 export enum LoginStateEnum {
   LOGIN,

@@ -13,14 +13,14 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { BasicModal, useModalInner } from '@/components/Modal';
   import { RowSelectionType } from 'ant-design-vue/lib/table/interface';
-  import { BasicTable, useTable, BasicColumn } from '/@/components/Table';
-  import { propTypes } from '/@/utils/propTypes';
+  import { BasicTable, useTable, BasicColumn } from '@/components/Table';
+  import { propTypes } from '@/utils/propTypes';
   import { h, reactive, unref } from 'vue';
   import { Switch } from 'ant-design-vue';
   import { isFunction } from 'lodash-es';
-  import { downloadByData, findFileName } from '/@/utils/file/download';
+  import { downloadByData, findFileName } from '@/utils/file/download';
 
   const props = defineProps({
     // 查询导出参数API

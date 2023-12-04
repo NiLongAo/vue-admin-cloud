@@ -1,4 +1,4 @@
-import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
+import { BasicPageParams, BasicFetchResult } from '@/api/model/baseModel';
 
 export interface OauthClientModel {
   // 客户端ID

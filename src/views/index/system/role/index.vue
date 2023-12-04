@@ -31,10 +31,10 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doRemove, getRolePage } from '/@/api/sys/role';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { useDrawer } from '/@/components/Drawer';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doRemove, getRolePage } from '@/api/sys/role';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { useDrawer } from '@/components/Drawer';
   import RoleDrawer from './RoleDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
   const { hasPermission } = usePermission();

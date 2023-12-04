@@ -60,14 +60,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { getUserPage, doDelete, doExportEntityInfo, doExportUrl } from '/@/api/sys/user';
-  import { useModal } from '/@/components/Modal';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { useGo } from '/@/hooks/web/usePage';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { getUserPage, doDelete, doExportEntityInfo, doExportUrl } from '@/api/sys/user';
+  import { useModal } from '@/components/Modal';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { useGo } from '@/hooks/web/usePage';
   import SettingUser from './SettingUser.vue';
   import UserDetailPrintModel from './UserDetailPrintModel.vue';
-  import { ExpCommonModel } from '/@/components/Excel';
+  import { ExpCommonModel } from '@/components/Excel';
   import { reactive } from 'vue';
 
   const [registerPrintModal, { openModal: openPrintModal }] = useModal();

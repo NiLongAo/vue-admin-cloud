@@ -1,11 +1,11 @@
-import { getSystem, getAreaInfoList } from '/@/api/sys/system';
-import { doDictionaryItemMap } from '/@/api/sys/dictionary';
-import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { SYSYTEM_KEY, AREA_KEY, DITC_KEY } from '/@/enums/cacheEnum';
+import { getSystem, getAreaInfoList } from '@/api/sys/system';
+import { doDictionaryItemMap } from '@/api/sys/dictionary';
+import { getAuthCache, setAuthCache } from '@/utils/auth';
+import { SYSYTEM_KEY, AREA_KEY, DITC_KEY } from '@/enums/cacheEnum';
 import { defineStore } from 'pinia';
-import { store } from '/@/store';
-import { AreaEntity } from '/@/api/sys/model/systemModel';
-import { DictionaryItemEntity } from '/@/api/sys/model/dictionaryModel';
+import { store } from '@/store';
+import { AreaEntity } from '@/api/sys/model/systemModel';
+import { DictionaryItemEntity } from '@/api/sys/model/dictionaryModel';
 interface SystemState {
   systemConfigMap: Recordable | undefined;
   areaList: Array<AreaEntity> | undefined;

@@ -15,13 +15,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doOauthClientDetail, doOauthClientSave } from '/@/api/sys/oauthClient';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { DITE_AUTHORIZED_KEY } from '/@/enums/commonEnum';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doOauthClientDetail, doOauthClientSave } from '@/api/sys/oauthClient';
+  import { useSystemStore } from '@/store/modules/system';
+  import { DITE_AUTHORIZED_KEY } from '@/enums/commonEnum';
   import { ref, unref, computed } from 'vue';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { usePermission } from '@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
 
   const emit = defineEmits(['success', 'register']);

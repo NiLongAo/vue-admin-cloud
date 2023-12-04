@@ -12,10 +12,10 @@
 </template>
 <script lang="ts" setup>
   import { shallowRef } from 'vue';
-  import { PageWrapper } from '/@/components/Page';
-  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
+  import { PageWrapper } from '@/components/Page';
+  import { createAsyncComponent } from '@/utils/factory/createAsyncComponent';
   import PersonalMenu, { ButtonType } from './components/PersonalMenu.vue';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { useDesign } from '@/hooks/web/useDesign';
   const AccountConfig = createAsyncComponent(
     () => import('./components/context/AccountConfig.vue'),
   );

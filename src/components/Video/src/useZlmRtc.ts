@@ -1,7 +1,7 @@
 import { unref,ref,Ref,watch,nextTick } from 'vue';
-import { useScript } from '/@/hooks/web/useScript';
-import { isEmpty } from '/@/utils/is';
-import { deepMerge } from '/@/utils';
+import { useScript } from '@/hooks/web/useScript';
+import { isEmpty } from '@/utils/is';
+import { deepMerge } from '@/utils';
 
 const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
 

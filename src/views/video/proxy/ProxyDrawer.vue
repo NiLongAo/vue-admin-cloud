@@ -15,11 +15,11 @@
 
 <script lang="ts" setup>
   import { ref, computed, unref } from 'vue';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doProxyDetail, doProxySave } from '/@/api/video/proxy';
-  import { PROXY_TYPE_ENUM,PROXY_RTP_TYPE_ENUM} from '/@/enums/commonEnum';
-  import { useSystemStore } from '/@/store/modules/system';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doProxyDetail, doProxySave } from '@/api/video/proxy';
+  import { PROXY_TYPE_ENUM,PROXY_RTP_TYPE_ENUM} from '@/enums/commonEnum';
+  import { useSystemStore } from '@/store/modules/system';
 
   const emit = defineEmits(['success', 'register']);
   const systemStore = useSystemStore();

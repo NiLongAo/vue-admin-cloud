@@ -17,7 +17,7 @@
 </template>
 <script lang="ts" setup>
   import { Card } from 'ant-design-vue';
-  import { PageWrapper } from '/@/components/Page';
+  import { PageWrapper } from '@/components/Page';
   import QuickNav from './components/QuickNav.vue';
   import WorkbenchHeader from './components/WorkbenchHeader.vue';
   import SaleRadar from './components/SaleRadar.vue';

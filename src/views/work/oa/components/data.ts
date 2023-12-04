@@ -1,11 +1,11 @@
-import { BasicColumn } from '/@/components/Table';
+import { BasicColumn } from '@/components/Table';
 import { Tag } from 'ant-design-vue';
 import { h } from 'vue';
 import {
   doFindUserNeedList,
   doFindUserLaunchList,
   doFindUserAlreadyList,
-} from '/@/api/oa/activiti';
+} from '@/api/oa/activiti';
 
 //表格tabs
 export const tabListTitle = [

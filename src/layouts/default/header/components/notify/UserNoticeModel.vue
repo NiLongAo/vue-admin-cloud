@@ -22,12 +22,12 @@
   import type { CSSProperties } from 'vue';
   import { ref, reactive, computed, unref } from 'vue';
   import { Spin } from 'ant-design-vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { doConfigDetail } from '/@/api/sys/config';
-  import { MINIO_PATH } from '/@/enums/commonEnum';
-  import { PublicNoticeEntity } from '/@/api/notice/model/publicNoticeModel';
+  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { doConfigDetail } from '@/api/sys/config';
+  import { MINIO_PATH } from '@/enums/commonEnum';
+  import { PublicNoticeEntity } from '@/api/notice/model/publicNoticeModel';
   import { useWindowSizeFn } from '@vben/hooks';
-  import { useLayoutHeight } from '/@/layouts/default/content/useContentViewHeight';
+  import { useLayoutHeight } from '@/layouts/default/content/useContentViewHeight';
 
   const emit = defineEmits(['afterClose', 'register']);
 

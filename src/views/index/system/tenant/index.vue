@@ -31,12 +31,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { getTenantPage, doTenantRemove } from '/@/api/sys/tenant';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { getTenantPage, doTenantRemove } from '@/api/sys/tenant';
+  import { usePermission } from '@/hooks/web/usePermission';
   import { h } from 'vue';
   import { Tag } from 'ant-design-vue';
-  import { useDrawer } from '/@/components/Drawer';
+  import { useDrawer } from '@/components/Drawer';
   import TenantDrawer from './TenantDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
   const { hasPermission } = usePermission();

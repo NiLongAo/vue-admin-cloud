@@ -11,12 +11,12 @@
 <script lang="ts" setup>
   import { useRoute } from 'vue-router';
   import { onMounted, reactive } from 'vue';
-  import { PageWrapper } from '/@/components/Page';
-  import { useGo } from '/@/hooks/web/usePage';
-  import { useTabs } from '/@/hooks/web/useTabs';
-  import { UserInfoApi } from '/@/api/sys/user';
-  import { Description, DescItem, useDescription } from '/@/components/Description/index';
-  // import { UserInfoModel } from '/@/api/sys/model/userModel';
+  import { PageWrapper } from '@/components/Page';
+  import { useGo } from '@/hooks/web/usePage';
+  import { useTabs } from '@/hooks/web/useTabs';
+  import { UserInfoApi } from '@/api/sys/user';
+  import { Description, DescItem, useDescription } from '@/components/Description/index';
+  // import { UserInfoModel } from '@/api/sys/model/userModel';
   const route = useRoute();
   const { setTitle } = useTabs();
 

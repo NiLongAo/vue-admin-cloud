@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { store } from '/@/store';
+import { store } from '@/store';
 import { SocketNamespace, SocketInEvent } from '../../enums/SocketEnum';
 import io, { Socket } from 'socket.io-client';
 

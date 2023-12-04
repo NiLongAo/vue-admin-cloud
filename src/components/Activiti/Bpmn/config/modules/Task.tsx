@@ -6,16 +6,16 @@ import {
   getElementTypeListenerProperties,
 } from '../common';
 import { GroupProperties } from '../index';
-import PrefixLabelLinkageSelect from '/@/components/Activiti/prefix-label-linkage-select';
-import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
-import PrefixLabelNumBer from '/@/components/Activiti/prefix-label-number';
-import {type FieldDefine} from '/@/components/Activiti/dynamic-binder';
-import { tenantObj } from '/@/settings/tenantSetting';
+import PrefixLabelLinkageSelect from '@/components/Activiti/prefix-label-linkage-select';
+import PrefixLabelSelect from '@/components/Activiti/prefix-label-select';
+import PrefixLabelNumBer from '@/components/Activiti/prefix-label-number';
+import {type FieldDefine} from '@/components/Activiti/dynamic-binder';
+import { tenantObj } from '@/settings/tenantSetting';
 import { Input, SelectOption } from 'ant-design-vue';
-import { getChoiceUserPage } from '/@/api/sys/user';
+import { getChoiceUserPage } from '@/api/sys/user';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
-import { resolve } from '/@/components/Activiti/utils/script-helper';
+import { resolve } from '@/components/Activiti/utils/script-helper';
 import { unref,reactive,toRaw,computed } from 'vue';
 
 const TASK_EVENT_OPTIONS = [

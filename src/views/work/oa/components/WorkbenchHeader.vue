@@ -29,10 +29,10 @@
 <script lang="ts" setup>
   import { computed, reactive, onMounted } from 'vue';
   import { Avatar } from 'ant-design-vue';
-  import { useUserStore } from '/@/store/modules/user';
-  import headerImg from '/@/assets/images/header.jpg';
-  import { formatToDate } from '/@/utils/dateUtil';
-  import { doStatsUserOa } from '/@/api/oa/activiti';
+  import { useUserStore } from '@/store/modules/user';
+  import headerImg from '@/assets/images/header.jpg';
+  import { formatToDate } from '@/utils/dateUtil';
+  import { doStatsUserOa } from '@/api/oa/activiti';
 
   const userStore = useUserStore();
   const userinfo = computed(() => userStore.getUserInfo);

@@ -16,9 +16,9 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, unref } from 'vue';
-  import { BasicTree, TreeItem, ContextMenuItem, TreeActionType,ContextMenuOptions } from '/@/components/Tree';
-  import { doDictionaryTypeList } from '/@/api/sys/dictionary';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { BasicTree, TreeItem, ContextMenuItem, TreeActionType,ContextMenuOptions } from '@/components/Tree';
+  import { doDictionaryTypeList } from '@/api/sys/dictionary';
+  import { usePermission } from '@/hooks/web/usePermission';
   const defaultKey = ref();
   const asyncExpandTreeRef = ref<Nullable<TreeActionType>>(null);
   const { hasPermission } = usePermission();

@@ -51,20 +51,20 @@
 </template>
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { PageWrapper } from '/@/components/Page';
-  import { useDrawer } from '/@/components/Drawer';
-  import { useModal } from '/@/components/Modal';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { PageWrapper } from '@/components/Page';
+  import { useDrawer } from '@/components/Drawer';
+  import { useModal } from '@/components/Modal';
   import TypeTree from './TypeTree.vue';
   import DictionaryItemDrawer from './DictionaryItemDrawer.vue';
   import DictionaryTypeModal from './DictionaryTypeModal.vue';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useMessage } from '@/hooks/web/useMessage';
   import {
     doDictionaryTypeRemove,
     doDictionaryItemPage,
     doDictionaryItemRemove,
-  } from '/@/api/sys/dictionary';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  } from '@/api/sys/dictionary';
+  import { usePermission } from '@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
 
   const TypeTreeRef = ref();

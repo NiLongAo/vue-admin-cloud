@@ -15,12 +15,12 @@
 
 <script lang="ts" setup>
   import { ref, reactive,computed, unref } from 'vue';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doPlatformSipList,doPlatformDetail, doPlatformInsert,doPlatformUpdate } from '/@/api/video/platform';
-  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM} from '/@/enums/commonEnum';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { isEmpty } from '/@/utils/is';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doPlatformSipList,doPlatformDetail, doPlatformInsert,doPlatformUpdate } from '@/api/video/platform';
+  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM} from '@/enums/commonEnum';
+  import { useSystemStore } from '@/store/modules/system';
+  import { isEmpty } from '@/utils/is';
 
   const emit = defineEmits(['success', 'register']);
   const systemStore = useSystemStore();

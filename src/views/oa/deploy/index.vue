@@ -20,17 +20,17 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { PageWrapper } from '/@/components/Page';
-  import Modeler from '/@/components/Activiti/Modeler';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import Panel from '/@/components/Activiti/panel';
-  import BpmnActions from '/@/components/Activiti/bpmn-actions';
+  import { PageWrapper } from '@/components/Page';
+  import Modeler from '@/components/Activiti/Modeler';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import Panel from '@/components/Activiti/panel';
+  import BpmnActions from '@/components/Activiti/bpmn-actions';
   import { useRoute } from 'vue-router';
   import { Button } from 'ant-design-vue';
   import { onMounted, reactive, ref, unref } from 'vue';
-  import { useTabs } from '/@/hooks/web/useTabs';
-  import { doFindRepositoryXml, doDeployProcessParameter } from '/@/api/oa/activiti';
-  import { useGo } from '/@/hooks/web/usePage';
+  import { useTabs } from '@/hooks/web/useTabs';
+  import { doFindRepositoryXml, doDeployProcessParameter } from '@/api/oa/activiti';
+  import { useGo } from '@/hooks/web/usePage';
 
   
   const { hasPermission } = usePermission();

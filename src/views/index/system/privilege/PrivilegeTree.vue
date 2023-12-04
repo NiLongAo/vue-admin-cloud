@@ -35,10 +35,10 @@
 </script>
 <script lang="ts" setup>
   import { onMounted, ref, unref, watch, nextTick } from 'vue';
-  import { BasicTree, TreeItem, TreeActionType } from '/@/components/Tree';
-  import { doAll } from '/@/api/sys/role';
-  import { doDepartmentTree } from '/@/api/sys/department';
-  import { doPositionTree } from '/@/api/sys/position';
+  import { BasicTree, TreeItem, TreeActionType } from '@/components/Tree';
+  import { doAll } from '@/api/sys/role';
+  import { doDepartmentTree } from '@/api/sys/department';
+  import { doPositionTree } from '@/api/sys/position';
 
   const props = defineProps({
     tenant: {

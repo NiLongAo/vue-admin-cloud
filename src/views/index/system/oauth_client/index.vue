@@ -36,15 +36,15 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doOauthClientRemove, getOauthClientPage } from '/@/api/sys/oauthClient';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doOauthClientRemove, getOauthClientPage } from '@/api/sys/oauthClient';
   import { h } from 'vue';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { DITE_AUTHORIZED_KEY } from '/@/enums/commonEnum';
+  import { useSystemStore } from '@/store/modules/system';
+  import { DITE_AUTHORIZED_KEY } from '@/enums/commonEnum';
   import { Tag } from 'ant-design-vue';
-  import { useDrawer } from '/@/components/Drawer';
+  import { useDrawer } from '@/components/Drawer';
   import OauthClientDrawer from './OauthClientDrawer.vue';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { usePermission } from '@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
   const systemStore = useSystemStore();
   const [register, { openDrawer }] = useDrawer();

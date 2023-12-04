@@ -1,4 +1,4 @@
-import { defHttp } from '/@/utils/http/axios';
+import { defHttp } from '@/utils/http/axios';
 import { SmsConfigModel, SmsConfigParams, SmsConfigPageResultModel } from './model/smsConfigModel';
 enum Api {
   //手机号登录

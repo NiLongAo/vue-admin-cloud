@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doDepartmentDetail, doDepartmentSave, doDepartmentTree } from '/@/api/sys/department';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doDepartmentDetail, doDepartmentSave, doDepartmentTree } from '@/api/sys/department';
 
   const emit = defineEmits(['success', 'register']);
   const schemas: FormSchema[] = [

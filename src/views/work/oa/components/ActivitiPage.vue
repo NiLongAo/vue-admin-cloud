@@ -16,18 +16,18 @@
 <script lang="ts" setup>
   import { unref, reactive } from 'vue';
   import { Card } from 'ant-design-vue';
-  import { BasicTable, useTable, TableAction, ActionItem} from '/@/components/Table';
+  import { BasicTable, useTable, TableAction, ActionItem} from '@/components/Table';
   import {
     doClaim,
     doSuspendedInstance,
     doDeleteProcessInstance,
     doBackProcess,
-  } from '/@/api/oa/activiti';
+  } from '@/api/oa/activiti';
   import { tabListTitle, tableDate } from './data';
   import { nextTick } from 'vue';
-  import { useGo } from '/@/hooks/web/usePage';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { OAIndex } from '/@/api/oa/activiti';
+  import { useGo } from '@/hooks/web/usePage';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { OAIndex } from '@/api/oa/activiti';
   const go = useGo();
   const { prefixCls } = useDesign('activiti');
 

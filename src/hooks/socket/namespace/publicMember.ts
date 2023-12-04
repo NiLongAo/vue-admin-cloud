@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io-client';
 import { SocketModel, Namespace } from '../common';
-import { SocketNamespace, SocketOutEvent } from '/@/enums/SocketEnum';
-import rootSocketEmitter from '/@/hooks/socket/rootSocketEmitter';
+import { SocketNamespace, SocketOutEvent } from '@/enums/SocketEnum';
+import rootSocketEmitter from '@/hooks/socket/rootSocketEmitter';
 
 class PublicMemberNamespace implements Namespace {
   private socket: Socket;

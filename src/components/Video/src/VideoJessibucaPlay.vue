@@ -17,7 +17,7 @@
 </template>
 <script lang="ts" setup>
   import Icon from '@/components/Icon/Icon.vue';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { useDesign } from '@/hooks/web/useDesign';
   import { useJessibuca } from './useJessibuca';
   import { ref,reactive,onUnmounted,watch } from 'vue';
 

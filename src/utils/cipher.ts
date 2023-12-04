@@ -1,5 +1,5 @@
 import { decrypt as aesDecrypt, encrypt as aesEncrypt } from 'crypto-js/aes';
-import { SECRET_KEY, SECRET_IV } from '/@/enums/commonEnum';
+import { SECRET_KEY, SECRET_IV } from '@/enums/commonEnum';
 import UTF8, { parse } from 'crypto-js/enc-utf8';
 import pkcs7 from 'crypto-js/pad-pkcs7';
 import { mode } from 'crypto-js/index';

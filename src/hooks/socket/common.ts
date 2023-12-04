@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io-client';
-import { SocketNamespace } from '/@/enums/SocketEnum';
+import { SocketNamespace } from '@/enums/SocketEnum';
 /**
  * @description: 空间类方法
  */

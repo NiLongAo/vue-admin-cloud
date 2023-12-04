@@ -106,16 +106,16 @@
     TwitterCircleFilled,
   } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
-  import { doGetCode } from '/@/api/sys/user';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { useUserStore } from '/@/store/modules/user';
+  import { doGetCode } from '@/api/sys/user';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useMessage } from '@/hooks/web/useMessage';
+  import { useUserStore } from '@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { EncryptionFactory } from '/@/utils/cipher';
-  import { RememberLoing } from '/@/api/sys/model/userModel';
-  import { getAuthCache, setAuthCache } from '/@/utils/auth';
-  import { REMEMBER } from '/@/enums/cacheEnum';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { EncryptionFactory } from '@/utils/cipher';
+  import { RememberLoing } from '@/api/sys/model/userModel';
+  import { getAuthCache, setAuthCache } from '@/utils/auth';
+  import { REMEMBER } from '@/enums/cacheEnum';
 
   //import { onKeyStroke } from '@vueuse/core';
 

@@ -1,6 +1,6 @@
-import { FormSchema } from '/@/components/Form/index';
-import { useSystemStore } from '/@/store/modules/system';
-import { isPhone, isIdCard } from '/@/utils/validate';
+import { FormSchema } from '@/components/Form/index';
+import { useSystemStore } from '@/store/modules/system';
+import { isPhone, isIdCard } from '@/utils/validate';
 
 const systemStore = useSystemStore();
 // tab的list

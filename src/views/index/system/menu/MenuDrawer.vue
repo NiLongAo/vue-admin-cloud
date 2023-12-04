@@ -35,8 +35,8 @@
 </script>
 <script lang="ts" setup>
   import { ref, unref, computed, watch, nextTick } from 'vue';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, useForm } from '@/components/Form/index';
   import { menuSchemas, privilegeSchemas } from './menuDrawerData';
   import {
     doMenuDetail,
@@ -44,7 +44,7 @@
     doMenuTree,
     doPrivilegeDetail,
     doPrivilegeSave,
-  } from '/@/api/sys/menu';
+  } from '@/api/sys/menu';
   const emit = defineEmits(['success', 'register']);
 
   const isUpdate = ref(false);

@@ -35,13 +35,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doDepartmentPage, doDepartmentRemove } from '/@/api/sys/department';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doDepartmentPage, doDepartmentRemove } from '@/api/sys/department';
   import { h, nextTick } from 'vue';
   import { Tag } from 'ant-design-vue';
-  import { useDrawer } from '/@/components/Drawer';
+  import { useDrawer } from '@/components/Drawer';
   import DepartmentDrawer from './DepartmentDrawer.vue';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { usePermission } from '@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
   const [register, { openDrawer }] = useDrawer();
 

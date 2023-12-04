@@ -18,15 +18,15 @@
 </template>
 <script lang="ts" setup>
   import { reactive,ref,unref,watch,onMounted,nextTick} from 'vue';
-  import { useModal } from '/@/components/Modal';
-  import { isEmpty } from '/@/utils/is';
-  import { BasicTree,TreeItem, TreeActionType,ContextMenuItem,ContextMenuOptions } from '/@/components/Tree';
+  import { useModal } from '@/components/Modal';
+  import { isEmpty } from '@/utils/is';
+  import { BasicTree,TreeItem, TreeActionType,ContextMenuItem,ContextMenuOptions } from '@/components/Tree';
   import { 
     doPlatformCatalogTree ,
     doPlatformCatalogDelete,
     doPlatformCatalogDeleteRelation
-  } from '/@/api/video/platform';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  } from '@/api/video/platform';
+  import { usePermission } from '@/hooks/web/usePermission';
   import PlatformCatalogModel from './PlatformCatalogModel.vue';
 
   const emit = defineEmits(['select','clean']);

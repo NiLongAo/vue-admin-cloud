@@ -17,9 +17,9 @@
   import { useRoute } from 'vue-router';
   import { reactive, computed, onMounted, unref, ref } from 'vue';
   import Exanube from '../oa/common/Examine.vue';
-  import { doFind, doInsert, doDelete } from '/@/api/oa/leave';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { useTabs } from '/@/hooks/web/useTabs';
+  import { doFind, doInsert, doDelete } from '@/api/oa/leave';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { useTabs } from '@/hooks/web/useTabs';
   const { closeCurrent } = useTabs();
 
   const route = useRoute();

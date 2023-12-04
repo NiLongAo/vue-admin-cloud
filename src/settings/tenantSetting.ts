@@ -1,10 +1,10 @@
-import { FormSchema } from '/@/components/Form/src/types/form';
-import { doTenantSelect } from '/@/api/sys/tenant';
-import { isString, isNumber } from '/@/utils/is';
-import { sysTenantId } from '/@/api/sys/model/tenantModel';
-import { useUserStore } from '/@/store/modules/user';
+import { FormSchema } from '@/components/Form/src/types/form';
+import { doTenantSelect } from '@/api/sys/tenant';
+import { isString, isNumber } from '@/utils/is';
+import { sysTenantId } from '@/api/sys/model/tenantModel';
+import { useUserStore } from '@/store/modules/user';
 import { debounce } from 'lodash-es';
-import { defHttp } from '/@/utils/http/axios';
+import { defHttp } from '@/utils/http/axios';
 import { reactive, computed, unref } from 'vue';
 
 const userStore = useUserStore();

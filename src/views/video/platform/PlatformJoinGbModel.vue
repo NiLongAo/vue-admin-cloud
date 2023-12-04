@@ -33,8 +33,8 @@
 </template>
 <script lang="ts" setup>
   import { ref,unref,reactive} from 'vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { useDesign } from '@/hooks/web/useDesign';
   import { Card } from 'ant-design-vue';
   import PlatformTree from './components/PlatformTree.vue';
   import PlatformTransfer from './components/PlatformTransfer.vue';

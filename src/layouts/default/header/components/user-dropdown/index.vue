@@ -18,7 +18,7 @@
           v-if="getShowDoc"
         />
         <MenuDivider v-if="getShowDoc" />
-	<MenuItem
+	      <MenuItem
           v-if="getShowApi"
           key="api"
           :text="t('layout.header.dropdownChangeApi')"
@@ -53,124 +53,100 @@
   <ChangeApi @register="registerApi" />
   <TenantAction @register="registerTenantAction" :isSysTenant="isSysTenant" />
 </template>
-<script lang="ts">
+<script lang="ts" setup>
   // components
   import { Dropdown, Menu } from 'ant-design-vue';
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface';
 
-  import { defineComponent, computed } from 'vue';
+  import { computed } from 'vue';
 
-  import { DOC_URL } from '/@/settings/siteSetting';
+  import { DOC_URL } from '@/settings/siteSetting';
 
-  import { useUserStore } from '/@/store/modules/user';
-  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { useModal } from '/@/components/Modal';
-  import { sysTenantId } from '/@/api/sys/model/tenantModel';
-  import headerImg from '/@/assets/images/header.jpg';
-  import { propTypes } from '/@/utils/propTypes';
-  import { openWindow } from '/@/utils';
-  import { useGo } from '/@/hooks/web/usePage';
-  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
+  import { useUserStore } from '@/store/modules/user';
+  import { useHeaderSetting } from '@/hooks/setting/useHeaderSetting';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { useModal } from '@/components/Modal';
+  import { sysTenantId } from '@/api/sys/model/tenantModel';
+  import headerImg from '@/assets/images/header.jpg';
+  import { propTypes } from '@/utils/propTypes';
+  import { openWindow } from '@/utils';
+  import { useGo } from '@/hooks/web/usePage';
+  import { createAsyncComponent } from '@/utils/factory/createAsyncComponent';
 
   type MenuEvent = 'logout' | 'doc' | 'lock' | 'api' | 'tenant' | 'personal';
-
-  export default defineComponent({
-    name: 'UserDropdown',
-    components: {
-      Dropdown,
-      Menu,
-      MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      MenuDivider: Menu.Divider,
-      LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
-      ChangeApi: createAsyncComponent(() => import('../ChangeApi/index.vue')),
-      TenantAction: createAsyncComponent(() => import('../tenant/TenantModal.vue')),
-    },
-    props: {
-      theme: propTypes.oneOf(['dark', 'light']),
-    },
-    setup() {
-      const { prefixCls } = useDesign('header-user-dropdown');
-      const { t } = useI18n();
-      const go = useGo();
-      const { getShowDoc, getUseLockPage ,getShowApi} = useHeaderSetting();
-      const userStore = useUserStore();
-      const getUserInfo = computed(() => {
-        const { userName = '', imageUrl, tenantId } = userStore.getUserInfo || {};
-        return {
-          userName,
-          tenantId,
-          imageUrl: imageUrl ? imageUrl : headerImg,
-        };
-      });
-
-      const isSysTenant = computed(() => {
-        return sysTenantId == getUserInfo.value.tenantId;
-      });
-
-      const [register, { openModal }] = useModal();
-      const [registerApi, { openModal: openApiModal }] = useModal();
-      const [registerTenantAction, { openModal: openModalTenantAction }] = useModal();
-
-      function handleLock() {
-        openModal(true);
-      }
-      function handleApi() {
-        openApiModal(true, {});
-      }
-      //  login out
-      function handleLoginOut() {
-        userStore.confirmLoginOut();
-      }
-
-      // open doc
-      function openDoc() {
-        openWindow(DOC_URL);
-      }
-
-      //open tenant
-      const handleTenant = () => {
-        openModalTenantAction(true);
-      };
-      function handleMenuClick(e: MenuInfo) {
-        switch (e.key as MenuEvent) {
-          case 'logout':
-            handleLoginOut();
-            break;
-          case 'doc':
-            openDoc();
-            break;
-          case 'lock':
-            handleLock();
-            break;
-	  case 'api':
-            handleApi();
-            break;
-          case 'tenant':
-            handleTenant();
-            break;
-          case 'personal':
-            go('/work/personal');
-            break;
-        }
-      }
-
-      return {
-        prefixCls,
-        t,
-        isSysTenant,
-        getUserInfo,
-        handleMenuClick,
-        getShowDoc,
- 	getShowApi,
-        register,
-	registerApi,
-        registerTenantAction,
-        getUseLockPage,
-      };
-    },
+  const MenuItem = createAsyncComponent(() => import('./DropMenuItem.vue'));
+  const LockAction = createAsyncComponent(() => import('../lock/LockModal.vue'));
+  const ChangeApi = createAsyncComponent(() => import('../ChangeApi/index.vue'));
+  const TenantAction = createAsyncComponent(() => import('../tenant/TenantModal.vue'));
+  defineOptions({ name: 'UserDropdown' });
+  defineProps({
+    theme: propTypes.oneOf(['dark', 'light']),
   });
+  const { prefixCls } = useDesign('header-user-dropdown');
+  const { t } = useI18n();
+  const go = useGo();
+  const { getShowDoc, getUseLockPage ,getShowApi} = useHeaderSetting();
+  const userStore = useUserStore();
+  const getUserInfo = computed(() => {
+    const { userName = '', imageUrl, tenantId } = userStore.getUserInfo || {};
+    return {
+      userName,
+      tenantId,
+      imageUrl: imageUrl ? imageUrl : headerImg,
+    };
+  });
+
+  const isSysTenant = computed(() => {
+    return sysTenantId == getUserInfo.value.tenantId;
+  });
+
+  const [register, { openModal }] = useModal();
+  const [registerApi, { openModal: openApiModal }] = useModal();
+  const [registerTenantAction, { openModal: openModalTenantAction }] = useModal();
+
+  function handleLock() {
+    openModal(true);
+  }
+  function handleApi() {
+    openApiModal(true, {});
+  }
+  //  login out
+  function handleLoginOut() {
+    userStore.confirmLoginOut();
+  }
+
+  // open doc
+  function openDoc() {
+    openWindow(DOC_URL);
+  }
+
+  //open tenant
+  const handleTenant = () => {
+    openModalTenantAction(true);
+  };
+  function handleMenuClick(e: MenuInfo) {
+    switch (e.key as MenuEvent) {
+      case 'logout':
+        handleLoginOut();
+        break;
+      case 'doc':
+        openDoc();
+        break;
+      case 'lock':
+        handleLock();
+        break;
+      case 'api':
+        handleApi();
+        break;
+      case 'tenant':
+        handleTenant();
+        break;
+      case 'personal':
+        go('/work/personal');
+        break;
+    }
+  }
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-header-user-dropdown';

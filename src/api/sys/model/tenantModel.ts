@@ -1,4 +1,4 @@
-import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
+import { BasicPageParams, BasicFetchResult } from '@/api/model/baseModel';
 
 // 默认系统租户编号
 export const sysTenantId = 1;

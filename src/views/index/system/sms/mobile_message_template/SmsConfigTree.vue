@@ -15,8 +15,8 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, unref } from 'vue';
-  import { BasicTree, TreeItem, TreeActionType } from '/@/components/Tree';
-  import { doAll } from '/@/api/sys/smsConfig';
+  import { BasicTree, TreeItem, TreeActionType } from '@/components/Tree';
+  import { doAll } from '@/api/sys/smsConfig';
   const defaultKey = ref();
   const asyncExpandTreeRef = ref<Nullable<TreeActionType>>(null);
 

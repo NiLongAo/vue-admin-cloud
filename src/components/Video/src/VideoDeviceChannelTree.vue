@@ -13,8 +13,8 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, unref } from 'vue';
-  import { BasicTree, TreeItem, TreeActionType } from '/@/components/Tree';
-  import { doTreeDeviceChannel } from '/@/api/video/deviceChannel';
+  import { BasicTree, TreeItem, TreeActionType } from '@/components/Tree';
+  import { doTreeDeviceChannel } from '@/api/video/deviceChannel';
   const emit = defineEmits(['select', 'edit', 'remove']);
   const defaultKey = ref();
   const asyncExpandTreeRef = ref<Nullable<TreeActionType>>(null);

@@ -1,4 +1,4 @@
-import { defHttp } from '/@/utils/http/axios';
+import { defHttp } from '@/utils/http/axios';
 import { RecordInfo } from './model/recordModel';
 enum Api {
   //录像查询列表

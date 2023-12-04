@@ -23,19 +23,19 @@
   import { computed, reactive, unref, onMounted, onBeforeMount } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { Button, Divider, Image } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useI18n } from '@/hooks/web/useI18n';
   import { useLoginState, LoginStateEnum } from './useLogin';
-  import { useUserStore } from '/@/store/modules/user';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useUserStore } from '@/store/modules/user';
+  import { useMessage } from '@/hooks/web/useMessage';
   import {
     SocketNamespace,
     SocketInEvent,
     SocketOutEvent,
     SocketData,
     ResultEnum,
-  } from '/@/enums/SocketEnum';
-  import { useSocketStore } from '/@/store/modules/socket';
-  import rootSocketEmitter from '/@/hooks/socket/rootSocketEmitter';
+  } from '@/enums/SocketEnum';
+  import { useSocketStore } from '@/store/modules/socket';
+  import rootSocketEmitter from '@/hooks/socket/rootSocketEmitter';
 
   const useSocket = useSocketStore();
   const stats = reactive({

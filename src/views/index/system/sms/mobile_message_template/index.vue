@@ -42,15 +42,15 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
   import { Tag } from 'ant-design-vue';
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { PageWrapper } from '/@/components/Page';
-  import { useDrawer } from '/@/components/Drawer';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { PageWrapper } from '@/components/Page';
+  import { useDrawer } from '@/components/Drawer';
   import SmsConfigTree from './SmsConfigTree.vue';
   import MobileMessageTemplateDrawer from './MobileMessageTemplateDrawer.vue';
-  import { getSmsConfigPage, doRemove } from '/@/api/sys/mobileMessageTemplate';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { DITE_SMS_SEND_TYPE_KEY } from '/@/enums/commonEnum';
+  import { getSmsConfigPage, doRemove } from '@/api/sys/mobileMessageTemplate';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { useSystemStore } from '@/store/modules/system';
+  import { DITE_SMS_SEND_TYPE_KEY } from '@/enums/commonEnum';
   const { hasPermission } = usePermission();
   const systemStore = useSystemStore();
 

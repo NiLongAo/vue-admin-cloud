@@ -15,12 +15,12 @@
 
 <script lang="ts" setup>
   import { ref, unref, computed,reactive } from 'vue';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM,GEO_COORD_SYS_TYPE_ENUM,STREAM_MODE_TYPE_ENUM} from '/@/enums/commonEnum';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { doFindDeviceId,doSaveDevice } from '/@/api/video/device';
-  import { doMediaPage } from '/@/api/video/mediaServer';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM,GEO_COORD_SYS_TYPE_ENUM,STREAM_MODE_TYPE_ENUM} from '@/enums/commonEnum';
+  import { useSystemStore } from '@/store/modules/system';
+  import { doFindDeviceId,doSaveDevice } from '@/api/video/device';
+  import { doMediaPage } from '@/api/video/mediaServer';
   import { debounce } from 'lodash-es';
 
   const emit = defineEmits(['success', 'register']);

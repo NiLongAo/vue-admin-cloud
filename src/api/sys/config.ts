@@ -1,4 +1,4 @@
-import { defHttp } from '/@/utils/http/axios';
+import { defHttp } from '@/utils/http/axios';
 import { ConfigEntity, ConfigParams, ConfigPageResultModel } from './model/configModel';
 
 enum Api {

@@ -1,4 +1,4 @@
-import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
+import { BasicPageParams, BasicFetchResult } from '@/api/model/baseModel';
 
 //头部数据统计
 export interface StatsItem {

@@ -11,14 +11,14 @@
 </template>
 <script lang="ts" setup>
   import { reactive, computed, unref } from 'vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { getChoiceUserPage } from '/@/api/sys/user';
-  import { doAll as doRoleAll } from '/@/api/sys/role';
-  import { doPositionAll } from '/@/api/sys/position';
+  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { getChoiceUserPage } from '@/api/sys/user';
+  import { doAll as doRoleAll } from '@/api/sys/role';
+  import { doPositionAll } from '@/api/sys/position';
   import { RowSelectionType } from 'ant-design-vue/lib/table/interface';
-  import { doDepartmentAll } from '/@/api/sys/department';
-  import { BasicTable, useTable, BasicColumn, FormProps } from '/@/components/Table';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { doDepartmentAll } from '@/api/sys/department';
+  import { BasicTable, useTable, BasicColumn, FormProps } from '@/components/Table';
+  import { useMessage } from '@/hooks/web/useMessage';
 
   const emit = defineEmits(['success', 'register']);
   const getTitle = computed(() => '用户选择器');

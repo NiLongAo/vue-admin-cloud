@@ -29,10 +29,10 @@
 <script lang="ts" setup>
   import { reactive,watch} from 'vue';
   import { Progress } from 'ant-design-vue';
-  import { isEmpty } from '/@/utils/is';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { doSyncStatusDeviceChannel} from '/@/api/video/deviceChannel';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { isEmpty } from '@/utils/is';
+  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { doSyncStatusDeviceChannel} from '@/api/video/deviceChannel';
+  import { useDesign } from '@/hooks/web/useDesign';
 
   const emit = defineEmits(['close', 'register']);
   const { prefixCls } = useDesign('device-channel-model');

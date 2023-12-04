@@ -17,11 +17,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doConfigPage } from '/@/api/sys/config';
-  import { useDrawer } from '/@/components/Drawer';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doConfigPage } from '@/api/sys/config';
+  import { useDrawer } from '@/components/Drawer';
   import ConfigDrawer from './ConfigDrawer.vue';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { usePermission } from '@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
   const [register, { openDrawer }] = useDrawer();
 

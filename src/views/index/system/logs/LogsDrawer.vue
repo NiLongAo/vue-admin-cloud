@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doLogsDetail } from '/@/api/sys/logs';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doLogsDetail } from '@/api/sys/logs';
   const schemas: FormSchema[] = [
     {
       field: 'id',

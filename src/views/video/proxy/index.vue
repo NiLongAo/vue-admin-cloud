@@ -59,15 +59,15 @@
 <script lang="ts" setup>
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { useUserStoreWithOut } from '/@/store/modules/user';
-  import { PROXY_TYPE_ENUM,PROXY_RTP_TYPE_ENUM } from '/@/enums/commonEnum';
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doProxyPage, doProxyRemove,doProxyStart,doProxyStop,doProxyGetPlayUrl } from '/@/api/video/proxy';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { useModal } from '/@/components/Modal';
-  import { useDrawer } from '/@/components/Drawer';
-  import {PlayModel} from '/@/components/Video';
+  import { useSystemStore } from '@/store/modules/system';
+  import { useUserStoreWithOut } from '@/store/modules/user';
+  import { PROXY_TYPE_ENUM,PROXY_RTP_TYPE_ENUM } from '@/enums/commonEnum';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doProxyPage, doProxyRemove,doProxyStart,doProxyStop,doProxyGetPlayUrl } from '@/api/video/proxy';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { useModal } from '@/components/Modal';
+  import { useDrawer } from '@/components/Drawer';
+  import {PlayModel} from '@/components/Video';
   import ProxyDrawer from './ProxyDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
   const { hasPermission } = usePermission();

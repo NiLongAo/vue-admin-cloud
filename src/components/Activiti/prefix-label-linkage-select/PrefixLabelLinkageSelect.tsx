@@ -1,11 +1,11 @@
 import { Select } from 'ant-design-vue';
-import ApiSelect from '/@/components/Form/src/components/ApiSelect.vue';
-import { doSelect as doUserSelect } from '/@/api/sys/user';
-import { doSelect as doRoleSelect } from '/@/api/sys/role';
-import { doSelect as doDepartmentSelect } from '/@/api/sys/department';
+import ApiSelect from '@/components/Form/src/components/ApiSelect.vue';
+import { doSelect as doUserSelect } from '@/api/sys/user';
+import { doSelect as doRoleSelect } from '@/api/sys/role';
+import { doSelect as doDepartmentSelect } from '@/api/sys/department';
 import { debounce } from 'lodash-es';
 import { defineComponent, computed, reactive, unref, watch } from 'vue';
-import { propTypes } from '/@/utils/propTypes';
+import { propTypes } from '@/utils/propTypes';
 import './prefix-label-linkage-select.css';
 const PrefixLabelSelect = defineComponent({
   props: {

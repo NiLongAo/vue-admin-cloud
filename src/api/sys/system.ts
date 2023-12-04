@@ -1,4 +1,4 @@
-import { defHttp } from '/@/utils/http/axios';
+import { defHttp } from '@/utils/http/axios';
 import { GetSystemModel, AreaEntity } from './model/systemModel';
 enum Api {
   GetSystemApi = '/webapi/config/config/all',

@@ -10,12 +10,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps } from '/@/components/Table';
-  import { getMobileMessagePage } from '/@/api/sys/mobileMessage';
+  import { BasicTable, useTable, BasicColumn, FormProps } from '@/components/Table';
+  import { getMobileMessagePage } from '@/api/sys/mobileMessage';
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { DITE_SMS_TYPE_KEY } from '/@/enums/commonEnum';
+  import { useSystemStore } from '@/store/modules/system';
+  import { DITE_SMS_TYPE_KEY } from '@/enums/commonEnum';
   const systemStore = useSystemStore();
 
   const [registerTable] = useTable({

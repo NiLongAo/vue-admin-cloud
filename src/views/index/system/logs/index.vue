@@ -21,14 +21,14 @@
 </template>
 <script lang="ts" setup>
   import LogsDrawer from './LogsDrawer.vue';
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doLogsPage } from '/@/api/sys/logs';
-  import { useDrawer } from '/@/components/Drawer';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { LOGS_TYPE_ENUM } from '/@/enums/commonEnum';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doLogsPage } from '@/api/sys/logs';
+  import { useDrawer } from '@/components/Drawer';
+  import { useSystemStore } from '@/store/modules/system';
+  import { LOGS_TYPE_ENUM } from '@/enums/commonEnum';
   import { h, computed } from 'vue';
   import { Tag } from 'ant-design-vue';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { usePermission } from '@/hooks/web/usePermission';
 
   const { hasPermission } = usePermission();
   const [register, { openDrawer }] = useDrawer();

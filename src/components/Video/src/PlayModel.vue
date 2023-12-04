@@ -198,16 +198,16 @@
 </template>
 <script lang="ts" setup>
   import { reactive,ref,unref,computed,nextTick,defineAsyncComponent } from 'vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { RadioButtonGroup } from '/@/components/Form';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { isEmpty,isNotEmpty,isFunction } from '/@/utils/is';
-  import { setObjToUrlParams } from '/@/utils';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { RadioButtonGroup } from '@/components/Form';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { isEmpty,isNotEmpty,isFunction } from '@/utils/is';
+  import { setObjToUrlParams } from '@/utils';
+  import { useMessage } from '@/hooks/web/useMessage';
   import Icon from '@/components/Icon/Icon.vue';
-  import { copyText } from '/@/utils/copyTextToClipboard';
-  import {doPtzPtz,doPtzFrontEndCommand} from '/@/api/video/ptz';
-  import { useZlmRtc } from '/@/components/Video';
+  import { copyText } from '@/utils/copyTextToClipboard';
+  import {doPtzPtz,doPtzFrontEndCommand} from '@/api/video/ptz';
+  import { useZlmRtc } from '@/components/Video';
   import { Input,InputNumber,Descriptions,DescriptionsItem, Button ,Divider ,Slider,Dropdown,Menu,MenuItem} from 'ant-design-vue';
 
   const VideoJessibucaPlay = defineAsyncComponent(() => import('./VideoJessibucaPlay.vue'))

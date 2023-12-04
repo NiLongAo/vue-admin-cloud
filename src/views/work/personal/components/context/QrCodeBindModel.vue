@@ -14,19 +14,19 @@
 </template>
 <script lang="ts" setup>
   import { reactive, onBeforeMount } from 'vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { BasicModal, useModalInner } from '@/components/Modal';
   import { Divider, Image } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useMessage } from '@/hooks/web/useMessage';
   import {
     SocketNamespace,
     SocketInEvent,
     SocketOutEvent,
     SocketData,
     ResultEnum,
-  } from '/@/enums/SocketEnum';
-  import { useSocketStore } from '/@/store/modules/socket';
-  import rootSocketEmitter from '/@/hooks/socket/rootSocketEmitter';
+  } from '@/enums/SocketEnum';
+  import { useSocketStore } from '@/store/modules/socket';
+  import rootSocketEmitter from '@/hooks/socket/rootSocketEmitter';
 
   const useSocket = useSocketStore();
 

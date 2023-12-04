@@ -15,11 +15,11 @@
 
 <script lang="ts" setup>
   import { ref, computed, unref } from 'vue';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { PTZ_TYPE_ENUM } from '/@/enums/commonEnum';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { doDetailDeviceChannel,doSaveDeviceChannel } from '/@/api/video/deviceChannel';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { PTZ_TYPE_ENUM } from '@/enums/commonEnum';
+  import { useSystemStore } from '@/store/modules/system';
+  import { doDetailDeviceChannel,doSaveDeviceChannel } from '@/api/video/deviceChannel';
 
   const emit = defineEmits(['success', 'register']);
   const isUpdate = ref(true);

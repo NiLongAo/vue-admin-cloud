@@ -39,18 +39,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { ActivitiRepositoryEntity } from '/@/api/oa/model/activitiModel';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { ActivitiRepositoryEntity } from '@/api/oa/model/activitiModel';
   import {
     OAIndex,
     doDeleteProcess,
     doFindRepositoryList,
     doSuspendedProcessDefinition,
-  } from '/@/api/oa/activiti';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  } from '@/api/oa/activiti';
+  import { usePermission } from '@/hooks/web/usePermission';
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
-  import { useGo } from '/@/hooks/web/usePage';
+  import { useGo } from '@/hooks/web/usePage';
   const go = useGo();
 
   const { hasPermission } = usePermission();

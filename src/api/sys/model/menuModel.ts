@@ -1,5 +1,5 @@
 import type { RouteMeta } from 'vue-router';
-import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
+import { BasicPageParams, BasicFetchResult } from '@/api/model/baseModel';
 export interface RouteItem {
   path: string;
   component: any;

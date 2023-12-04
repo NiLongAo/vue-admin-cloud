@@ -33,10 +33,10 @@
 <script lang="ts" setup>
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doMediaPage, doMediaRemove } from '/@/api/video/mediaServer';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { useDrawer } from '/@/components/Drawer';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doMediaPage, doMediaRemove } from '@/api/video/mediaServer';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { useDrawer } from '@/components/Drawer';
   import MediaDrawer from './MediaDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
   const { hasPermission } = usePermission();

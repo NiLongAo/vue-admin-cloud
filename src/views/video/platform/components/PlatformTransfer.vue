@@ -25,9 +25,9 @@
 </template>
 <script lang="ts" setup>
   import { reactive,h,computed,onMounted,watch} from 'vue';
-  import { BasicTable } from '/@/components/Table';
+  import { BasicTable } from '@/components/Table';
   import { Tag,Transfer } from 'ant-design-vue';
-  import { isEmpty } from '/@/utils/is';
+  import { isEmpty } from '@/utils/is';
   import {
     doPlatformGbChannelList,
     doPlatformChannelBindKey,
@@ -37,7 +37,7 @@
     doPlatformStreamBindKey,
     doPlatformGbStreamInsert,
     doPlatformGbStreamDelete
-  } from '/@/api/video/platform';
+  } from '@/api/video/platform';
 
   const props = defineProps({
     serverGbId: {

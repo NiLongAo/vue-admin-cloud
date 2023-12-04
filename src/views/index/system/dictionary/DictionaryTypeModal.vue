@@ -5,9 +5,9 @@
 </template>
 <script lang="ts" setup>
   import { ref, computed, unref } from 'vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { BasicForm, useForm, FormSchema } from '/@/components/Form/index';
-  import { doDictionaryTypeSave, doDictionaryTypeDetail } from '/@/api/sys/dictionary';
+  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { BasicForm, useForm, FormSchema } from '@/components/Form/index';
+  import { doDictionaryTypeSave, doDictionaryTypeDetail } from '@/api/sys/dictionary';
 
   const isUpdate = ref(true);
   const emit = defineEmits(['success', 'register']);

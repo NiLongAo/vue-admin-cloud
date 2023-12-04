@@ -1,7 +1,7 @@
 import { unref,Ref,reactive,watch ,nextTick} from 'vue';
-import { isEmpty } from '/@/utils/is';
-import { deepMerge } from '/@/utils';
-import { useScript } from '/@/hooks/web/useScript';
+import { isEmpty } from '@/utils/is';
+import { deepMerge } from '@/utils';
+import { useScript } from '@/hooks/web/useScript';
 
 
 export interface JessibucaProps {

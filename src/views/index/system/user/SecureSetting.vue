@@ -40,9 +40,9 @@
 </template>
 <script lang="ts" setup>
   import { List, ListItem, ListItemMeta } from 'ant-design-vue';
-  import { CollapseContainer } from '/@/components/Container';
+  import { CollapseContainer } from '@/components/Container';
   import { unref, reactive, onMounted, onUpdated } from 'vue';
-  import { useModal } from '/@/components/Modal';
+  import { useModal } from '@/components/Modal';
   import SettingTreeMode from './SettingTreeMode.vue';
   import {
     GetUserRole,
@@ -51,7 +51,7 @@
     SaveUserDepartment,
     GetUserPosition,
     SaveUserPosition,
-  } from '/@/api/sys/user';
+  } from '@/api/sys/user';
   defineEmits(['register','success']);
 
   const [registerTreeModal, { openModal: onTreeModel }] = useModal();

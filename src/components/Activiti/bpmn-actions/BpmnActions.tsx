@@ -1,6 +1,6 @@
 import { defineComponent, ref, nextTick, unref } from 'vue';
-import ButtonRender, { ButtonRenderProps } from '/@/components/Activiti/button-render';
-import { BpmnStore } from '/@/components/Activiti/Bpmn/store';
+import ButtonRender, { ButtonRenderProps } from '@/components/Activiti/button-render';
+import { BpmnStore } from '@/components/Activiti/Bpmn/store';
 import CodeMirror from 'codemirror';
 import { Drawer, Input } from 'ant-design-vue';
 import 'codemirror/mode/xml/xml.js';
@@ -8,9 +8,9 @@ import 'codemirror/addon/hint/xml-hint.js';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 
-import '/@/components/Activiti/iconfont';
+import '@/components/Activiti/iconfont';
 import './bpmn-actions.css';
-import { ModdleElement } from '/@/components/Activiti/Bpmn/type';
+import { ModdleElement } from '@/components/Activiti/Bpmn/type';
 
 export default defineComponent({
   name: 'BpmnActions',

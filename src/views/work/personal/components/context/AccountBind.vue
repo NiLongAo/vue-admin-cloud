@@ -20,14 +20,14 @@
   <QrCodeBindModel @register="registerModal" @success="handleSuccess" />
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, TableAction } from '/@/components/Table';
-  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
-  import Icon from '/@/components/Icon/Icon.vue';
+  import { BasicTable, useTable, BasicColumn, TableAction } from '@/components/Table';
+  import { createAsyncComponent } from '@/utils/factory/createAsyncComponent';
+  import Icon from '@/components/Icon/Icon.vue';
   import { h } from 'vue';
   import { Tag, Avatar } from 'ant-design-vue';
-  import { doFindUserBind, doUnBindMiniWeb } from '/@/api/sys/user';
-  import { useModal } from '/@/components/Modal';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { doFindUserBind, doUnBindMiniWeb } from '@/api/sys/user';
+  import { useModal } from '@/components/Modal';
+  import { usePermission } from '@/hooks/web/usePermission';
 
   const { hasPermission } = usePermission();
 

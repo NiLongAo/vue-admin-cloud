@@ -12,13 +12,13 @@
 </template>
 <script lang="ts" setup>
   import { reactive, ref, nextTick } from 'vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { UserInfoApi } from '/@/api/sys/user';
-  import { doConfigDetail } from '/@/api/sys/config';
-  import { PRINT_NAME } from '/@/enums/commonEnum';
+  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { UserInfoApi } from '@/api/sys/user';
+  import { doConfigDetail } from '@/api/sys/config';
+  import { PRINT_NAME } from '@/enums/commonEnum';
   import printJS from 'print-js';
-  import { Description, DescItem, useDescription } from '/@/components/Description/index';
-  import { useWatermark } from '/@/hooks/web/useWatermark';
+  import { Description, DescItem, useDescription } from '@/components/Description/index';
+  import { useWatermark } from '@/hooks/web/useWatermark';
 
   defineEmits(['register']);
 

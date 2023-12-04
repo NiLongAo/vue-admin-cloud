@@ -24,16 +24,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { PageWrapper } from '/@/components/Page';
-  import { VideoDeviceChannelTree ,VideoJessibucaPlay} from '/@/components/Video';
-  import { useUserStoreWithOut } from '/@/store/modules/user';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { PageWrapper } from '@/components/Page';
+  import { VideoDeviceChannelTree ,VideoJessibucaPlay} from '@/components/Video';
+  import { useUserStoreWithOut } from '@/store/modules/user';
   import Icon from '@/components/Icon/Icon.vue';
-  import { doPlayStart } from '/@/api/video/paly';
-  import { isEmpty } from '/@/utils/is';
+  import { doPlayStart } from '@/api/video/paly';
+  import { isEmpty } from '@/utils/is';
   import { reactive } from 'vue';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { setObjToUrlParams } from '/@/utils';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { setObjToUrlParams } from '@/utils';
   const { hasPermission } = usePermission();
   const userStore = useUserStoreWithOut();
 

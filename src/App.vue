@@ -9,7 +9,7 @@
 <script lang="ts" setup>
   import { AppProvider } from '@/components/Application';
   import { useTitle } from '@/hooks/web/useTitle';
-  import { useSocket } from '/@/hooks/socket';
+  import { useSocket } from '@/hooks/socket';
   import { useLocale } from '@/locales/useLocale';
   import { ConfigProvider } from 'ant-design-vue';
 

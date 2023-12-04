@@ -1,8 +1,8 @@
 import { Select } from 'ant-design-vue';
-import ApiSelect from '/@/components/Form/src/components/ApiSelect.vue';
+import ApiSelect from '@/components/Form/src/components/ApiSelect.vue';
 import { debounce } from 'lodash-es';
 import { defineComponent, computed, reactive, unref } from 'vue';
-import { propTypes } from '/@/utils/propTypes';
+import { propTypes } from '@/utils/propTypes';
 import './prefix-label-select.css';
 
 const PrefixLabelSelect = defineComponent({

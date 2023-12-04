@@ -4,10 +4,10 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { BasicModal, useModalInner } from '@/components/Modal';
   import { computed,reactive } from 'vue';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doPlatformCatalogInsert ,doPlatformCatalogUpdate} from '/@/api/video/platform';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doPlatformCatalogInsert ,doPlatformCatalogUpdate} from '@/api/video/platform';
 
   const emit = defineEmits(['success', 'register']);
   const getTitle = computed(() => (stats.isUpdate ?'编辑目录': '新增目录'));

@@ -4,7 +4,7 @@
   </video>
 </template>
 <script lang="ts" setup>
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { useDesign } from '@/hooks/web/useDesign';
   import { ref,reactive,onUnmounted ,watch} from 'vue';
   import { useZlmRtc } from './useZlmRtc';
   const containerRef = ref();

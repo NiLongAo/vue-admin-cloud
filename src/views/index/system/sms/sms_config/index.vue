@@ -39,14 +39,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doRemove, getSmsConfigPage } from '/@/api/sys/smsConfig';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doRemove, getSmsConfigPage } from '@/api/sys/smsConfig';
   import { Tag } from 'ant-design-vue';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { usePermission } from '@/hooks/web/usePermission';
   import { h } from 'vue';
-  import { useDrawer } from '/@/components/Drawer';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { DITE_SMS_TYPE_KEY } from '/@/enums/commonEnum';
+  import { useDrawer } from '@/components/Drawer';
+  import { useSystemStore } from '@/store/modules/system';
+  import { DITE_SMS_TYPE_KEY } from '@/enums/commonEnum';
   import SmsConfigDrawer from './SmsConfigDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
   const systemStore = useSystemStore();

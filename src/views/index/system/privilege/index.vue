@@ -5,12 +5,12 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { PageWrapper } from '/@/components/Page';
+  import { PageWrapper } from '@/components/Page';
   import PrivilegeTree from './PrivilegeTree.vue';
   import PrivilegeCheckbox from './PrivilegeCheckbox.vue';
   import { ref, unref, reactive } from 'vue';
-  import { doTenantMenuPrivilegeTree, doMenuPrivilegeTree } from '/@/api/sys/menu';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { doTenantMenuPrivilegeTree, doMenuPrivilegeTree } from '@/api/sys/menu';
+  import { useMessage } from '@/hooks/web/useMessage';
   import {
     doDepartmentPrivilegeList,
     doDepartmentPrivilegeSave,
@@ -18,7 +18,7 @@
     doPositionPrivilegeSave,
     doRolePrivilegeList,
     doRolePrivilegeSave,
-  } from '/@/api/sys/privilege';
+  } from '@/api/sys/privilege';
 
   const { createMessage } = useMessage();
   const { error } = createMessage;

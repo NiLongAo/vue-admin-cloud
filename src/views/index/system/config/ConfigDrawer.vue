@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doConfigUpdate, doConfigDetail } from '/@/api/sys/config';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doConfigUpdate, doConfigDetail } from '@/api/sys/config';
   import { ref, unref } from 'vue';
 
   const isUpdate = ref(true);

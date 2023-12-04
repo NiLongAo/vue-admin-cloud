@@ -1,6 +1,6 @@
-import { useUserStore } from '/@/store/modules/user';
-import { useSocketStore } from '/@/store/modules/socket';
-import { SocketNamespace } from '/@/enums/SocketEnum';
+import { useUserStore } from '@/store/modules/user';
+import { useSocketStore } from '@/store/modules/socket';
+import { SocketNamespace } from '@/enums/SocketEnum';
 import { Socket } from 'socket.io-client';
 import { watch } from 'vue';
 import { Namespace } from './common';

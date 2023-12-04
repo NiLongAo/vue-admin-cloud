@@ -1,4 +1,4 @@
-import { defHttp } from '/@/utils/http/axios';
+import { defHttp } from '@/utils/http/axios';
 import { MobileMessageParams, MobileMessagePageResultModel } from './model/mobileMessageModel';
 enum Api {
   //发送短信分页

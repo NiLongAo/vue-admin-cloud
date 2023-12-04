@@ -35,13 +35,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { doPositionPage, doPositionRemove } from '/@/api/sys/position';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { doPositionPage, doPositionRemove } from '@/api/sys/position';
   import { nextTick, h } from 'vue';
   import { Tag } from 'ant-design-vue';
-  import { useDrawer } from '/@/components/Drawer';
+  import { useDrawer } from '@/components/Drawer';
   import PositionDrawer from './PositionDrawer.vue';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { usePermission } from '@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
   const [register, { openDrawer }] = useDrawer();
 

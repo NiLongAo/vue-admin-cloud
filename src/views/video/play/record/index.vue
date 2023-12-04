@@ -74,9 +74,9 @@
   import { DatePicker,Slider,List,ListItem,Tag,TimeRangePicker,ButtonGroup,Button,Dropdown,Menu,MenuItem} from 'ant-design-vue';
   import { useRoute } from 'vue-router';
   import { reactive,onMounted,watch} from 'vue';
-  import { useGo } from '/@/hooks/web/usePage';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { PageWrapper } from '/@/components/Page';
+  import { useGo } from '@/hooks/web/usePage';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { PageWrapper } from '@/components/Page';
   import { 
     doRecordList,
     doRecordStartPlay ,
@@ -86,10 +86,10 @@
     doRecordDownloadStop,
     doRecordDownloadList,
     doRecordDownloadDel
-  } from '/@/api/video/record';
-  import { isEmpty } from '/@/utils/is';
-  import { RecordItem } from '/@/api/video/model/recordModel';
-  import { VideoJessibucaPlay } from  '/@/components/Video/index';
+  } from '@/api/video/record';
+  import { isEmpty } from '@/utils/is';
+  import { RecordItem } from '@/api/video/model/recordModel';
+  import { VideoJessibucaPlay } from  '@/components/Video/index';
   import { 
     formatToDateTime,
     stringToFormatString,
@@ -99,11 +99,11 @@
     DATE_TIME_FORMAT,
     DATE_FORMAT,
     DATE_TIME
-  } from '/@/utils/dateUtil';
-  import { setObjToUrlParams } from '/@/utils';
+  } from '@/utils/dateUtil';
+  import { setObjToUrlParams } from '@/utils';
   import { debounce } from 'lodash-es';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { useUserStoreWithOut } from '/@/store/modules/user';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { useUserStoreWithOut } from '@/store/modules/user';
   const userStore = useUserStoreWithOut();
 
 

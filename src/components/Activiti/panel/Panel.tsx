@@ -1,7 +1,7 @@
 import { defineComponent, reactive, watch } from 'vue';
-import { BpmnStore } from '/@/components/Activiti/Bpmn/store';
-import DynamicBinder from '/@/components/Activiti/dynamic-binder';
-import { GroupProperties } from '/@/components/Activiti/Bpmn/config';
+import { BpmnStore } from '@/components/Activiti/Bpmn/store';
+import DynamicBinder from '@/components/Activiti/dynamic-binder';
+import { GroupProperties } from '@/components/Activiti/Bpmn/config';
 import { Collapse, CollapsePanel } from 'ant-design-vue';
 import './panel.css';
 

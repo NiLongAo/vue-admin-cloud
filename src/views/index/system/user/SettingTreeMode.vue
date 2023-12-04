@@ -45,11 +45,11 @@
 </template>
 <script lang="ts" setup>
   import { Transfer } from 'ant-design-vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { BasicTree, TreeActionType } from '/@/components/Tree';
-  import { doAll } from '/@/api/sys/role';
-  import { doDepartmentTree } from '/@/api/sys/department';
-  import { doPositionTree } from '/@/api/sys/position';
+  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { BasicTree, TreeActionType } from '@/components/Tree';
+  import { doAll } from '@/api/sys/role';
+  import { doDepartmentTree } from '@/api/sys/department';
+  import { doPositionTree } from '@/api/sys/position';
   import { ref, unref, computed, nextTick } from 'vue';
 
   interface TreeDataItem {

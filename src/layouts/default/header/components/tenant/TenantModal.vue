@@ -18,15 +18,15 @@
 </template>
 <script lang="ts">
   import { defineComponent, computed, reactive } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { doTenantSelect } from '/@/api/sys/tenant';
-  import { defHttp } from '/@/utils/http/axios';
-  import { useUserStore } from '/@/store/modules/user';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { doTenantSelect } from '@/api/sys/tenant';
+  import { defHttp } from '@/utils/http/axios';
+  import { useUserStore } from '@/store/modules/user';
   import { debounce } from 'lodash-es';
-  import { useTabs } from '/@/hooks/web/useTabs';
-  import { BasicModal, useModalInner } from '/@/components/Modal/index';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { useTabs } from '@/hooks/web/useTabs';
+  import { BasicModal, useModalInner } from '@/components/Modal/index';
+  import { BasicForm, useForm } from '@/components/Form/index';
 
   export default defineComponent({
     name: 'TenantModal',

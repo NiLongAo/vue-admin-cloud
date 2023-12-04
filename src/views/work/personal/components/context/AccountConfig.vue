@@ -28,17 +28,17 @@
 <script lang="ts" setup>
   import { Button, Row, Col } from 'ant-design-vue';
   import { computed, ref, unref, onMounted } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
-  import { CollapseContainer } from '/@/components/Container';
-  import { CropperAvatar } from '/@/components/Cropper';
-  import { UserInfoApi, doUpdateLoginUserInfo } from '/@/api/sys/user';
-  import { useSystemStore } from '/@/store/modules/system';
-  import headerImg from '/@/assets/images/header.jpg';
+  import { BasicForm, useForm } from '@/components/Form/index';
+  import { CollapseContainer } from '@/components/Container';
+  import { CropperAvatar } from '@/components/Cropper';
+  import { UserInfoApi, doUpdateLoginUserInfo } from '@/api/sys/user';
+  import { useSystemStore } from '@/store/modules/system';
+  import headerImg from '@/assets/images/header.jpg';
   import { baseSetschemas } from '../../data';
-  import { uploadApi } from '/@/api/sys/upload';
-  import { SystemEnum } from '/@/enums/systemEnum';
-  import { useUserStore } from '/@/store/modules/user';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { uploadApi } from '@/api/sys/upload';
+  import { SystemEnum } from '@/enums/systemEnum';
+  import { useUserStore } from '@/store/modules/user';
+  import { usePermission } from '@/hooks/web/usePermission';
   const { hasPermission } = usePermission();
 
   const userStore = useUserStore();

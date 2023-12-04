@@ -5,7 +5,7 @@ import {
   getElementTypeListenerProperties,
 } from '../common';
 import { Input } from 'ant-design-vue';
-import PrefixLabelSelect from '/@/components/Activiti/prefix-label-select';
+import PrefixLabelSelect from '@/components/Activiti/prefix-label-select';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
 

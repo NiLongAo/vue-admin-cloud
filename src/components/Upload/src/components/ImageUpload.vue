@@ -26,8 +26,8 @@
 <script lang="ts" setup>
   import { ref, toRefs, watch } from 'vue';
   import { PlusOutlined } from '@ant-design/icons-vue';
-  import { Upload, Modal } from 'ant-design-vue';
-  import type { UploadProps } from 'ant-design-vue';
+  import type { UploadFile, UploadProps } from 'ant-design-vue';
+  import { Modal, Upload } from 'ant-design-vue';
   import { UploadRequestOption } from 'ant-design-vue/lib/vc-upload/interface';
   import { useMessage } from '@/hooks/web/useMessage';
   import { isArray, isFunction, isObject, isString } from '@/utils/is';
@@ -36,6 +36,7 @@
   import { useUploadType } from '../hooks/useUpload';
   import { uploadContainerProps } from '../props';
   import { isImgTypeByName } from '../helper';
+  import { UploadResultStatus } from '@/components/Upload/src/types/typing';
 
   defineOptions({ name: 'ImageUpload' });
 
@@ -46,6 +47,7 @@
   const { t } = useI18n();
   const { createMessage } = useMessage();
   const { accept, helpText, maxNumber, maxSize } = toRefs(props);
+  const isInnerOperate = ref<boolean>(false);
   const { getStringAccept } = useUploadType({
     acceptRef: accept,
     helpTextRef: helpText,
@@ -63,8 +65,18 @@
   watch(
     () => props.value,
     (v) => {
-      if (v && isArray(v)) {
-        fileList.value = v.map((item, i) => {
+      if (isInnerOperate.value) {
+        isInnerOperate.value = false;
+        return;
+      }
+      if (v) {
+        let value: string[] = [];
+        if (isArray(v)) {
+          value = v;
+        } else {
+          value.push(v);
+        }
+        fileList.value = value.map((item, i) => {
           if (item && isString(item)) {
             return {
               uid: -i + '',
@@ -77,34 +89,39 @@
           } else {
             return;
           }
-        }) as UploadProps['fileList'][number];
+        }) as UploadProps['fileList'];
       }
     },
   );
 
-  function getBase64(file: File) {
-    return new Promise((resolve, reject) => {
+  function getBase64<T extends string | ArrayBuffer | null>(file: File) {
+    return new Promise<T>((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
+      reader.onload = () => {
+        resolve(reader.result as T);
+      };
       reader.onerror = (error) => reject(error);
     });
   }
 
-  const handlePreview = async (file: UploadProps['fileList'][number]) => {
+  const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      file.preview = (await getBase64(file.originFileObj)) as string;
+      file.preview = await getBase64<string>(file.originFileObj!);
     }
-    previewImage.value = file.url || file.preview;
+    previewImage.value = file.url || file.preview || '';
     previewOpen.value = true;
-    previewTitle.value = file.name || file.url.substring(file.url.lastIndexOf('/') + 1);
+    previewTitle.value =
+      file.name || previewImage.value.substring(previewImage.value.lastIndexOf('/') + 1);
   };
 
-  const handleRemove = async (file: UploadProps['fileList'][number]) => {
+  const handleRemove = async (file: UploadFile) => {
     if (fileList.value) {
-      const index = fileList.value.findIndex((item: any) => item.uuid === file.uuid);
+      const index = fileList.value.findIndex((item) => item.uid === file.uid);
       index !== -1 && fileList.value.splice(index, 1);
-      emit('change', fileList.value);
+      const value = getValue();
+      isInnerOperate.value = true;
+      emit('change', value);
       emit('delete', file);
     }
   };
@@ -149,11 +166,22 @@
         filename: props.filename,
       });
       info.onSuccess!(res.data);
-      emit('change', fileList.value);
+      const value = getValue();
+      isInnerOperate.value = true;
+      emit('change', value);
     } catch (e: any) {
       console.log(e);
       info.onError!(e);
     }
+  }
+
+  function getValue() {
+    const list = (fileList.value || [])
+      .filter((item) => item?.status === UploadResultStatus.DONE)
+      .map((item: any) => {
+        return item?.url || item?.response?.url;
+      });
+    return props.multiple ? list : list.length > 0 ? list[0] : '';
   }
 </script>
 

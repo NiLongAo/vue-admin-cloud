@@ -12,11 +12,12 @@
   import type { TableActionType } from '@/components/Table';
   import { Col, Divider, Form } from 'ant-design-vue';
   import { componentMap } from '../componentMap';
-  import { BasicHelp } from '@/components/Basic';
+  import { BasicHelp, BasicTitle } from '@/components/Basic';
   import { isBoolean, isFunction, isNull } from '@/utils/is';
   import { getSlot } from '@/utils/helper/tsxHelper';
   import {
     createPlaceholderMessage,
+    isIncludeSimpleComponents,
     NO_AUTO_LINK_COMPONENTS,
     setComponentRuleType,
   } from '../helper';
@@ -89,7 +90,7 @@
         if (isFunction(componentProps)) {
           componentProps = componentProps({ schema, tableAction, formModel, formActionType }) ?? {};
         }
-        if (schema.component === 'Divider') {
+        if (isIncludeSimpleComponents(schema.component)) {
           componentProps = Object.assign(
             { type: 'horizontal' },
             {
@@ -114,6 +115,21 @@
           disabled = dynamicDisabled(unref(getValues));
         }
         return disabled;
+      });
+
+      const getReadonly = computed(() => {
+        const { readonly: globReadonly } = props.formProps;
+        const { dynamicReadonly } = props.schema;
+        const { readonly: itemReadonly = false } = unref(getComponentsProps);
+
+        let readonly = globReadonly || itemReadonly;
+        if (isBoolean(dynamicReadonly)) {
+          readonly = dynamicReadonly;
+        }
+        if (isFunction(dynamicReadonly)) {
+          readonly = dynamicReadonly(unref(getValues));
+        }
+        return readonly;
       });
 
       function getShow(): { isShow: boolean; isIfShow: boolean } {
@@ -280,6 +296,7 @@
           size,
           ...unref(getComponentsProps),
           disabled: unref(getDisable),
+          readonly: unref(getReadonly),
         };
 
         const isCreatePlaceholder = !propsData.disabled && autoSetPlaceHolder;
@@ -305,7 +322,12 @@
           return <Comp {...compAttr} />;
         }
         const compSlot = isFunction(renderComponentContent)
-          ? { ...renderComponentContent(unref(getValues), { disabled: unref(getDisable) }) }
+          ? {
+              ...renderComponentContent(unref(getValues), {
+                disabled: unref(getDisable),
+                readonly: unref(getReadonly),
+              }),
+            }
           : {
               default: () => renderComponentContent,
             };
@@ -339,12 +361,23 @@
         const { itemProps, slot, render, field, suffix, component } = props.schema;
         const { labelCol, wrapperCol } = unref(itemLabelWidthProp);
         const { colon } = props.formProps;
-        const opts = { disabled: unref(getDisable) };
+        const opts = { disabled: unref(getDisable), readonly: unref(getReadonly) };
         if (component === 'Divider') {
           return (
             <Col span={24}>
               <Divider {...unref(getComponentsProps)}>{renderLabelHelpMessage()}</Divider>
             </Col>
+          );
+        } else if (component === 'BasicTitle') {
+          return (
+            <Form.Item
+              labelCol={labelCol}
+              wrapperCol={wrapperCol}
+              name={field}
+              class={{ 'suffix-item': !!suffix }}
+            >
+              <BasicTitle {...unref(getComponentsProps)}>{renderLabelHelpMessage()}</BasicTitle>
+            </Form.Item>
           );
         } else {
           const getContent = () => {
@@ -397,7 +430,7 @@
         const realColProps = { ...baseColProps, ...colProps };
         const { isIfShow, isShow } = getShow();
         const values = unref(getValues);
-        const opts = { disabled: unref(getDisable) };
+        const opts = { disabled: unref(getDisable), readonly: unref(getReadonly) };
 
         const getContent = () => {
           return colSlot

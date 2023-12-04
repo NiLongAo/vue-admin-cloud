@@ -11,7 +11,7 @@
 
 <script lang="ts" setup>
   import { PropType, reactive, watch, ref } from 'vue';
-  import type { BasicTableProps } from '/@/components/Table/src/types/table';
+  import type { BasicTableProps } from '@/components/Table/src/types/table';
   import {
     BasicTable,
     useTable,
@@ -19,9 +19,9 @@
     BasicColumn,
     ActionItem,
     EditRecordRow,
-  } from '/@/components/Table';
+  } from '@/components/Table';
   import { SubListState } from './type';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useMessage } from '@/hooks/web/useMessage';
   import { cloneDeep } from 'lodash-es';
   const { createMessage: msg } = useMessage();
   const emit = defineEmits(['update:value']);

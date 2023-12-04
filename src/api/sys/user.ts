@@ -1,5 +1,5 @@
-import { defHttp } from '/@/utils/http/axios';
-import type { RequestOptions } from '/#/axios';
+import { defHttp } from '@/utils/http/axios';
+import type { RequestOptions } from '#/axios';
 import {
   LoginParams,
   LoginResultModel,
@@ -8,7 +8,7 @@ import {
   UserPageResultModel,
   UserParams,
 } from './model/userModel';
-import { ErrorMessageMode } from '/#/axios';
+import { ErrorMessageMode } from '#/axios';
 
 enum Api {
   //登录

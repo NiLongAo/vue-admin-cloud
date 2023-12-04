@@ -26,8 +26,8 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
   import { Tabs } from 'ant-design-vue';
-  import { ScrollContainer } from '/@/components/Container/index';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { ScrollContainer } from '@/components/Container/index';
+  import { BasicModal, useModalInner } from '@/components/Modal';
   import { settingUpdateList, settingInsertList } from './data';
 
   const props = defineProps({

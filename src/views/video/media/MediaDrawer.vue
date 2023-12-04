@@ -15,9 +15,9 @@
 
 <script lang="ts" setup>
   import { ref, computed, unref } from 'vue';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doMediaDetail, doMediaSave } from '/@/api/video/mediaServer';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doMediaDetail, doMediaSave } from '@/api/video/mediaServer';
 
   const emit = defineEmits(['success', 'register']);
   const isUpdate = ref(true);

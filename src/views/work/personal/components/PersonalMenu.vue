@@ -18,9 +18,9 @@
 </template>
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
-  import { useUserStore } from '/@/store/modules/user';
+  import { useUserStore } from '@/store/modules/user';
   import { Row, Col, Divider, Menu } from 'ant-design-vue';
-  import MenuItem from '/@/layouts/default/header/components/user-dropdown/DropMenuItem.vue';
+  import MenuItem from '@/layouts/default/header/components/user-dropdown/DropMenuItem.vue';
   export type ButtonType = 'account_config' | 'account_bind' | 'mail_config';
   const key = ref(['account_config']);
 

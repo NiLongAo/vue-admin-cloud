@@ -15,9 +15,9 @@
 
 <script lang="ts" setup>
   import { ref, computed, unref } from 'vue';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { doPushDetail, doPushSave } from '/@/api/video/push';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
+  import { doPushDetail, doPushSave } from '@/api/video/push';
 
   const emit = defineEmits(['success', 'register']);
   const isUpdate = ref(true);

@@ -18,8 +18,8 @@
 <script lang="ts" setup>
   import { ref, unref, watch } from 'vue';
   import { CheckboxGroupEntity } from './model/privilege';
-  import { usePermission } from '/@/hooks/web/usePermission';
-  import { ScrollContainer } from '/@/components/Container/index';
+  import { usePermission } from '@/hooks/web/usePermission';
+  import { ScrollContainer } from '@/components/Container/index';
   import MyCheckBox from './MyCheckBox.vue';
 
   const { hasPermission } = usePermission();

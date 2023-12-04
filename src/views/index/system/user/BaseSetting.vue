@@ -24,16 +24,16 @@
 <script lang="ts" setup>
   import { Button, Row, Col } from 'ant-design-vue';
   import { computed, ref, unref, onMounted } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
-  import { CollapseContainer } from '/@/components/Container';
-  import { CropperAvatar } from '/@/components/Cropper';
-  import { UserInfoApi, doInsert, doUpdate } from '/@/api/sys/user';
-  import { useSystemStore } from '/@/store/modules/system';
-  import headerImg from '/@/assets/images/header.jpg';
+  import { BasicForm, useForm } from '@/components/Form/index';
+  import { CollapseContainer } from '@/components/Container';
+  import { CropperAvatar } from '@/components/Cropper';
+  import { UserInfoApi, doInsert, doUpdate } from '@/api/sys/user';
+  import { useSystemStore } from '@/store/modules/system';
+  import headerImg from '@/assets/images/header.jpg';
   import { baseSetschemas, insertSetschemas } from './data';
-  import { uploadApi } from '/@/api/sys/upload';
-  import { SystemEnum } from '/@/enums/systemEnum';
-  import { isFunction } from '/@/utils/is';
+  import { uploadApi } from '@/api/sys/upload';
+  import { SystemEnum } from '@/enums/systemEnum';
+  import { isFunction } from '@/utils/is';
 
   const systemStore = useSystemStore();
   const staticPath = systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH];

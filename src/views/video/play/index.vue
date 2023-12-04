@@ -62,20 +62,20 @@
 </template>
 
 <script lang="ts" setup>
-  import { PageWrapper } from '/@/components/Page';
-  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '/@/components/Table';
-  import { usePermission } from '/@/hooks/web/usePermission';
+  import { PageWrapper } from '@/components/Page';
+  import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
+  import { usePermission } from '@/hooks/web/usePermission';
   import { h } from 'vue';
   import { Tag } from 'ant-design-vue';
-  import { useDrawer } from '/@/components/Drawer';
-  import { useModal } from '/@/components/Modal';
-  import { doDevicePage ,doDelDeviceId} from '/@/api/video/device';
-  import { doSyncDeviceChannel } from '/@/api/video/deviceChannel';
+  import { useDrawer } from '@/components/Drawer';
+  import { useModal } from '@/components/Modal';
+  import { doDevicePage ,doDelDeviceId} from '@/api/video/device';
+  import { doSyncDeviceChannel } from '@/api/video/deviceChannel';
   import DeviceDrawer from './DeviceDrawer.vue';
   import DeviceChannelSyncModel from './channel/DeviceChannelSyncModel.vue';
-  import { useSystemStore } from '/@/store/modules/system';
-  import { TRANSPORT_TYPE_ENUM ,STREAM_MODE_TYPE_ENUM,TREE_TYPE_ENUM} from '/@/enums/commonEnum';
-  import { useGo } from '/@/hooks/web/usePage';
+  import { useSystemStore } from '@/store/modules/system';
+  import { TRANSPORT_TYPE_ENUM ,STREAM_MODE_TYPE_ENUM,TREE_TYPE_ENUM} from '@/enums/commonEnum';
+  import { useGo } from '@/hooks/web/usePage';
   const go = useGo();
 
   const systemStore = useSystemStore();
