@@ -33,19 +33,19 @@ export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
         controlAutoHide: false,
         debug: false,
         decoder: publicPath+"script/jessibuca/decoder.js",
-        forceNoOffscreen: true,
+        forceNoOffscreen: false,
         hasAudio: typeof (jessibucaProps.hasAudio) == "undefined" ? true : jessibucaProps.hasAudio,
         hasVideo: true,
         heartTimeout: 5,
         heartTimeoutReplay: true,
         heartTimeoutReplayTimes:-1,
         hiddenAutoPause: false,
-        hotKey: false,
+        hotKey: true,
         isFlv: false,
         isFullResize: false,
         isNotMute: stats.isMute,
         isResize: false,
-        keepScreenOn: false,
+        keepScreenOn: true,
         loadingText: "请稍等, 视频加载中......",
         loadingTimeout: 5,
         loadingTimeoutReplay: true,
@@ -58,17 +58,15 @@ export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
           audio: false,
           record: false
         },
-        recordType: "webm",
+        recordType: "mp4",
         rotate: 0,
         showBandwidth: false,
-        supportDblclickFullscreen: true,
-        timeout: 5,
-        useMSE: location.hostname !== "localhost" && location.protocol !== "https:",
-        useOffscreen: false,
-        useWCS: location.hostname === "localhost" || location.protocol === "https",
-        useWebFullScreen: false,
-        videoBuffer: 0,
-        wasmDecodeAudioSyncVideo: true,
+        supportDblclickFullscreen: false,
+        timeout: 10,
+        useMSE: true,
+        useWCS: location.hostname === "localhost" || location.protocol === "https:",
+        useWebFullScreen: true,
+        videoBuffer: 0.1,
         wasmDecodeErrorReplay: true,
         wcsUseVideoRender: true
       },
@@ -83,16 +81,7 @@ export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
       return;
     }
     jessibucaPlayer = new (window as any).Jessibuca({...{container: unref(container)},...options});
-    jessibucaPlayer.on("load", function () {
-      console.log("on load init");
-    });
 
-    jessibucaPlayer.on("log", function (msg) {
-      console.log("on log", msg);
-    });
-    jessibucaPlayer.on("record", function (msg) {
-      console.log("on record:", msg);
-    });
     jessibucaPlayer.on("pause", function () {
       stats.playing = false;
     });
@@ -100,41 +89,12 @@ export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
       stats.playing = true;
     });
     jessibucaPlayer.on("fullscreen", function (msg) {
-      console.log("on fullscreen", msg);
       stats.fullscreen = msg
     });
 
     jessibucaPlayer.on("mute", function (msg) {
-      console.log("on mute", msg);
       stats.isMute = !msg;
     });
-    jessibucaPlayer.on("audioInfo", function (msg) {
-      console.log("audioInfo", msg);
-    });
-
-    jessibucaPlayer.on("bps", function (bps) {
-      // console.log('bps', bps);
-
-    });
-    jessibucaPlayer.on("timeUpdate", function (ts) {
-      // console.log('timeUpdate,old,new,timestamp', _ts, ts, ts - _ts);
-    });
-
-    jessibucaPlayer.on("videoInfo", function (info) {
-      console.log("videoInfo", info);
-    });
-
-    jessibucaPlayer.on("error", function (error) {
-      console.log("error", error);
-    });
-
-    jessibucaPlayer.on("timeout", function () {
-      console.log("timeout");
-    });
-
-    jessibucaPlayer.on('start', function () {
-      console.log('start');
-    })
 
     jessibucaPlayer.on("performance", function (performance) {
       let show = "卡顿";
@@ -145,24 +105,30 @@ export function useJessibuca(container: Ref,jessibucaProps:JessibucaProps){
       }
       performance = show;
     });
-    jessibucaPlayer.on('buffer', function (buffer) {
-      // console.log('buffer', buffer);
-    })
-
-    jessibucaPlayer.on('stats', function (stats) {
-      // console.log('stats', stats);
-    })
 
     jessibucaPlayer.on('kBps', function (kBps) {
       stats.kBps = Math.round(kBps);
     });
-    // 显示时间戳 PTS
-    jessibucaPlayer.on('videoFrame', function () {
-
-    })
-
-    jessibucaPlayer.on('metadata', function () {
-
+    jessibucaPlayer.on("videoInfo", function (msg) {
+      console.log("Jessibuca -> videoInfo: ", msg);
+    });
+    jessibucaPlayer.on("audioInfo", function (msg) {
+      console.log("Jessibuca -> audioInfo: ", msg);
+    });
+    jessibucaPlayer.on("error", function (msg) {
+      console.log("Jessibuca -> error: ", msg);
+    });
+    jessibucaPlayer.on("timeout", function (msg) {
+      console.log("Jessibuca -> timeout: ", msg);
+    });
+    jessibucaPlayer.on("loadingTimeout", function (msg) {
+      console.log("Jessibuca -> timeout: ", msg);
+    });
+    jessibucaPlayer.on("delayTimeout", function (msg) {
+      console.log("Jessibuca -> timeout: ", msg);
+    });
+    jessibucaPlayer.on("playToRenderTimes", function (msg) {
+      console.log("Jessibuca -> playToRenderTimes: ", msg);
     });
     stats.destroy =false;
   }
