@@ -38,7 +38,7 @@
 </template>
 <script lang="ts" setup>
   import { computed, ref, reactive, unref, watch, onBeforeMount } from 'vue';
-  import { Popover, Tabs, Badge } from 'ant-design-vue';
+  import { Popover, Tabs, Badge,TabPane } from 'ant-design-vue';
   import { BellOutlined } from '@ant-design/icons-vue';
   import { tabListData, ListItem } from './data';
   import UserNoticeModel from './UserNoticeModel.vue';

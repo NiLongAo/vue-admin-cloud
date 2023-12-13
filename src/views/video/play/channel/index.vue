@@ -272,7 +272,7 @@
       },
       {
         title: '录像状态',
-        field: 'hasAudio',
+        field: 'hasRecord',
         width: 100,
         slots: {
           default: ({ row }) => {
