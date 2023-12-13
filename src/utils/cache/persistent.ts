@@ -1,4 +1,4 @@
-import type { LockInfo, UserInfo } from '#/store';
+import type { LockInfo, UserInfo, TableSetting } from '#/store';
 import type { ProjectConfig } from '#/config';
 import type { RouteLocationNormalized } from 'vue-router';
 import { AreaEntity } from '@/api/sys/model/systemModel';
@@ -20,6 +20,7 @@ import {
   AREA_KEY,
   DITC_KEY,
   REMEMBER,
+  TABLE_SETTING_KEY,
   CHECK_URL_TOKEN_KEY,
 } from '@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting';
@@ -36,6 +37,7 @@ interface BasicStore {
   [SYSYTEM_KEY]: Recordable;
   [PROJ_CFG_KEY]: ProjectConfig;
   [MULTIPLE_TABS_KEY]: RouteLocationNormalized[];
+  [TABLE_SETTING_KEY]: Partial<TableSetting>;
   [AREA_KEY]: Array<AreaEntity>;
   [DITC_KEY]: Recordable;
   [REMEMBER]: RememberLoing;
