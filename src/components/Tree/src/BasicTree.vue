@@ -162,7 +162,6 @@
         return unref(treeDataRef);
       }
 
-
       function setExpandedKeys(keys: KeyType[]) {
         state.expandedKeys = keys;
       }
