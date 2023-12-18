@@ -23,7 +23,8 @@ export * from './axiosTransform';
 export class VAxios {
   private axiosInstance: AxiosInstance;
   private readonly options: CreateAxiosOptions;
-  private requests = []; // 存储待重发请求的数组(同时发起多个请求的处理)
+  private isRefreshing = false;
+  private requests = [] as Array<any>; // 存储待重发请求的数组(同时发起多个请求的处理)
 
   constructor(options: CreateAxiosOptions) {
     this.options = options;
@@ -50,7 +51,21 @@ export class VAxios {
   getOptions(): CreateAxiosOptions {
     return this.options;
   }
-
+  getIsRefreshing(): boolean {
+    return this.isRefreshing;
+  }
+  setIsRefreshing(isRefreshing:boolean){
+   this.isRefreshing = isRefreshing;
+  }
+  getRequests() :Array<any>{
+    return this.requests;
+  }
+  cloneRequests(){
+    this.requests=[];
+ }
+  setRequests(requests:any){
+     this.requests.push(requests);
+  }
   /**
    * @description: Reconfigure axios
    */
@@ -115,7 +130,7 @@ export class VAxios {
     this.axiosInstance.interceptors.response.use(async (res: AxiosResponse<any>) => {
       res && axiosCanceler.removePending(res.config);
       if (responseInterceptors && isFunction(responseInterceptors)) {
-        res = await responseInterceptors(this.axiosInstance, res);
+        res = await responseInterceptors(this,this.axiosInstance, res);
       }
       return res;
     }, undefined);

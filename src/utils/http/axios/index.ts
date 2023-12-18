@@ -181,7 +181,7 @@ const transform: AxiosTransform = {
    * @description: 响应拦截器处理
    * 无感token 刷新策略
    */
-  responseInterceptors: async (axiosInstance: AxiosInstance, res: AxiosResponse<any>) => {
+  responseInterceptors: async (axios:VAxios,axiosInstance: AxiosInstance, res: AxiosResponse<any>) => {
     const { t } = useI18n();
     const { data: resData } = res;
     if (!resData) {
@@ -193,16 +193,33 @@ const transform: AxiosTransform = {
     const userStore = useUserStoreWithOut();
     switch (code) {
       case ResultEnum.OVERDUE:
-        if (userStore.getRefreshToken !== undefined) {
-          userStore.setToken(undefined, userStore.getRefreshToken);
-          await userStore.refreshToken();
-          if (userStore.getToken == undefined) {
-            await userStore.logout(true);
-          } else {
-            res = await axiosInstance(res.config);
-          }
+        if(!axios.getIsRefreshing()){
+          axios.setIsRefreshing(true);
+          res = new Promise(async(resolve)=>{
+            axios.setRequests({config:res.config,resl:resolve});
+            const aaa = axios.getRequests();
+            if (userStore.getRefreshToken !== undefined) {
+              userStore.setToken(undefined, userStore.getRefreshToken);
+              await userStore.refreshToken();
+              if (userStore.getToken == undefined) {
+                await userStore.logout(true);
+              } else {
+                const aaa =axios.getRequests();
+                axios.getRequests().forEach(({config,resl}) =>
+                  resl(axiosInstance(config))
+                );
+              }
+            }else{
+              await userStore.logout(true);
+              resolve(res);
+            }
+            axios.cloneRequests();
+            axios.setIsRefreshing(false);
+          })
         }else{
-          await userStore.logout(true);
+          res = new Promise((resolve)=>{
+            axios.setRequests({config:res.config,resl:resolve});
+          })
         }
         break;
     }

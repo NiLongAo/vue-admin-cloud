@@ -8,6 +8,7 @@ import type {
   InternalAxiosRequestConfig,
 } from 'axios';
 import type { RequestOptions, Result } from '#/axios';
+import { VAxios } from './Axios';
 
 export interface CreateAxiosOptions extends AxiosRequestConfig {
   authenticationScheme?: string;
@@ -44,6 +45,7 @@ export abstract class AxiosTransform {
    * @description: 请求之后的拦截器
    */
   responseInterceptors?: (
+    axios:VAxios,
     axiosInstance: AxiosInstance,
     res: AxiosResponse<any>,
   ) => Promise<AxiosResponse<any>>;
