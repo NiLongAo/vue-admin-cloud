@@ -173,10 +173,6 @@ export const useUserStore = defineStore({
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
       const sessionTimeout = this.sessionTimeout;
-      const systemStore = await useSystemStore();
-      await systemStore.getSystemConfigAction(); //加载权限配置信息
-      await systemStore.getAreaListAction(); //加载省市区配置信息
-      await systemStore.getDictMapAction(); //加载后端字典配置类
       // get user info
       const userInfo = await this.getUserInfoAction();
       if (sessionTimeout) {
@@ -198,6 +194,9 @@ export const useUserStore = defineStore({
     async getUserInfoAction(): Promise<UserInfo | null> {
       const systemStore = useSystemStore();
       if (!this.getToken) return null;
+      systemStore.getSystemConfigAction(); //加载权限配置信息
+      systemStore.getAreaListAction(); //加载省市区配置信息
+      systemStore.getDictMapAction(); //加载后端字典配置类
       const userInfo = await getUserInfo();
       const { roleIdList = [], privilegeList = [], imageUrl } = userInfo;
       if (isArray(roleIdList)) {

@@ -18,6 +18,7 @@ import { useErrorLogStoreWithOut } from '@/store/modules/errorLog';
 import { useI18n } from '@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
 import { useUserStoreWithOut } from '@/store/modules/user';
+import { useServiceStoreWithOut } from '@/store/modules/service';
 import { AxiosRetry } from '@/utils/http/axios/axiosRetry';
 import axios from 'axios';
 
@@ -181,7 +182,7 @@ const transform: AxiosTransform = {
    * @description: 响应拦截器处理
    * 无感token 刷新策略
    */
-  responseInterceptors: async (axios:VAxios,axiosInstance: AxiosInstance, res: AxiosResponse<any>) => {
+  responseInterceptors: async (axiosInstance: AxiosInstance, res: AxiosResponse<any>) => {
     const { t } = useI18n();
     const { data: resData } = res;
     if (!resData) {
@@ -191,21 +192,20 @@ const transform: AxiosTransform = {
     //  这里 code，data，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code } = resData;
     const userStore = useUserStoreWithOut();
+    const useService = useServiceStoreWithOut();
     switch (code) {
       case ResultEnum.OVERDUE:
-        if(!axios.getIsRefreshing()){
-          axios.setIsRefreshing(true);
+        if(!useService.getIsRefreshing){
+          useService.setIsRefreshing(true);
           res = new Promise(async(resolve)=>{
-            axios.setRequests({config:res.config,resl:resolve});
-            const aaa = axios.getRequests();
+            useService.setRequests({config:res.config,resl:resolve});
             if (userStore.getRefreshToken !== undefined) {
               userStore.setToken(undefined, userStore.getRefreshToken);
               await userStore.refreshToken();
               if (userStore.getToken == undefined) {
                 await userStore.logout(true);
               } else {
-                const aaa =axios.getRequests();
-                axios.getRequests().forEach(({config,resl}) =>
+                useService.getRequests.forEach(({config,resl}) =>
                   resl(axiosInstance(config))
                 );
               }
@@ -213,13 +213,13 @@ const transform: AxiosTransform = {
               await userStore.logout(true);
               resolve(res);
             }
-            axios.cloneRequests();
-            axios.setIsRefreshing(false);
-          })
+            useService.cloneRequests();
+            useService.setIsRefreshing(false);
+          }) as any;
         }else{
           res = new Promise((resolve)=>{
-            axios.setRequests({config:res.config,resl:resolve});
-          })
+            useService.setRequests({config:res.config,resl:resolve});
+          }) as any;
         }
         break;
     }
