@@ -31,7 +31,7 @@ export function doAll(params) {
   return defHttp.get({ url: Api.all, params });
 }
 
-export function doSave(params: RoleModel) {
+export function doSave(params: Recordable) {
   return defHttp.post({ url: Api.save, params });
 }
 

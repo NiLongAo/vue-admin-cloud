@@ -83,7 +83,7 @@ export function useDataSource(
       searchState.sortInfo = sortInfo;
       params.sortInfo = sortInfo;
       //点击排序后清空默认排序
-      unref(propsRef).defSort = {};
+      //unref(propsRef).defSort = {};
     }
 
     if (filters && isFunction(filterFn)) {

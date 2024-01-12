@@ -59,9 +59,7 @@
     try {
       const values = await validate();
       //新增
-      await doSave({
-        ...values,
-      });
+      await doSave({...values});
       setDrawerProps({ confirmLoading: true });
       closeDrawer();
       emit('success');
