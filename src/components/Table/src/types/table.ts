@@ -21,9 +21,12 @@ export interface TableCurrentDataSource<T = Recordable> {
 export interface TableRowSelection<T = any> extends ITableRowSelection {
   /**
    * Callback executed when selected rows change
-   * @type Function
+   * @param selectedRowKeys 已选的keys
+   * @param selectedRows 已选的records
+   * @param isClickCustomRow 是否是点击行触发（反之，就是点击checkbox/radiobox）
+   * @returns void
    */
-  onChange?: (selectedRowKeys: Key[], selectedRows: T[]) => any;
+  onChange?: (selectedRowKeys: Key[], selectedRows: T[], isClickCustomRow?: boolean) => void;
 
   /**
    * Callback executed when select/deselect one row
@@ -87,7 +90,7 @@ export interface GetColumnsParams {
 export type SizeType = 'default' | 'middle' | 'small' | 'large';
 
 export interface TableActionType {
-  reload: (opt?: FetchParams) => Promise<void>;
+  reload: (opt?: FetchParams) => Promise<Recordable<any>[] | undefined>;
   setSelectedRows: (rows: Recordable[]) => void;
   getSelectRows: <T = Recordable>() => T[];
   clearSelectedRowKeys: () => void;
@@ -148,6 +151,7 @@ export interface BasicTableProps<T = any> {
   // 点击行选中
   clickToRowSelect?: boolean;
   isTreeTable?: boolean;
+  accordion?: boolean; // isTreeTable 或 expandRowByClick 时支持
   // 自定义排序方法
   sortFn?: (sortInfo: SorterResult) => any;
   // 排序方法
@@ -311,6 +315,12 @@ export interface BasicTableProps<T = any> {
    * @type object
    */
   rowSelection?: TableRowSelection;
+
+  /**
+   * Show table selection bar（显示多选状态栏）
+   * @type boolean
+   */
+  showSelectionBar?: boolean;
 
   /**
    * Set horizontal or vertical scrolling, can also be used to specify the width and height of the scroll area.
@@ -487,6 +497,11 @@ export type ColumnChangeParam = {
 
 export interface InnerHandlers {
   onColumnsChange: (data: ColumnChangeParam[]) => void;
+}
+
+export interface InnerMethods {
+  clearSelectedRowKeys: TableActionType['clearSelectedRowKeys'];
+  getSelectRowKeys: TableActionType['getSelectRowKeys'];
 }
 
 export interface ColumnOptionsType {

@@ -1,19 +1,17 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'action'">
-          <TableAction
-            :actions="[
-              {
-                ifShow: hasPermission('system.logs:detail'),
-                icon: 'clarity:info-standard-line',
-                tooltip: '详情',
-                onClick: handleDetail.bind(null, record),
-              },
-            ]"
-          />
-        </template>
+      <template #action="{ record }">
+        <TableAction 
+          :actions="[
+            {
+              ifShow: hasPermission('system.logs:detail'),
+              icon: 'clarity:info-standard-line',
+              tooltip: '详情',
+              onClick: handleDetail.bind(null, record),
+            },
+          ]"
+        />
       </template>
     </BasicTable>
     <LogsDrawer @register="register" />
@@ -62,6 +60,7 @@
       width: 160,
       title: '操作',
       dataIndex: 'action',
+      slots: { customRender: 'action' },
     },
   });
   function handleDetail(record: Recordable) {
@@ -84,7 +83,7 @@
             xxl: 5,
           },
           componentProps: {
-            options: logsEnum,
+            options: logsEnum as any,
           },
         },
         {

@@ -11,8 +11,8 @@ export async function useSocket() {
   const notTokenNamespaceMap: Record<SocketNamespace, Namespace> | {} = {},
     tokenNamespaceMap: Record<SocketNamespace, Namespace> | {} = {};
   //获取namespace 下所有空间
-  const namespaceFiles = import.meta.globEager('./namespace/**/*.ts');
-  Object.keys(namespaceFiles).forEach((key) => {
+  const namespaceFiles:Record<SocketNamespace,any> = import.meta.glob('./namespace/**/*.ts', { eager: true });
+  Object.keys(namespaceFiles).forEach((key: string | SocketNamespace) => {
     const namespace: Namespace = new namespaceFiles[key].default();
     const param = namespace.getParam();
     if (!param.token) {
@@ -23,7 +23,7 @@ export async function useSocket() {
   watch(
     () => userStore.getToken,
     () => {
-      Object.keys(tokenNamespaceMap).forEach(async (key: SocketNamespace) => {
+      Object.keys(tokenNamespaceMap).forEach(async (key: string | SocketNamespace) => {
         const namespace: Namespace = tokenNamespaceMap[key];
         const socket = namespace.getSocket();
         if (socket) {
@@ -31,7 +31,7 @@ export async function useSocket() {
         }
       });
       if (userStore.getToken) {
-        Object.keys(tokenNamespaceMap).forEach(async (key: SocketNamespace) => {
+        Object.keys(tokenNamespaceMap).forEach(async (key: string | SocketNamespace) => {
           const namespace: Namespace = tokenNamespaceMap[key];
           let socket = namespace.getSocket();
           //创建Socket监听

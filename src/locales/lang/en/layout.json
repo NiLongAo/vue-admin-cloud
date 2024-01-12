@@ -7,7 +7,6 @@
     "dropdownChangeApi": "Change Api", 
     "dropdownItemDoc": "Document", 
     "dropdownItemLoginOut": "Log Out", 
-    "tooltipPersonalCenter": "Personal Center",
     "tooltipErrorLog": "Error log", 
     "tooltipLock": "Lock screen", 
     "tooltipNotify": "Notification", 
@@ -16,10 +15,11 @@
     "lockScreenPassword": "Lock screen password", 
     "lockScreen": "Lock screen", 
     "lockScreenBtn": "Locking", 
+    "home": "Home",
+    "tooltipPersonalCenter": "Personal Center",
     "switchTenants": "Switch Tenants",
     "tenantName": "Tenants",
-    "switch": "Switch",
-    "home": "Home"
+    "switch": "Switch"
   },
   "multipleTab": {
     "reload": "Refresh current",

@@ -20,6 +20,7 @@
       <InputPassword
         size="large"
         visibilityToggle
+        autocomplete
         v-model:value="formData.password"
         :placeholder="t('sys.login.password')"
       />

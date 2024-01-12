@@ -143,7 +143,7 @@ export class EncryptionFactory {
   public static createAesEncryption(params?: EncryptionParams): Encryption {
     return new AesEncryption({...params});
   }
-  
+
   public static createBase64Encryption(): Encryption {
     return Base64Encryption.getInstance();
   }

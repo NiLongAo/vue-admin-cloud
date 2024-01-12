@@ -31,6 +31,9 @@ export default defineApplicationConfig({
           rewrite: (path) => path.replace(new RegExp(`^/upload`), ''),
         },
       },
+      warmup: {
+        clientFiles: ['./index.html', './src/{views,components}/*'],
+      },
     },
     //解决  vue-i18n 报错 Failed to resolve entry for package "@intlify/shared" 后续版本修复后再克删除
     // https://github.com/intlify/vue-i18n-next/issues/1521

@@ -81,7 +81,7 @@
       },
       componentProps: {
         disabled: true,
-        autosize: true,
+        autoSize: true,
       },
     },
     {
@@ -93,7 +93,7 @@
       },
       componentProps: {
         disabled: true,
-        autosize: true,
+        autoSize: true,
       },
     },
     {

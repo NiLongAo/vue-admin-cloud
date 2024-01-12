@@ -8,7 +8,6 @@
     "dropdownItemDoc": "文档", 
     "dropdownItemLoginOut": "退出系统", 
     "tooltipErrorLog": "错误日志", 
-    "tooltipPersonalCenter": "个人中心",
     "tooltipLock": "锁定屏幕", 
     "tooltipNotify": "消息通知", 
     "tooltipEntryFull": "全屏", 
@@ -16,10 +15,11 @@
     "lockScreenPassword": "锁屏密码", 
     "lockScreen": "锁定屏幕", 
     "lockScreenBtn": "锁定", 
+    "home": "首页",
     "switchTenants": "切换租户",
     "tenantName": "租户",
     "switch": "切换",
-    "home": "首页"
+    "tooltipPersonalCenter": "个人中心"
 
   },
   "multipleTab": {
