@@ -6,104 +6,103 @@ export interface PlatformEntity {
   /**
    * 主键
    */
-  id:number;
+  id: number;
   /**
    * 是否启用
    */
-  enable:number;
+  enable: number;
   /**
    * 名称
    */
-  name:string;
+  name: string;
   /**
    * SIP服务国标编码
    */
-  serverGbId:string;
+  serverGbId: string;
   /**
    * SIP服务国标域
    */
-  serverGbDomain:string;
+  serverGbDomain: string;
   /**
    * SIP服务IP
    */
-  serverIp:string;
+  serverIp: string;
   /**
    * SIP服务端口
    */
-  serverPort:number;
+  serverPort: number;
   /**
    * 设备国标编号
    */
-  deviceGbId:string;
+  deviceGbId: string;
   /**
    * 设备ip
    */
-  deviceIp:string;
+  deviceIp: string;
   /**
    * 设备端口
    */
-  devicePort:number;
+  devicePort: number;
   /**
    * SIP认证用户名
    */
-  username:string;
-   /**
+  username: string;
+  /**
    * SIP认证密码
    */
-   password:string;
+  password: string;
   /**
    * 注册周期 (秒)
    */
-  expires:number;
+  expires: number;
   /**
    * 心跳周期(秒)
    */
-  keepTimeout:number;
+  keepTimeout: number;
   /**
    * 传输协议 1.UDP 2.TCP
    */
-  transport:number;
+  transport: number;
   /**
    * 字符集, 1.UTF-8 2.GB2312
    */
-  characterSet:number;
+  characterSet: number;
   /**
    * 默认目录Id,自动添加的通道多放在这个目录下
    */
-  catalogId:string;
+  catalogId: string;
   /**
    * 目录分组-每次向上级发送通道信息时单个包携带的通道数量，取值1,2,4,8
    */
-  catalogGroup:number;
+  catalogGroup: number;
   /**
    * 是否允许云台控制
    */
-  ptz:number;
+  ptz: number;
   /**
    * RTCP流保活
    */
-  rtcp:number;
+  rtcp: number;
   /**
    * 在线状态
    */
-  status:number;
+  status: number;
   /**
    * 点播未推流的设备时是否使用redis通知拉起
    */
-  startOfflinePush:number;
-   /**
+  startOfflinePush: number;
+  /**
    * 行政区划
    */
-   administrativeDivision:string;
-    /**
+  administrativeDivision: string;
+  /**
    * 树类型 国标规定了两种树的展现方式 216.行政区划：CivilCode 215.业务分组:BusinessGroup
    */
-    treeType:number;
-   /**
+  treeType: number;
+  /**
    * 是否作为消息通道 1.是 0.否
    */
-   asMessageChannel:number;
-
+  asMessageChannel: number;
 }
 /**
  * 查询参数类型

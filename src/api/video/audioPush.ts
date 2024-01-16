@@ -8,9 +8,8 @@ enum Api {
 }
 
 export function doAudioPushPath(params: Recordable) {
-  return defHttp.get({ url: Api.findAudioPushPath,params});
+  return defHttp.get({ url: Api.findAudioPushPath, params });
 }
-
 
 export function doPlayBroadcast(params: Recordable) {
   return defHttp.get({ url: Api.broadcast, params });

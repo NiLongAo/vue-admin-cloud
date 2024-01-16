@@ -75,11 +75,10 @@
     await resetFields();
   };
 
- const avatar = computed(() => {
-	const { imageUrl } = userStore.getUserInfo;
-	return imageUrl ? imageUrl : headerImg;
- });
-
+  const avatar = computed(() => {
+    const { imageUrl } = userStore.getUserInfo;
+    return imageUrl ? imageUrl : headerImg;
+  });
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-header-lock-modal';

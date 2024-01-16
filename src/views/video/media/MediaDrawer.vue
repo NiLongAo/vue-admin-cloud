@@ -23,10 +23,10 @@
   const isUpdate = ref(true);
   const getTitle = computed(() => (!unref(isUpdate) ? '新增流媒体' : '编辑流媒体'));
 
-
   const handleOk = async () => {
     try {
-      const { enable,sslStatus,autoConfig,rtpEnable,defaultServer, ...values } = await validate();
+      const { enable, sslStatus, autoConfig, rtpEnable, defaultServer, ...values } =
+        await validate();
       await doMediaSave({
         ...values,
         enable: enable === true ? 1 : 0,
@@ -42,7 +42,7 @@
       setDrawerProps({ confirmLoading: false });
     }
   };
-  
+
   const schemasDevice: FormSchema[] = [
     {
       field: 'id',
@@ -112,8 +112,8 @@
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
+        min: 0,
+        max: 65535,
       },
       defaultValue: 0,
       required: true,
@@ -126,8 +126,8 @@
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
+        min: 0,
+        max: 65535,
       },
       defaultValue: 0,
       required: true,
@@ -140,8 +140,8 @@
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
+        min: 0,
+        max: 65535,
       },
       defaultValue: 0,
       required: true,
@@ -154,8 +154,8 @@
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
+        min: 0,
+        max: 65535,
       },
       defaultValue: 0,
       required: true,
@@ -168,8 +168,8 @@
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
+        min: 0,
+        max: 65535,
       },
       defaultValue: 0,
       required: true,
@@ -191,8 +191,8 @@
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
+        min: 0,
+        max: 65535,
       },
       defaultValue: 0,
       required: true,
@@ -205,8 +205,8 @@
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
+        min: 0,
+        max: 65535,
       },
       defaultValue: 0,
       required: true,
@@ -219,8 +219,8 @@
         span: 12,
       },
       componentProps: {
-        min:10,
-        max:3600
+        min: 10,
+        max: 3600,
       },
       defaultValue: 10,
       required: true,
@@ -233,7 +233,7 @@
         span: 12,
       },
       required: true,
-      defaultValue:'035c73f7-bb6b-4889-a715-d9eb2d1925cc'
+      defaultValue: '035c73f7-bb6b-4889-a715-d9eb2d1925cc',
     },
     {
       field: 'enable',
@@ -242,7 +242,7 @@
       colProps: {
         span: 12,
       },
-      defaultValue:true,
+      defaultValue: true,
     },
     {
       field: 'defaultServer',
@@ -251,7 +251,7 @@
       colProps: {
         span: 12,
       },
-      defaultValue:true,
+      defaultValue: true,
     },
     {
       field: 'sslStatus',
@@ -260,7 +260,7 @@
       colProps: {
         span: 12,
       },
-      defaultValue:false,
+      defaultValue: false,
     },
     {
       field: 'rtpEnable',
@@ -269,9 +269,9 @@
       colProps: {
         span: 12,
       },
-      defaultValue:true,
+      defaultValue: true,
     },
-    
+
     {
       field: 'autoConfig',
       component: 'Switch',
@@ -279,23 +279,24 @@
       colProps: {
         span: 12,
       },
-      defaultValue:true,
+      defaultValue: true,
     },
   ];
 
-  const [registerDeviceForm, { setFieldsValue, validate,resetFields }] = useForm({
+  const [registerDeviceForm, { setFieldsValue, validate, resetFields }] = useForm({
     labelWidth: 120,
     schemas: schemasDevice,
     showActionButtonGroup: false,
   });
 
-    //初始化页面
-    const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+  //初始化页面
+  const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     resetFields();
     setDrawerProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      const { enable,sslStatus,autoConfig,rtpEnable,defaultServer, ...entity } = await doMediaDetail({ id: data.id });
+      const { enable, sslStatus, autoConfig, rtpEnable, defaultServer, ...entity } =
+        await doMediaDetail({ id: data.id });
       setFieldsValue({
         ...entity,
         enable: enable === 1 ? true : false,
@@ -306,5 +307,4 @@
       });
     }
   });
-
 </script>

@@ -5,7 +5,7 @@ enum Api {
   //分页
   page = '/webapi/video/device/page',
   //根据国标设备编号获取设备
-  findDeviceId =  '/webapi/video/device/find_device_id',
+  findDeviceId = '/webapi/video/device/find_device_id',
   //移除设备
   del = '/webapi/video/device/del',
   //修改数据流传输模式

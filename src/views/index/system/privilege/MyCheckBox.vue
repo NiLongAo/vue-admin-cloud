@@ -55,7 +55,6 @@
 
   const emit = defineEmits(['subset']);
 
-
   const props = defineProps({
     treeData: {
       type: Array as PropType<CheckboxGroupEntity[]>,

@@ -7,75 +7,75 @@ export interface PushEntity {
   /**
    * 编号
    */
-  id:number;
+  id: number;
   /**
    * 应用名
    */
-  app:string;
+  app: string;
   /**
    * 流id
    */
-  stream:string;
+  stream: string;
   /**
    * 观看总人数，包括hls/rtsp/rtmp/http-flv/ws-flv
    */
-  totalReaderCount:string;
+  totalReaderCount: string;
   /**
    * 产生源类型 unknown = 0,rtmp_push=1,rtsp_push=2,rtp_push=3,pull=4,ffmpeg_pull=5,mp4_vod=6,device_chn=7
    */
-  originType:number;
+  originType: number;
   /**
    * 产生源类型的字符串描述
    */
-  originTypeStr:string;
+  originTypeStr: string;
   /**
    * 存活时间，单位秒
    */
-  aliveSecond:number;
+  aliveSecond: number;
   /**
    * 使用的流媒体ID
    */
-  mediaServerId:string;
+  mediaServerId: string;
   /**
    * 使用的服务ID
    */
-  serverId:string;
+  serverId: string;
   /**
    * 推流时间
    */
-  pushTime:string;
+  pushTime: string;
   /**
    * 状态
    */
-  status:number;
+  status: number;
   /**
    * 是否正在推流
    */
-  pushIng:number;
+  pushIng: number;
   /**
    * 是否自己平台的推流
    */
-  onSelf:number;
+  onSelf: number;
   /**
    * 国标流编号
    */
-  gbStreamId?:number;
+  gbStreamId?: number;
   /**
    * 名称
    */
-  name?:string;
+  name?: string;
   /**
    * 国标ID
    */
-  gbId?:string;
+  gbId?: string;
   /**
    * 经度
    */
-  longitude?:number;
+  longitude?: number;
   /**
    * 纬度
    */
-  latitude?:number;
+  latitude?: number;
 }
 
 /**

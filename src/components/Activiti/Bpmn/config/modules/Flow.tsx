@@ -42,7 +42,7 @@ const BaseProperties = {
       predicate: (businessObject: ModdleElement): boolean => {
         return businessObject?.sourceRef?.$type !== 'bpmn:StartEvent';
       },
-      options:FLOW_TYPE_OPTIONS,
+      options: FLOW_TYPE_OPTIONS,
       getValue(businessObject: ModdleElement): string {
         return getSequenceFlowType(businessObject);
       },

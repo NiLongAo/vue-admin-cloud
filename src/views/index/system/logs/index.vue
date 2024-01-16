@@ -2,7 +2,7 @@
   <div>
     <BasicTable @register="registerTable">
       <template #action="{ record }">
-        <TableAction 
+        <TableAction
           :actions="[
             {
               ifShow: hasPermission('system.logs:detail'),

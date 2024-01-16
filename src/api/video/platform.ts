@@ -1,5 +1,5 @@
 import { defHttp } from '@/utils/http/axios';
-import {PlatformParams,PlatformPageResultModel} from './model/platformModel';
+import { PlatformParams, PlatformPageResultModel } from './model/platformModel';
 
 enum Api {
   //获取注册到本服务的所有sip服务
@@ -9,9 +9,9 @@ enum Api {
   //详情
   doPlatformDetail = '/webapi/video/parent/platform/detail',
   //新增
-  doPlatformInsert =  '/webapi/video/parent/platform/insert',
+  doPlatformInsert = '/webapi/video/parent/platform/insert',
   //编辑
-  doPlatformUpdate =  '/webapi/video/parent/platform/update',
+  doPlatformUpdate = '/webapi/video/parent/platform/update',
   //移除
   doPlatformRemove = '/webapi/video/parent/platform/delete',
 
@@ -43,7 +43,6 @@ enum Api {
   doPlatformGbStreamInsert = '/webapi/video/platform/gb_stream/add',
   //级联国标流分页接口
   doPlatformGbStreamDelete = '/webapi/video/platform/gb_stream/del',
-
 }
 export function doPlatformSipList(params: Recordable) {
   return defHttp.get({ url: Api.doPlatformSipList, params });
@@ -82,7 +81,6 @@ export function doPlatformCatalogDelete(params: Recordable) {
 export function doPlatformCatalogDeleteRelation(params: Recordable) {
   return defHttp.delete({ url: Api.doPlatformCatalogDeleteRelation, params });
 }
-
 
 export function doPlatformGbChannelList() {
   return defHttp.get({ url: Api.doPlatformGbChannelList });

@@ -1,5 +1,5 @@
 import { defHttp } from '@/utils/http/axios';
-import {ProxyParams,ProxyPageResultModel} from './model/proxyModel';
+import { ProxyParams, ProxyPageResultModel } from './model/proxyModel';
 
 enum Api {
   //分页
@@ -7,7 +7,7 @@ enum Api {
   //详情
   doProxyDetail = '/webapi/video/stream/proxy/detail',
   //保存
-  doProxySave =  '/webapi/video/stream/proxy/save',
+  doProxySave = '/webapi/video/stream/proxy/save',
   //移除
   doProxyRemove = '/webapi/video/stream/proxy/remove',
   //获取流媒体中ffmpeg.cmd模板

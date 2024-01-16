@@ -23,15 +23,24 @@
   const isUpdate = ref(true);
   const getTitle = computed(() => (!unref(isUpdate) ? '新增推流' : '编辑推流'));
 
-
   const handleOk = async () => {
     try {
-      const { enable,enableAudio,enableMp4,enableRemoveNoneReader,enableDisableNoneReader,type,url,srcUrl, ...values } = await validate();
+      const {
+        enable,
+        enableAudio,
+        enableMp4,
+        enableRemoveNoneReader,
+        enableDisableNoneReader,
+        type,
+        url,
+        srcUrl,
+        ...values
+      } = await validate();
       await doPushSave({
         ...values,
-        type:type,
-        url:type===1?url:'',
-        srcUrl:type===1?'':url,
+        type: type,
+        url: type === 1 ? url : '',
+        srcUrl: type === 1 ? '' : url,
         enable: enable === true ? 1 : 0,
         enableAudio: enableAudio === true ? 1 : 0,
         enableMp4: enableMp4 === true ? 1 : 0,
@@ -83,13 +92,13 @@
     },
   ];
 
-  const [registerDeviceForm, { setFieldsValue, validate,resetFields }] = useForm({
+  const [registerDeviceForm, { setFieldsValue, validate, resetFields }] = useForm({
     labelWidth: 120,
     schemas: schemasDevice,
     showActionButtonGroup: false,
   });
 
-    //初始化页面
+  //初始化页面
   const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     resetFields();
     setDrawerProps({ confirmLoading: false });
@@ -101,5 +110,4 @@
       });
     }
   });
-
 </script>

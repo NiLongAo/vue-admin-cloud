@@ -38,7 +38,7 @@
 </template>
 <script lang="ts" setup>
   import { computed, ref, reactive, unref, watch, onBeforeMount } from 'vue';
-  import { Popover, Tabs, Badge,TabPane } from 'ant-design-vue';
+  import { Popover, Tabs, Badge, TabPane } from 'ant-design-vue';
   import { BellOutlined } from '@ant-design/icons-vue';
   import { tabListData, ListItem } from './data';
   import UserNoticeModel from './UserNoticeModel.vue';
@@ -52,7 +52,7 @@
 
   const [registerModal, { openModal }] = useModal();
   const stats = reactive({
-    numberStyle:{},
+    numberStyle: {},
     tabList: [
       {
         key: '1',
@@ -219,7 +219,7 @@
   };
   onBeforeMount(() => {
     rootSocketEmitter.on(SocketOutEvent.PUBLIC_MEMBER_EVENT, (obj) => {
-     const  { code, message, data } = obj as any;
+      const { code, message, data } = obj as any;
       if (code != ResultEnum.SUCCESS) {
         createMessage.error(message || '获取消息错误');
         return;

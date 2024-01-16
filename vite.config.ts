@@ -17,7 +17,7 @@ export default defineApplicationConfig({
     server: {
       proxy: {
         '/basic-api': {
-          target: 'https://www.nilongao.cn/basic-api',//http://192.168.1.26:9190 https://www.nilongao.cn/basic-api
+          target: 'https://www.nilongao.cn/basic-api', //http://192.168.1.26:9190 https://www.nilongao.cn/basic-api
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(new RegExp(`^/basic-api`), ''),
@@ -37,10 +37,10 @@ export default defineApplicationConfig({
     },
     //解决  vue-i18n 报错 Failed to resolve entry for package "@intlify/shared" 后续版本修复后再克删除
     // https://github.com/intlify/vue-i18n-next/issues/1521
-    resolve:{
+    resolve: {
       alias: {
-        "vue-i18n": "vue-i18n/dist/vue-i18n.esm-bundler.js", // After modification
+        'vue-i18n': 'vue-i18n/dist/vue-i18n.esm-bundler.js', // After modification
       },
-    }
+    },
   },
 });

@@ -51,14 +51,14 @@
       </template>
     </BasicTable>
     <PlatformDrawer @register="register" @success="handleSuccess" />
-    <PlatformJoinGbModel @register="registerModal" @success="handleSuccess"/>
+    <PlatformJoinGbModel @register="registerModal" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts" setup>
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
   import { useSystemStore } from '@/store/modules/system';
-  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM} from '@/enums/commonEnum';
+  import { TRANSPORT_TYPE_ENUM, CHARSET_TYPE_ENUM, TREE_TYPE_ENUM } from '@/enums/commonEnum';
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
   import { doPlatformPage, doPlatformRemove } from '@/api/video/platform';
   import { usePermission } from '@/hooks/web/usePermission';
@@ -66,8 +66,8 @@
   import { useModal } from '@/components/Modal';
   import PlatformDrawer from './PlatformDrawer.vue';
   import PlatformJoinGbModel from './PlatformJoinGbModel.vue';
-  const [ register, { openDrawer }] = useDrawer();
-  const [ registerModal, { openModal }] = useModal();
+  const [register, { openDrawer }] = useDrawer();
+  const [registerModal, { openModal }] = useModal();
   const { hasPermission } = usePermission();
   const systemStore = useSystemStore();
 
@@ -93,11 +93,11 @@
     openModal(true, record);
   }
   function handleAdd() {
-    openDrawer(true, { isUpdate:false,id: undefined });
+    openDrawer(true, { isUpdate: false, id: undefined });
   }
   function handleEdit(record: Recordable) {
     openDrawer(true, {
-      isUpdate:true,
+      isUpdate: true,
       id: record.id,
     });
   }
@@ -118,9 +118,9 @@
       autoSubmitOnEnter: true,
       schemas: [
         {
-          field:"query",
-          label:"IP地址",
-          component:"Input",
+          field: 'query',
+          label: 'IP地址',
+          component: 'Input',
           colProps: {
             xl: 6,
             xxl: 5,

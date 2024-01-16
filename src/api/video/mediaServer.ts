@@ -1,5 +1,5 @@
 import { defHttp } from '@/utils/http/axios';
-import {MediaServerParams,MediaServerPageResultModel} from './model/mediaServerModel';
+import { MediaServerParams, MediaServerPageResultModel } from './model/mediaServerModel';
 
 enum Api {
   //分页
@@ -7,7 +7,7 @@ enum Api {
   //详情
   doMediaDetail = '/webapi/video/media/server/detail',
   //保存
-  doMediaSave =  '/webapi/video/media/server/save',
+  doMediaSave = '/webapi/video/media/server/save',
   //移除
   doMediaRemove = '/webapi/video/media/server/remove',
   //根据应用名和流id获取播放地址

@@ -18,7 +18,7 @@
           v-if="getShowDoc"
         />
         <MenuDivider v-if="getShowDoc" />
-	      <MenuItem
+        <MenuItem
           v-if="getShowApi"
           key="api"
           :text="t('layout.header.dropdownChangeApi')"
@@ -55,7 +55,7 @@
 </template>
 <script lang="ts" setup>
   // components
-  import { Dropdown, Menu,MenuDivider } from 'ant-design-vue';
+  import { Dropdown, Menu, MenuDivider } from 'ant-design-vue';
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface';
 
   import { computed } from 'vue';
@@ -86,7 +86,7 @@
   const { prefixCls } = useDesign('header-user-dropdown');
   const { t } = useI18n();
   const go = useGo();
-  const { getShowDoc, getUseLockPage ,getShowApi} = useHeaderSetting();
+  const { getShowDoc, getUseLockPage, getShowApi } = useHeaderSetting();
   const userStore = useUserStore();
   const getUserInfo = computed(() => {
     const { userName = '', imageUrl, tenantId } = userStore.getUserInfo || {};

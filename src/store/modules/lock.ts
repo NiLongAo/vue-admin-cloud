@@ -7,7 +7,6 @@ import { Persistent } from '@/utils/cache/persistent';
 import { useUserStore } from './user';
 import { EncryptionFactory } from '@/utils/cipher';
 
-
 interface LockState {
   lockInfo: Nullable<LockInfo>;
 }

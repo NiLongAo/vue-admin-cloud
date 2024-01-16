@@ -16,7 +16,13 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, unref } from 'vue';
-  import { BasicTree, TreeItem, ContextMenuItem, TreeActionType,ContextMenuOptions } from '@/components/Tree';
+  import {
+    BasicTree,
+    TreeItem,
+    ContextMenuItem,
+    TreeActionType,
+    ContextMenuOptions,
+  } from '@/components/Tree';
   import { doDictionaryTypeList } from '@/api/sys/dictionary';
   import { usePermission } from '@/hooks/web/usePermission';
   const defaultKey = ref();
@@ -35,7 +41,7 @@
     emit('select', unref(defaultKey)[0]);
   };
 
-  const handleSelect = (_,info) => {
+  const handleSelect = (_, info) => {
     defaultKey.value = [info.node.key];
     emit('select', info.node.key);
   };

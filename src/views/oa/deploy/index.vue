@@ -13,7 +13,13 @@
     <!-- 按钮 -->
     <template #rightFooter>
       <!-- 部署按钮 -->
-      <Button style="margin-right: 10px" type="primary" @click="deploy()" v-if="hasPermission('oa.deploy:deploy')">部署</Button>
+      <Button
+        style="margin-right: 10px"
+        type="primary"
+        @click="deploy()"
+        v-if="hasPermission('oa.deploy:deploy')"
+        >部署</Button
+      >
       <!-- 取消按钮 -->
       <Button style="margin-right: 10px" @click="close()">取消</Button>
     </template>
@@ -32,7 +38,6 @@
   import { doFindRepositoryXml, doDeployProcessParameter } from '@/api/oa/activiti';
   import { useGo } from '@/hooks/web/usePage';
 
-  
   const { hasPermission } = usePermission();
   const go = useGo();
   const route = useRoute();

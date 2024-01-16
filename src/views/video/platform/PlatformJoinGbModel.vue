@@ -1,16 +1,16 @@
 <template>
   <BasicModal
     v-bind="$attrs"
-    destroyOnClose 
+    destroyOnClose
     :maskClosable="false"
     :footer="null"
     @register="registerModal"
     width="90%"
   >
     <div :class="`${prefixCls} flex flex-row`">
-      <PlatformTree 
+      <PlatformTree
         :class="`${prefixCls}-tree  min-w-60`"
-        :server-gb-id="stats.data?.serverGbId" 
+        :server-gb-id="stats.data?.serverGbId"
         @select="handleTreeSelect"
         @clean="handleTreeclean"
       />
@@ -20,10 +20,10 @@
           :active-tab-key="stats.activeKey"
           @tabChange="onTabChange"
         >
-          <PlatformTransfer 
+          <PlatformTransfer
             ref="platformTransfer"
-            :server-gb-id="stats.data?.serverGbId" 
-            :active-key="stats.activeKey" 
+            :server-gb-id="stats.data?.serverGbId"
+            :active-key="stats.activeKey"
             :catalog-id="stats.catalogId"
           />
         </Card>
@@ -32,7 +32,7 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { ref,unref,reactive} from 'vue';
+  import { ref, unref, reactive } from 'vue';
   import { BasicModal, useModalInner } from '@/components/Modal';
   import { useDesign } from '@/hooks/web/useDesign';
   import { Card } from 'ant-design-vue';
@@ -42,11 +42,11 @@
   const platformTransfer = ref();
   const { prefixCls } = useDesign('platform-join-model');
   const stats = reactive({
-    data : {} as any,
-    catalogId:'',
-    keys:[],
-    activeKey:'gbChannel',
-    cardTabList:[
+    data: {} as any,
+    catalogId: '',
+    keys: [],
+    activeKey: 'gbChannel',
+    cardTabList: [
       {
         key: 'gbChannel',
         tab: '国标通道',
@@ -62,12 +62,12 @@
     stats.catalogId = val;
   };
 
-  const onTabChange = async (key)=>{
+  const onTabChange = async (key) => {
     stats.activeKey = key;
-  }
-  const handleTreeclean = () =>{
+  };
+  const handleTreeclean = () => {
     unref(platformTransfer).refresh();
-  }
+  };
   const [registerModal] = useModalInner(async (data) => {
     if (!data) {
       return;
@@ -75,14 +75,11 @@
     stats.data = data;
     await onTabChange(stats.activeKey);
   });
-  
 </script>
 <style lang="less">
- @prefix-cls: ~'@{namespace}-platform-join-model';
- .@{prefix-cls}{
-    &-tree{
-      
+  @prefix-cls: ~'@{namespace}-platform-join-model';
+  .@{prefix-cls} {
+    &-tree {
     }
- }
-
+  }
 </style>

@@ -60,11 +60,11 @@
     },
   });
   function handleAdd() {
-    openDrawer(true, { isUpdate:false,id: undefined });
+    openDrawer(true, { isUpdate: false, id: undefined });
   }
   function handleEdit(record: Recordable) {
     openDrawer(true, {
-      isUpdate:true,
+      isUpdate: true,
       id: record.id,
     });
   }

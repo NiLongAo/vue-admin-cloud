@@ -14,15 +14,15 @@
       <template #action="{ record }">
         <TableAction
           :actions="[
-             {
+            {
               ifShow: hasPermission('video.proxy:enable'),
-              color:( record.status === 1?'error':undefined),
-              tooltip: record.status === 1?'停用':'启用',
-              icon: record.status === 1?'ic:outline-toggle-off':'ic:outline-toggle-on',
+              color: record.status === 1 ? 'error' : undefined,
+              tooltip: record.status === 1 ? '停用' : '启用',
+              icon: record.status === 1 ? 'ic:outline-toggle-off' : 'ic:outline-toggle-on',
               onClick: handleEnable.bind(null, record),
             },
             {
-              ifShow: hasPermission('video.proxy:play') && (record.status === 1),
+              ifShow: hasPermission('video.proxy:play') && record.status === 1,
               tooltip: '播放',
               icon: 'ic-outline-play-circle',
               onClick: handlePlay.bind(null, record),
@@ -53,7 +53,7 @@
       </template>
     </BasicTable>
     <ProxyDrawer @register="register" @success="handleSuccess" />
-    <PlayModel @register="registerModal" :auth="userStore.getToken"/>
+    <PlayModel @register="registerModal" :auth="userStore.getToken" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -61,13 +61,19 @@
   import { h } from 'vue';
   import { useSystemStore } from '@/store/modules/system';
   import { useUserStoreWithOut } from '@/store/modules/user';
-  import { PROXY_TYPE_ENUM,PROXY_RTP_TYPE_ENUM } from '@/enums/commonEnum';
+  import { PROXY_TYPE_ENUM, PROXY_RTP_TYPE_ENUM } from '@/enums/commonEnum';
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
-  import { doProxyPage, doProxyRemove,doProxyStart,doProxyStop,doProxyGetPlayUrl } from '@/api/video/proxy';
+  import {
+    doProxyPage,
+    doProxyRemove,
+    doProxyStart,
+    doProxyStop,
+    doProxyGetPlayUrl,
+  } from '@/api/video/proxy';
   import { usePermission } from '@/hooks/web/usePermission';
   import { useModal } from '@/components/Modal';
   import { useDrawer } from '@/components/Drawer';
-  import {PlayModel} from '@/components/Video';
+  import { PlayModel } from '@/components/Video';
   import ProxyDrawer from './ProxyDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
   const { hasPermission } = usePermission();
@@ -94,11 +100,11 @@
     },
   });
   function handleAdd() {
-    openDrawer(true, { isUpdate:false,id: undefined });
+    openDrawer(true, { isUpdate: false, id: undefined });
   }
   function handleEdit(record: Recordable) {
     openDrawer(true, {
-      isUpdate:true,
+      isUpdate: true,
       id: record.id,
     });
   }
@@ -112,24 +118,23 @@
     //刷新表单
     reload();
   }
-  //启用 禁用 
-  const handleEnable = async(val) =>{
-    const {id,status} = val;
-    if(status ===1){
-      await doProxyStop({id})
-    }else{
-      await doProxyStart({id})
+  //启用 禁用
+  const handleEnable = async (val) => {
+    const { id, status } = val;
+    if (status === 1) {
+      await doProxyStop({ id });
+    } else {
+      await doProxyStart({ id });
     }
     //刷新表单
     reload();
-  }
+  };
   //播放
-  const handlePlay = async(val) =>{
-     const {id} = val;
-     const data = await doProxyGetPlayUrl({id});
-     openModal(true,data);
-  }
-
+  const handlePlay = async (val) => {
+    const { id } = val;
+    const data = await doProxyGetPlayUrl({ id });
+    openModal(true, data);
+  };
 
   function getFormConfig(): Partial<FormProps> {
     return {
@@ -137,16 +142,16 @@
       autoSubmitOnEnter: true,
       schemas: [
         {
-          field:"query",
-          label:"查询",
-          component:"Input",
+          field: 'query',
+          label: '查询',
+          component: 'Input',
           colProps: {
             xl: 6,
             xxl: 5,
           },
-          componentProps:{
-            placeholder:'名称，应用名，流ID，国标ID'
-          }
+          componentProps: {
+            placeholder: '名称，应用名，流ID，国标ID',
+          },
         },
         {
           field: `online`,
@@ -177,7 +182,6 @@
 
   function getBasicColumns(): BasicColumn[] {
     return [
-      
       {
         title: '应用名',
         dataIndex: 'app',
@@ -233,9 +237,9 @@
         title: '拉流地址',
         dataIndex: 'url',
         width: 200,
-        ellipsis:true,
+        ellipsis: true,
         customRender: ({ record }) => {
-          return record.type===1?record.url:record.srcUrl
+          return record.type === 1 ? record.url : record.srcUrl;
         },
       },
       {

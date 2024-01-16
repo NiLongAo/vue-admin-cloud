@@ -5,12 +5,12 @@
       <div class="lg:w-7/10 lg:!mr-4 enter-y">
         <ActivitiPage />
       </div>
-      <div class="lg:w-3/10  enter-y">
-        <QuickNav/>
+      <div class="lg:w-3/10 enter-y">
+        <QuickNav />
         <Card class="!my-4 enter-y">
           <img class="xl:h-50 h-30 mx-auto" src="../../../assets/svg/illustration.svg" />
         </Card>
-        <SaleRadar class="enter-y"/>
+        <SaleRadar class="enter-y" />
       </div>
     </div>
   </PageWrapper>

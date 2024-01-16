@@ -18,13 +18,13 @@
       <Row :gutter="24">
         <Col :span="24">
           <BasicTree
-              ref="asyncTreeRef"
-              :treeData="treeData"
-              :selectedKeys="selectedKeys"
-              :fieldNames="{ title: 'k', key: 'v' }"
-              checkable
-              toolbar
-            />
+            ref="asyncTreeRef"
+            :treeData="treeData"
+            :selectedKeys="selectedKeys"
+            :fieldNames="{ title: 'k', key: 'v' }"
+            checkable
+            toolbar
+          />
         </Col>
       </Row>
     </CollapseContainer>
@@ -61,7 +61,7 @@
   import { doTenantDetail, doTenantInsert, doTenantUpdate } from '@/api/sys/tenant';
   import { doMenuPrivilegeTree } from '@/api/sys/menu';
   import { doTenantPrivilegeList, doTenantPrivilegeSave } from '@/api/sys/privilege';
-  import { BasicTree, TreeItem,TreeActionType } from '@/components/Tree';
+  import { BasicTree, TreeItem, TreeActionType } from '@/components/Tree';
   import headerImg from '@/assets/images/header.jpg';
   import { SystemEnum } from '@/enums/systemEnum';
   import { useSystemStore } from '@/store/modules/system';
@@ -144,7 +144,7 @@
 
   const handleOk = async () => {
     try {
-      const { status, ...TenantValues } :any= await TenantValidate();
+      const { status, ...TenantValues }: any = await TenantValidate();
       if (!unref(isUpdate)) {
         const { isAdmin, isEnabled, areaList, ...UserValues } = await UserValidate();
         let map = {
@@ -166,7 +166,7 @@
           status: status === true ? 1 : 0,
           ...TenantValues,
         });
-        const keys= getTree().getCheckedKeys() as string[];
+        const keys = getTree().getCheckedKeys() as string[];
         await doTenantPrivilegeSave({
           tenantId: TenantValues.id,
           privilegeList: getPrivilega(keys),
@@ -180,7 +180,7 @@
     }
   };
 
-  const getPrivilega = (privilega:string []) => {
+  const getPrivilega = (privilega: string[]) => {
     return privilega.filter((val: String) => val.match(/:/));
   };
 

@@ -1,7 +1,7 @@
 <template>
   <LoginFormTitle v-show="getShow" class="enter-x" />
   <Form
-    :class=" `${prefixCls}-from p-4 enter-x`"
+    :class="`${prefixCls}-from p-4 enter-x`"
     :model="formData"
     :rules="getFormRules"
     ref="formRef"
@@ -26,11 +26,7 @@
       />
     </FormItem>
     <FormItem name="loginCode" class="enter-x">
-      <Input
-        size="large"
-        v-model:value="formData.loginCode"
-        placeholder="验证码"
-      >
+      <Input size="large" v-model:value="formData.loginCode" placeholder="验证码">
         <template #addonAfter>
           <Image
             class="object-fill cursor-pointer"
@@ -73,7 +69,7 @@
           {{ t('sys.login.mobileSignInFormTitle') }}
         </Button>
       </ACol>
-      <ACol :md="8" :xs="24" >
+      <ACol :md="8" :xs="24">
         <Button block @click="setLoginState(LoginStateEnum.QR_CODE)">
           {{ t('sys.login.qrSignInFormTitle') }}
         </Button>
@@ -214,7 +210,7 @@
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-login-from';
-  
+
   .@{prefix-cls} {
     .ant-input-group-addon {
       padding: 0;

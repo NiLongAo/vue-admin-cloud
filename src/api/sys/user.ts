@@ -124,7 +124,7 @@ export function doInsert(params: Recordable) {
 }
 
 export function doUpdate(params: Recordable, options?: RequestOptions) {
-  return defHttp.post({ url: Api.update, params },options);
+  return defHttp.post({ url: Api.update, params }, options);
 }
 
 export function doUpdateLoginUserInfo(params: Recordable) {

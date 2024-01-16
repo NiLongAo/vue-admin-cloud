@@ -23,25 +23,31 @@ export function doDepartmentPrivilegeList(params) {
   return defHttp.get({ url: Api.departmentPrivilegeList, params });
 }
 export function doDepartmentPrivilegeSave(params) {
-  return defHttp.post({ url: Api.departmentPrivilegeSave, params },{successMessageMode:'message'});
+  return defHttp.post(
+    { url: Api.departmentPrivilegeSave, params },
+    { successMessageMode: 'message' },
+  );
 }
 
 export function doPositionPrivilegeList(params) {
   return defHttp.get({ url: Api.positionPrivilegeList, params });
 }
 export function doPositionPrivilegeSave(params) {
-  return defHttp.post({ url: Api.positionPrivilegeSave, params },{successMessageMode:'message'});
+  return defHttp.post(
+    { url: Api.positionPrivilegeSave, params },
+    { successMessageMode: 'message' },
+  );
 }
 
 export function doRolePrivilegeList(params) {
   return defHttp.get({ url: Api.rolePrivilegeList, params });
 }
 export function doRolePrivilegeSave(params) {
-  return defHttp.post({ url: Api.rolePrivilegeSave, params },{successMessageMode:'message'});
+  return defHttp.post({ url: Api.rolePrivilegeSave, params }, { successMessageMode: 'message' });
 }
 export function doTenantPrivilegeList(params) {
   return defHttp.get({ url: Api.tenantPrivilegeList, params });
 }
 export function doTenantPrivilegeSave(params) {
-  return defHttp.post({ url: Api.tenantPrivilegeSave, params },{successMessageMode:'message'});
+  return defHttp.post({ url: Api.tenantPrivilegeSave, params }, { successMessageMode: 'message' });
 }

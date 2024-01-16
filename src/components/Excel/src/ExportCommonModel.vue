@@ -64,7 +64,9 @@
           disabled: !record.isDesensitized,
           checkedChildren: '已启用',
           unCheckedChildren: '已禁用',
-          onClick: (checked: boolean | string | number)=>{record.isDesensitized = checked},
+          onClick: (checked: boolean | string | number) => {
+            record.isDesensitized = checked;
+          },
         });
       },
     },

@@ -15,11 +15,7 @@ const PrefixLabelNumBer = defineComponent({
     return () => (
       <div class="prefix-label-number-container">
         {props.prefixTitle && <div class="prefix-number-title ">{props.prefixTitle}</div>}
-        <InputNumber
-          class="prefix-label-number"
-          {...props}
-          v-slots={slots}
-        />
+        <InputNumber class="prefix-label-number" {...props} v-slots={slots} />
       </div>
     );
   },

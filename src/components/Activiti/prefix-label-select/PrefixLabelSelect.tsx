@@ -72,12 +72,7 @@ const PrefixLabelSelect = defineComponent({
       return () => (
         <div class="prefix-label-select-container">
           {props.prefixTitle && <div class="prefix-title ">{props.prefixTitle}</div>}
-          <Select
-            class="prefix-label-select"
-            {...props}
-            {...stats.select}
-            v-slots={slots}
-          />
+          <Select class="prefix-label-select" {...props} {...stats.select} v-slots={slots} />
         </div>
       );
     }

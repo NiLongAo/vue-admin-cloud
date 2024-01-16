@@ -5,5 +5,11 @@ import PlayModel from './src/PlayModel.vue';
 import { useJessibuca } from './src/useJessibuca';
 import { useZlmRtc } from './src/useZlmRtc';
 
-
-export { VideoDeviceChannelTree,VideoJessibucaPlay,PlayModel,VideoZlmRtcPlay ,useJessibuca,useZlmRtc};
+export {
+  VideoDeviceChannelTree,
+  VideoJessibucaPlay,
+  PlayModel,
+  VideoZlmRtcPlay,
+  useJessibuca,
+  useZlmRtc,
+};

@@ -11,7 +11,9 @@ export async function useSocket() {
   const notTokenNamespaceMap: Record<SocketNamespace, Namespace> | {} = {},
     tokenNamespaceMap: Record<SocketNamespace, Namespace> | {} = {};
   //获取namespace 下所有空间
-  const namespaceFiles:Record<SocketNamespace,any> = import.meta.glob('./namespace/**/*.ts', { eager: true });
+  const namespaceFiles: Record<SocketNamespace, any> = import.meta.glob('./namespace/**/*.ts', {
+    eager: true,
+  });
   Object.keys(namespaceFiles).forEach((key: string | SocketNamespace) => {
     const namespace: Namespace = new namespaceFiles[key].default();
     const param = namespace.getParam();

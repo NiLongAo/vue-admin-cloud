@@ -122,13 +122,13 @@
   import { isFunction } from '@/utils/is';
   import { useI18n } from '@/hooks/web/useI18n';
 
-  export type apiFunParams = { type:number,file: Blob; name: string; filename: string };
+  export type apiFunParams = { type: number; file: Blob; name: string; filename: string };
 
   defineOptions({ name: 'CropperModal' });
 
   const props = defineProps({
     circled: { type: Boolean, default: true },
-    type:{type: Number,default:1},
+    type: { type: Number, default: 1 },
     uploadApi: {
       type: Function as PropType<(params: apiFunParams) => Promise<any>>,
     },
@@ -190,7 +190,7 @@
       const blob = dataURLtoBlob(previewSource.value);
       try {
         setModalProps({ confirmLoading: true });
-	const result = await uploadApi({ type: props.type,name: 'file', file: blob, filename });
+        const result = await uploadApi({ type: props.type, name: 'file', file: blob, filename });
         emit('uploadSuccess', { source: previewSource.value, data: result });
         closeModal();
       } finally {

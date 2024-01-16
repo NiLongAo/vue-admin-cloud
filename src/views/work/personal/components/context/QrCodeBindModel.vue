@@ -51,7 +51,7 @@
   });
 
   onBeforeMount(() => {
-    rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_QR_CODE_EVENT, (val:any) => {
+    rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_QR_CODE_EVENT, (val: any) => {
       const { code, message, data } = val;
       if (code != ResultEnum.SUCCESS) {
         createMessage.error(message || '获取消息错误');
@@ -65,7 +65,7 @@
       setModalProps({ loading: false });
     });
     //检测socket平台消息
-    rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_BIND_EVENT, (val:any) => {
+    rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_BIND_EVENT, (val: any) => {
       const { code, message } = val;
       if (code == ResultEnum.OVERDUE) {
         qrCode();

@@ -1,20 +1,20 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit" >
+  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
 <script lang="ts" setup>
   import { BasicModal, useModalInner } from '@/components/Modal';
-  import { computed,reactive } from 'vue';
+  import { computed, reactive } from 'vue';
   import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
-  import { doPlatformCatalogInsert ,doPlatformCatalogUpdate} from '@/api/video/platform';
+  import { doPlatformCatalogInsert, doPlatformCatalogUpdate } from '@/api/video/platform';
 
   const emit = defineEmits(['success', 'register']);
-  const getTitle = computed(() => (stats.isUpdate ?'编辑目录': '新增目录'));
+  const getTitle = computed(() => (stats.isUpdate ? '编辑目录' : '新增目录'));
   const isUpdate = computed(() => stats.isUpdate);
   const stats = reactive({
-    isUpdate : true as boolean,
-    data:{} as any,
+    isUpdate: true as boolean,
+    data: {} as any,
   });
 
   const schemas: FormSchema[] = [
@@ -26,8 +26,8 @@
         span: 24,
       },
       required: true,
-      componentProps: { 
-        disabled: isUpdate 
+      componentProps: {
+        disabled: isUpdate,
       },
     },
     {
@@ -51,15 +51,15 @@
     try {
       const values = await validate();
       setModalProps({ confirmLoading: true });
-      if(stats.isUpdate){
-        await  doPlatformCatalogUpdate({
-          ...values
-        });
-      }else{
-        await  doPlatformCatalogInsert({
+      if (stats.isUpdate) {
+        await doPlatformCatalogUpdate({
           ...values,
-          parentId:stats.data.id,
-          platformId:stats.data.platformId,
+        });
+      } else {
+        await doPlatformCatalogInsert({
+          ...values,
+          parentId: stats.data.id,
+          platformId: stats.data.platformId,
         });
       }
       closeModal();
@@ -73,13 +73,13 @@
   const [registerModal, { setModalProps, closeModal }] = useModalInner((data) => {
     resetFields();
     setModalProps({ confirmLoading: false });
-    const {isUpdate ,node} = data;
+    const { isUpdate, node } = data;
     stats.isUpdate = isUpdate;
     stats.data = node;
     if (isUpdate) {
       setFieldsValue({
         id: node.id,
-        name : node.name.el.innerText,
+        name: node.name.el.innerText,
       });
     }
   });

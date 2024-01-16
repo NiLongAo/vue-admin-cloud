@@ -4,7 +4,7 @@ enum Api {
   //录像查询列表
   doRecordList = '/webapi/video/gb/video/list',
   //开始下载录像
-  doRecordDownloadStart =  '/webapi/video/gb/video/download/start',
+  doRecordDownloadStart = '/webapi/video/gb/video/download/start',
   //停止下载录像
   doRecordDownloadStop = '/webapi/video/gb/video/download/stop',
   //获取当前用户下载录像信息
@@ -24,7 +24,6 @@ enum Api {
   //回放倍速播放
   doRecordSpeed = '/webapi/video/playback/speed',
 }
-
 
 export function doRecordList(params: Recordable) {
   return defHttp.get<RecordInfo>({ url: Api.doRecordList, params });

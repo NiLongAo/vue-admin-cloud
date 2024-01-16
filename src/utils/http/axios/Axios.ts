@@ -54,17 +54,17 @@ export class VAxios {
   getIsRefreshing(): boolean {
     return this.isRefreshing;
   }
-  setIsRefreshing(isRefreshing:boolean){
-   this.isRefreshing = isRefreshing;
+  setIsRefreshing(isRefreshing: boolean) {
+    this.isRefreshing = isRefreshing;
   }
-  getRequests() :Array<any>{
+  getRequests(): Array<any> {
     return this.requests;
   }
-  cloneRequests(){
-    this.requests=[];
- }
-  setRequests(requests:any){
-     this.requests.push(requests);
+  cloneRequests() {
+    this.requests = [];
+  }
+  setRequests(requests: any) {
+    this.requests.push(requests);
   }
   /**
    * @description: Reconfigure axios
@@ -110,7 +110,8 @@ export class VAxios {
     // Request interceptor configuration processing
     this.axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
       // If cancel repeat request is turned on, then cancel repeat request is prohibited
-      const requestOptions =  (config as unknown as any).requestOptions ?? this.options.requestOptions;
+      const requestOptions =
+        (config as unknown as any).requestOptions ?? this.options.requestOptions;
       const ignoreCancelToken = requestOptions?.ignoreCancelToken ?? true;
 
       !ignoreCancelToken && axiosCanceler.addPending(config);
@@ -220,7 +221,7 @@ export class VAxios {
     if (config.cancelToken) {
       conf.cancelToken = config.cancelToken;
     }
-    
+
     if (config.signal) {
       conf.signal = config.signal;
     }

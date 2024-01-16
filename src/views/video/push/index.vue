@@ -4,9 +4,8 @@
       <template #action="{ record }">
         <TableAction
           :actions="[
-            
             {
-              ifShow: hasPermission('video.push:play') && (record.pushIng === 1),
+              ifShow: hasPermission('video.push:play') && record.pushIng === 1,
               tooltip: '播放',
               icon: 'ic-outline-play-circle',
               onClick: handlePlay.bind(null, record),
@@ -44,11 +43,11 @@
   import { Tag } from 'ant-design-vue';
   import { h } from 'vue';
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
-  import { doPushPage, doPushRemove,doPushGetPlayUrl } from '@/api/video/push';
+  import { doPushPage, doPushRemove, doPushGetPlayUrl } from '@/api/video/push';
   import { usePermission } from '@/hooks/web/usePermission';
   import { useModal } from '@/components/Modal';
   import { useDrawer } from '@/components/Drawer';
-  import {PlayModel} from '@/components/Video';
+  import { PlayModel } from '@/components/Video';
   import PushDrawer from './PushDrawer.vue';
   const [register, { openDrawer }] = useDrawer();
   const { hasPermission } = usePermission();
@@ -73,11 +72,11 @@
     },
   });
   function handleAdd() {
-    openDrawer(true, { isUpdate:false,id: undefined });
+    openDrawer(true, { isUpdate: false, id: undefined });
   }
   function handleEdit(record: Recordable) {
     openDrawer(true, {
-      isUpdate:true,
+      isUpdate: true,
       id: record.id,
     });
   }
@@ -93,11 +92,11 @@
   }
 
   //播放
-  const handlePlay = async(val) =>{
-    const {id} = val;
-     const data = await doPushGetPlayUrl({id});
-     openModal(data);
-  }
+  const handlePlay = async (val) => {
+    const { id } = val;
+    const data = await doPushGetPlayUrl({ id });
+    openModal(data);
+  };
 
   function getFormConfig(): Partial<FormProps> {
     return {
@@ -105,16 +104,16 @@
       autoSubmitOnEnter: true,
       schemas: [
         {
-          field:"query",
-          label:"查询",
-          component:"Input",
+          field: 'query',
+          label: '查询',
+          component: 'Input',
           colProps: {
             xl: 6,
             xxl: 5,
           },
-          componentProps:{
-            placeholder:'名称，应用名，流ID，国标ID'
-          }
+          componentProps: {
+            placeholder: '名称，应用名，流ID，国标ID',
+          },
         },
         {
           field: `pushing`,

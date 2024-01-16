@@ -39,7 +39,7 @@
   import { useI18n } from '@/hooks/web/useI18n';
   import { useUserStore } from '@/store/modules/user';
   //import { checkImgType, getBase64WithFile } from '@/components/Upload/src/helper';
-  
+
   defineOptions({ name: 'TinymceImageUpload' });
   const props = defineProps({
     fullscreen: {

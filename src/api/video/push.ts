@@ -1,5 +1,5 @@
 import { defHttp } from '@/utils/http/axios';
-import {PushParams,PushPageResultModel} from './model/pushModel';
+import { PushParams, PushPageResultModel } from './model/pushModel';
 
 enum Api {
   //分页
@@ -7,7 +7,7 @@ enum Api {
   //详情
   doPushDetail = '/webapi/video/stream/push/detail',
   //保存
-  doPushSave =  '/webapi/video/stream/push/save',
+  doPushSave = '/webapi/video/stream/push/save',
   //移除
   doPushRemove = '/webapi/video/stream/push/remove',
   //获取推流播放地址

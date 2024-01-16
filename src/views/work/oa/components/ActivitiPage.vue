@@ -16,7 +16,7 @@
 <script lang="ts" setup>
   import { unref, reactive } from 'vue';
   import { Card } from 'ant-design-vue';
-  import { BasicTable, useTable, TableAction, ActionItem} from '@/components/Table';
+  import { BasicTable, useTable, TableAction, ActionItem } from '@/components/Table';
   import {
     doClaim,
     doSuspendedInstance,
@@ -134,7 +134,7 @@
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-activiti';
-  
+
   .@{prefix-cls} {
     .ant-card-body {
       padding: 0;

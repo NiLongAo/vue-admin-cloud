@@ -1,15 +1,15 @@
 <template>
   <BasicTree
-      title="设备通道"
-      toolbar
-      search
-      ref="asyncExpandTreeRef"
-      :fieldNames="{ key: 'id', title: 'name' }"
-      :clickRowToExpand="false"
-      :selectedKeys="defaultKey"
-      :treeData="treeData"
-      @select="handleSelect"
-    />
+    title="设备通道"
+    toolbar
+    search
+    ref="asyncExpandTreeRef"
+    :fieldNames="{ key: 'id', title: 'name' }"
+    :clickRowToExpand="false"
+    :selectedKeys="defaultKey"
+    :treeData="treeData"
+    @select="handleSelect"
+  />
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, unref } from 'vue';
@@ -19,7 +19,6 @@
   const defaultKey = ref();
   const asyncExpandTreeRef = ref<Nullable<TreeActionType>>(null);
   const treeData = ref<TreeItem[]>([]);
-  
 
   const fetch = async () => {
     treeData.value = (await doTreeDeviceChannel()) as unknown as TreeItem[];
@@ -30,7 +29,7 @@
     }
   };
 
-  const handleSelect = (_,info) => {
+  const handleSelect = (_, info) => {
     defaultKey.value = [info.node.key];
     emit('select', unref(asyncExpandTreeRef)?.getSelectedNode(info.node.key));
   };

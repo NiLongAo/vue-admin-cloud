@@ -1,8 +1,9 @@
 <template>
-  <PageWrapper dense contentFullHeight  @back="goBack" :title="`国标通道：` + formData.deviceId">
+  <PageWrapper dense contentFullHeight @back="goBack" :title="`国标通道：` + formData.deviceId">
     <VxeBasicTable ref="tableRef" v-bind="gridOptions">
       <template #action="{ row }">
-        <TableAction outside
+        <TableAction
+          outside
           :actions="[
             {
               ifShow: hasPermission('video.play.channel:update'),
@@ -23,20 +24,27 @@
           ]"
           :dropDownActions="[
             {
-              ifShow: hasPermission('video.play.channel:play') && row.status === 1 && row.subCount === 0,
+              ifShow:
+                hasPermission('video.play.channel:play') && row.status === 1 && row.subCount === 0,
               label: '播放',
               icon: 'ic-outline-play-circle',
               onClick: handlePlay.bind(null, row),
             },
             {
-              ifShow: hasPermission('video.play.channel:suspend') && isNotEmpty(row.streamId) && row.subCount === 0,
-              label:'暂停',
+              ifShow:
+                hasPermission('video.play.channel:suspend') &&
+                isNotEmpty(row.streamId) &&
+                row.subCount === 0,
+              label: '暂停',
               color: 'error',
               icon: 'ic-outline-stop-circle',
               onClick: handleStop.bind(null, row),
             },
             {
-              ifShow: hasPermission('video.play.channel:playback') && row.status === 1 && row.subCount === 0,
+              ifShow:
+                hasPermission('video.play.channel:playback') &&
+                row.status === 1 &&
+                row.subCount === 0,
               label: '历史回放',
               icon: 'ic-round-history',
               onClick: handleRecord.bind(null, row),
@@ -46,7 +54,14 @@
       </template>
     </VxeBasicTable>
     <DeviceChannelDrawer @register="register" @success="handleSuccess" />
-    <PlayModel @register="registerModal" control :auth="userStore.getToken" :audio-push-api="doAudioPushPath" :broadcast-api="doPlayBroadcast" @cancel="handleSuccess" />
+    <PlayModel
+      @register="registerModal"
+      control
+      :auth="userStore.getToken"
+      :audio-push-api="doAudioPushPath"
+      :broadcast-api="doPlayBroadcast"
+      @cancel="handleSuccess"
+    />
   </PageWrapper>
 </template>
 
@@ -63,18 +78,18 @@
   import { TableAction } from '@/components/Table';
   import { PageWrapper } from '@/components/Page';
   import { usePermission } from '@/hooks/web/usePermission';
-  import { computed, reactive,h ,ref,unref} from 'vue';
+  import { computed, reactive, h, ref, unref } from 'vue';
   import { useDrawer } from '@/components/Drawer';
   import { useModal } from '@/components/Modal';
   import { Tag } from 'ant-design-vue';
   import { useSystemStore } from '@/store/modules/system';
   import { useRoute } from 'vue-router';
-  import { DEVICE_TYPE_ENUM,PTZ_TYPE_ENUM } from '@/enums/commonEnum';
-  import { doPlayStart,doPlayStop} from '@/api/video/paly';
-  import { doDeviceChannelPage ,doDelDeviceChannel} from '@/api/video/deviceChannel';
-  import { doAudioPushPath ,doPlayBroadcast} from '@/api/video/audioPush';
+  import { DEVICE_TYPE_ENUM, PTZ_TYPE_ENUM } from '@/enums/commonEnum';
+  import { doPlayStart, doPlayStop } from '@/api/video/paly';
+  import { doDeviceChannelPage, doDelDeviceChannel } from '@/api/video/deviceChannel';
+  import { doAudioPushPath, doPlayBroadcast } from '@/api/video/audioPush';
   import DeviceChannelDrawer from './DeviceChannelDrawer.vue';
-  import {PlayModel} from '@/components/Video/index';
+  import { PlayModel } from '@/components/Video/index';
   import { useUserStoreWithOut } from '@/store/modules/user';
 
   const tableRef = ref<VxeGridInstance>();
@@ -123,7 +138,7 @@
       ajax: {
         query: async ({ page, form }) => {
           return await doDeviceChannelPage({
-            deviceId:formData.deviceId,
+            deviceId: formData.deviceId,
             pageNumber: page.currentPage,
             pageSize: page.pageSize,
             ...form,
@@ -159,42 +174,42 @@
     columns: getBasicColumns(),
   });
   //播放
-  const handlePlay = async(data)=>{
-    const values = await doPlayStart({ deviceId:data.deviceId,channelId:data.channelId});
+  const handlePlay = async (data) => {
+    const values = await doPlayStart({ deviceId: data.deviceId, channelId: data.channelId });
     openModal(true, values);
-  }
- //暂停
-  const handleStop = async(data)=>{
-    await doPlayStop({ deviceId:data.deviceId,channelId:data.channelId});
+  };
+  //暂停
+  const handleStop = async (data) => {
+    await doPlayStop({ deviceId: data.deviceId, channelId: data.channelId });
     handleSuccess();
-  }
-  
+  };
+
   //历史回放
-  const handleRecord = (data) =>{
-    go('/video/play/record/'+data.deviceId+'/'+data.channelId);
-  }
+  const handleRecord = (data) => {
+    go('/video/play/record/' + data.deviceId + '/' + data.channelId);
+  };
   function handleAdd() {
-    openDrawer(true, { 
-      deviceId:formData.deviceId,
-      channelId: undefined, 
-      isUpdate: false 
+    openDrawer(true, {
+      deviceId: formData.deviceId,
+      channelId: undefined,
+      isUpdate: false,
     });
   }
   function handleEdit(record: Recordable) {
     openDrawer(true, {
       channelId: record.channelId,
-      deviceId:formData.deviceId,
+      deviceId: formData.deviceId,
       isUpdate: true,
     });
   }
   const handleSuccess = () => {
-   //刷新表单
-   unref(tableRef)?.commitProxy('reload');
+    //刷新表单
+    unref(tableRef)?.commitProxy('reload');
   };
   async function handleDelete(record: Recordable) {
     //删除
-    await doDelDeviceChannel({ deviceId: record.deviceId ,channelId: record.channelId});
-     //刷新表单
+    await doDelDeviceChannel({ deviceId: record.deviceId, channelId: record.channelId });
+    //刷新表单
     unref(tableRef)?.commitProxy('reload');
   }
 
@@ -205,9 +220,9 @@
         title: '通道状态',
         itemRender: {
           name: 'ASelect',
-          props:{
+          props: {
             options: onlineTypes,
-          }
+          },
         },
         span: 6,
       },
@@ -235,14 +250,14 @@
         title: '编号',
         treeNode: true,
         type: 'seq',
-        fixed:'left',
+        fixed: 'left',
         field: 'id',
         width: 100,
       },
       {
         title: '通道国标编号',
         field: 'channelId',
-        fixed:'left',
+        fixed: 'left',
         showOverflow: 'tooltip',
         width: 200,
       },
@@ -303,7 +318,7 @@
         field: 'ptzType',
         width: 100,
         slots: {
-          default: ({row})=>{
+          default: ({ row }) => {
             const template = systemStore.getDictMap[PTZ_TYPE_ENUM];
             return h(Tag, { color: 'green' }, () => template[row.ptzType]);
           },
@@ -314,8 +329,8 @@
         field: 'longitude',
         width: 150,
         slots: {
-          default: ({row})=>{
-            return row.latitude+','+row.longitude
+          default: ({ row }) => {
+            return row.latitude + ',' + row.longitude;
           },
         },
       },
@@ -340,7 +355,7 @@
         width: 150,
       },
       {
-        minWidth:120,
+        minWidth: 120,
         title: '操作',
         align: 'center',
         slots: { default: 'action' },
@@ -354,5 +369,4 @@
     // 本例的效果时点击返回始终跳转到账号列表页，实际应用时可返回上一页
     go('/video/play');
   }
-  
 </script>

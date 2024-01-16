@@ -1,17 +1,28 @@
 <template>
   <Transfer
-    :rowKey="(record)=>(record[stats.tabListTitle[props.activeKey].rowKey])"
-    :target-keys="stats.useCatalogGbIdList" 
-    :show-select-all="false" 
+    :rowKey="(record) => record[stats.tabListTitle[props.activeKey].rowKey]"
+    :target-keys="stats.useCatalogGbIdList"
+    :show-select-all="false"
     :data-source="stats.dataData"
     @change="onChange"
   >
-    <template #children="{direction,disabled:listDisabled,selectedKeys,filteredItems,onItemSelect,onItemSelectAll}">
-      <BasicTable  
-        :row-selection="onRowSelection(direction,listDisabled,selectedKeys,onItemSelect,onItemSelectAll)"
-        :data-source="(direction=='left'?buildTree(tableData):buildTree(filteredItems))"
+    <template
+      #children="{
+        direction,
+        disabled: listDisabled,
+        selectedKeys,
+        filteredItems,
+        onItemSelect,
+        onItemSelectAll,
+      }"
+    >
+      <BasicTable
+        :row-selection="
+          onRowSelection(direction, listDisabled, selectedKeys, onItemSelect, onItemSelectAll)
+        "
+        :data-source="direction == 'left' ? buildTree(tableData) : buildTree(filteredItems)"
         :rowKey="stats.tabListTitle[props.activeKey].rowKey"
-        :columns=stats.tabListTitle[props.activeKey].columns
+        :columns="stats.tabListTitle[props.activeKey].columns"
         size="small"
         :isTreeTable="true"
         :striped="false"
@@ -24,9 +35,9 @@
   </Transfer>
 </template>
 <script lang="ts" setup>
-  import { reactive,h,computed,onMounted,watch} from 'vue';
+  import { reactive, h, computed, onMounted, watch } from 'vue';
   import { BasicTable } from '@/components/Table';
-  import { Tag,Transfer } from 'ant-design-vue';
+  import { Tag, Transfer } from 'ant-design-vue';
   import { isEmpty } from '@/utils/is';
   import {
     doPlatformGbChannelList,
@@ -36,7 +47,7 @@
     doPlatformGbStreamList,
     doPlatformStreamBindKey,
     doPlatformGbStreamInsert,
-    doPlatformGbStreamDelete
+    doPlatformGbStreamDelete,
   } from '@/api/video/platform';
 
   const props = defineProps({
@@ -53,19 +64,18 @@
     },
   });
 
-
-  const stats  = reactive({
-    allGbIdList:[],
-    useCatalogGbIdList:[],
-    dataData:[],
-    tabListTitle:{
-      gbChannel:{
-        rowKey:'id',
+  const stats = reactive({
+    allGbIdList: [],
+    useCatalogGbIdList: [],
+    dataData: [],
+    tabListTitle: {
+      gbChannel: {
+        rowKey: 'id',
         apiList: doPlatformGbChannelList,
         apiBind: doPlatformChannelBindKey,
-        apiInsert:doPlatformGbChannelInsert,
-        apiDelete:doPlatformGbChannelDelete,
-        columns:[
+        apiInsert: doPlatformGbChannelInsert,
+        apiDelete: doPlatformGbChannelDelete,
+        columns: [
           {
             title: '通道编号',
             dataIndex: 'id',
@@ -88,15 +98,15 @@
               return h(Tag, { color: color }, () => text);
             },
           },
-        ]
+        ],
       },
-      gbStream:{
-        rowKey:'gbId',
+      gbStream: {
+        rowKey: 'gbId',
         apiList: doPlatformGbStreamList,
         apiBind: doPlatformStreamBindKey,
-        apiInsert:doPlatformGbStreamInsert,
-        apiDelete:doPlatformGbStreamDelete,
-        columns:[
+        apiInsert: doPlatformGbStreamInsert,
+        apiDelete: doPlatformGbStreamDelete,
+        columns: [
           {
             title: '国标编号',
             dataIndex: 'gbId',
@@ -117,35 +127,35 @@
             dataIndex: 'stream',
             width: 10,
           },
-        ]
+        ],
       },
-    }
-  })
+    },
+  });
 
-  const onChange = async (targetKeys,direction,moveKeys) => {
+  const onChange = async (targetKeys, direction, moveKeys) => {
     const obj = stats.tabListTitle[props.activeKey] as any;
-    if(direction === 'left'){
-     await obj.apiDelete({
-        platformId:props.serverGbId,
-        catalogId:props.catalogId,
-        isSub:0,
-        isAll:0,
-        gbIdList:moveKeys,
-      })
-    }else{
+    if (direction === 'left') {
+      await obj.apiDelete({
+        platformId: props.serverGbId,
+        catalogId: props.catalogId,
+        isSub: 0,
+        isAll: 0,
+        gbIdList: moveKeys,
+      });
+    } else {
       await obj.apiInsert({
-        platformId:props.serverGbId,
-        catalogId:props.catalogId,
-        isSub:0,
-        isAll:0,
-        gbIdList:moveKeys
-      })
+        platformId: props.serverGbId,
+        catalogId: props.catalogId,
+        isSub: 0,
+        isAll: 0,
+        gbIdList: moveKeys,
+      });
     }
     refresh();
   };
 
   const tableData = computed(() => {
-    return handleTreeData(stats.dataData,stats.allGbIdList);
+    return handleTreeData(stats.dataData, stats.allGbIdList);
   });
 
   //转换eTreeData
@@ -155,17 +165,21 @@
       if (item.children) {
         tree1 = handleTreeData(item.children, targetKeys);
       }
-      return { ...item, disabled: targetKeys.includes(item[stats.tabListTitle[props.activeKey].rowKey]), children: tree1 };
+      return {
+        ...item,
+        disabled: targetKeys.includes(item[stats.tabListTitle[props.activeKey].rowKey]),
+        children: tree1,
+      };
     });
     return tree;
   };
 
-  const buildTree = (data,parentId =null) =>{
+  const buildTree = (data, parentId = null) => {
     const tree = [] as Array<Object>;
-    data.forEach(item => {
-      if(!item.hasOwnProperty('parentId')){
+    data.forEach((item) => {
+      if (!item.hasOwnProperty('parentId')) {
         tree.push(item);
-      }else if(item?.parentId == parentId){
+      } else if (item?.parentId == parentId) {
         const children = buildTree(data, item[stats.tabListTitle[props.activeKey].rowKey]);
         if (children.length) {
           item.children = children;
@@ -174,73 +188,78 @@
       }
     });
     return tree;
-  }
+  };
 
-  const onRowSelection = (direction,listDisabled,selectedKeys,onItemSelect,onItemSelectAll) =>{
+  const onRowSelection = (direction, listDisabled, selectedKeys, onItemSelect, onItemSelectAll) => {
     return {
-      checkStrictly:false,
-      columnWidth:'5px',
-      selectedRowKeys: (direction=='left'?[...selectedKeys,...stats.useCatalogGbIdList]:selectedKeys),
+      checkStrictly: false,
+      columnWidth: '5px',
+      selectedRowKeys:
+        direction == 'left' ? [...selectedKeys, ...stats.useCatalogGbIdList] : selectedKeys,
       getCheckboxProps: (item) => ({
         disabled: item.disabled,
       }),
-      onSelect( _ , selected,selectedAllRows) {
-        const treeSelectedKeys = selectedAllRows.filter(item => !item.disabled).map(( val ) => val[stats.tabListTitle[props.activeKey].rowKey]);
+      onSelect(_, selected, selectedAllRows) {
+        const treeSelectedKeys = selectedAllRows
+          .filter((item) => !item.disabled)
+          .map((val) => val[stats.tabListTitle[props.activeKey].rowKey]);
         onItemSelectAll(treeSelectedKeys, selected);
       },
       onSelectAll(selected, selectedAllRows) {
-        const treeSelectedKeys = selectedAllRows.filter(item => !item.disabled).map(( val ) => val[stats.tabListTitle[props.activeKey].rowKey]);
+        const treeSelectedKeys = selectedAllRows
+          .filter((item) => !item.disabled)
+          .map((val) => val[stats.tabListTitle[props.activeKey].rowKey]);
         onItemSelectAll(treeSelectedKeys, selected);
-      }
-    }
-  }
+      },
+    };
+  };
 
-  const fetchList = async (activeKey)=>{
-    if(isEmpty(activeKey)){
+  const fetchList = async (activeKey) => {
+    if (isEmpty(activeKey)) {
       return;
-    } 
+    }
     stats.dataData = [];
-    stats.allGbIdList=[];
-    stats.useCatalogGbIdList=[];
+    stats.allGbIdList = [];
+    stats.useCatalogGbIdList = [];
     const obj = stats.tabListTitle[activeKey] as any;
     stats.dataData = await obj.apiList();
-  }
+  };
 
-  const fetchBind = async (activeKey)=>{
-    if( isEmpty(activeKey) || isEmpty(props.serverGbId) || isEmpty(props.catalogId)){
+  const fetchBind = async (activeKey) => {
+    if (isEmpty(activeKey) || isEmpty(props.serverGbId) || isEmpty(props.catalogId)) {
       return;
     }
     const obj = stats.tabListTitle[activeKey] as any;
-    const {allGbIdList,useCatalogGbIdList} = await obj.apiBind({
-      platformId:props.serverGbId,
-      catalogId:props.catalogId,
-      isSub:0,
+    const { allGbIdList, useCatalogGbIdList } = await obj.apiBind({
+      platformId: props.serverGbId,
+      catalogId: props.catalogId,
+      isSub: 0,
     });
-    stats.allGbIdList=allGbIdList;
-    stats.useCatalogGbIdList=useCatalogGbIdList;
-  }
+    stats.allGbIdList = allGbIdList;
+    stats.useCatalogGbIdList = useCatalogGbIdList;
+  };
 
-  const refresh = () =>{
+  const refresh = () => {
     fetchList(props.activeKey);
     fetchBind(props.activeKey);
-  }
+  };
 
-  watch(() => props.activeKey,
+  watch(
+    () => props.activeKey,
     () => {
       fetchList(props.activeKey);
       fetchBind(props.activeKey);
     },
   );
-  watch(() => props.catalogId,
+  watch(
+    () => props.catalogId,
     () => {
       fetchBind(props.activeKey);
     },
   );
 
-  
-
-  onMounted(()=>{
+  onMounted(() => {
     fetchList(props.activeKey);
-  })
+  });
   defineExpose({ refresh });
 </script>

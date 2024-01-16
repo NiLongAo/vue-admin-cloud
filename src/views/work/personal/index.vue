@@ -37,8 +37,8 @@
   };
 </script>
 <style lang="less">
- @prefix-cls: ~'@{namespace}-personal-center';
- .@{prefix-cls} {
+  @prefix-cls: ~'@{namespace}-personal-center';
+  .@{prefix-cls} {
     &-menu {
       background: @component-background;
     }

@@ -1,7 +1,13 @@
 <template>
   <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
     <PrivilegeTree class="w-50" @select="handleSelect" :tenant="state.tenant" />
-    <PrivilegeCheckbox ref="handleCheckRef" class="grow" :treeData="treeData" :checkedList="checkedList" @save="handleSave" />
+    <PrivilegeCheckbox
+      ref="handleCheckRef"
+      class="grow"
+      :treeData="treeData"
+      :checkedList="checkedList"
+      @save="handleSave"
+    />
   </PageWrapper>
 </template>
 <script lang="ts" setup>

@@ -9,14 +9,14 @@ import { GroupProperties } from '../index';
 import PrefixLabelLinkageSelect from '@/components/Activiti/prefix-label-linkage-select';
 import PrefixLabelSelect from '@/components/Activiti/prefix-label-select';
 import PrefixLabelNumBer from '@/components/Activiti/prefix-label-number';
-import {type FieldDefine} from '@/components/Activiti/dynamic-binder';
+import { type FieldDefine } from '@/components/Activiti/dynamic-binder';
 import { tenantObj } from '@/settings/tenantSetting';
 import { Input, SelectOption } from 'ant-design-vue';
 import { getChoiceUserPage } from '@/api/sys/user';
 import { ModdleElement } from '../../type';
 import { BpmnStore } from '../../store';
 import { resolve } from '@/components/Activiti/utils/script-helper';
-import { unref,reactive,toRaw,computed } from 'vue';
+import { unref, reactive, toRaw, computed } from 'vue';
 
 const TASK_EVENT_OPTIONS = [
   { label: '创建', value: 'create' },
@@ -58,20 +58,22 @@ export const BpmnUserGroupProperties: GroupProperties = {
       showSearch: true,
       filterOption: false,
       prefixTitle: '处理人',
-      bindTransformer:(sourceModel: unknown, bindKey: string, bindDefine: FieldDefine)=>{
+      bindTransformer: (sourceModel: unknown, bindKey: string, bindDefine: FieldDefine) => {
         return reactive({
           bindKey,
           ...bindDefine,
           sourceModel,
-          value: computed(()=>{
-            const val =bindDefine.getValue? bindDefine.getValue(toRaw(sourceModel)): resolve(bindKey, sourceModel) || '';
-            if(!Number.isNaN(Number.parseInt(val))){
+          value: computed(() => {
+            const val = bindDefine.getValue
+              ? bindDefine.getValue(toRaw(sourceModel))
+              : resolve(bindKey, sourceModel) || '';
+            if (!Number.isNaN(Number.parseInt(val))) {
               return Number(val);
             }
             return val;
           }),
         });
-      }
+      },
     },
     /**
      * 候选人属性

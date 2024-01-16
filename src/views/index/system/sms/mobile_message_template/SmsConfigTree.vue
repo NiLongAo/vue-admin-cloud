@@ -32,7 +32,7 @@
     emit('select', unref(defaultKey)[0]);
   };
 
-  const handleSelect = (_,info) => {
+  const handleSelect = (_, info) => {
     defaultKey.value = [info.node.key];
     emit('select', info.node.key);
   };

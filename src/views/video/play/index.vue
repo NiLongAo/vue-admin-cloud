@@ -69,21 +69,19 @@
   import { Tag } from 'ant-design-vue';
   import { useDrawer } from '@/components/Drawer';
   import { useModal } from '@/components/Modal';
-  import { doDevicePage ,doDelDeviceId} from '@/api/video/device';
+  import { doDevicePage, doDelDeviceId } from '@/api/video/device';
   import { doSyncDeviceChannel } from '@/api/video/deviceChannel';
   import DeviceDrawer from './DeviceDrawer.vue';
   import DeviceChannelSyncModel from './channel/DeviceChannelSyncModel.vue';
   import { useSystemStore } from '@/store/modules/system';
-  import { TRANSPORT_TYPE_ENUM ,STREAM_MODE_TYPE_ENUM,TREE_TYPE_ENUM} from '@/enums/commonEnum';
+  import { TRANSPORT_TYPE_ENUM, STREAM_MODE_TYPE_ENUM, TREE_TYPE_ENUM } from '@/enums/commonEnum';
   import { useGo } from '@/hooks/web/usePage';
   const go = useGo();
 
   const systemStore = useSystemStore();
   const { hasPermission } = usePermission();
-  const [ registerDrawer, { openDrawer }] = useDrawer();
-  const [ registerModel, { openModal }] = useModal();
-
-
+  const [registerDrawer, { openDrawer }] = useDrawer();
+  const [registerModel, { openModal }] = useModal();
 
   const [registerTable, { reload }] = useTable({
     title: '国标设备',
@@ -103,51 +101,51 @@
       slots: { customRender: 'action' },
     },
   });
-  const handleRefresh = async (record: Recordable)=>{
-    await doSyncDeviceChannel({deviceId:record.deviceId})
-    openModal(true,{deviceId:record.deviceId})
-  }
+  const handleRefresh = async (record: Recordable) => {
+    await doSyncDeviceChannel({ deviceId: record.deviceId });
+    openModal(true, { deviceId: record.deviceId });
+  };
   const handleChannel = (record: Recordable) => {
     go('/video/play/channel/' + record.deviceId);
-  }
+  };
   const handleAdd = () => {
     openDrawer(true, { id: undefined, isUpdate: false });
-  }
+  };
   const handleEdit = (record: Recordable) => {
     openDrawer(true, {
       deviceId: record.deviceId,
       isUpdate: true,
     });
-  }
+  };
   const handleSuccess = () => {
     //刷新表单
     reload();
   };
-  const handleDelete = async(record: Recordable) => {
+  const handleDelete = async (record: Recordable) => {
     //删除
     await doDelDeviceId({ deviceId: record.deviceId });
     //刷新表单
     reload();
-  }
+  };
 
   function getFormConfig(): Partial<FormProps> {
     return {
       labelWidth: 100,
       autoSubmitOnEnter: true,
-      autoSetPlaceHolder:true,
+      autoSetPlaceHolder: true,
       schemas: [
         {
           field: `query`,
           label: `查询内容`,
           component: 'Input',
-          componentProps:{
-            placeholder:'请输入设备ip或收流IP',
+          componentProps: {
+            placeholder: '请输入设备ip或收流IP',
           },
           colProps: {
             xl: 6,
             xxl: 5,
           },
-        }
+        },
       ],
     };
   }

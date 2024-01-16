@@ -14,12 +14,18 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, unref, computed,reactive } from 'vue';
+  import { ref, unref, computed, reactive } from 'vue';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
-  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM,GEO_COORD_SYS_TYPE_ENUM,STREAM_MODE_TYPE_ENUM} from '@/enums/commonEnum';
+  import {
+    TRANSPORT_TYPE_ENUM,
+    CHARSET_TYPE_ENUM,
+    TREE_TYPE_ENUM,
+    GEO_COORD_SYS_TYPE_ENUM,
+    STREAM_MODE_TYPE_ENUM,
+  } from '@/enums/commonEnum';
   import { useSystemStore } from '@/store/modules/system';
-  import { doFindDeviceId,doSaveDevice } from '@/api/video/device';
+  import { doFindDeviceId, doSaveDevice } from '@/api/video/device';
   import { doMediaPage } from '@/api/video/mediaServer';
   import { debounce } from 'lodash-es';
 
@@ -29,20 +35,20 @@
   const systemStore = useSystemStore();
 
   const stats = reactive({
-    query:"",
+    query: '',
   });
 
   const handleOk = async () => {
     try {
-      const { ssrcCheck, asMessageChannel,hasAdministrator, ...values } = await validate();
+      const { ssrcCheck, asMessageChannel, hasAdministrator, ...values } = await validate();
       if (!unref(isUpdate)) {
         //新增
         await doSaveDevice({
-            ...values,
-            ssrcCheck: ssrcCheck === true ? 1 : 0,
-            asMessageChannel: asMessageChannel === true ? 1 : 0,
-            hasAdministrator: hasAdministrator === true ? 1 : 0,
-          });
+          ...values,
+          ssrcCheck: ssrcCheck === true ? 1 : 0,
+          asMessageChannel: asMessageChannel === true ? 1 : 0,
+          hasAdministrator: hasAdministrator === true ? 1 : 0,
+        });
       } else {
         //修改
         await doSaveDevice({
@@ -100,7 +106,7 @@
     });
     return types;
   });
-  
+
   const schemasDevice: FormSchema[] = [
     {
       field: 'id',
@@ -142,12 +148,16 @@
         allowCreate: true,
         showSearch: true,
         filterOption: false,
-        params: computed(()=> {return { query: stats.query, pageSize: 20 }}),
-        onSearch: debounce((value)=>{
-          return stats.query = value;
-        },300),
-        onChange: ()=>{stats.query = '';},
-        resultField:'data',
+        params: computed(() => {
+          return { query: stats.query, pageSize: 20 };
+        }),
+        onSearch: debounce((value) => {
+          return (stats.query = value);
+        }, 300),
+        onChange: () => {
+          stats.query = '';
+        },
+        resultField: 'data',
         labelField: 'ip',
         valueField: 'id',
       },
@@ -307,7 +317,7 @@
     },
     {
       field: 'hasAdministrator',
-      helpMessage:'开启后普通用户无法看到当前设备',
+      helpMessage: '开启后普通用户无法看到当前设备',
       component: 'Switch',
       label: '开启数据限制',
       colProps: {
@@ -318,26 +328,27 @@
     },
   ];
 
-  const [registerDeviceForm, { setFieldsValue, validate,resetFields }] = useForm({
+  const [registerDeviceForm, { setFieldsValue, validate, resetFields }] = useForm({
     labelWidth: 120,
     schemas: schemasDevice,
     showActionButtonGroup: false,
   });
 
-    //初始化页面
-    const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+  //初始化页面
+  const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     resetFields();
     setDrawerProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      const { ssrcCheck,asMessageChannel,hasAdministrator, ...entity } = await doFindDeviceId({ deviceId: data.deviceId });
+      const { ssrcCheck, asMessageChannel, hasAdministrator, ...entity } = await doFindDeviceId({
+        deviceId: data.deviceId,
+      });
       setFieldsValue({
         ...entity,
-        ssrcCheck: ssrcCheck ===  1 ? true : false,
-        asMessageChannel: asMessageChannel ===  1 ? true : false,
+        ssrcCheck: ssrcCheck === 1 ? true : false,
+        asMessageChannel: asMessageChannel === 1 ? true : false,
         hasAdministrator: hasAdministrator === 1 ? true : false,
       });
     }
   });
-
 </script>

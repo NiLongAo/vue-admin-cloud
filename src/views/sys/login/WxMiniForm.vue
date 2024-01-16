@@ -67,7 +67,7 @@
         stats.scene = scene;
       }
     });
-    
+
     rootSocketEmitter.on(SocketOutEvent.OUT_LOGIN_INFO_EVENT, (val) => {
       const { code, message, data } = val as Recordable;
       if (code == ResultEnum.OVERDUE) {

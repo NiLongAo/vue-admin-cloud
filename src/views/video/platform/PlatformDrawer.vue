@@ -14,11 +14,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, reactive,computed, unref } from 'vue';
+  import { ref, reactive, computed, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
-  import { doPlatformSipList,doPlatformDetail, doPlatformInsert,doPlatformUpdate } from '@/api/video/platform';
-  import { TRANSPORT_TYPE_ENUM ,CHARSET_TYPE_ENUM,TREE_TYPE_ENUM} from '@/enums/commonEnum';
+  import {
+    doPlatformSipList,
+    doPlatformDetail,
+    doPlatformInsert,
+    doPlatformUpdate,
+  } from '@/api/video/platform';
+  import { TRANSPORT_TYPE_ENUM, CHARSET_TYPE_ENUM, TREE_TYPE_ENUM } from '@/enums/commonEnum';
   import { useSystemStore } from '@/store/modules/system';
   import { isEmpty } from '@/utils/is';
 
@@ -27,31 +32,31 @@
   const isUpdate = ref(true);
   const getTitle = computed(() => (!unref(isUpdate) ? '新增国标级联' : '编辑国标级联'));
   const stats = reactive({
-    sipList :[] as any,
-    sipMap :{},
+    sipList: [] as any,
+    sipMap: {},
   });
 
   const handleOk = async () => {
     try {
-      const { enable,rtcp,ptz,startOfflinePush,asMessageChannel, ...values } = await validate();
-      if(unref(isUpdate)){
+      const { enable, rtcp, ptz, startOfflinePush, asMessageChannel, ...values } = await validate();
+      if (unref(isUpdate)) {
         await doPlatformUpdate({
-        ...values,
-        enable: enable === true ? 1 : 0,
-        rtcp: rtcp === true ? 1 : 0,
-        ptz: ptz === true ? 1 : 0,
-        startOfflinePush: startOfflinePush === true ? 1 : 0,
-        asMessageChannel: asMessageChannel === true ? 1 : 0,
-      });
-      }else{
+          ...values,
+          enable: enable === true ? 1 : 0,
+          rtcp: rtcp === true ? 1 : 0,
+          ptz: ptz === true ? 1 : 0,
+          startOfflinePush: startOfflinePush === true ? 1 : 0,
+          asMessageChannel: asMessageChannel === true ? 1 : 0,
+        });
+      } else {
         await doPlatformInsert({
-        ...values,
-        enable: enable === true ? 1 : 0,
-        rtcp: rtcp === true ? 1 : 0,
-        ptz: ptz === true ? 1 : 0,
-        startOfflinePush: startOfflinePush === true ? 1 : 0,
-        asMessageChannel: asMessageChannel === true ? 1 : 0,
-      });
+          ...values,
+          enable: enable === true ? 1 : 0,
+          rtcp: rtcp === true ? 1 : 0,
+          ptz: ptz === true ? 1 : 0,
+          startOfflinePush: startOfflinePush === true ? 1 : 0,
+          asMessageChannel: asMessageChannel === true ? 1 : 0,
+        });
       }
       setDrawerProps({ confirmLoading: true });
       closeDrawer();
@@ -106,36 +111,44 @@
       colProps: {
         span: 12,
       },
-      componentProps:{
-        onChange:(val) =>{
-          let {serverGbId:serverId,catalogId,username,administrativeDivision,serverGbDomain} = getFieldsValue();
-          const serverGbId= val?.target?.value;
-          if(val === serverId){
+      componentProps: {
+        onChange: (val) => {
+          let {
+            serverGbId: serverId,
+            catalogId,
+            username,
+            administrativeDivision,
+            serverGbDomain,
+          } = getFieldsValue();
+          const serverGbId = val?.target?.value;
+          if (val === serverId) {
             return;
           }
-          if(isEmpty(username) || username === serverId){
+          if (isEmpty(username) || username === serverId) {
             setFieldsValue({
-              username:serverGbId,
+              username: serverGbId,
             });
           }
-          if(isEmpty(catalogId) || catalogId === serverId){
+          if (isEmpty(catalogId) || catalogId === serverId) {
             setFieldsValue({
-              catalogId:serverGbId,
+              catalogId: serverGbId,
             });
           }
-          if(isEmpty(administrativeDivision) || administrativeDivision === serverId){
-            administrativeDivision = serverGbId?.length >=6 ?serverGbId.slice(0, 6):val?.target?.value;
+          if (isEmpty(administrativeDivision) || administrativeDivision === serverId) {
+            administrativeDivision =
+              serverGbId?.length >= 6 ? serverGbId.slice(0, 6) : val?.target?.value;
             setFieldsValue({
-              administrativeDivision:administrativeDivision,
+              administrativeDivision: administrativeDivision,
             });
           }
-          if(isEmpty(serverGbDomain) || serverGbDomain === serverId){
-            serverGbDomain =serverGbId?.length >=10 ?serverGbId.slice(0, 10):val?.target?.value;
+          if (isEmpty(serverGbDomain) || serverGbDomain === serverId) {
+            serverGbDomain =
+              serverGbId?.length >= 10 ? serverGbId.slice(0, 10) : val?.target?.value;
             setFieldsValue({
-              serverGbDomain:serverGbDomain,
+              serverGbDomain: serverGbDomain,
             });
           }
-        }
+        },
       },
       required: true,
     },
@@ -165,15 +178,15 @@
         span: 12,
       },
       componentProps: {
-        min:0,
-        max:65535
+        min: 0,
+        max: 65535,
       },
       defaultValue: 0,
       required: true,
     },
     {
       field: 'username',
-      helpMessage:'默认SIP国标编码',
+      helpMessage: '默认SIP国标编码',
       component: 'Input',
       label: 'SIP认证账号',
       colProps: {
@@ -192,7 +205,7 @@
     {
       field: 'catalogId',
       component: 'Input',
-      helpMessage:'默认SIP国标编码',
+      helpMessage: '默认SIP国标编码',
       label: '目录编号',
       colProps: {
         span: 12,
@@ -208,24 +221,24 @@
       componentProps: {
         options: [
           {
-            label:'1',
-            value:1,
-            key:'1',
+            label: '1',
+            value: 1,
+            key: '1',
           },
           {
-            label:'2',
-            value:2,
-            key:'2',
+            label: '2',
+            value: 2,
+            key: '2',
           },
           {
-            label:'4',
-            value:4,
-            key:'4',
+            label: '4',
+            value: 4,
+            key: '4',
           },
           {
-            label:'8',
-            value:8,
-            key:'8',
+            label: '8',
+            value: 8,
+            key: '8',
           },
         ],
       },
@@ -258,14 +271,14 @@
       },
       componentProps: {
         options: sipListTypes,
-        onSelect:(val) =>{
+        onSelect: (val) => {
           setFieldsValue({
-            deviceIp:stats.sipMap[val].ip,
+            deviceIp: stats.sipMap[val].ip,
           });
           setFieldsValue({
-            devicePort:stats.sipMap[val].port,
+            devicePort: stats.sipMap[val].port,
           });
-        }
+        },
       },
       required: true,
     },
@@ -277,8 +290,8 @@
         span: 12,
       },
       componentProps: {
-        min:30,
-        max:68400
+        min: 30,
+        max: 68400,
       },
       defaultValue: 3600,
       required: true,
@@ -291,7 +304,7 @@
         span: 12,
       },
       componentProps: {
-        disabled:true,
+        disabled: true,
       },
     },
     {
@@ -302,7 +315,7 @@
         span: 12,
       },
       componentProps: {
-        disabled:true,
+        disabled: true,
       },
       defaultValue: 0,
     },
@@ -314,11 +327,11 @@
         span: 12,
       },
       componentProps: {
-        min:30,
-        max:600
+        min: 30,
+        max: 600,
       },
       defaultValue: 30,
-      required: true
+      required: true,
     },
     {
       field: 'treeType',
@@ -406,27 +419,28 @@
     },
   ];
 
-  const [registerDeviceForm, { setFieldsValue, validate,resetFields,getFieldsValue }] = useForm({
+  const [registerDeviceForm, { setFieldsValue, validate, resetFields, getFieldsValue }] = useForm({
     labelWidth: 120,
     schemas: schemasDevice,
     showActionButtonGroup: false,
   });
 
-    //初始化页面
+  //初始化页面
   const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     resetFields();
     setDrawerProps({ confirmLoading: false });
     const list = await doPlatformSipList({});
     stats.sipList = [];
     stats.sipMap = {};
-    list.forEach((obj)=>{
-      const {gbId,...val} = obj;
+    list.forEach((obj) => {
+      const { gbId, ...val } = obj;
       stats.sipList.push({ label: obj.gbId, value: obj.gbId, key: obj.gbId });
-      stats.sipMap[obj.gbId]=val;
-    })
+      stats.sipMap[obj.gbId] = val;
+    });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      const { enable,rtcp,ptz,startOfflinePush,asMessageChannel, ...entity } = await doPlatformDetail({ id: data.id });
+      const { enable, rtcp, ptz, startOfflinePush, asMessageChannel, ...entity } =
+        await doPlatformDetail({ id: data.id });
       setFieldsValue({
         ...entity,
         enable: enable === 1 ? true : false,
@@ -437,5 +451,4 @@
       });
     }
   });
-
 </script>

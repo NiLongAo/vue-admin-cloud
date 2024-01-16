@@ -50,7 +50,7 @@
     api: doDepartmentPage,
     columns: getBasicColumns(),
     formConfig: getFormConfig(),
-    striped:true,
+    striped: true,
     bordered: true,
     useSearchForm: true,
     showTableSetting: true,

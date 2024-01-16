@@ -19,26 +19,25 @@
   import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
   import { PTZ_TYPE_ENUM } from '@/enums/commonEnum';
   import { useSystemStore } from '@/store/modules/system';
-  import { doDetailDeviceChannel,doSaveDeviceChannel } from '@/api/video/deviceChannel';
+  import { doDetailDeviceChannel, doSaveDeviceChannel } from '@/api/video/deviceChannel';
 
   const emit = defineEmits(['success', 'register']);
   const isUpdate = ref(true);
   const getTitle = computed(() => (!unref(isUpdate) ? '新增通道' : '编辑通道'));
   const systemStore = useSystemStore();
 
-
   const handleOk = async () => {
     try {
-      const {...values } = await validate();
+      const { ...values } = await validate();
       if (!unref(isUpdate)) {
         //新增
         await doSaveDeviceChannel({
-            ...values
-          });
+          ...values,
+        });
       } else {
         //修改
         await doSaveDeviceChannel({
-          ...values
+          ...values,
         });
       }
       setDrawerProps({ confirmLoading: true });
@@ -57,7 +56,7 @@
     });
     return types;
   });
-  
+
   const schemasDevice: FormSchema[] = [
     {
       field: 'parentId',
@@ -66,9 +65,9 @@
       colProps: {
         span: 12,
       },
-      componentProps:{
-        disabled:true,
-      }
+      componentProps: {
+        disabled: true,
+      },
     },
     {
       field: 'deviceId',
@@ -77,9 +76,9 @@
       colProps: {
         span: 12,
       },
-      componentProps:{
-        disabled:true,
-      }
+      componentProps: {
+        disabled: true,
+      },
     },
     {
       field: 'channelId',
@@ -125,7 +124,7 @@
         options: ptzTypes,
       },
       required: true,
-      defaultValue:0
+      defaultValue: 0,
     },
     {
       field: 'password',
@@ -146,8 +145,8 @@
         span: 12,
       },
       componentProps: {
-        unCheckedValue:0,
-        checkedValue:1,
+        unCheckedValue: 0,
+        checkedValue: 1,
       },
       defaultValue: 0,
       required: true,
@@ -160,15 +159,15 @@
         span: 12,
       },
       componentProps: {
-        unCheckedValue:0,
-        checkedValue:1,
+        unCheckedValue: 0,
+        checkedValue: 1,
       },
       defaultValue: 0,
       required: true,
     },
   ];
 
-  const [registerDeviceForm, { setFieldsValue, validate,resetFields }] = useForm({
+  const [registerDeviceForm, { setFieldsValue, validate, resetFields }] = useForm({
     labelWidth: 120,
     schemas: schemasDevice,
     showActionButtonGroup: false,
@@ -176,20 +175,19 @@
 
   //初始化页面
   const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
-  resetFields();
-  setDrawerProps({ confirmLoading: false });
-  isUpdate.value = !!data?.isUpdate;
-  if (unref(isUpdate)) {
-    const {  ...entity } = await doDetailDeviceChannel({ channelId: data.channelId });
-    setFieldsValue({
-      ...entity
-    });
-  }else{
-    setFieldsValue({
-      parentId:data.deviceId,
-      deviceId:data.deviceId,
-    });
-  }
+    resetFields();
+    setDrawerProps({ confirmLoading: false });
+    isUpdate.value = !!data?.isUpdate;
+    if (unref(isUpdate)) {
+      const { ...entity } = await doDetailDeviceChannel({ channelId: data.channelId });
+      setFieldsValue({
+        ...entity,
+      });
+    } else {
+      setFieldsValue({
+        parentId: data.deviceId,
+        deviceId: data.deviceId,
+      });
+    }
   });
-
 </script>

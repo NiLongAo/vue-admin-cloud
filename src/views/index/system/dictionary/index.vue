@@ -80,12 +80,12 @@
     formConfig: getFormConfig(),
     useSearchForm: true,
     bordered: true,
-    immediate:false,
+    immediate: false,
     showTableSetting: true,
     tableSetting: { fullScreen: true },
     showIndexColumn: false,
     rowKey: 'id',
-    defSort:{
+    defSort: {
       field: 'sort',
       order: 'ascend',
     },

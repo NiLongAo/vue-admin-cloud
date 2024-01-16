@@ -18,7 +18,7 @@
   import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
   import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
   import { doProxyDetail, doProxySave } from '@/api/video/proxy';
-  import { PROXY_TYPE_ENUM,PROXY_RTP_TYPE_ENUM} from '@/enums/commonEnum';
+  import { PROXY_TYPE_ENUM, PROXY_RTP_TYPE_ENUM } from '@/enums/commonEnum';
   import { useSystemStore } from '@/store/modules/system';
 
   const emit = defineEmits(['success', 'register']);
@@ -26,15 +26,24 @@
   const isUpdate = ref(true);
   const getTitle = computed(() => (!unref(isUpdate) ? '新增拉流' : '编辑拉流'));
 
-
   const handleOk = async () => {
     try {
-      const { enable,enableAudio,enableMp4,enableRemoveNoneReader,enableDisableNoneReader,type,url,srcUrl, ...values } = await validate();
+      const {
+        enable,
+        enableAudio,
+        enableMp4,
+        enableRemoveNoneReader,
+        enableDisableNoneReader,
+        type,
+        url,
+        srcUrl,
+        ...values
+      } = await validate();
       await doProxySave({
         ...values,
-        type:type,
-        url:type===1?url:'',
-        srcUrl:type===1?'':url,
+        type: type,
+        url: type === 1 ? url : '',
+        srcUrl: type === 1 ? '' : url,
         enable: enable === true ? 1 : 0,
         enableAudio: enableAudio === true ? 1 : 0,
         enableMp4: enableMp4 === true ? 1 : 0,
@@ -65,7 +74,7 @@
     });
     return types;
   });
-  
+
   const schemasDevice: FormSchema[] = [
     {
       field: 'app',
@@ -127,8 +136,8 @@
         span: 12,
       },
       componentProps: {
-        min:1000,
-        max:60000
+        min: 1000,
+        max: 60000,
       },
       defaultValue: 10000,
     },
@@ -194,7 +203,7 @@
       },
       defaultValue: false,
     },
-    
+
     {
       field: 'enableDisableNoneReader',
       component: 'Switch',
@@ -206,24 +215,34 @@
     },
   ];
 
-  const [registerDeviceForm, { setFieldsValue, validate,resetFields }] = useForm({
+  const [registerDeviceForm, { setFieldsValue, validate, resetFields }] = useForm({
     labelWidth: 120,
     schemas: schemasDevice,
     showActionButtonGroup: false,
   });
 
-    //初始化页面
+  //初始化页面
   const [register, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
     resetFields();
     setDrawerProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
-      const { enable,enableAudio,enableMp4,enableRemoveNoneReader,enableDisableNoneReader,type,url,srcUrl ,...entity } = await doProxyDetail({ id: data.id });
-      const proxyUrl =type===1?url:srcUrl;
+      const {
+        enable,
+        enableAudio,
+        enableMp4,
+        enableRemoveNoneReader,
+        enableDisableNoneReader,
+        type,
+        url,
+        srcUrl,
+        ...entity
+      } = await doProxyDetail({ id: data.id });
+      const proxyUrl = type === 1 ? url : srcUrl;
       setFieldsValue({
         ...entity,
-        type:type,
-        url:proxyUrl,
+        type: type,
+        url: proxyUrl,
         enable: enable === 1 ? true : false,
         enableAudio: enableAudio === 1 ? true : false,
         enableMp4: enableMp4 === 1 ? true : false,
@@ -232,5 +251,4 @@
       });
     }
   });
-
 </script>

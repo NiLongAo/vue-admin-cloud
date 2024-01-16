@@ -156,8 +156,8 @@ export const getElementTypeListenerProperties = function (options: {
               const type = item.expression
                 ? 'expression'
                 : item.delegateExpression
-                ? 'delegateExpression'
-                : 'class';
+                  ? 'delegateExpression'
+                  : 'class';
               return {
                 event: item.event,
                 type: type,

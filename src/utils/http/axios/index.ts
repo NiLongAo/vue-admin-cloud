@@ -111,7 +111,10 @@ const transform: AxiosTransform = {
     const params = config.params || {};
     const data = config.data || false;
     formatDate && data && !isString(data) && formatRequestDate(data);
-    if (config.method?.toUpperCase() === RequestEnum.GET || config.method?.toUpperCase() === RequestEnum.DELETE) {
+    if (
+      config.method?.toUpperCase() === RequestEnum.GET ||
+      config.method?.toUpperCase() === RequestEnum.DELETE
+    ) {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
         config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
@@ -195,30 +198,28 @@ const transform: AxiosTransform = {
     const useService = useServiceStoreWithOut();
     switch (code) {
       case ResultEnum.OVERDUE:
-        if(!useService.getIsRefreshing){
+        if (!useService.getIsRefreshing) {
           useService.setIsRefreshing(true);
-          res = new Promise(async(resolve)=>{
-            useService.setRequests({config:res.config,resl:resolve});
+          res = new Promise(async (resolve) => {
+            useService.setRequests({ config: res.config, resl: resolve });
             if (userStore.getRefreshToken !== undefined) {
               userStore.setToken(undefined, userStore.getRefreshToken);
               await userStore.refreshToken();
               if (userStore.getToken == undefined) {
                 await userStore.logout(true);
               } else {
-                useService.getRequests.forEach(({config,resl}) =>
-                  resl(axiosInstance(config))
-                );
+                useService.getRequests.forEach(({ config, resl }) => resl(axiosInstance(config)));
               }
-            }else{
+            } else {
               await userStore.logout(true);
               resolve(res);
             }
             useService.cloneRequests();
             useService.setIsRefreshing(false);
           }) as any;
-        }else{
-          res = new Promise((resolve)=>{
-            useService.setRequests({config:res.config,resl:resolve});
+        } else {
+          res = new Promise((resolve) => {
+            useService.setRequests({ config: res.config, resl: resolve });
           }) as any;
         }
         break;

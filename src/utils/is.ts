@@ -1,4 +1,4 @@
-import {isNil,isEmpty }from 'lodash-es';
+import { isNil, isEmpty } from 'lodash-es';
 export {
   isArguments,
   isArrayBuffer,

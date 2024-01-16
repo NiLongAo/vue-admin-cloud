@@ -82,7 +82,7 @@
     return !!unref(image) ? staticPath + image.value : headerImg;
   });
 
-  const handleFileVal = ({source,data}) => {
+  const handleFileVal = ({ source, data }) => {
     image.value = data.path;
     setFieldsValue({ imageUrl: data.path });
   };
@@ -94,14 +94,17 @@
       const { isAdmin, isEnabled, areaList, ...values } = await validate();
       if (unref(props.userId)) {
         //修改
-        await doUpdate({
-          ...values,
-          isAdmin: isAdmin === true ? 1 : 0,
-          isEnabled: isEnabled === true ? 1 : 0,
-          provinceId: areaList[0],
-          cityId: areaList[1],
-          areaId: areaList[2],
-        },{successMessageMode:'message'});
+        await doUpdate(
+          {
+            ...values,
+            isAdmin: isAdmin === true ? 1 : 0,
+            isEnabled: isEnabled === true ? 1 : 0,
+            provinceId: areaList[0],
+            cityId: areaList[1],
+            areaId: areaList[2],
+          },
+          { successMessageMode: 'message' },
+        );
       } else {
         //新增
         await doInsert({

@@ -1,15 +1,19 @@
 import { defHttp } from '@/utils/http/axios';
-import { DeviceChannelEntity, DeviceChannelParams, DeviceChannelPageResultModel } from './model/deviceChannelModel';
+import {
+  DeviceChannelEntity,
+  DeviceChannelParams,
+  DeviceChannelPageResultModel,
+} from './model/deviceChannelModel';
 
 enum Api {
   //通道树
   tree = '/webapi/video/device/channel/tree',
   //通道分页
   page = '/webapi/video/device/channel/page',
-   //通道详情
+  //通道详情
   detail = '/webapi/video/device/channel/detail',
   //保存通道信息
-  save =  '/webapi/video/device/channel/save',
+  save = '/webapi/video/device/channel/save',
   //同步设备通道
   sync = '/webapi/video/device/channel/sync',
   //获取通道同步进度

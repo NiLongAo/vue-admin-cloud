@@ -1,7 +1,5 @@
 import { BasicPageParams, BasicFetchResult } from '@/api/model/baseModel';
 
-
-
 /**
  * @description: 流媒体相关信息
  */
@@ -9,88 +7,87 @@ export interface MediaServerEntity {
   /**
    * 主键
    */
-  id:string;
+  id: string;
   /**
    * IP
    */
-  ip:string;
+  ip: string;
   /**
    * hook使用的IP（zlm访问 使用的IP）
    */
-  sslStatus:number;
+  sslStatus: number;
   /**
    * hook使用的IP（zlm访问 使用的IP）
    */
-  hookIp:string;
+  hookIp: string;
   /**
    * SDP IP
    */
-  sdpIp:string;
+  sdpIp: string;
   /**
    * 流IP
    */
-  streamIp:string;
+  streamIp: string;
   /**
    * HTTP端口
    */
-  httpPort:number;
+  httpPort: number;
   /**
    * HTTPS端口
    */
-  httpSslPort:number;
+  httpSslPort: number;
   /**
    * RTMP端口
    */
-  rtmpPort:number;
+  rtmpPort: number;
   /**
    * RTMPS端口
    */
-  rtmpSslPort:number;
+  rtmpSslPort: number;
   /**
    * RTP收流端口（单端口模式有用）
    */
-  rtpProxyPort:number;
+  rtpProxyPort: number;
   /**
    * RTSP端口
    */
-  rtspPort:number;
+  rtspPort: number;
   /**
    * RTSPS端口
    */
-  rtspSslPort:number;
+  rtspSslPort: number;
   /**
    * 是否开启自动配置ZLM
    */
-  autoConfig:number;
+  autoConfig: number;
   /**
    * ZLM鉴权参数
    */
-  secret:string;
+  secret: string;
   /**
    * 是否使用多端口模式
    */
-  rtpEnable:number;
+  rtpEnable: number;
   /**
    * 状态
    */
-  status:number;
+  status: number;
   /**
    * 多端口RTP收流端口范围
    */
-  rtpPortRange:string;
+  rtpPortRange: string;
   /**
    * assist服务端口
    */
-  recordAssistPort:number;
+  recordAssistPort: number;
   /**
    * 是否是默认ZLM
    */
-  defaultServer:number;
+  defaultServer: number;
   /**
    * keepalive hook触发间隔,单位秒
    */
-  hookAliveInterval:number;
-
+  hookAliveInterval: number;
 }
 /**
  * 查询参数类型

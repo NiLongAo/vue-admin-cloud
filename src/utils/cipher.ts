@@ -8,7 +8,6 @@ import MD5 from 'crypto-js/md5';
 import SHA256 from 'crypto-js/sha256';
 import SHA512 from 'crypto-js/sha512';
 
-
 // Define an interface for encryption
 // 定义一个加密器的接口
 export interface Encryption {
@@ -26,7 +25,7 @@ export interface EncryptionParams {
   md?: any;
 }
 
-class AesEncryption implements Encryption{
+class AesEncryption implements Encryption {
   private readonly key;
   private readonly iv;
   private readonly md;
@@ -141,7 +140,7 @@ class SHA512Hashing implements Hashing {
 export class EncryptionFactory {
   //AES加解密
   public static createAesEncryption(params?: EncryptionParams): Encryption {
-    return new AesEncryption({...params});
+    return new AesEncryption({ ...params });
   }
 
   public static createBase64Encryption(): Encryption {

@@ -174,7 +174,7 @@
     });
   };
 
-  const handleSelect = (_,info) => {
+  const handleSelect = (_, info) => {
     nextTick(() => {
       defaultKey.value = [info.node.key];
       const node: any = getTree().getSelectedNode(info.node.key);
