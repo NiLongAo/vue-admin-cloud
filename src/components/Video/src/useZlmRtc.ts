@@ -33,11 +33,12 @@ export function useZlmRtc(rtcProps: RtcProps, container?: Ref) {
         {
           zlmsdpUrl: '', //播放流地址
           debug: false, // 是否打印日志
-          simulecast: false,
-          useCamera: false,
-          audioEnable: false,
-          videoEnable: false,
-          recvOnly: true,
+          simulcast: false,// 是否联播
+          useCamera: false,//是否使用相机
+          audioEnable: true,//是否开启视频
+          videoEnable: true,//是否开启音频
+          recvOnly: true,//是否仅cv模式
+          usedatachannel: false//是否使用数据通道
         },
         rtcProps || {},
       ),
