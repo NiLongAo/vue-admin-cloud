@@ -172,19 +172,22 @@ export const useUserStore = defineStore({
     },
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
-      const sessionTimeout = this.sessionTimeout;
       // get user info
       const userInfo = await this.getUserInfoAction();
+
+      const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
       } else {
         const permissionStore = usePermissionStore();
+
+        // 动态路由加载（首次）
         if (!permissionStore.isDynamicAddedRoute) {
           const routes = await permissionStore.buildRoutesAction();
-          routes.forEach((route) => {
+          [...routes, PAGE_NOT_FOUND_ROUTE].forEach((route) => {
             router.addRoute(route as unknown as RouteRecordRaw);
           });
-          router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
+          // 记录动态路由加载完成
           permissionStore.setDynamicAddedRoute(true);
         }
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
@@ -234,8 +237,19 @@ export const useUserStore = defineStore({
       this.setSessionTimeout(false);
       this.setUserInfo(null);
       systemStore.setSystemConfigMap({}); //清空配置信息
-      goLogin && router.push(PageEnum.BASE_LOGIN);
-    },
+      if (goLogin) {
+        // 直接回登陆页
+        router.replace(PageEnum.BASE_LOGIN);
+      } else {
+        // 回登陆页带上当前路由地址
+        router.replace({
+          path: PageEnum.BASE_LOGIN,
+          query: {
+            redirect: encodeURIComponent(router.currentRoute.value.fullPath),
+          },
+        });
+      }    },
+
     /**
      * @description: Confirm before logging out
      */
@@ -247,6 +261,7 @@ export const useUserStore = defineStore({
         title: () => h('span', t('sys.app.logoutTip')),
         content: () => h('span', t('sys.app.logoutMessage')),
         onOk: async () => {
+          // 主动登出，不带redirect地址
           await this.logout(true);
         },
       });

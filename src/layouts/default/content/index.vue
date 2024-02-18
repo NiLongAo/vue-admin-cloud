@@ -1,9 +1,17 @@
 <template>
-  <div :class="[prefixCls, getLayoutContentMode]" v-loading="getOpenPageLoading && getPageLoading">
+  <div
+    :class="[prefixCls, getLayoutContentMode]"
+    v-loading="getOpenPageLoading && getPageLoading"
+    ref="content"
+  >
     <PageLayout />
+    <BackTop v-if="getUseOpenBackTop" :target="() => content" :visibilityHeight="100" />
   </div>
 </template>
 <script lang="ts" setup>
+  import { ref } from 'vue';
+  import { BackTop } from 'ant-design-vue';
+
   import PageLayout from '@/layouts/page/index.vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { useRootSetting } from '@/hooks/setting/useRootSetting';
@@ -14,9 +22,11 @@
 
   const { prefixCls } = useDesign('layout-content');
   const { getOpenPageLoading } = useTransitionSetting();
-  const { getLayoutContentMode, getPageLoading } = useRootSetting();
+  const { getLayoutContentMode, getPageLoading, getUseOpenBackTop } = useRootSetting();
 
   useContentViewHeight();
+
+  const content = ref();
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-layout-content';
@@ -31,7 +41,7 @@
     min-height: 0;
     overflow: auto;
 
-    // begin: ÏÂÃæÕâ¿é´úÂë ÔÚÎÒµÄÏîÄ¿´ò°üºóÔÚ±È½Ï¿íµÄÆÁÄ»(2K 31 ´ç)ÓĞÏÔÊ¾ bug ÓĞÅ¼·¢ĞÔ Çå»º´æÊ×´Î½øÈë»á³öÏÖ , Ë¢ĞÂ¾ÍÃ»ÁË, ÕâÀïÎªÊ²Ã´ÒªÖ¸¶¨¿í¶È ?
+    // begin: ä¸‹é¢è¿™å—ä»£ç  åœ¨æˆ‘çš„é¡¹ç›®æ‰“åŒ…ååœ¨æ¯”è¾ƒå®½çš„å±å¹•(2K 31 å¯¸)æœ‰æ˜¾ç¤º bug æœ‰å¶å‘æ€§ æ¸…ç¼“å­˜é¦–æ¬¡è¿›å…¥ä¼šå‡ºç° , åˆ·æ–°å°±æ²¡äº†, è¿™é‡Œä¸ºä»€ä¹ˆè¦æŒ‡å®šå®½åº¦ ?
     &.fixed {
       width: 1200px;
       margin: 0 auto;
