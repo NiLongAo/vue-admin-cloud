@@ -48,6 +48,7 @@
             <TimeRangePicker
               v-model:value="stats.rangePickerDate"
               value-format="HH:mm:ss"
+              :allowClear="false"
               size="small"
               :disabledTime="disabledTime"
             />
