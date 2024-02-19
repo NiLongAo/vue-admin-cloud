@@ -468,6 +468,7 @@
   const pushStats = reactive({
     zlmsdpUrl: '',
     audioEnable: true,
+    videoEnable: false,
     recvOnly: false,
     debug: true,
   });

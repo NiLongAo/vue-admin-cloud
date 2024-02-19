@@ -80,7 +80,7 @@
   const use = reactive({
     videoUrl: props.videoUrl,
     options: {},
-    hasAudio: false,
+    hasAudio: true,
     isMute: false,
   });
   const { stats, play, pause, refresh, screenshot, onMute, fullscreenSwich, destroy } =
