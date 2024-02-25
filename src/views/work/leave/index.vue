@@ -20,6 +20,7 @@
   import { doFind, doInsert, doDelete } from '@/api/oa/leave';
   import { BasicForm, FormSchema, useForm } from '@/components/Form/index';
   import { useTabs } from '@/hooks/web/useTabs';
+  import { isEmpty } from '@/utils/is';
   const { closeCurrent } = useTabs();
 
   const route = useRoute();
@@ -45,9 +46,14 @@
     if (businessKey === 'undefined') {
       return;
     }
-    const { startTime, endTime, day, processInstanceId, memo } = await doFind({
+    const val = await doFind({
       id: businessKey,
     });
+    if(isEmpty(val)){
+      //记录被删除
+      return;
+    }
+    const { startTime, endTime, day, processInstanceId, memo } =val;
     stats.processInstanceId = processInstanceId;
     stats.startTime = startTime;
     stats.endTime = endTime;
@@ -57,22 +63,22 @@
     updateSchema([
       {
         field: 'startTime',
-        defaultValue: stats.startTime,
-        componentProps: { disabled: !!stats.processInstanceId },
+        componentProps: { 
+          disabled: !!stats.processInstanceId 
+        },
       },
       {
         field: 'endTime',
-        defaultValue: stats.endTime,
-        componentProps: { disabled: !!stats.processInstanceId },
+        componentProps: { 
+          disabled: !!stats.processInstanceId 
+        },
       },
       {
         field: 'day',
-        defaultValue: stats.day,
         componentProps: { disabled: !!stats.processInstanceId },
       },
       {
         field: 'memo',
-        defaultValue: stats.memo,
         componentProps: { disabled: !!stats.processInstanceId },
       },
     ]);
@@ -93,6 +99,9 @@
       },
       defaultValue: stats.startTime,
       required: true,
+      componentProps: { 
+        disabled: !!stats.processInstanceId 
+      },
     },
     {
       field: 'endTime',
@@ -103,7 +112,9 @@
       },
       defaultValue: stats.endTime,
       required: true,
-      componentProps: { disabled: !!stats.processInstanceId },
+      componentProps: { 
+        disabled: !!stats.processInstanceId 
+      },
     },
     {
       field: 'day',
@@ -114,7 +125,9 @@
       },
       defaultValue: stats.day,
       required: true,
-      componentProps: { disabled: !!stats.processInstanceId },
+      componentProps: { 
+        disabled: !!stats.processInstanceId 
+      },
     },
     {
       field: 'memo',
