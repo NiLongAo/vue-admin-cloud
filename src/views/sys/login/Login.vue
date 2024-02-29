@@ -207,9 +207,5 @@
         min-width: 160px;
       }
     }
-
-    .@{countdown-prefix-cls} input {
-      min-width: unset;
-    }
   }
 </style>

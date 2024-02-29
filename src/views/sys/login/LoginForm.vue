@@ -20,20 +20,18 @@
       <InputPassword
         size="large"
         visibilityToggle
-        autocomplete
+        autocomplete="off"
         v-model:value="formData.password"
         :placeholder="t('sys.login.password')"
       />
     </FormItem>
     <FormItem name="loginCode" class="enter-x">
-      <Input size="large" v-model:value="formData.loginCode" placeholder="验证码">
-        <template #addonAfter>
+      <Input size="large" v-model:value="formData.loginCode" autocomplete="off" placeholder="验证码" class="login-code-input">
+        <template #suffix>
           <Image
             class="object-fill cursor-pointer"
             :src="formData.images"
             :preview="false"
-            width="120px"
-            height="38px"
             @click="GetCode()"
           />
         </template>
@@ -212,8 +210,10 @@
   @prefix-cls: ~'@{namespace}-login-from';
 
   .@{prefix-cls} {
-    .ant-input-group-addon {
-      padding: 0;
+    .login-code-input {
+      input{
+        min-width: unset !important;
+      }
     }
   }
 </style>
