@@ -55,7 +55,7 @@
     labelWidth: 120,
     showActionButtonGroup: false,
   });
-  onMounted(async () => {
+  onMounted(() => {
     initModel();
   });
 
