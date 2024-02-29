@@ -131,7 +131,7 @@ export class VAxios {
     this.axiosInstance.interceptors.response.use(async (res: AxiosResponse<any>) => {
       res && axiosCanceler.removePending(res.config);
       if (responseInterceptors && isFunction(responseInterceptors)) {
-        res = await responseInterceptors(this.axiosInstance, res);
+        res = await responseInterceptors(axiosInstance, res);
       }
       return res;
     }, undefined);

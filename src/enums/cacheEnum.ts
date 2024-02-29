@@ -10,6 +10,9 @@ export const LOCALE_KEY = 'LOCALE__';
 // user info key
 export const USER_INFO_KEY = 'USER__INFO__';
 
+// user info key
+export const SEARCH_TENANT_KEY = 'SEARCH_TENANT__';
+
 // role info key
 export const ROLES_KEY = 'ROLES__KEY__';
 

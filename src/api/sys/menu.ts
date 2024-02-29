@@ -46,7 +46,7 @@ enum Api {
  */
 //获取用户路由菜单
 export const getMenuList = () => {
-  return defHttp.post<getMenuListResultModel>({ url: Api.GetMenuList });
+  return defHttp.post<getMenuListResultModel>({ url: Api.GetMenuList },{dataHeaderTenant:false});
 };
 //获取菜单分页
 export function doMenuPage(params: MenuParams) {

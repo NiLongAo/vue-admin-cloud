@@ -10,6 +10,7 @@ import {
   USER_INFO_KEY,
   CHECK_URL_TOKEN_KEY,
   ABILITY_KEY,
+  SEARCH_TENANT_KEY,
 } from '@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '@/api/sys/model/userModel';
@@ -89,7 +90,7 @@ export const useUserStore = defineStore({
       return state.checkUrl;
     },
     getSearchTenant(state): string | number | undefined {
-      return state.searchTenant;
+      return state.searchTenant || getAuthCache<number>(SEARCH_TENANT_KEY);
     },
   },
   actions: {
@@ -125,6 +126,7 @@ export const useUserStore = defineStore({
     },
     setSearchTenant(searchTenant: string | number | undefined) {
       this.searchTenant = searchTenant;
+      setAuthCache(SEARCH_TENANT_KEY, searchTenant);
     },
     resetState() {
       this.userInfo = null;

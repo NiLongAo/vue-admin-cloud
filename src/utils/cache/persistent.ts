@@ -21,6 +21,7 @@ import {
   DITC_KEY,
   REMEMBER,
   TABLE_SETTING_KEY,
+  SEARCH_TENANT_KEY,
   CHECK_URL_TOKEN_KEY,
 } from '@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting';
@@ -42,6 +43,7 @@ interface BasicStore {
   [DITC_KEY]: Recordable;
   [REMEMBER]: RememberLoing;
   [CHECK_URL_TOKEN_KEY]: string | null | undefined;
+  [SEARCH_TENANT_KEY]: string | null | undefined;
 }
 
 type LocalStore = BasicStore;

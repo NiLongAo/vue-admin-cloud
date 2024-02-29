@@ -27,6 +27,7 @@
   import { useTabs } from '@/hooks/web/useTabs';
   import { BasicModal, useModalInner } from '@/components/Modal/index';
   import { BasicForm, useForm } from '@/components/Form/index';
+  import { isEmpty } from '@/utils/is';
 
   export default defineComponent({
     name: 'TenantModal',
@@ -63,6 +64,7 @@
           {
             field: schemasTenantId as string,
             label: t('layout.header.tenantName'),
+            defaultValue:userStore.getSearchTenant,
             colProps: {
               span: 24,
             },
@@ -86,6 +88,7 @@
       const handleSwitch = async () => {
         const val = (await validateFields()) as any;
         await userStore.setSearchTenant(val[schemasTenantId as string]);
+        
         //刷新页面
         refreshPage();
         closeModal();

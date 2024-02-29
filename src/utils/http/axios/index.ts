@@ -172,8 +172,8 @@ const transform: AxiosTransform = {
     // 添加 Tenant
     const userStore = useUserStoreWithOut();
     const tenantId = userStore.getSearchTenant;
-    if (options?.requestOptions?.dataHeaderTenant && tenantId) {
-      const dataHeaderTenant = options?.requestOptions?.dataHeaderTenant as string;
+    if ((config as Recordable)?.requestOptions?.dataHeaderTenant && tenantId) {
+      const dataHeaderTenant = (config as Recordable)?.requestOptions?.dataHeaderTenant as string;
       if (isString(tenantId) || isNumber(tenantId)) {
         (config as Recordable).headers[dataHeaderTenant] = tenantId;
       }
