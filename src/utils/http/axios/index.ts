@@ -115,18 +115,9 @@ const transform: AxiosTransform = {
       config.method?.toUpperCase() === RequestEnum.GET ||
       config.method?.toUpperCase() === RequestEnum.DELETE
     ) {
-      if (!isString(params)) {
-        // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
-        config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
-      } else {
-        // 兼容restful风格
-        config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
-        config.params = undefined;
-      }
-      //处理 get 请求传输集合参数
-      config.paramsSerializer = function (params) {
-        return qs.stringify(params, { arrayFormat: 'repeat' });
-      };
+      config.url = setObjToUrlParams(config.url,data,true);
+			const {data:_,...conf} = config;
+			config = conf;
     } else {
       if (!isString(params)) {
         formatDate && formatRequestDate(params);

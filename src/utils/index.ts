@@ -3,7 +3,7 @@ import type { App, Component } from 'vue';
 
 import { intersectionWith, isEqual, mergeWith, unionWith } from 'lodash-es';
 import { unref } from 'vue';
-import { isArray, isObject } from '@/utils/is';
+import { isArray, isObject,isString } from '@/utils/is';
 
 export const noop = () => {};
 
@@ -24,14 +24,30 @@ export function getPopupContainer(node?: HTMLElement): HTMLElement {
  *  setObjToUrlParams('www.baidu.com', obj)
  *  ==>www.baidu.com?a=3&b=4
  */
-export function setObjToUrlParams(baseUrl: string, obj: any): string {
-  const url = new URL(baseUrl);
-  const params = new URLSearchParams(url.search);
-  for (const key in obj) {
-    params.set(key, String(obj[key]));
+export function setObjToUrlParams(baseUrl: string|undefined, obj: String| Recordable,joinTimestamp?:boolean): string |undefined{
+  if(!isString(baseUrl)){
+    return baseUrl;
   }
-  url.search = params.toString();
-  return url.toString();
+	if(isObject(obj)){
+		if(isString(obj)){
+			baseUrl += baseUrl.includes('?') ? '&' : '?';
+			baseUrl += obj;
+		}else{
+			const keys = Object.keys(obj);
+			if (keys.length > 0) {
+			  baseUrl += baseUrl.includes('?') ? '&' : '?';
+			  baseUrl += keys.map(key => encodeURIComponent(key) + '=' + encodeURIComponent((obj as Recordable)[key])).join('&');
+			}
+		}
+	}
+	
+	if(joinTimestamp){
+		baseUrl += baseUrl.includes('?') ? '&' : '?';
+		const now = new Date().getTime();
+		baseUrl += `_t=${now}`;
+	}
+
+    return baseUrl;
 }
 
 /**

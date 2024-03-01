@@ -66,7 +66,7 @@
     }
   };
 
-  const transportTypes = computed(() => {
+  const transportTypes= computed(() => {
     const template = systemStore.getDictMap[TRANSPORT_TYPE_ENUM];
     const types = [] as any;
     Object.keys(template).forEach((key) => {
@@ -160,7 +160,7 @@
         resultField: 'data',
         labelField: 'ip',
         valueField: 'id',
-      },
+      } as any,
     },
     {
       field: 'transport',
@@ -170,7 +170,7 @@
         span: 12,
       },
       componentProps: {
-        options: transportTypes,
+        options: transportTypes as any,
       },
       required: true,
       defaultValue: 1,
@@ -199,7 +199,7 @@
         span: 12,
       },
       componentProps: {
-        options: charsetTypes,
+        options: charsetTypes as any,
       },
       defaultValue: 2,
       required: true,
@@ -212,7 +212,7 @@
         span: 12,
       },
       componentProps: {
-        options: treeTypes,
+        options: treeTypes as any,
       },
       defaultValue: 215,
       required: true,
@@ -225,7 +225,7 @@
         span: 12,
       },
       componentProps: {
-        options: geoCoordSysTypes,
+        options: geoCoordSysTypes as any,
       },
       defaultValue: 1,
       required: true,
@@ -238,7 +238,7 @@
         span: 12,
       },
       componentProps: {
-        options: streamModeTypes,
+        options: streamModeTypes as any,
       },
       defaultValue: 1,
       required: true,
