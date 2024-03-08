@@ -82,7 +82,8 @@
               uid: -i + '',
               name: item.substring(item.lastIndexOf('/') + 1),
               status: 'done',
-              url: item,
+              url: props.prefix?props.prefix + item:item,
+              path: item,
             };
           } else if (item && isObject(item)) {
             return item;
@@ -161,11 +162,10 @@
         data: {
           ...(props.uploadParams || {}),
         },
-        file: info.file,
-        name: props.name,
+        [props.name]: info.file,
         filename: props.filename,
       });
-      info.onSuccess!(res.data);
+      await info.onSuccess!(res);
       const value = getValue();
       isInnerOperate.value = true;
       emit('change', value);
@@ -179,7 +179,7 @@
     const list = (fileList.value || [])
       .filter((item) => item?.status === UploadResultStatus.DONE)
       .map((item: any) => {
-        return item?.url || item?.response?.url;
+        return item?.path || item?.response?.path;
       });
     return props.multiple ? list : list.length > 0 ? list[0] : '';
   }

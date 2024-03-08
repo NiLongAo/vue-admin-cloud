@@ -59,13 +59,13 @@
     const h = Number(formatToDate(new Date(), 'HH'));
     let holle;
     if (0 <= h && h < 10) {
-      holle = '早上好,  ' + userinfo.value.userName + '  开始您一天的工作吧！';
+      holle = '早上好,  ' + userinfo.value.nickName + '  开始您一天的工作吧！';
     } else if (10 <= h && h < 12) {
-      holle = '中午好,  ' + userinfo.value.userName + '  继续努力哟！';
+      holle = '中午好,  ' + userinfo.value.nickName + '  继续努力哟！';
     } else if (12 <= h && h < 18) {
-      holle = '下午好,  ' + userinfo.value.userName + '  保持完美工作状态！';
+      holle = '下午好,  ' + userinfo.value.nickName + '  保持完美工作状态！';
     } else if (18 <= h && h < 24) {
-      holle = '晚上好,  ' + userinfo.value.userName + '  早点休息吧！';
+      holle = '晚上好,  ' + userinfo.value.nickName + '  早点休息吧！';
     }
     return holle;
   });

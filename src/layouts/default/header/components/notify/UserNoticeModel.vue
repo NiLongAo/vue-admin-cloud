@@ -2,7 +2,7 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerBasicModal"
-    :afterClose="afterCloseModel"
+    @afterClose="afterCloseModel"
     :showOkBtn="false"
     :title="stats.data?.title"
     :bodyStyle="getWrapStyle"

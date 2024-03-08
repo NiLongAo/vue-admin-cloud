@@ -40,7 +40,8 @@
         .filter((item) => !!item)
         .map((item) => {
           return {
-            url: item,
+            fullPath: props.prefix? props.prefix + item : item,
+            path:  item,
             type: item.split('.').pop() || '',
             name: item.split('/').pop() || '',
           };
@@ -51,21 +52,18 @@
 
   // 删除
   function handleRemove(record: PreviewFileItem) {
-    const index = fileListRef.value.findIndex((item) => item.url === record.url);
+    const index = fileListRef.value.findIndex((item) => item.path === record.path);
     if (index !== -1) {
       const removed = fileListRef.value.splice(index, 1);
-      emit('delete', removed[0].url);
-      emit(
-        'list-change',
-        fileListRef.value.map((item) => item.url),
-      );
+      emit('delete', removed[0].path);
+      emit('list-change',fileListRef.value.map((item) => item.path),);
     }
   }
 
   // 下载
   function handleDownload(record: PreviewFileItem) {
-    const { url = '' } = record;
-    downloadByUrl({ url });
+    const { fullPath = '' } = record;
+    downloadByUrl({ url:fullPath });
   }
 </script>
 <style lang="less">

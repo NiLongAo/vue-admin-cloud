@@ -21,15 +21,6 @@
   const emit = defineEmits(['success', 'register']);
   const schemas: FormSchema[] = [
     {
-      field: 'id',
-      show: false,
-      component: 'Input',
-      label: '编号',
-      colProps: {
-        span: 24,
-      },
-    },
-    {
       field: 'typeId',
       show: false,
       component: 'Input',
@@ -66,9 +57,9 @@
       required: true,
     },
   ];
-  const [registerForm, { setFieldsValue, validate, resetFields }] = useForm({
+  const [registerForm, { setFieldsValue, validate, resetFields ,setProps}] = useForm({
     labelWidth: 120,
-    schemas: schemas,
+    //schemas: schemas,
     showActionButtonGroup: false,
     actionColOptions: {
       span: 24,
@@ -82,7 +73,7 @@
         isEnable: isEnable === true ? 1 : 0,
         num: sort,
         ...values,
-      });
+      } as any);
       setDrawerProps({ confirmLoading: true });
       closeDrawer();
       emit('success');
@@ -96,15 +87,36 @@
     resetFields();
     setDrawerProps({ confirmLoading: false });
     let id = data.id;
-
     //更新表单下拉数据
     if (id) {
       const dictionaryType = await doDictionaryItemDetail({ id: id });
+      setProps({
+        schemas:[{
+          field: 'id',
+          show: false,
+          component: 'Input',
+          label: '编号',
+          colProps: {
+            span: 24,
+          }
+        },...schemas]
+      })
       setFieldsValue({
         typeId: data.typeId,
         ...dictionaryType,
       });
     } else {
+      setProps({
+        schemas:[{
+          field: 'id',
+          show: true,
+          component: 'Input',
+          label: '编号',
+          colProps: {
+            span: 24,
+          },
+        },...schemas]
+      })
       setFieldsValue({
         typeId: data.typeId,
       });

@@ -4,7 +4,7 @@
       <img :class="`${prefixCls}__header`" :src="getUserInfo.imageUrl" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
-          {{ getUserInfo.userName }}
+          {{ getUserInfo.nickName }}
         </span>
       </span>
     </span>
@@ -89,9 +89,9 @@
   const { getShowDoc, getUseLockPage, getShowApi } = useHeaderSetting();
   const userStore = useUserStore();
   const getUserInfo = computed(() => {
-    const { userName = '', imageUrl, tenantId } = userStore.getUserInfo || {};
+    const { nickName = '', imageUrl, tenantId } = userStore.getUserInfo || {};
     return {
-      userName,
+      nickName,
       tenantId,
       imageUrl: imageUrl ? imageUrl : headerImg,
     };

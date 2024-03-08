@@ -16,7 +16,7 @@
           class="fix-auto-fill"
           v-model:value="formData.verificationCode"
           :count="count"
-          :sendCodeApi="SmsSend"
+          @sendCodeApi="SmsSend"
           :placeholder="t('sys.login.smsCode')"
         />
       </FormItem>
@@ -88,6 +88,7 @@
       const userInfo = await userStore.login(
         toRaw({
           grantType: 'sms',
+          loginType:'WEB_MOBILE',
           sms: {
             phone: data.phone,
             smsCodeCode: data.verificationCode,
@@ -98,7 +99,7 @@
       if (userInfo) {
         notification.success({
           message: t('sys.login.loginSuccessTitle'),
-          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.userName}`,
+          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.nickName}`,
           duration: 3,
         });
       }

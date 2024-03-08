@@ -14,15 +14,6 @@
 
   const schemas: FormSchema[] = [
     {
-      field: 'id',
-      show: false,
-      component: 'Input',
-      label: '编号',
-      colProps: {
-        span: 24,
-      },
-    },
-    {
       field: 'code',
       component: 'Input',
       label: '字典类型编码',
@@ -50,9 +41,9 @@
     },
   ];
 
-  const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
+  const [registerForm, { setFieldsValue, resetFields, validate,setProps }] = useForm({
     labelWidth: 100,
-    schemas: schemas,
+    // schemas: schemas,
     showActionButtonGroup: false,
     actionColOptions: {
       span: 23,
@@ -66,7 +57,7 @@
       const { status, ...values } = await validate();
       setModalProps({ confirmLoading: true });
       // TODO custom api
-      await doDictionaryTypeSave({ status: status === true ? 1 : 0, ...values });
+      await doDictionaryTypeSave({ status: status === true ? 1 : 0, ...values } as any);
       closeModal();
       emit('success');
     } finally {
@@ -79,11 +70,34 @@
     setModalProps({ confirmLoading: false });
     isUpdate.value = !!data?.isUpdate;
     if (unref(isUpdate)) {
+      setProps({
+        schemas:[{
+          field: 'id',
+          show: false,
+          component: 'Input',
+          label: '编号',
+          colProps: {
+            span: 24,
+          }
+        },...schemas]
+      })
       const { status, ...dictionaryType } = await doDictionaryTypeDetail({ id: data.id });
       setFieldsValue({
         status: status === 0 ? false : true,
         ...dictionaryType,
       });
+    }else{
+      setProps({
+        schemas:[{
+          field: 'id',
+          show: true,
+          component: 'Input',
+          label: '编号',
+          colProps: {
+            span: 24,
+          },
+        },...schemas]
+      })
     }
   });
 </script>

@@ -178,8 +178,7 @@
           data: {
             ...(props.uploadParams || {}),
           },
-          file: item.file,
-          name: props.name,
+          [props.name]: item.file,
           filename: props.filename,
         },
         function onUploadProgress(progressEvent: ProgressEvent) {
@@ -187,9 +186,8 @@
           item.percent = complete;
         },
       );
-      const { data } = ret;
       item.status = UploadResultStatus.SUCCESS;
-      item.response = data;
+      item.response = ret;
       return {
         success: true,
         error: null,
@@ -245,7 +243,7 @@
     for (const item of fileListRef.value) {
       const { status, response } = item;
       if (status === UploadResultStatus.SUCCESS && response) {
-        fileList.push(response.url);
+        fileList.push(response.path);
       }
     }
     // 存在一个上传成功的即可保存

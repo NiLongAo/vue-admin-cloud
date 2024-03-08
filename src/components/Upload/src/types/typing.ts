@@ -21,7 +21,8 @@ export interface FileItem {
 }
 
 export interface PreviewFileItem {
-  url: string;
+  fullPath: string;
+  path: string;
   name: string;
   type: string;
 }

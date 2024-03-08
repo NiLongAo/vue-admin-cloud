@@ -87,8 +87,8 @@ export function getPermCode() {
   return defHttp.get<string[]>({ url: Api.GetPermCode });
 }
 
-export function doLogout() {
-  return defHttp.get({ url: Api.Logout });
+export function doLogout(params) {
+  return defHttp.get({ url: Api.Logout, params });
 }
 
 export function UserInfoApi(params) {

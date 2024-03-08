@@ -4,6 +4,7 @@ import { FileBasicColumn } from './types/typing';
 import type { Options } from 'sortablejs';
 
 import { Merge } from '@/utils/types';
+import { string } from 'vue-types';
 
 type SortableOptions = Merge<
   Omit<Options, 'onEnd'>,
@@ -58,13 +59,16 @@ export const basicProps = {
   },
   filename: {
     type: String as PropType<string>,
-    default: null,
+    default: undefined,
   },
   fileListOpenDrag: {
     type: Boolean,
     default: true,
   },
-
+  prefix:{
+    type : [String ,Boolean],
+    default : ()=> false,
+  },
   fileListDragOptions: {
     type: Object as PropType<SortableOptions>,
     default: () => ({}),
@@ -73,7 +77,7 @@ export const basicProps = {
 
 export const uploadContainerProps = {
   value: {
-    type: Array as PropType<string[]>,
+    type: [ String ,  Array ] as PropType<string[]>,
     default: () => [],
   },
   ...basicProps,
@@ -88,6 +92,10 @@ export const uploadContainerProps = {
 };
 
 export const previewProps = {
+  prefix:{
+    type : [String ,Boolean],
+    default : ()=> false,
+  },
   value: {
     type: Array as PropType<string[]>,
     default: () => [],

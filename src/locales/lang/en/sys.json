@@ -87,6 +87,7 @@
     "confirmPassword": "Confirm Password",
     "email": "Email",
     "smsCode": "SMS code",
-    "mobile": "Mobile"
+    "mobile": "Mobile",
+    "wxMiniInFormTitle":"WeChat Mini Program Scan Code Login"
   }
 }

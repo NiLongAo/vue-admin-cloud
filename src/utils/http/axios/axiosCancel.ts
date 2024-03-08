@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig } from 'axios';
 
-// ÓÃÓÚ´æ´¢Ã¿¸öÇëÇóµÄ±êÊ¶ºÍÈ¡Ïûº¯Êı
+// ç”¨äºå­˜å‚¨æ¯ä¸ªè¯·æ±‚çš„æ ‡è¯†å’Œå–æ¶ˆå‡½æ•°
 const pendingMap = new Map<string, AbortController>();
 
 const getPendingUrl = (config: AxiosRequestConfig): string => {
@@ -9,8 +9,8 @@ const getPendingUrl = (config: AxiosRequestConfig): string => {
 
 export class AxiosCanceler {
   /**
-   * Ìí¼ÓÇëÇó
-   * @param config ÇëÇóÅäÖÃ
+   * æ·»åŠ è¯·æ±‚
+   * @param config è¯·æ±‚é…ç½®
    */
   public addPending(config: AxiosRequestConfig): void {
     this.removePending(config);
@@ -18,13 +18,13 @@ export class AxiosCanceler {
     const controller = new AbortController();
     config.signal = config.signal || controller.signal;
     if (!pendingMap.has(url)) {
-      // Èç¹ûµ±Ç°ÇëÇó²»ÔÚµÈ´ıÖĞ£¬½«ÆäÌí¼Óµ½µÈ´ıÖĞ
+      // å¦‚æœå½“å‰è¯·æ±‚ä¸åœ¨ç­‰å¾…ä¸­ï¼Œå°†å…¶æ·»åŠ åˆ°ç­‰å¾…ä¸­
       pendingMap.set(url, controller);
     }
   }
 
   /**
-   * Çå³ıËùÓĞµÈ´ıÖĞµÄÇëÇó
+   * æ¸…é™¤æ‰€æœ‰ç­‰å¾…ä¸­çš„è¯·æ±‚
    */
   public removeAllPending(): void {
     pendingMap.forEach((abortController) => {
@@ -36,13 +36,13 @@ export class AxiosCanceler {
   }
 
   /**
-   * ÒÆ³ıÇëÇó
-   * @param config ÇëÇóÅäÖÃ
+   * ç§»é™¤è¯·æ±‚
+   * @param config è¯·æ±‚é…ç½®
    */
   public removePending(config: AxiosRequestConfig): void {
     const url = getPendingUrl(config);
     if (pendingMap.has(url)) {
-      // Èç¹ûµ±Ç°ÇëÇóÔÚµÈ´ıÖĞ£¬È¡ÏûËü²¢½«Æä´ÓµÈ´ıÖĞÒÆ³ı
+      // å¦‚æœå½“å‰è¯·æ±‚åœ¨ç­‰å¾…ä¸­ï¼Œå–æ¶ˆå®ƒå¹¶å°†å…¶ä»ç­‰å¾…ä¸­ç§»é™¤
       const abortController = pendingMap.get(url);
       if (abortController) {
         abortController.abort(url);
@@ -52,7 +52,7 @@ export class AxiosCanceler {
   }
 
   /**
-   * ÖØÖÃ
+   * é‡ç½®
    */
   public reset(): void {
     pendingMap.clear();

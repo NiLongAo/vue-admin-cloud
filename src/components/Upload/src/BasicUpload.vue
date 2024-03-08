@@ -31,6 +31,7 @@
 
     <UploadPreviewModal
       :value="fileList"
+      :prefix ="props.prefix"
       @register="registerPreviewModal"
       @list-change="handlePreviewChange"
       @delete="handlePreviewDelete"

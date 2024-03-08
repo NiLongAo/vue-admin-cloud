@@ -4,7 +4,7 @@
       <Col class="px-4 pt-4">
         <div :class="`${prefixCls}-top-avatar`">
           <img :src="stats.userImages" width="100" />
-          <span>{{ stats.userName }}</span>
+          <span>{{ stats.nickName }}</span>
         </div>
       </Col>
     </Row>
@@ -31,7 +31,7 @@
 
   const stats = reactive({
     userId: userStore.getUserInfo.id,
-    userName: userStore.getUserInfo.userName,
+    nickName: userStore.getUserInfo.nickName,
     userImages: userStore.getUserInfo.imageUrl,
     memoRef: userStore.getUserInfo.memo,
   });

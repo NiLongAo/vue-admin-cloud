@@ -161,6 +161,7 @@ export const useUserStore = defineStore({
       try {
         const data = await loginApi({
           grantType: 'refresh_token',
+          loginType: 'WEB_ACCOUNT',
           refreshToken: {
             refreshToken: this.getRefreshToken,
           },
@@ -225,7 +226,7 @@ export const useUserStore = defineStore({
     async logout(goLogin = false) {
       if (this.getToken) {
         try {
-          await doLogout();
+          await doLogout({loginType:'WEB_ACCOUNT'});
         } catch {
           console.log('注销Token失败');
         }

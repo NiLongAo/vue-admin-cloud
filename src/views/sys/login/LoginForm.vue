@@ -173,6 +173,7 @@
       const userInfo = await userStore.login(
         toRaw({
           grantType: 'code',
+          loginType:'WEB_ACCOUNT',
           code: {
             username: encryption.encrypt(data.username),
             password: encryption.encrypt(data.password),

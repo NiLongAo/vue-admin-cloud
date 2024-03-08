@@ -31,7 +31,7 @@
       await UserInfoApi({ id: formData.userId });
     formData.userName = userName;
     //设置导航名称
-    setTitle('详情：用户' + userName);
+    setTitle('详情：用户' + nickName);
     //初始化基本详情信息
     basicSetDescProps({
       title: '基本信息',
