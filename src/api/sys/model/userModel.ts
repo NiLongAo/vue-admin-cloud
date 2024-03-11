@@ -11,6 +11,7 @@ export interface LoginParams {
     | 'client_credentials'
     | 'sms'
     | 'code';
+  loginType:string,
   authorizationCode?: AuthorizationCodeParams;
   code?: CodeParams;
   sms?: SmsParams;
