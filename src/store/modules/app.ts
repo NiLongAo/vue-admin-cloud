@@ -9,7 +9,7 @@ import type { BeforeMiniState, ApiAddress } from '#/store';
 
 import { defineStore } from 'pinia';
 import { store } from '@/store';
-
+import { getAuthCache, setAuthCache } from '@/utils/auth';
 import { ThemeEnum } from '@/enums/appEnum';
 import { APP_DARK_MODE_KEY, PROJ_CFG_KEY, API_ADDRESS } from '@/enums/cacheEnum';
 import { Persistent } from '@/utils/cache/persistent';
@@ -40,7 +40,7 @@ export const useAppStore = defineStore({
       return state.pageLoading;
     },
     getDarkMode(state): 'light' | 'dark' | string {
-      return state.darkMode || localStorage.getItem(APP_DARK_MODE_KEY) || darkMode;
+      return state.darkMode || getAuthCache<string>(APP_DARK_MODE_KEY) || darkMode;
     },
 
     getBeforeMiniInfo(state): BeforeMiniState {
@@ -48,7 +48,7 @@ export const useAppStore = defineStore({
     },
 
     getProjectConfig(state): ProjectConfig {
-      return state.projectConfig || ({} as ProjectConfig);
+      return state.projectConfig || getAuthCache<ProjectConfig>(PROJ_CFG_KEY) || ({} as ProjectConfig);
     },
 
     getHeaderSetting(): HeaderSetting {
@@ -64,7 +64,7 @@ export const useAppStore = defineStore({
       return this.getProjectConfig.multiTabsSetting;
     },
     getApiAddress() {
-      return JSON.parse(localStorage.getItem(API_ADDRESS) || '{}');
+      return JSON.parse( getAuthCache<string>(API_ADDRESS)|| '{}');
     },
   },
   actions: {
@@ -74,7 +74,7 @@ export const useAppStore = defineStore({
 
     setDarkMode(mode: ThemeEnum): void {
       this.darkMode = mode;
-      localStorage.setItem(APP_DARK_MODE_KEY, mode);
+      setAuthCache(APP_DARK_MODE_KEY, mode);
     },
 
     setBeforeMiniInfo(state: BeforeMiniState): void {
@@ -83,11 +83,12 @@ export const useAppStore = defineStore({
 
     setProjectConfig(config: DeepPartial<ProjectConfig>): void {
       this.projectConfig = deepMerge(this.projectConfig || {}, config) as ProjectConfig;
-      Persistent.setLocal(PROJ_CFG_KEY, this.projectConfig);
+      setAuthCache(PROJ_CFG_KEY, this.projectConfig);
     },
     setMenuSetting(setting: Partial<MenuSetting>): void {
-      this.projectConfig!.menuSetting = deepMerge(this.projectConfig!.menuSetting, setting);
-      Persistent.setLocal(PROJ_CFG_KEY, this.projectConfig);
+      this.projectConfig = this.getProjectConfig;
+      this.projectConfig!.menuSetting = deepMerge(this.projectConfig.menuSetting, setting);
+      setAuthCache(PROJ_CFG_KEY, this.projectConfig);
     },
 
     async resetAllState() {
@@ -107,7 +108,7 @@ export const useAppStore = defineStore({
       }
     },
     setApiAddress(config: ApiAddress): void {
-      localStorage.setItem(API_ADDRESS, JSON.stringify(config));
+      setAuthCache(API_ADDRESS, JSON.stringify(config));
     },
   },
 });

@@ -23,6 +23,8 @@ import {
   TABLE_SETTING_KEY,
   SEARCH_TENANT_KEY,
   CHECK_URL_TOKEN_KEY,
+  APP_DARK_MODE_KEY,
+  API_ADDRESS,
 } from '@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting';
 import { toRaw } from 'vue';
@@ -44,6 +46,9 @@ interface BasicStore {
   [REMEMBER]: RememberLoing;
   [CHECK_URL_TOKEN_KEY]: string | null | undefined;
   [SEARCH_TENANT_KEY]: string | null | undefined;
+  [APP_DARK_MODE_KEY]: string | null | undefined;
+  [API_ADDRESS]: string | null | undefined;
+  
 }
 
 type LocalStore = BasicStore;
