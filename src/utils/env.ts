@@ -1,7 +1,6 @@
 import type { GlobEnvConfig } from '#/config';
 import pkg from '../../package.json';
 import { API_ADDRESS } from '@/enums/cacheEnum';
-import { getAuthCache } from '@/utils/auth';
 
 export function getCommonStoragePrefix() {
   const { VITE_GLOB_APP_TITLE } = getAppEnvConfig();
@@ -34,8 +33,8 @@ export function getAppEnvConfig() {
   const { VITE_GLOB_APP_TITLE, VITE_GLOB_API_URL_PREFIX, VITE_GLOB_UPLOAD_URL, VITE_SOCKET_URL } =
     ENV;
   let { VITE_GLOB_API_URL } = ENV;
-  if (getAuthCache(API_ADDRESS)) {
-    const address = JSON.parse(getAuthCache(API_ADDRESS) || '{}');
+  if (localStorage.getItem(API_ADDRESS)) {
+    const address = JSON.parse(localStorage.getItem(API_ADDRESS) || '{}');
     if (address?.key) VITE_GLOB_API_URL = address?.val;
   }
   return {
@@ -72,6 +71,7 @@ export function getEnv(): string {
  * @example:
  */
 export function isDevMode(): boolean {
+  console.log(import.meta.env);
   return import.meta.env.DEV;
 }
 

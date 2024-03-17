@@ -31,10 +31,8 @@
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-countdown-input';
+
   .@{prefix-cls} {
-    input {
-      min-width: unset !important;
-    }
     .ant-input-group-addon {
       padding-right: 0;
       border: none;

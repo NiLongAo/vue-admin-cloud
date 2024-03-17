@@ -7,14 +7,14 @@
     showFooter
     @ok="handleOk"
   >
-    <CollapseContainer title="租户信息" :canExpan="false">
+    <CollapseContainer title="租户信息" :canExpand="false">
       <Row :gutter="24">
         <Col :span="24">
           <BasicForm @register="registerTenantForm" />
         </Col>
       </Row>
     </CollapseContainer>
-    <CollapseContainer title="权限分配" :canExpan="false" v-if="isUpdate">
+    <CollapseContainer title="权限分配" :canExpand="false" v-if="isUpdate">
       <Row :gutter="24">
         <Col :span="24">
           <BasicTree
@@ -28,7 +28,7 @@
         </Col>
       </Row>
     </CollapseContainer>
-    <CollapseContainer title="用户设置" :canExpan="false" v-if="!isUpdate">
+    <CollapseContainer title="用户设置" :canExpand="false" v-if="!isUpdate">
       <Row :gutter="24">
         <Col :span="16">
           <BasicForm @register="registerUserForm" />

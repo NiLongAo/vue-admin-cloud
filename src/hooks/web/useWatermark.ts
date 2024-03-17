@@ -10,14 +10,34 @@ type UseWatermarkRes = {
   setWatermark: (str: string) => void;
   clear: () => void;
   clearAll: () => void;
+  waterMarkOptions?: waterMarkOptionsType;
   obInstance?: MutationObserver;
   targetElement?: HTMLElement;
   parentElement?: HTMLElement;
 };
 
+type waterMarkOptionsType = {
+  // 自定义水印的文字大小
+  fontSize?: number;
+  // 自定义水印的文字颜色
+  fontColor?: string;
+  // 自定义水印的文字字体
+  fontFamily?: string;
+  // 自定义水印的文字对齐方式
+  textAlign?: CanvasTextAlign;
+  // 自定义水印的文字基线
+  textBaseline?: CanvasTextBaseline;
+  // 自定义水印的文字倾斜角度
+  rotate?: number;
+};
+
 const sourceMap = new Map<Symbol, Omit<UseWatermarkRes, 'clearAll'>>();
 
-function createBase64(str: string) {
+function findTargetNode(el) {
+  return Array.from(sourceMap.values()).find((item) => item.targetElement === el);
+}
+
+function createBase64(str: string, waterMarkOptions: waterMarkOptionsType) {
   const can = document.createElement('canvas');
   const width = 300;
   const height = 240;
@@ -25,19 +45,30 @@ function createBase64(str: string) {
 
   const cans = can.getContext('2d');
   if (cans) {
-    cans.rotate((-20 * Math.PI) / 180);
-    cans.font = '15px Vedana';
-    cans.fillStyle = 'rgba(0, 0, 0, 0.15)';
-    cans.textAlign = 'left';
-    cans.textBaseline = 'middle';
+    const fontFamily = waterMarkOptions?.fontFamily || 'Vedana';
+    const fontSize = waterMarkOptions?.fontSize || 15;
+    const fontColor = waterMarkOptions?.fontColor || 'rgba(0, 0, 0, 0.15)';
+    const textAlign = waterMarkOptions?.textAlign || 'left';
+    const textBaseline = waterMarkOptions?.textBaseline || 'middle';
+    const rotate = waterMarkOptions?.rotate || 20;
+    cans.rotate((-rotate * Math.PI) / 180);
+    cans.font = `${fontSize}px ${fontFamily}`;
+    cans.fillStyle = fontColor;
+    cans.textAlign = textAlign;
+    cans.textBaseline = textBaseline;
     cans.fillText(str, width / 20, height);
-    // todo �Զ���ˮӡ��ʽ
   }
   return can.toDataURL('image/png');
 }
-const resetWatermarkStyle = (element: HTMLElement, watermarkText: string) => {
+const resetWatermarkStyle = (
+  element: HTMLElement,
+  watermarkText: string,
+  waterMarkOptions: waterMarkOptionsType,
+) => {
   element.className = '__' + watermarkSymbol;
   element.style.pointerEvents = 'none';
+  element.style.display = 'block';
+  element.style.visibility = 'visible';
   element.style.top = '0px';
   element.style.left = '0px';
   element.style.position = 'absolute';
@@ -46,6 +77,7 @@ const resetWatermarkStyle = (element: HTMLElement, watermarkText: string) => {
   element.style.width = '100%';
   element.style.background = `url(${createBase64(
     unref(updateWatermarkText) || watermarkText,
+    waterMarkOptions,
   )}) left top repeat`;
 };
 
@@ -53,18 +85,24 @@ const obFn = () => {
   const obInstance = new MutationObserver((mutationRecords) => {
     for (const mutation of mutationRecords) {
       for (const node of Array.from(mutation.removedNodes)) {
-        const target = Array.from(sourceMap.values()).find((item) => item.targetElement === node);
+        const target = findTargetNode(node);
         if (!target) return;
         const { targetElement, parentElement } = target;
-        // ��Ԫ�ص���Ԫ��ˮӡ�����ɾ�� ���²��뱻ɾ����ˮӡ(���۸ģ�����ͨ������̨ɾ����ˮӡ)
+        // 父元素的子元素水印如果被删除 重新插入被删除的水印(防篡改，插入通过控制台删除的水印)
         if (!parentElement?.contains(targetElement as Node | null)) {
           target?.parentElement?.appendChild(node as HTMLElement);
         }
       }
       if (mutation.attributeName === 'style' && mutation.target) {
         const _target = mutation.target as HTMLElement;
-        if (_target.className === '__' + watermarkSymbol) {
-          resetWatermarkStyle(_target as HTMLElement, _target?.['data-watermark-text']);
+        const target = findTargetNode(_target);
+        if (target) {
+          const { waterMarkOptions = {} } = target;
+          resetWatermarkStyle(
+            _target as HTMLElement,
+            _target?.['data-watermark-text'],
+            waterMarkOptions,
+          );
         }
       }
     }
@@ -74,6 +112,7 @@ const obFn = () => {
 
 export function useWatermark(
   appendEl: Ref<HTMLElement | null> = ref(document.body) as Ref<HTMLElement>,
+  waterMarkOptions: waterMarkOptionsType = {},
 ): UseWatermarkRes {
   const domSymbol = Symbol(watermarkSymbol);
   const appendElRaw = unref(appendEl);
@@ -115,7 +154,7 @@ export function useWatermark(
       el.style.height = `${options.height}px`;
     }
     if (isDef(options.str)) {
-      el.style.background = `url(${createBase64(options.str)}) left top repeat`;
+      el.style.background = `url(${createBase64(options.str, waterMarkOptions)}) left top repeat`;
     }
   }
 
@@ -126,10 +165,10 @@ export function useWatermark(
       return;
     }
     const div = document.createElement('div');
-    div['data-watermark-text'] = str; //�Զ������� ���ڻָ�ˮӡ
+    div['data-watermark-text'] = str; //自定义属性 用于恢复水印
     updateWatermarkText.value = str;
     watermarkEl.value = div;
-    resetWatermarkStyle(div, str);
+    resetWatermarkStyle(div, str, waterMarkOptions);
     const el = unref(appendEl);
     if (!el) return;
     const { clientHeight: height, clientWidth: width } = el;
@@ -141,11 +180,12 @@ export function useWatermark(
       parentElement: el,
       targetElement: div,
       obInstance: obFn(),
+      waterMarkOptions,
     });
     sourceMap.get(domSymbol)?.obInstance?.observe(el, {
-      childList: true, // �ӽڵ�ı䶯��ָ������ɾ�����߸��ģ�
-      subtree: true, // �ù۲���Ӧ���ڸýڵ�����к���ڵ�
-      attributes: true, // ���Եı䶯
+      childList: true, // 子节点的变动（指新增，删除或者更改）
+      subtree: true, // 该观察器应用于该节点的所有后代节点
+      attributes: true, // 属性的变动
     });
   };
 

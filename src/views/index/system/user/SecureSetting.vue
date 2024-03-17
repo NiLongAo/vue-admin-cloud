@@ -1,5 +1,5 @@
 <template>
-  <CollapseContainer title="身份设置" :canExpan="false">
+  <CollapseContainer title="身份设置" :canExpand="false">
     <List>
       <ListItem>
         <ListItemMeta>
