@@ -3,7 +3,7 @@
     v-bind="$attrs"
     destroyOnClose
     :maskClosable="false"
-    :footer="null"
+    :footer="false"
     @register="registerModal"
     width="90%"
   >

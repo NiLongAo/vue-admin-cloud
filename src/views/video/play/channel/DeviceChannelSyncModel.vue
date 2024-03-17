@@ -3,11 +3,11 @@
     v-bind="$attrs"
     centered
     :wrapClassName="`${prefixCls}`"
-    :canFullscreen="false"
-    :maskClosable="false"
+    :closable="false"
+    :closeIcon="false"
+    :footer="false"
     :width="250"
     :minHeight="250"
-    :footer="null"
     destroyOnClose
     @register="registerModal"
     @cancel="handleCancel"
@@ -31,11 +31,12 @@
   import { isEmpty } from '@/utils/is';
   import { BasicModal, useModalInner } from '@/components/Modal';
   import { doSyncStatusDeviceChannel } from '@/api/video/deviceChannel';
+  import { useMessage } from '@/hooks/web/useMessage';
   import { useDesign } from '@/hooks/web/useDesign';
 
   const emit = defineEmits(['close', 'register']);
   const { prefixCls } = useDesign('device-channel-model');
-
+  const { createMessage } = useMessage();
   const stats = reactive({
     deviceId: '',
     massage: '同步中',
@@ -71,17 +72,34 @@
       if (isEmpty(errorMsg)) {
         stats.massage = '同步完成';
         setTimeout(function () {
-          stats.deviceId = '';
           closeModal();
+          stats.deviceId = '';
+          stats.massage = '同步中',
+          stats.status =  undefined,
+          stats.percent =  0,
+          stats.total =  0,
+          stats.current =  0,
+          stats.syncIng =  false,
+          stats.errorMsg =  '',
           emit('close');
         }, 1500);
       } else {
-        stats.massage = errorMsg;
+        createMessage.error(errorMsg);
+        closeModal();
+        stats.deviceId = '';
+        stats.massage = '同步中',
+        stats.status =  undefined,
+        stats.percent =  0,
+        stats.total =  0,
+        stats.current =  0,
+        stats.syncIng =  false,
+        stats.errorMsg =  '',
+        emit('close');
       }
       //关闭循环任务
       stats.timer && clearInterval(stats.timer);
     } else {
-      stats.massage = current + '/' + total;
+      //stats.massage = current + '/' + total;
       //开启循环任务
       if (!circulate) {
         return;
@@ -110,6 +128,9 @@
     }
     .scroll-container .scrollbar__view div {
       display: flex;
+    }
+    .ant-modal-header{
+      display: none;
     }
   }
 </style>

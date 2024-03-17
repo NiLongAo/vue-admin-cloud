@@ -71,7 +71,6 @@ export const useAppStore = defineStore({
     setPageLoading(loading: boolean): void {
       this.pageLoading = loading;
     },
-
     setDarkMode(mode: ThemeEnum): void {
       this.darkMode = mode;
       setAuthCache(APP_DARK_MODE_KEY, mode);

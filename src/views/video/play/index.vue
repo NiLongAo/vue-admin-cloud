@@ -65,6 +65,7 @@
   import { PageWrapper } from '@/components/Page';
   import { BasicTable, useTable, BasicColumn, FormProps, TableAction } from '@/components/Table';
   import { usePermission } from '@/hooks/web/usePermission';
+  import { useMessage } from '@/hooks/web/useMessage';
   import { h } from 'vue';
   import { Tag } from 'ant-design-vue';
   import { useDrawer } from '@/components/Drawer';
@@ -82,6 +83,7 @@
   const { hasPermission } = usePermission();
   const [registerDrawer, { openDrawer }] = useDrawer();
   const [registerModel, { openModal }] = useModal();
+  const { createMessage } = useMessage();
 
   const [registerTable, { reload }] = useTable({
     title: '国标设备',
@@ -102,6 +104,10 @@
     },
   });
   const handleRefresh = async (record: Recordable) => {
+    if(record.online==0){
+      createMessage.error("设备离线");
+      return;
+    }
     await doSyncDeviceChannel({ deviceId: record.deviceId });
     openModal(true, { deviceId: record.deviceId });
   };
