@@ -1,5 +1,6 @@
-import type { ExtendedModalApi, ModalApiOptions, ModalProps } from './modal';
 import type { Component } from 'vue';
+
+import type { ExtendedModalApi, ModalApiOptions, ModalProps } from './modal';
 
 import {
   defineComponent,

@@ -40,9 +40,9 @@ const state = reactive({
 const gridClass = computed(() =>
   state.gridNum === 1
     ? 'grid-cols-1'
-    : state.gridNum === 4
+    : (state.gridNum === 4
       ? 'grid-cols-2'
-      : 'grid-cols-3',
+      : 'grid-cols-3'),
 );
 
 const filteredTreeData = computed<TreeProps['treeData']>(() => {
