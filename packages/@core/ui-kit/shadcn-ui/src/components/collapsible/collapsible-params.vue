@@ -7,7 +7,7 @@ import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 
 import { useNamespace } from '@vben-core/composables';
 
-import { ChevronsDown } from 'lucide-vue-next';
+import { ChevronsDown } from '@lucide/vue';
 import {
   CollapsibleContent,
   CollapsibleRoot,
@@ -31,8 +31,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<{ 'update:value': [any, string] }>();
 
-const modelValue = defineModel('value', {
-  default: {} as Recordable<CollapsibleParamSchema['defaultValue']>,
+const modelValue = defineModel<
+  Recordable<CollapsibleParamSchema['defaultValue']>
+>('value', {
+  default: () => ({}),
 });
 
 const visibleRefs = useTemplateRef('visibleRefs');

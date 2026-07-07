@@ -2,7 +2,7 @@ import type { Preferences } from './types';
 
 const defaultPreferences: Preferences = {
   app: {
-    accessMode: 'mixed',
+    accessMode: 'frontend',
     authPageLayout: 'panel-right',
     checkUpdatesInterval: 1,
     colorGrayMode: false,
@@ -17,12 +17,12 @@ const defaultPreferences: Preferences = {
     contentPaddingTop: 0,
     defaultAvatar:
       'https://unpkg.com/@vbenjs/static-source@0.1.7/source/avatar-v1.webp',
-    defaultHomePath: '/analytics',
+    defaultHomePath: '/dashboard',
     dynamicTitle: true,
     enableCheckUpdates: true,
     enableCopyPreferences: true,
     enablePreferences: true,
-    enableRefreshToken: true,
+    enableRefreshToken: false,
     enableStickyPreferencesNavigationBar: true,
     isMobile: false,
     layout: 'sidebar-nav',
@@ -30,6 +30,7 @@ const defaultPreferences: Preferences = {
     loginExpiredMode: 'page',
     name: 'Vben Admin',
     preferencesButtonPosition: 'auto',
+    timezone: 'Asia/Shanghai',
     watermark: false,
     watermarkContent: '',
     zIndex: 200,
@@ -43,11 +44,11 @@ const defaultPreferences: Preferences = {
   },
   copyright: {
     companyName: 'Vben',
-    companySiteLink: 'https://www.vben.pro',
+    companySiteLink: 'https://www.nilongao.cn',
     date: '2024',
     enable: true,
-    icp: '',
-    icpLink: '',
+    icp: '陕ICP备2022011327号',
+    icpLink: 'https://beian.miit.gov.cn/',
     settingShow: true,
   },
   footer: {
@@ -67,6 +68,8 @@ const defaultPreferences: Preferences = {
     enable: true,
     fit: 'contain',
     source: 'https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp',
+    showText: true,
+    logoMode: 'icon',
   },
   navigation: {
     accordion: true,
@@ -75,6 +78,7 @@ const defaultPreferences: Preferences = {
   },
   shortcutKeys: {
     enable: true,
+    globalEscape: false,
     globalLockScreen: true,
     globalLogout: true,
     globalPreferences: true,

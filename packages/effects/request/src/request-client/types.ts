@@ -6,7 +6,6 @@ import type {
 } from 'axios';
 
 type ExtendOptions<T = any> = {
-  dataHeaderTenant?: false | string;
   /**
    * 参数序列化方式。预置的有
    * - brackets: ids[]=1&ids[]=2&ids[]=3

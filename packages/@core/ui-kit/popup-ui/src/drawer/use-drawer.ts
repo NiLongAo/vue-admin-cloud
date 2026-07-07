@@ -1,5 +1,3 @@
-import type { Component } from 'vue';
-
 import type {
   DrawerApiOptions,
   DrawerProps,
@@ -16,13 +14,19 @@ import {
   ref,
 } from 'vue';
 
-import { useStore } from '@vben-core/shared/store';
+import { usePreferences } from '@vben-core/preferences';
+import { useSelector } from '@vben-core/shared/store';
 
 import { DrawerApi } from './drawer-api';
 import VbenDrawer from './drawer.vue';
 
 const USER_DRAWER_INJECT_KEY = Symbol('VBEN_DRAWER_INJECT');
 
+const { globalEscapeShortcutKey } = usePreferences();
+
+/**
+ * 默认配置
+ */
 const DEFAULT_DRAWER_PROPS: Partial<DrawerProps> = {};
 
 export function setDefaultDrawerProps(props: Partial<DrawerProps>) {
@@ -35,6 +39,10 @@ export function useVbenDrawer<
   // Drawer一般会抽离出来，所以如果有传入 connectedComponent，则表示为外部调用，与内部组件进行连接
   // 外部的Drawer通过provide/inject传递api
 
+  const defaultOptions = {
+    closeOnPressEscape: globalEscapeShortcutKey.value, // 全局Esc快捷键配置
+    ...options,
+  };
   const { connectedComponent } = options;
   if (connectedComponent) {
     const extendedApi = reactive({});
@@ -47,7 +55,7 @@ export function useVbenDrawer<
             // 不能用 Object.assign,会丢失 api 的原型函数
             Object.setPrototypeOf(extendedApi, api);
           },
-          options,
+          options: defaultOptions,
           async reCreateDrawer() {
             isDrawerReady.value = false;
             await nextTick();
@@ -59,12 +67,12 @@ export function useVbenDrawer<
           ...attrs,
           ...slots,
         });
-        return () => {
-          const component = (
-            isDrawerReady.value ? connectedComponent : 'div'
-          ) as Component;
-          return h(component, { ...props, ...attrs }, slots);
-        };
+        return () =>
+          h(
+            isDrawerReady.value ? connectedComponent : 'div',
+            { ...props, ...attrs },
+            slots,
+          );
       },
       // eslint-disable-next-line vue/one-component-per-file
       {
@@ -81,7 +89,7 @@ export function useVbenDrawer<
   const mergedOptions = {
     ...DEFAULT_DRAWER_PROPS,
     ...injectData.options,
-    ...options,
+    ...defaultOptions,
   } as DrawerApiOptions;
 
   mergedOptions.onOpenChange = (isOpen: boolean) => {
@@ -101,17 +109,13 @@ export function useVbenDrawer<
   const extendedApi: ExtendedDrawerApi = api as never;
 
   extendedApi.useStore = (selector) => {
-    return useStore(api.store, selector);
+    return useSelector(api.store, selector);
   };
 
   const Drawer = defineComponent(
     (props: DrawerProps, { attrs, slots }) => {
       return () =>
-        h(
-          VbenDrawer as Component,
-          { ...props, ...attrs, drawerApi: extendedApi },
-          slots,
-        );
+        h(VbenDrawer, { ...props, ...attrs, drawerApi: extendedApi }, slots);
     },
     // eslint-disable-next-line vue/one-component-per-file
     {

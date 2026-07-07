@@ -31,6 +31,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
    * 重新认证逻辑
    */
   async function doReAuthenticate() {
+    console.warn('Access token or refresh token is invalid or expired. ');
     const accessStore = useAccessStore();
     const authStore = useAuthStore();
     accessStore.setAccessToken(null);
