@@ -52,14 +52,14 @@ defineEmits(['click']);
             <span class="ml-4 text-lg font-medium">{{ item.title }}</span>
           </div>
 
-          <!-- ÄÚÈİÇøÓòÖ§³Ö²å²Û×Ô¶¨Òå -->
+          <!-- å†…å®¹åŒºåŸŸæ”¯æŒæ’æ§½è‡ªå®šä¹‰ -->
           <slot name="content" :item="item" :index="index">
             <div class="text-foreground/80 mt-4 flex h-10">
               {{ item.content }}
             </div>
           </slot>
 
-          <!-- µ×²¿ĞÅÏ¢ÇøÓòÖ§³Ö²å²Û×Ô¶¨Òå -->
+          <!-- åº•éƒ¨ä¿¡æ¯åŒºåŸŸæ”¯æŒæ’æ§½è‡ªå®šä¹‰ -->
           <slot name="footer" :item="item" :index="index">
             <div class="text-foreground/80 flex justify-between">
               <span>{{ item.group }}</span>

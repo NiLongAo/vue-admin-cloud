@@ -1,28 +1,28 @@
 /**
- * ´æ´¢Çı¶¯½Ó¿Ú£¨²ßÂÔÄ£Ê½ºËĞÄ³éÏó£©
- * ËùÓĞ´æ´¢ÊµÏÖ£¨localStorage¡¢IndexedDB¡¢Memory µÈ£©¶¼ĞèÒªÊµÏÖ´Ë½Ó¿Ú
- * Driver ²ãÖ»¸ºÔğ´¿´âµÄ KV ´æÈ¡£¬²»¸ĞÖª TTL ºÍÇ°×º
+ * å­˜å‚¨é©±åŠ¨æ¥å£ï¼ˆç­–ç•¥æ¨¡å¼æ ¸å¿ƒæŠ½è±¡ï¼‰
+ * æ‰€æœ‰å­˜å‚¨å®ç°ï¼ˆlocalStorageã€IndexedDBã€Memory ç­‰ï¼‰éƒ½éœ€è¦å®ç°æ­¤æ¥å£
+ * Driver å±‚åªè´Ÿè´£çº¯ç²¹çš„ KV å­˜å–ï¼Œä¸æ„ŸçŸ¥ TTL å’Œå‰ç¼€
  */
 interface IStorageDriver {
-  /** Çå³ıËùÓĞ´æ´¢Ïî */
+  /** æ¸…é™¤æ‰€æœ‰å­˜å‚¨é¡¹ */
   clear(): Promise<void>;
 
-  /** »ñÈ¡´æ´¢Ïî */
+  /** è·å–å­˜å‚¨é¡¹ */
   getItem<T>(key: string): Promise<null | T>;
 
-  /** »ñÈ¡ËùÓĞ key */
+  /** è·å–æ‰€æœ‰ key */
   keys(): Promise<string[]>;
 
-  /** ÒÆ³ı´æ´¢Ïî */
+  /** ç§»é™¤å­˜å‚¨é¡¹ */
   removeItem(key: string): Promise<void>;
 
-  /** ÉèÖÃ´æ´¢Ïî */
+  /** è®¾ç½®å­˜å‚¨é¡¹ */
   setItem(key: string, value: unknown): Promise<void>;
 }
 
 /**
- * ´ø TTL µÄ´æ´¢Ïî°ü×°½á¹¹
- * TTL Âß¼­ÓÉ StorageManager Í³Ò»¹ÜÀí£¬Driver ²ã²»¸ĞÖª
+ * å¸¦ TTL çš„å­˜å‚¨é¡¹åŒ…è£…ç»“æ„
+ * TTL é€»è¾‘ç”± StorageManager ç»Ÿä¸€ç®¡ç†ï¼ŒDriver å±‚ä¸æ„ŸçŸ¥
  */
 interface StorageItem<T> {
   expiry?: number;
@@ -30,9 +30,9 @@ interface StorageItem<T> {
 }
 
 interface StorageManagerOptions {
-  /** ´æ´¢Çı¶¯ÊµÀı */
+  /** å­˜å‚¨é©±åŠ¨å®ä¾‹ */
   driver?: IStorageDriver;
-  /** ¼üÇ°×º£¬ÓÃÓÚÃüÃû¿Õ¼ä¸ôÀë */
+  /** é”®å‰ç¼€ï¼Œç”¨äºå‘½åç©ºé—´éš”ç¦» */
   prefix?: string;
 }
 

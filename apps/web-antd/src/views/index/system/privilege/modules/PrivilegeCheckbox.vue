@@ -24,7 +24,7 @@ const emit = defineEmits<{
   save: [ids: string[]];
 }>();
 
-const checkedList = defineModel<string[]>('checkedList', { default: [] });
+const checkedList = defineModel<string[]>('checkedList', { default: () => [] });
 const dataTree = ref<CheckboxGroupEntity[]>([]);
 const mode = ref('partial');
 const tree = ref<CheckboxGroupEntity[]>([]);

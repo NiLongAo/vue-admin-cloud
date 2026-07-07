@@ -3,100 +3,100 @@ import { defineConfig as defineOxfmtConfig } from 'oxfmt';
 type OxfmtConfig = Parameters<typeof defineOxfmtConfig>[0];
 
 /**
- * oxfmt ÅäÖÃÎÄ¼ş£¬Ïê¼ûÏÂ·½Á´½Ó
+ * oxfmt é…ç½®æ–‡ä»¶ï¼Œè¯¦è§ä¸‹æ–¹é“¾æ¥
  * https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html
  */
 const oxfmtConfig: OxfmtConfig = defineOxfmtConfig({
   /**
-   * µ¥ĞĞ³¤¶È oxfmt£¬ÊÊÅä prettier µÄ 80
-   * Default£º100
+   * å•è¡Œé•¿åº¦ oxfmtï¼Œé€‚é… prettier çš„ 80
+   * Defaultï¼š100
    */
   printWidth: 80,
   /**
-   * Ëõ½ø¿í¶È
-   * Default£º2
+   * ç¼©è¿›å®½åº¦
+   * Defaultï¼š2
    */
   tabWidth: 2,
   /**
-   * Markdown¡¢MDX¡¢YAML ÎÄ¼ş¸ñÊ½»¯°ü¹ü
+   * Markdownã€MDXã€YAML æ–‡ä»¶æ ¼å¼åŒ–åŒ…è£¹
    * type: always | never | preserve
    * Default: preserve
    */
   proseWrap: 'never',
   /**
-   * ½áÎ²Ìí¼Ó·ÖºÅ
-   * Default£ºtrue
+   * ç»“å°¾æ·»åŠ åˆ†å·
+   * Defaultï¼štrue
    */
   semi: true,
   /**
-   * Ê¹ÓÃµ¥ÒıºÅ
-   * Default£ºfalse
+   * ä½¿ç”¨å•å¼•å·
+   * Defaultï¼šfalse
    */
   singleQuote: true,
   /**
-   * ¶ÔÏóÊôĞÔÌí¼ÓÒıºÅ
-   * Default£ºas-needed
+   * å¯¹è±¡å±æ€§æ·»åŠ å¼•å·
+   * Defaultï¼šas-needed
    */
   quoteProps: 'as-needed',
   /**
-   * ½«¶àĞĞÔªËØµÄ > ·ÅÔÚ×îºóÒ»ĞĞµÄÄ©Î²£¬¶ø²»ÊÇµ¥¶À·ÅÔÚÏÂÒ»ĞĞ
-   * Default£ºfalse
+   * å°†å¤šè¡Œå…ƒç´ çš„ > æ”¾åœ¨æœ€åä¸€è¡Œçš„æœ«å°¾ï¼Œè€Œä¸æ˜¯å•ç‹¬æ”¾åœ¨ä¸‹ä¸€è¡Œ
+   * Defaultï¼šfalse
    */
   bracketSameLine: false,
   /**
-   * ¶ÔÏó×ÖÃæÁ¿µÄ´óÀ¨ºÅ¼äÌí¼Ó¿Õ¸ñ
-   * Default£ºtrue
+   * å¯¹è±¡å­—é¢é‡çš„å¤§æ‹¬å·é—´æ·»åŠ ç©ºæ ¼
+   * Defaultï¼štrue
    */
   bracketSpacing: true,
   /**
-   * ¼ıÍ·º¯Êı²ÎÊı×ÜÊÇÊ¹ÓÃÀ¨ºÅ
+   * ç®­å¤´å‡½æ•°å‚æ•°æ€»æ˜¯ä½¿ç”¨æ‹¬å·
    * type: always | avoid
-   * Default£ºalways
+   * Defaultï¼šalways
    */
   arrowParens: 'always',
   /**
-   * ÅäÖÃ package.json ÅÅĞò£¬µ«ÊÇ oxfmt ²»Ö§³Ö pnpm-workspace
-   * ÏÖÊ¹ÓÃ eslint ´îÅä eslint-plugin-pnpm eslint-plugin-yml Ö§³Ö package.json ºÍ pnpm-workspace.yaml µ«ÅÅĞò·ç¸ñ²»Ì«Ò»ÖÂ
-   * Default£ºtrue
+   * é…ç½® package.json æ’åºï¼Œä½†æ˜¯ oxfmt ä¸æ”¯æŒ pnpm-workspace
+   * ç°ä½¿ç”¨ eslint æ­é… eslint-plugin-pnpm eslint-plugin-yml æ”¯æŒ package.json å’Œ pnpm-workspace.yaml ä½†æ’åºé£æ ¼ä¸å¤ªä¸€è‡´
+   * Defaultï¼štrue
    */
   sortPackageJson: false,
   /**
-   * ÅäÖÃ import ÅÅĞò£¬ÏÖÔÚ Ê¹ÓÃ eslint-plugin-perfectionist£¬µ«ÊÇ oxfmt ²»Ö§³Ö export µÈ
-   * ²¢ÇÒ customGroups ²»Ö§³Ö ts-equals-import
-   * Default£ºfalse
+   * é…ç½® import æ’åºï¼Œç°åœ¨ ä½¿ç”¨ eslint-plugin-perfectionistï¼Œä½†æ˜¯ oxfmt ä¸æ”¯æŒ export ç­‰
+   * å¹¶ä¸” customGroups ä¸æ”¯æŒ ts-equals-import
+   * Defaultï¼šfalse
    */
   sortImports: false,
   /**
-   * ¶àĞĞ½á¹¹ÖĞµÄºóÖÃ¶ººÅ
-   * Default£ºall
+   * å¤šè¡Œç»“æ„ä¸­çš„åç½®é€—å·
+   * Defaultï¼šall
    */
   trailingComma: 'all',
   /**
-   * ĞĞÎ²»»ĞĞ·û
+   * è¡Œå°¾æ¢è¡Œç¬¦
    * type: lf | crlf | cr
    * Default: lf
    */
   endOfLine: 'lf',
   /**
-   * ÔÚÎÄ¼ş×îºó²åÈëÒ»¸ö»»ĞĞ
-   * Default£ºtrue
+   * åœ¨æ–‡ä»¶æœ€åæ’å…¥ä¸€ä¸ªæ¢è¡Œ
+   * Defaultï¼štrue
    */
   insertFinalNewline: true,
   /**
-   * ¿ØÖÆ¸ñÊ½»¯ÎÄ¼şÖĞÀıÈç£¬CSS-in-JS »ò JS-in-Vue µÈ
-   * Default£ºauto
+   * æ§åˆ¶æ ¼å¼åŒ–æ–‡ä»¶ä¸­ä¾‹å¦‚ï¼ŒCSS-in-JS æˆ– JS-in-Vue ç­‰
+   * Defaultï¼šauto
    */
   embeddedLanguageFormatting: 'auto',
   /**
-   * Vue/HTML/Angular/Handlebars µÄ¿Õ°×Ãô¸Ğ¶È£¨oxfmt ÏÖ»á¸ñÊ½»¯ <template>£©
+   * Vue/HTML/Angular/Handlebars çš„ç©ºç™½æ•æ„Ÿåº¦ï¼ˆoxfmt ç°ä¼šæ ¼å¼åŒ– <template>ï¼‰
    * type: css | strict | ignore
-   * Default£ºcss
+   * Defaultï¼šcss
    */
   htmlWhitespaceSensitivity: 'css',
   /**
-   * ÔİÊ±¹Ø±Õ£¬¸Ä¶¯½Ï¶à£¬ºóĞø¿ÉÒÔ¿¼ÂÇ¿ªÆô£¬Ö§³Ö vue µ«ÓëÏÖÓĞµÄ eslint-plugin-better-tailwindcss ¸ñÊ½»¯»á³åÍ»
-   * eslint-plugin-better-tailwindcssÅäÖÃÔÚ oxlint£¬ÔÚ vueÎÄ ¼şÔİÊ±²»ÉúĞ§£¬tsµÈÕı³£
-   * Default£º¹Ø±Õ
+   * æš‚æ—¶å…³é—­ï¼Œæ”¹åŠ¨è¾ƒå¤šï¼Œåç»­å¯ä»¥è€ƒè™‘å¼€å¯ï¼Œæ”¯æŒ vue ä½†ä¸ç°æœ‰çš„ eslint-plugin-better-tailwindcss æ ¼å¼åŒ–ä¼šå†²çª
+   * eslint-plugin-better-tailwindcssé…ç½®åœ¨ oxlintï¼Œåœ¨ vueæ–‡ ä»¶æš‚æ—¶ä¸ç”Ÿæ•ˆï¼Œtsç­‰æ­£å¸¸
+   * Defaultï¼šå…³é—­
    */
   // sortTailwindcss: {
   //   functions: ['clsx', 'cn', 'cva', 'tw'],

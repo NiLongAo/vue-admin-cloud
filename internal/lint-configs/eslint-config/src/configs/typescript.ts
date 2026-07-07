@@ -3,13 +3,13 @@ import type { Linter } from 'eslint';
 import { interopDefault } from '../util';
 
 /**
- * @typescript-eslint µÄ¹æÔòÒÑÇ¨ÒÆµ½ oxlint£¨typescript ²å¼ş£©¡£
- * ÕâÀï½ö±£Áô TS ½âÎöÆ÷£¬¹©ÆäËü eslint ²å¼ş£¨perfectionist¡¢n µÈ£©½âÎö TS/TSX ÎÄ¼ş¡£
- * Òò²»ÔÙÓĞÀàĞÍ¸ĞÖª¹æÔò£¬ÒÑÒÆ³ı parserOptions.project£¬eslint ½âÎö¸ü¿ì¡£
+ * @typescript-eslint çš„è§„åˆ™å·²è¿ç§»åˆ° oxlintï¼ˆtypescript æ’ä»¶ï¼‰ã€‚
+ * è¿™é‡Œä»…ä¿ç•™ TS è§£æå™¨ï¼Œä¾›å…¶å®ƒ eslint æ’ä»¶ï¼ˆperfectionistã€n ç­‰ï¼‰è§£æ TS/TSX æ–‡ä»¶ã€‚
+ * å› ä¸å†æœ‰ç±»å‹æ„ŸçŸ¥è§„åˆ™ï¼Œå·²ç§»é™¤ parserOptions.projectï¼Œeslint è§£ææ›´å¿«ã€‚
  *
- * ×¢Òâ£ºÒÆ³ı @typescript-eslint ²å¼şºó£¬unused-imports/no-unused-vars »áÍË»ØºËĞÄÊµÏÖ£¬
- * ÎŞ·¨Ê¶±ğ TS ÀàĞÍÇ©ÃûÀïµÄĞÎ²Î£¨»áÎó±¨£©¡£¹Ê¶Ô TS/TSX/Vue Í³Ò»¹Ø±Õ¸Ã¹æÔò£¬
- * Î´Ê¹ÓÃ±äÁ¿¸ÄÓÉ oxlint µÄ no-unused-vars£¨ÀàĞÍ¸ĞÖª£©¸ºÔğ¡£
+ * æ³¨æ„ï¼šç§»é™¤ @typescript-eslint æ’ä»¶åï¼Œunused-imports/no-unused-vars ä¼šé€€å›æ ¸å¿ƒå®ç°ï¼Œ
+ * æ— æ³•è¯†åˆ« TS ç±»å‹ç­¾åé‡Œçš„å½¢å‚ï¼ˆä¼šè¯¯æŠ¥ï¼‰ã€‚æ•…å¯¹ TS/TSX/Vue ç»Ÿä¸€å…³é—­è¯¥è§„åˆ™ï¼Œ
+ * æœªä½¿ç”¨å˜é‡æ”¹ç”± oxlint çš„ no-unused-varsï¼ˆç±»å‹æ„ŸçŸ¥ï¼‰è´Ÿè´£ã€‚
  */
 export async function typescript(): Promise<Linter.Config[]> {
   const parserTs = await interopDefault(import('@typescript-eslint/parser'));
@@ -34,7 +34,7 @@ export async function typescript(): Promise<Linter.Config[]> {
       },
     },
     {
-      // Vue `<script>` µÄÎ´Ê¹ÓÃ±äÁ¿Í¬Ñù½»¸ø oxlint£¬±ÜÃâºËĞÄ¹æÔòÎó±¨ TS ÀàĞÍÇ©ÃûĞÎ²Î
+      // Vue `<script>` çš„æœªä½¿ç”¨å˜é‡åŒæ ·äº¤ç»™ oxlintï¼Œé¿å…æ ¸å¿ƒè§„åˆ™è¯¯æŠ¥ TS ç±»å‹ç­¾åå½¢å‚
       files: ['**/*.vue'],
       rules: {
         'unused-imports/no-unused-vars': 'off',
