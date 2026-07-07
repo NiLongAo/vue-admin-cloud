@@ -1,3 +1,5 @@
+import type { WorkbenchQuickNavItem, WorkbenchTodoItem } from '@vben/common-ui';
+
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
 import { h } from 'vue';
@@ -16,26 +18,75 @@ export const tabOptions = [
   { key: 'already', label: '参与任务' },
 ];
 
-export const quickNavItems = [
+export const quickNavItems: WorkbenchQuickNavItem[] = [
   {
-    color: '#1fdaca',
+    color: '#ff6b6b',
+    icon: 'ion:calendar-outline',
     title: '请假',
     url: '/work/leave/undefined',
   },
   {
+    color: '#e18525',
+    icon: 'ion:grid-outline',
+    title: '仪表盘',
+    url: '/dashboard/analytics',
+  },
+  {
+    color: '#00d8ff',
+    icon: 'ion:layers-outline',
+    title: '组件',
+    url: '/demos/antd',
+  },
+  {
+    color: '#1fdaca',
+    icon: 'ion:settings-outline',
+    title: '系统管理',
+    url: '/index/system/user',
+  },
+  {
     color: '#3fb27f',
-    title: '待办流程',
-    url: '/oa/need',
+    icon: 'ion:key-outline',
+    title: '权限管理',
+    url: '/index/system/privilege',
   },
   {
     color: '#1677ff',
-    title: '历史流程',
-    url: '/oa/historic',
+    icon: 'ion:bar-chart-outline',
+    title: '图表',
+    url: '/dashboard/analytics',
+  },
+];
+
+export const flowTodoItems: WorkbenchTodoItem[] = [
+  {
+    completed: false,
+    content: '优先处理待办流程中的审批任务，避免流程长时间停留。',
+    date: '今日',
+    title: '处理待办审批',
   },
   {
-    color: '#e18525',
-    title: '流程仓库',
-    url: '/oa/repository',
+    completed: true,
+    content: '复核本人发起流程的当前节点，及时补充审批材料。',
+    date: '今日',
+    title: '跟进发起流程',
+  },
+  {
+    completed: false,
+    content: '查看历史流程记录，确认审批意见和流程状态。',
+    date: '本周',
+    title: '查看历史流程',
+  },
+  {
+    completed: false,
+    content: '检查流程定义与表单配置，确保常用流程可正常发起。',
+    date: '本周',
+    title: '维护流程仓库',
+  },
+  {
+    completed: false,
+    content: '整理异常流程并通知相关处理人继续推进。',
+    date: '本周',
+    title: '跟踪异常任务',
   },
 ];
 

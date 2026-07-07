@@ -10,15 +10,22 @@ import type { ActivitiUserNeedEntity } from '#/api/oa/activiti';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Page } from '@vben/common-ui';
+import { AnalysisChartCard, Page, WorkbenchHeader } from '@vben/common-ui';
 import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 
-import { Avatar, Button, Card, Modal, Statistic, Tabs } from 'ant-design-vue';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  VbenIcon,
+} from '@vben-core/shadcn-ui';
+
+import { Modal, Tabs } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
-  doBackProcess,
   doClaim,
   doDeleteProcessInstance,
   doFindUserAlreadyList,
@@ -29,7 +36,13 @@ import {
   OAIndex,
 } from '#/api/oa/activiti';
 
-import { getColumns, quickNavItems, tabOptions } from './modules/data';
+import AuditRadar from './modules/AuditRadar.vue';
+import {
+  flowTodoItems,
+  getColumns,
+  quickNavItems,
+  tabOptions,
+} from './modules/data';
 
 type GridColumn = NonNullable<VxeTableGridOptions['columns']>[number];
 
@@ -42,16 +55,36 @@ const stats = ref({
   userLaunchCount: 0,
   userNeedCount: 0,
 });
+const todoItems = ref(flowTodoItems.map((item) => ({ ...item })));
 
 const greeting = computed(() => {
   const hour = new Date().getHours();
-  const name =
-    userStore.userInfo?.nickName || userStore.userInfo?.realName || '';
-  if (hour < 10) return `早上好，${name}，开始您一天的工作吧！`;
-  if (hour < 12) return `中午好，${name}，继续努力。`;
-  if (hour < 18) return `下午好，${name}，保持工作状态。`;
-  return `晚上好，${name}，记得早点休息。`;
+  const name = userStore.userInfo?.nickName;
+  if (hour < 10) return `早安，${name}，开始您一天的工作吧！`;
+  if (hour < 12) return `上午好，${name}，继续推进流程任务。`;
+  if (hour < 18) return `下午好，${name}，保持完美工作状态！`;
+  return `晚上好，${name}，记得及时收尾流程。`;
 });
+
+const avatar = computed(
+  () => userStore.userInfo?.httpImageUrl || preferences.app.defaultAvatar,
+);
+
+const headerStats = computed(() => [
+  { label: '待办', value: stats.value.userNeedCount },
+  { label: '发起', value: stats.value.userLaunchCount },
+  { label: '已办', value: stats.value.userAlreadyCount },
+  { label: '部门人数', value: 300 },
+]);
+
+const workflowSummary = computed(
+  () =>
+    `当前共有 ${stats.value.userNeedCount} 条待办任务，${stats.value.userLaunchCount} 条发起记录，${stats.value.userAlreadyCount} 条已办记录。`,
+);
+
+const activeTabLabel = computed(
+  () => tabOptions.find((item) => item.key === activeKey.value)?.label ?? '',
+);
 
 function refreshGrid() {
   gridApi.query();
@@ -88,11 +121,6 @@ async function deleteProcess(row: ActivitiUserNeedEntity) {
   refreshGrid();
 }
 
-async function backProcess(row: ActivitiUserNeedEntity) {
-  await doBackProcess({ taskId: row.taskId });
-  refreshGrid();
-}
-
 function onActionClick({
   code,
   row,
@@ -104,14 +132,10 @@ function onActionClick({
     }
     case 'delete': {
       Modal.confirm({
-        title: '删除流程',
         content: `确定删除“${row.instanceName ?? row.taskName}”？`,
         onOk: () => deleteProcess(row),
+        title: '删除流程',
       });
-      break;
-    }
-    case 'reject': {
-      backProcess(row);
       break;
     }
     case 'review': {
@@ -158,11 +182,6 @@ const operationColumn: GridColumn = {
           row.isSuspended ? '激活' : '挂起',
       },
       {
-        code: 'reject',
-        show: () => activeKey.value === 'need',
-        text: '驳回',
-      },
-      {
         code: 'delete',
         show: (row: ActivitiUserNeedEntity) =>
           activeKey.value === 'launch' && row.processVariables?.status === 1,
@@ -173,13 +192,13 @@ const operationColumn: GridColumn = {
   field: 'operation',
   fixed: 'right',
   title: '操作',
-  width: 220,
+  width: 180,
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions: {
     columns: [...(getColumns(activeKey.value) ?? []), operationColumn],
-    height: 'auto',
+    height: '100%',
     keepSource: true,
     proxyConfig: {
       ajax: {
@@ -213,8 +232,9 @@ function onTabChange(key: Key) {
   refreshGrid();
 }
 
-function goUrl(url: string) {
-  router.push(url);
+function goUrl(item: (typeof quickNavItems)[number]) {
+  if (!item.url) return;
+  router.push(item.url);
 }
 
 onMounted(async () => {
@@ -223,49 +243,122 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Page auto-content-height>
-    <div class="space-y-4">
-      <Card>
-        <div class="flex flex-wrap items-center gap-6">
-          <Avatar
-            :size="72"
-            :src="userStore.userInfo?.avatar || preferences.app.defaultAvatar"
-          />
-          <div class="min-w-[260px] flex-1">
-            <div class="text-lg font-medium">{{ greeting }}</div>
-            <div class="text-muted-foreground">
-              集中处理流程任务和日常申请。
-            </div>
+  <Page auto-content-height content-class="overflow-hidden p-0">
+    <div class="flex h-full min-h-0 flex-col p-5">
+      <WorkbenchHeader :avatar="avatar">
+        <template #title>{{ greeting }}</template>
+        <template #description> 集中处理流程任务和日常申请。 </template>
+        <template #actions>
+          <div
+            v-for="item in headerStats"
+            :key="item.label"
+            class="ml-10 flex flex-col justify-center text-right first:ml-0 md:ml-14"
+          >
+            <span class="text-foreground/80">{{ item.label }}</span>
+            <span class="text-2xl">{{ item.value }}</span>
           </div>
-          <Statistic title="待办" :value="stats.userNeedCount" />
-          <Statistic title="发起" :value="stats.userLaunchCount" />
-          <Statistic title="已办" :value="stats.userAlreadyCount" />
-        </div>
-      </Card>
+        </template>
+      </WorkbenchHeader>
 
-      <div class="grid gap-4 lg:grid-cols-[1fr_320px]">
-        <Card>
-          <Tabs :active-key="activeKey" @change="onTabChange">
-            <Tabs.TabPane
-              v-for="item in tabOptions"
-              :key="item.key"
-              :tab="item.label"
-            />
-          </Tabs>
-          <Grid grid-class="p-0" />
-        </Card>
-        <Card title="快捷导航">
-          <div class="grid grid-cols-2 gap-3">
-            <Button
-              v-for="item in quickNavItems"
-              :key="item.title"
-              class="h-16"
-              @click="goUrl(item.url)"
+      <div
+        class="mt-5 grid min-h-0 flex-1 grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(320px,0.52fr)]"
+      >
+        <Card class="h-full min-h-0 min-w-0 gap-4 py-4">
+          <CardHeader class="px-5">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <CardTitle class="text-lg">工作流</CardTitle>
+                <p class="mt-1 text-sm text-foreground/70">
+                  {{ workflowSummary }}
+                </p>
+              </div>
+              <span class="text-sm text-foreground/70">
+                当前视图：{{ activeTabLabel }}
+              </span>
+            </div>
+          </CardHeader>
+          <CardContent class="flex min-h-0 flex-1 flex-col px-5 pt-0">
+            <Tabs
+              :active-key="activeKey"
+              class="shrink-0"
+              @change="onTabChange"
             >
-              <span :style="{ color: item.color }">{{ item.title }}</span>
-            </Button>
-          </div>
+              <Tabs.TabPane
+                v-for="item in tabOptions"
+                :key="item.key"
+                :tab="item.label"
+              />
+            </Tabs>
+            <div class="min-h-0 flex-1">
+              <Grid grid-class="h-full p-0" />
+            </div>
+          </CardContent>
         </Card>
+
+        <div
+          class="grid h-full min-h-0 grid-rows-[auto_auto_minmax(0,1fr)] gap-4"
+        >
+          <Card class="gap-3 py-4">
+            <CardHeader class="px-4">
+              <CardTitle class="text-base">快捷导航</CardTitle>
+            </CardHeader>
+            <CardContent class="grid grid-cols-3 px-4 pb-0">
+              <button
+                v-for="item in quickNavItems"
+                :key="item.title"
+                class="flex h-20 flex-col items-center justify-center gap-2 border-t border-r border-border text-sm transition-colors hover:bg-accent/40 [&:nth-child(3n)]:border-r-0 [&:nth-child(-n+3)]:border-t-0"
+                type="button"
+                @click="goUrl(item)"
+              >
+                <VbenIcon
+                  :color="item.color"
+                  :icon="item.icon"
+                  class="size-6"
+                />
+                <span class="truncate">{{ item.title }}</span>
+              </button>
+            </CardContent>
+          </Card>
+
+          <Card class="gap-3 py-4">
+            <CardHeader class="px-4">
+              <CardTitle class="text-base">流程提醒</CardTitle>
+            </CardHeader>
+            <CardContent class="px-4 pb-0">
+              <ul class="divide-y divide-border">
+                <li
+                  v-for="item in todoItems"
+                  :key="item.title"
+                  class="flex items-center gap-3 py-3"
+                >
+                  <span
+                    :class="[
+                      item.completed
+                        ? 'border-primary bg-primary'
+                        : 'border-border',
+                    ]"
+                    class="size-3 shrink-0 rounded-sm border"
+                  ></span>
+                  <div class="min-w-0 flex-1">
+                    <div class="truncate text-sm font-medium">
+                      {{ item.title }}
+                    </div>
+                    <div class="truncate text-xs text-foreground/70">
+                      {{ item.content }}
+                    </div>
+                  </div>
+                  <span class="shrink-0 text-xs text-foreground/60">
+                    {{ item.date }}
+                  </span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <AnalysisChartCard class="min-h-0 gap-3 py-4" title="审核统计">
+            <AuditRadar />
+          </AnalysisChartCard>
+        </div>
       </div>
     </div>
   </Page>

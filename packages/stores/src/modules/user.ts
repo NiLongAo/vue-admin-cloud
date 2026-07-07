@@ -2,9 +2,9 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 
 interface BasicUserInfo {
   [key: string]: any;
-  /**
-   * 用户id
-   */
+  avatar?: string;
+  homePath?: string;
+  httpImageUrl?: string | undefined;
   id?: string;
   /**
    * 头像
@@ -14,18 +14,15 @@ interface BasicUserInfo {
    * 用户昵称
    */
   nickName: string;
-  /**
-   * 用户角色
-   */
+  realName?: string;
+  roleIdList?: string[];
   roles?: string[];
-  /**
-   * 用户id
-   */
   userId?: string;
   /**
    * 用户名
    */
   userName: string;
+  username?: string;
 }
 
 interface AccessState {
@@ -48,9 +45,21 @@ interface AccessState {
  */
 export const useUserStore = defineStore('core-user', {
   actions: {
-    setUserInfo(userInfo: BasicUserInfo | null) {
+    setUserInfo(imageBaseUrl: string, userInfo: any | null) {
+      const imageUrl = userInfo?.imageUrl ?? '';
+      const httpImageUrl = imageUrl
+        ? `${imageBaseUrl}${imageUrl}`
+        : userInfo?.httpImageUrl;
       // 设置用户信息
-      this.userInfo = userInfo;
+      this.userInfo = userInfo
+        ? {
+            ...userInfo,
+            httpImageUrl,
+            imageUrl,
+            nickName: userInfo.nickName ?? '',
+            userName: userInfo.userName ?? userInfo.username ?? '',
+          }
+        : null;
       // 设置角色信息
       const roles = userInfo?.roleIdList ?? [];
       this.setUserRoles(roles);

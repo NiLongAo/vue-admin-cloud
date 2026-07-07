@@ -102,7 +102,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUserInfo() {
     const userInfo = await getUserInfoApi();
-    userStore.setUserInfo(userInfo);
+    userStore.setUserInfo(
+      systemStore.getSystemConfig(import.meta.env.VITE_APP_MINIO_PATH),
+      userInfo,
+    );
     return userInfo;
   }
 

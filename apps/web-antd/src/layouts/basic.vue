@@ -19,7 +19,7 @@ import { useAccessStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
 import { $t } from '#/locales';
-import { useAuthStore, useSystemStore } from '#/store';
+import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const notifications = ref<NotificationItem[]>([
@@ -78,7 +78,6 @@ const notifications = ref<NotificationItem[]>([
 const router = useRouter();
 const userStore = useUserStore();
 const authStore = useAuthStore();
-const systemStore = useSystemStore();
 const accessStore = useAccessStore();
 const { destroyWatermark, updateWatermark } = useWatermark();
 const { isDark } = usePreferences();
@@ -124,13 +123,7 @@ const menus = computed(() => [
 ]);
 
 const avatar = computed(() => {
-  let avatar = preferences.app.defaultAvatar;
-  if (userStore.userInfo?.imageUrl) {
-    avatar =
-      systemStore.getSystemConfig(import.meta.env.VITE_APP_MINIO_PATH) +
-      userStore.userInfo?.imageUrl;
-  }
-  return avatar;
+  return userStore.userInfo?.httpImageUrl || preferences.app.defaultAvatar;
 });
 
 async function handleLogout() {
