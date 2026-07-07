@@ -4,9 +4,9 @@ import type { NotificationItem } from '@vben/layouts';
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { AuthenticationLoginExpiredModal } from '@vben/common-ui';
+import { AuthenticationLoginExpiredModal, useVbenModal } from '@vben/common-ui';
 import { VBEN_DOC_URL, VBEN_GITHUB_URL } from '@vben/constants';
-import { useWatermark } from '@vben/hooks';
+import { useRefresh, useWatermark } from '@vben/hooks';
 import { BookOpenText, CircleHelp, SvgGithubIcon } from '@vben/icons';
 import {
   BasicLayout,
@@ -18,9 +18,12 @@ import { preferences, usePreferences } from '@vben/preferences';
 import { useAccessStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
+import { sysTenantId } from '#/api/sys/tenant';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
+
+import TenantSwitchModal from './modules/TenantSwitchModal.vue';
 
 const notifications = ref<NotificationItem[]>([
   {
@@ -79,11 +82,18 @@ const router = useRouter();
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
+const { refresh } = useRefresh();
 const { destroyWatermark, updateWatermark } = useWatermark();
 const { isDark } = usePreferences();
 const showDot = computed(() =>
   notifications.value.some((item) => !item.isRead),
 );
+const isSysTenant = computed(
+  () => Number(userStore.userInfo?.tenantId) === sysTenantId,
+);
+const [TenantSwitchModalInstance, tenantSwitchModalApi] = useVbenModal({
+  connectedComponent: TenantSwitchModal,
+});
 
 const menus = computed(() => [
   {
@@ -93,6 +103,17 @@ const menus = computed(() => [
     icon: 'lucide:user',
     text: $t('page.auth.profile'),
   },
+  ...(isSysTenant.value
+    ? [
+        {
+          handler: () => {
+            tenantSwitchModalApi.open();
+          },
+          icon: 'lucide:repeat-2',
+          text: '切换租户',
+        },
+      ]
+    : []),
   {
     handler: () => {
       openWindow(VBEN_DOC_URL, {
@@ -132,6 +153,10 @@ async function handleLogout() {
 
 function handleNoticeClear() {
   notifications.value = [];
+}
+
+async function handleTenantSwitched() {
+  await refresh();
 }
 
 function markRead(id: number | string) {
@@ -241,6 +266,7 @@ watch(
       />
     </template>
     <template #extra>
+      <TenantSwitchModalInstance @switched="handleTenantSwitched" />
       <AuthenticationLoginExpiredModal
         v-model:open="accessStore.loginExpired"
         :avatar

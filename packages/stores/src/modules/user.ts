@@ -40,6 +40,10 @@ interface AccessState {
   userRoles: string[];
 }
 
+export const userStorePersist = {
+  pick: ['searchTenant'],
+};
+
 /**
  * @zh_CN 用户信息相关
  */
@@ -76,6 +80,7 @@ export const useUserStore = defineStore('core-user', {
     userInfo: null,
     userRoles: [],
   }),
+  persist: userStorePersist,
 });
 
 // 解决热更新问题

@@ -116,6 +116,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 }
 
 export const requestClient = createRequestClient(apiURL, {
+  dataHeaderTenant: 'schemasTenantId',
   responseReturn: 'data',
 });
 
