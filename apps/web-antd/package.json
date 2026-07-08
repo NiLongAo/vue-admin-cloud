@@ -52,6 +52,8 @@
     "@vue-flow/core": "catalog:",
     "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
+    "bpmn-js": "catalog:",
+    "codemirror": "catalog:",
     "crypto-js": "catalog:",
     "dayjs": "catalog:",
     "pinia": "catalog:",
@@ -61,6 +63,7 @@
     "vue-router": "catalog:"
   },
   "devDependencies": {
+    "@types/codemirror": "catalog:",
     "@types/crypto-js": "catalog:"
   }
 }

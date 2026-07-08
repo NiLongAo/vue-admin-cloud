@@ -78,6 +78,7 @@ catalog:
   '@tiptap/vue-3': ^3.26.1
   '@tsdown/css': ^0.22.3
   '@types/archiver': ^8.0.0
+  '@types/codemirror': ^5.60.15
   '@types/crypto-js': ^4.2.2
   '@types/html-minifier-terser': ^7.0.2
   '@types/json-bigint': ^1.0.4
@@ -105,12 +106,14 @@ catalog:
   archiver: ^8.0.0
   axios: ^1.18.0
   axios-mock-adapter: ^2.1.0
+  bpmn-js: ^8.1.0
   cac: ^7.0.0
   chalk: ^5.6.2
   cheerio: ^1.2.0
   circular-dependency-scanner: ^3.0.1
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
+  codemirror: ^5.65.16
   commitlint-plugin-function-rules: ^5.0.1
   consola: ^3.4.2
   cross-env: ^10.1.0

@@ -1,0 +1,31 @@
+.bpmn-actions {
+  position: absolute;
+  top: 12px;
+  left: 72px;
+  z-index: 20;
+  padding: 8px;
+  background: hsl(var(--background) / 92%);
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+  box-shadow: 0 8px 24px hsl(var(--foreground) / 10%);
+  backdrop-filter: blur(8px);
+}
+
+.bpmn-actions button {
+  color: hsl(var(--foreground));
+}
+
+.CodeMirror {
+  height: 100%;
+  font-family: Monaco, Menlo, Consolas, 'COURIER NEW', monospace;
+  font-size: 12px;
+}
+
+.CodeMirror-scroll {
+  overflow: auto;
+}
+
+.ant-drawer-body {
+  height: 100%;
+  padding: 0;
+}

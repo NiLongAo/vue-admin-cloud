@@ -1,0 +1,58 @@
+.bpmn-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(360px, 35%);
+  height: 100%;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  border-left: 1px solid hsl(var(--border));
+  box-shadow: -8px 0 24px hsl(var(--foreground) / 8%);
+}
+
+.bpmn-panel .dynamic-binder {
+  padding: 0 12px 12px;
+}
+
+.bpmn-panel .title {
+  padding: 10px 44px 10px 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.group-title-block {
+  margin-left: 4px;
+  font-size: 14px;
+  color: hsl(var(--foreground));
+}
+
+.dynamic-binder > * {
+  padding-top: 12px;
+}
+
+.bpmn-panel-collapse {
+  max-height: calc(100% - 45px);
+  padding: 4px;
+  overflow-y: auto;
+  background-color: hsl(var(--background));
+}
+
+.bpmn-panel-shrinkage {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 99;
+  padding: 2px 8px;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: 4px;
+}
+
+.bpmn-panel-shrinkage:hover {
+  color: hsl(var(--foreground));
+  background: hsl(var(--accent));
+}

@@ -1,0 +1,134 @@
+.bjs-powered-by {
+  display: none;
+}
+
+.bpmn-container {
+  height: 100%;
+}
+
+#modeler-container {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  background-image:
+    linear-gradient(hsl(var(--border) / 45%) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border) / 45%) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.dark #modeler-container {
+  background-image:
+    linear-gradient(hsl(var(--border) / 30%) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border) / 30%) 1px, transparent 1px);
+}
+
+#modeler-container .djs-palette {
+  top: 64px !important;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 8px 24px hsl(var(--foreground) / 12%);
+}
+
+#modeler-container .djs-palette .entry {
+  color: hsl(var(--foreground));
+}
+
+#modeler-container .djs-palette .entry:hover {
+  background-color: hsl(var(--accent));
+}
+
+#modeler-container .djs-context-pad {
+  color: hsl(var(--foreground));
+}
+
+#modeler-container .djs-context-pad .entry {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 4px;
+  box-shadow: 0 6px 16px hsl(var(--foreground) / 12%);
+  fill: currentcolor;
+}
+
+#modeler-container .djs-context-pad .entry::before,
+#modeler-container .djs-popup .entry::before {
+  color: hsl(var(--foreground));
+}
+
+#modeler-container .djs-context-pad .entry svg,
+#modeler-container .djs-context-pad .entry path,
+#modeler-container .djs-popup .entry svg,
+#modeler-container .djs-popup .entry path {
+  fill: currentcolor;
+  stroke: currentcolor;
+}
+
+#modeler-container .djs-context-pad .entry:hover {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--accent));
+}
+
+#modeler-container .djs-popup {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+  box-shadow: 0 10px 30px hsl(var(--foreground) / 16%);
+}
+
+#modeler-container .djs-popup-header,
+#modeler-container .djs-popup-body,
+#modeler-container .djs-popup-group {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  border-color: hsl(var(--border));
+}
+
+#modeler-container .djs-popup .entry {
+  color: hsl(var(--foreground));
+  background-color: transparent;
+  fill: currentcolor;
+}
+
+#modeler-container .djs-popup .entry:hover,
+#modeler-container .djs-popup .entry.selected {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--accent));
+}
+
+.dark #modeler-container .djs-context-pad .entry,
+.dark #modeler-container .djs-popup {
+  box-shadow: 0 10px 30px hsl(0deg 0% 0% / 35%);
+}
+
+.dark #modeler-container .djs-shape .djs-visual > :is(rect, circle, ellipse, polygon) {
+  fill: hsl(var(--background)) !important;
+  stroke: hsl(var(--foreground) / 72%) !important;
+}
+
+.dark #modeler-container .djs-shape .djs-visual path {
+  fill: hsl(var(--foreground) / 72%) !important;
+  stroke: hsl(var(--foreground) / 72%) !important;
+}
+
+.dark #modeler-container .djs-connection .djs-visual path {
+  fill: none !important;
+  stroke: hsl(var(--foreground) / 72%) !important;
+}
+
+.dark #modeler-container marker path,
+.dark #modeler-container marker polygon {
+  fill: hsl(var(--foreground) / 72%) !important;
+  stroke: hsl(var(--foreground) / 72%) !important;
+}
+
+.dark #modeler-container text {
+  fill: hsl(var(--foreground)) !important;
+}
+
+.dark #modeler-container .djs-outline {
+  stroke: hsl(var(--primary)) !important;
+}

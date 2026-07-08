@@ -1,0 +1,16 @@
+export default {
+  'Activate the create/remove space tool': '启动创建/删除空间工具',
+  'Activate the global connect tool': '启动全局连接工具',
+  'Activate the hand tool': '启动抓手工具',
+  'Activate the lasso tool': '启动套索工具',
+  'Append EndEvent': '追加结束事件',
+  'Append Gateway': '追加网关',
+  'Append Task': '追加任务',
+  'Append TextAnnotation': '追加文本注释',
+  'Create EndEvent': '创建结束事件',
+  'Create Gateway': '创建网关',
+  'Create StartEvent': '创建开始事件',
+  'Create Task': '创建任务',
+  'Create expanded SubProcess': '创建子流程',
+  Remove: '删除',
+};

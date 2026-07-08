@@ -1,0 +1,31 @@
+.prefix-label-number-container {
+  display: inline-table;
+  width: 100%;
+}
+
+.prefix-number-title {
+  display: table-cell;
+  width: 1px;
+  padding: 0 11px;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-right: 0;
+  border-radius: 4px 0 0 4px;
+}
+
+.prefix-label-number {
+  display: table-cell;
+  width: 100%;
+}
+
+.prefix-label-number .el-input,
+.el-number {
+  line-height: normal;
+}
+
+.prefix-label-number .el-input__inner {
+  line-height: normal;
+  border-radius: 0 4px 4px 0 !important;
+}

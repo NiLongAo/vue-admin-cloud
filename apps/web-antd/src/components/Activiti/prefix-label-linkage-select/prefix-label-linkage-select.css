@@ -1,0 +1,30 @@
+.prefix-label-linkage-select-container {
+  display: inline-table;
+  width: 100%;
+}
+
+.prefix-title {
+  display: table-cell;
+  width: 1px;
+  padding: 0 11px;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-right: 0;
+  border-radius: 4px 0 0 4px;
+}
+
+.prefix-label-linkage-select {
+  display: table-cell;
+}
+
+.prefix-label-linkage-select .el-input,
+.el-select {
+  line-height: normal;
+}
+
+.prefix-label-linkage-select .el-input__inner {
+  line-height: normal;
+  border-radius: 0 4px 4px 0 !important;
+}
