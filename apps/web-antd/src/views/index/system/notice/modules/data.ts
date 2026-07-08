@@ -2,7 +2,7 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { PublicNoticeEntity } from '#/api/notice/publicNotice';
 
-import { h } from 'vue';
+import { h, markRaw } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { VbenTiptap } from '@vben/plugins/tiptap';
@@ -12,6 +12,7 @@ import { Tag } from 'ant-design-vue';
 import { uploadNoticeRichTextImage } from './richTextImageUpload';
 
 const { hasAccessByCodes } = useAccess();
+const NoticeRichTextEditor = markRaw(VbenTiptap);
 
 const unknownNoticeTypeOption: OptionItem = {
   color: 'default',
@@ -253,7 +254,7 @@ export function useFormSchema(): VbenFormSchema[] {
       rules: 'required',
     },
     {
-      component: VbenTiptap,
+      component: NoticeRichTextEditor,
       componentProps: {
         imageUpload: {
           accept: 'image/*',
