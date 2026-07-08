@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { CheckboxGroupEntity } from '../model';
 
-import { ref, unref, watch } from 'vue';
+import { computed, ref, unref, watch } from 'vue';
 
 import { cloneDeep } from '@vben/utils';
 
@@ -31,6 +31,7 @@ const last = ref<string[]>([]);
 const isInternal = ref(false);
 const selected = ref(new Set(unref(checkedList)));
 const idMap = ref(new Map<string, CheckboxGroupEntity>());
+const checkedCount = computed(() => checkedList.value.length);
 
 function onInit() {
   const lastIds: string[] = [];
@@ -191,11 +192,20 @@ defineExpose({ onInit });
 
 <template>
   <div class="flex h-full flex-col">
-    <div v-if="showSave" class="flex items-center justify-end border-b p-4">
-      <Button type="primary" @click="handleSave">保存</Button>
+    <div
+      class="flex shrink-0 flex-col gap-3 border-b border-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div class="min-w-0">
+        <div class="text-base font-medium">权限配置</div>
+        <div class="mt-1 text-xs text-muted-foreground">
+          已选择 {{ checkedCount }} 项权限
+        </div>
+      </div>
+
+      <Button v-if="showSave" type="primary" @click="handleSave">保存</Button>
     </div>
 
-    <div class="flex-1 overflow-auto p-4">
+    <div class="min-h-0 flex-1 overflow-auto p-4">
       <MyCheckBox :tree-data="tree" @subset="handleSubsetChange" />
     </div>
   </div>

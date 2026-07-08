@@ -33,8 +33,15 @@ function subChange(e: any, id: string) {
 </script>
 
 <template>
-  <div v-if="isButtonLevel" class="flex flex-row gap-4 pb-2 pl-6">
-    <div v-for="value in treedata" :key="value.id">
+  <div
+    v-if="isButtonLevel"
+    class="flex flex-wrap gap-x-5 gap-y-2 py-2 pl-0 md:pl-6"
+  >
+    <div
+      v-for="value in treedata"
+      :key="value.id"
+      class="rounded-md bg-muted/40 px-2.5 py-1.5"
+    >
       <Checkbox
         v-model:checked="value.checked"
         class="select-none"
@@ -52,12 +59,16 @@ function subChange(e: any, id: string) {
       v-for="value in treedata"
       :key="value.id"
       class="flex flex-col"
-      :class="{ 'pl-6': value.parentId }"
+      :class="
+        value.parentId
+          ? 'border-l border-border/70 pl-4 md:ml-4 md:pl-5'
+          : 'mb-3 rounded-lg border border-border bg-background px-4 py-3 shadow-xs'
+      "
     >
       <div class="pb-2">
         <Checkbox
           v-model:checked="value.checked"
-          class="select-none"
+          class="select-none font-medium"
           :indeterminate="value.indeterminate"
           :value="value.id"
           @change="(e) => subChange(e, value.id)"

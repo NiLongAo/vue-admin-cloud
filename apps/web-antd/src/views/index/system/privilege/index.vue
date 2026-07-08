@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { ref, unref, watch } from 'vue';
+import { computed, ref, unref, watch } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { Page } from '@vben/common-ui';
 
 import { VbenTree } from '@vben-core/shadcn-ui';
 
-import { message, Radio } from 'ant-design-vue';
+import { InputSearch, message, Radio } from 'ant-design-vue';
 
 import {
   doDepartmentPrivilegeList,
@@ -34,8 +34,36 @@ const vbenTreeData = ref<any[]>([]);
 const selectTreeId = ref<number | string | undefined>();
 const treeData = ref<any[]>([]);
 const tenant = ref([]);
-const checkedList = ref([]);
+const checkedList = ref<string[]>([]);
 const selectId = ref<number | string>();
+const treeKeyword = ref('');
+
+const treeTitle = computed(() => {
+  if (type.value === 1) return '部门信息';
+  if (type.value === 2) return '职位信息';
+  return '角色信息';
+});
+
+function filterTree(nodes: any[], keyword: string): any[] {
+  return nodes
+    .map((node) => {
+      const children = filterTree(node.children ?? [], keyword);
+      const matched = String(node.name ?? '')
+        .toLowerCase()
+        .includes(keyword);
+      if (matched || children.length > 0) {
+        return { ...node, children };
+      }
+      return undefined;
+    })
+    .filter(Boolean);
+}
+
+const filteredTreeData = computed(() => {
+  const keyword = treeKeyword.value.trim().toLowerCase();
+  if (!keyword) return vbenTreeData.value;
+  return filterTree(vbenTreeData.value, keyword);
+});
 
 function formatTreeNode(
   item: any,
@@ -93,16 +121,11 @@ async function handleSelect({ bind = {} as any }) {
   }
 }
 
-// 修复：将参数类型改为 string[] 以匹配组件事件定义
-async function handleSave(checkIdList: string[]) {
+async function handleSave(privilegeList: string[]) {
   if (!unref(type) || !unref(selectId)) {
     message.error('请选择权限类型');
     return;
   }
-
-  // 如果后端 API 严格要求 number 数组，则在此处进行转换
-  // 假设 API 需要 number[]，将 string[] 转换为 number[]
-  const privilegeList = checkIdList.map(Number);
 
   if (unref(type) === 1) {
     await doDepartmentPrivilegeSave({
@@ -116,7 +139,7 @@ async function handleSave(checkIdList: string[]) {
     });
   } else {
     await doRolePrivilegeSave({
-      privilegeList,
+      menuIdList: privilegeList,
       roleId: unref(selectId),
     });
   }
@@ -144,6 +167,7 @@ watch(
     }
 
     selectId.value = undefined;
+    treeKeyword.value = '';
     if (vbenTreeData.value.length > 0) {
       selectTreeId.value = vbenTreeData.value[0].id;
       await handleSelect({ bind: { value: vbenTreeData.value[0] } });
@@ -160,56 +184,68 @@ watch(
 <template>
   <Page
     auto-content-height
-    title="权限管理"
-    description="设置各个管理模块的权限"
+    content-class="overflow-hidden bg-background-deep p-4"
   >
     <div
-      class="bg-background dark:bg-background flex h-full flex-row gap-4 p-4"
+      class="grid h-full min-h-0 gap-4 overflow-auto lg:grid-cols-[280px_minmax(0,1fr)] lg:overflow-hidden"
     >
-      <div class="w-80 flex-none">
+      <aside
+        class="flex min-h-[280px] flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm lg:min-h-0"
+      >
+        <div class="border-b border-border p-3">
+          <Radio.Group
+            v-model:value="type"
+            button-style="solid"
+            class="privilege-type-tabs flex w-full"
+          >
+            <Radio.Button :value="1">部门</Radio.Button>
+            <Radio.Button :value="2">职位</Radio.Button>
+            <Radio.Button :value="3">角色</Radio.Button>
+          </Radio.Group>
+
+          <div class="mt-3 flex items-center gap-2">
+            <span class="shrink-0 text-sm font-medium">{{ treeTitle }}</span>
+            <InputSearch
+              v-model:value="treeKeyword"
+              allow-clear
+              placeholder="搜索"
+              size="small"
+              class="min-w-0 flex-1"
+            />
+          </div>
+        </div>
+
         <VbenTree
           v-model="selectTreeId"
-          :tree-data="vbenTreeData"
-          bordered
-          class="h-full rounded-lg border shadow-sm"
+          :tree-data="filteredTreeData"
+          class="privilege-source-tree min-h-0 flex-1 overflow-auto p-3"
           label-field="name"
-          show-icon
           value-field="id"
           @select="handleSelect"
-        >
-          <template #header>
-            <Radio.Group
-              v-model:value="type"
-              button-style="solid"
-              class="flex w-full"
-            >
-              <Radio.Button
-                :value="1"
-                class="flex-1 !rounded-es-none text-center"
-              >
-                部门
-              </Radio.Button>
-              <Radio.Button :value="2" class="flex-1 text-center">
-                职位
-              </Radio.Button>
-              <Radio.Button
-                :value="3"
-                class="flex-1 !rounded-ee-none text-center"
-              >
-                角色
-              </Radio.Button>
-            </Radio.Group>
-          </template>
-        </VbenTree>
-      </div>
-      <div class="flex-auto overflow-hidden rounded-lg border shadow-sm">
+        />
+      </aside>
+
+      <section
+        class="min-h-[360px] overflow-hidden rounded-lg border border-border bg-card shadow-sm lg:min-h-0"
+      >
         <PrivilegeCheckbox
           v-model:checked-list="checkedList"
           :show-save="hasAccessByCodes(['system.privilege:save'])"
           :tree-data="treeData"
           @save="handleSave"
         />
-      </div>
+      </section>
     </div>
   </Page>
 </template>
+
+<style scoped>
+.privilege-type-tabs :deep(.ant-radio-button-wrapper) {
+  flex: 1;
+  text-align: center;
+}
+
+.privilege-source-tree :deep(> div:first-child) {
+  display: none;
+}
+</style>
