@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import type { Key } from 'ant-design-vue/es/_util/type';
 
+import type { WorkflowTabKey } from './modules/workflow';
+
 import type {
   OnActionClickParams,
   VxeTableGridOptions,
@@ -22,10 +24,11 @@ import {
   VbenIcon,
 } from '@vben-core/shadcn-ui';
 
-import { Modal, Tabs } from 'ant-design-vue';
+import { message, Modal, Tabs } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
+  doBackProcess,
   doClaim,
   doDeleteProcessInstance,
   doFindUserAlreadyList,
@@ -33,7 +36,6 @@ import {
   doFindUserNeedList,
   doStatsUserOa,
   doSuspendedInstance,
-  OAIndex,
 } from '#/api/oa/activiti';
 
 import AuditRadar from './modules/AuditRadar.vue';
@@ -43,13 +45,20 @@ import {
   quickNavItems,
   tabOptions,
 } from './modules/data';
+import {
+  buildWorkflowBusinessPath,
+  canClaimTask,
+  canDeleteLaunchProcess,
+  canSuspendLaunchProcess,
+  getWorkflowKeyField,
+} from './modules/workflow';
 
 type GridColumn = NonNullable<VxeTableGridOptions['columns']>[number];
 
 const router = useRouter();
 const userStore = useUserStore();
 
-const activeKey = ref('need');
+const activeKey = ref<WorkflowTabKey>('need');
 const stats = ref({
   userAlreadyCount: 0,
   userLaunchCount: 0,
@@ -59,10 +68,11 @@ const todoItems = ref(flowTodoItems.map((item) => ({ ...item })));
 
 const greeting = computed(() => {
   const hour = new Date().getHours();
-  const name = userStore.userInfo?.nickName;
+  const name =
+    userStore.userInfo?.nickName ?? userStore.userInfo?.realName ?? '';
   if (hour < 10) return `早安，${name}，开始您一天的工作吧！`;
   if (hour < 12) return `上午好，${name}，继续推进流程任务。`;
-  if (hour < 18) return `下午好，${name}，保持完美工作状态！`;
+  if (hour < 18) return `下午好，${name}，保持良好工作状态。`;
   return `晚上好，${name}，记得及时收尾流程。`;
 });
 
@@ -96,11 +106,18 @@ function getApi() {
   return doFindUserAlreadyList;
 }
 
-function viewRecord(row: ActivitiUserNeedEntity, mode = '2') {
-  const key = row.processDefinitionId?.split(':')?.[0];
-  const path = key ? OAIndex[key as keyof typeof OAIndex] : undefined;
-  if (!path) return;
-  router.push(`${path}${row.businessKey}:${mode}:${row.taskId ?? ''}`);
+function viewRecord(row: ActivitiUserNeedEntity, mode: '1' | '2') {
+  const path = buildWorkflowBusinessPath({
+    businessKey: row.businessKey,
+    mode,
+    processDefinitionId: row.processDefinitionId,
+    taskId: row.taskId,
+  });
+  if (!path) {
+    message.warning('未找到该流程对应的业务页面');
+    return;
+  }
+  router.push(path);
 }
 
 async function claim(row: ActivitiUserNeedEntity) {
@@ -110,6 +127,11 @@ async function claim(row: ActivitiUserNeedEntity) {
 
 async function suspend(row: ActivitiUserNeedEntity) {
   await doSuspendedInstance({ instanceId: row.instanceId });
+  refreshGrid();
+}
+
+async function backProcess(row: ActivitiUserNeedEntity) {
+  await doBackProcess({ taskId: row.taskId });
   refreshGrid();
 }
 
@@ -126,6 +148,14 @@ function onActionClick({
   row,
 }: OnActionClickParams<ActivitiUserNeedEntity>) {
   switch (code) {
+    case 'back': {
+      Modal.confirm({
+        content: `确定驳回任务“${row.instanceName ?? row.taskName}”到上一节点？`,
+        onOk: () => backProcess(row),
+        title: '驳回任务',
+      });
+      break;
+    }
     case 'claim': {
       claim(row);
       break;
@@ -171,20 +201,25 @@ const operationColumn: GridColumn = {
       {
         code: 'claim',
         show: (row: ActivitiUserNeedEntity) =>
-          activeKey.value === 'need' && row.assignee === null,
+          activeKey.value === 'need' && canClaimTask(row),
         text: '签收',
+      },
+      {
+        code: 'back',
+        show: () => activeKey.value === 'need',
+        text: '驳回',
       },
       {
         code: 'suspend',
         show: (row: ActivitiUserNeedEntity) =>
-          activeKey.value === 'launch' && row.processVariables?.status === 1,
+          activeKey.value === 'launch' && canSuspendLaunchProcess(row),
         text: (row: ActivitiUserNeedEntity) =>
           row.isSuspended ? '激活' : '挂起',
       },
       {
         code: 'delete',
         show: (row: ActivitiUserNeedEntity) =>
-          activeKey.value === 'launch' && row.processVariables?.status === 1,
+          activeKey.value === 'launch' && canDeleteLaunchProcess(row),
         text: '删除',
       },
     ],
@@ -192,7 +227,7 @@ const operationColumn: GridColumn = {
   field: 'operation',
   fixed: 'right',
   title: '操作',
-  width: 180,
+  width: 220,
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({
@@ -211,7 +246,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       },
     },
     rowConfig: {
-      keyField: 'taskId',
+      keyField: getWorkflowKeyField(activeKey.value),
     },
     toolbarConfig: {
       custom: true,
@@ -223,11 +258,11 @@ const [Grid, gridApi] = useVbenVxeGrid({
 });
 
 function onTabChange(key: Key) {
-  const nextKey = String(key);
+  const nextKey = String(key) as WorkflowTabKey;
   activeKey.value = nextKey;
   gridApi.setGridOptions({
     columns: [...(getColumns(nextKey) ?? []), operationColumn],
-    rowConfig: { keyField: nextKey === 'need' ? 'taskId' : 'instanceId' },
+    rowConfig: { keyField: getWorkflowKeyField(nextKey) },
   } as VxeTableGridOptions);
   refreshGrid();
 }
@@ -247,7 +282,7 @@ onMounted(async () => {
     <div class="flex h-full min-h-0 flex-col p-5">
       <WorkbenchHeader :avatar="avatar">
         <template #title>{{ greeting }}</template>
-        <template #description> 集中处理流程任务和日常申请。 </template>
+        <template #description>集中处理流程任务和日常申请。</template>
         <template #actions>
           <div
             v-for="item in headerStats"

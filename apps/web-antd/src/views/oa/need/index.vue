@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router';
 
 import { Page } from '@vben/common-ui';
 
-import { Modal } from 'ant-design-vue';
+import { message, Modal } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
@@ -17,8 +17,8 @@ import {
   doBackProcess,
   doFindNeedList,
   doSuspendedInstance,
-  OAIndex,
 } from '#/api/oa/activiti';
+import { buildWorkflowBusinessPath } from '#/views/work/oa/modules/workflow';
 
 import { useColumns, useGridFormSchema } from './modules/data';
 
@@ -28,42 +28,50 @@ function refreshGrid() {
   gridApi.query();
 }
 
-function onView(row: ActivitiUserNeedEntity) {
-  const key = row.processDefinitionId?.split(':')?.[0];
-  if (!key) return;
-  router.push(`${OAIndex[key as keyof typeof OAIndex]}${row.businessKey}:2`);
+function goBusinessPage(row: ActivitiUserNeedEntity, mode: '1' | '2') {
+  const path = buildWorkflowBusinessPath({
+    businessKey: row.businessKey,
+    mode,
+    processDefinitionId: row.processDefinitionId,
+    taskId: row.taskId,
+  });
+  if (!path) {
+    message.warning('未找到该流程对应的业务页面');
+    return;
+  }
+  router.push(path);
 }
 
 function onClaim(row: ActivitiUserNeedEntity) {
   Modal.confirm({
-    title: '签收任务',
-    content: `确定签收任务“${row.instanceName ?? row.taskName}”？`,
     async onOk() {
       await doAppointClaim({ taskId: row.taskId });
       refreshGrid();
     },
+    content: `确定签收任务“${row.instanceName ?? row.taskName}”？`,
+    title: '签收任务',
   });
 }
 
 function onSuspended(row: ActivitiUserNeedEntity) {
   Modal.confirm({
-    title: '状态切换',
-    content: `确定切换流程“${row.instanceName ?? row.taskName}”状态？`,
     async onOk() {
       await doSuspendedInstance({ instanceId: row.instanceId });
       refreshGrid();
     },
+    content: `确定${row.isSuspended ? '激活' : '挂起'}流程“${row.instanceName ?? row.taskName}”？`,
+    title: '状态切换',
   });
 }
 
 function onBackProcess(row: ActivitiUserNeedEntity) {
   Modal.confirm({
-    title: '驳回任务',
-    content: `确定驳回任务“${row.instanceName ?? row.taskName}”到上一节点？`,
     async onOk() {
       await doBackProcess({ taskId: row.taskId });
       refreshGrid();
     },
+    content: `确定驳回任务“${row.instanceName ?? row.taskName}”到上一节点？`,
+    title: '驳回任务',
   });
 }
 
@@ -72,8 +80,12 @@ function onActionClick({
   row,
 }: OnActionClickParams<ActivitiUserNeedEntity>) {
   switch (code) {
+    case 'audit': {
+      goBusinessPage(row, '1');
+      break;
+    }
     case 'detail': {
-      onView(row);
+      goBusinessPage(row, '2');
       break;
     }
     case 'pending': {

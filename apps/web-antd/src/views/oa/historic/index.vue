@@ -9,17 +9,28 @@ import { useRouter } from 'vue-router';
 
 import { Page } from '@vben/common-ui';
 
+import { message } from 'ant-design-vue';
+
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { doFindAlreadyList, OAIndex } from '#/api/oa/activiti';
+import { doFindAlreadyList } from '#/api/oa/activiti';
+import { buildWorkflowBusinessPath } from '#/views/work/oa/modules/workflow';
 
 import { useColumns, useGridFormSchema } from './modules/data';
 
 const router = useRouter();
 
 function onView(row: ActivitiUserAlreadyEntity) {
-  const key = row.processDefinitionId?.split(':')?.[0];
-  if (!key) return;
-  router.push(`${OAIndex[key as keyof typeof OAIndex]}${row.businessKey}:2`);
+  const path = buildWorkflowBusinessPath({
+    businessKey: row.businessKey,
+    mode: '2',
+    processDefinitionId: row.processDefinitionId,
+    taskId: row.taskId,
+  });
+  if (!path) {
+    message.warning('未找到该流程对应的业务页面');
+    return;
+  }
+  router.push(path);
 }
 
 function onActionClick({
@@ -52,7 +63,7 @@ const [Grid] = useVbenVxeGrid({
       },
     },
     rowConfig: {
-      keyField: 'taskId',
+      keyField: 'historicInstanceId',
     },
     toolbarConfig: {
       custom: true,

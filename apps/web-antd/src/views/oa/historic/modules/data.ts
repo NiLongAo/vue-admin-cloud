@@ -10,11 +10,11 @@ export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
-      fieldName: 'name',
-      label: '任务名称',
       componentProps: {
         placeholder: '请输入任务名称',
       },
+      fieldName: 'name',
+      label: '任务名称',
     },
   ];
 }
@@ -34,16 +34,30 @@ export function useColumns<T = ActivitiUserAlreadyEntity>(
       field: 'instanceName',
       minWidth: 180,
       showOverflow: true,
-      title: '任务名称',
+      title: '流程名称',
+    },
+    {
+      field: 'taskName',
+      minWidth: 160,
+      showOverflow: true,
+      title: '参与节点名称',
+    },
+    {
+      field: 'statusName',
+      minWidth: 120,
+      slots: {
+        default: ({ row }) => row.processVariables?.statusName ?? '-',
+      },
+      title: '流程状态',
     },
     {
       field: 'startTime',
-      minWidth: 180,
+      minWidth: 170,
       title: '开始时间',
     },
     {
       field: 'endTime',
-      minWidth: 180,
+      minWidth: 170,
       title: '结束时间',
     },
     {
@@ -58,8 +72,8 @@ export function useColumns<T = ActivitiUserAlreadyEntity>(
         options: [
           {
             code: 'detail',
-            text: '详情',
             show: () => hasAccessByCodes(['oa.historic:detail']),
+            text: '详情',
           },
         ],
       },

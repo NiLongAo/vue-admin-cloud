@@ -5,12 +5,12 @@ import type { LeaveEntity } from '#/api/oa/leave';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Page } from '@vben/common-ui';
-
-import { Button, Card, message, Space } from 'ant-design-vue';
+import { Button, message, Modal } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { doDeleteLeave, doFindLeave, doInsertLeave } from '#/api/oa/leave';
+
+import ProcessDetailShell from '../oa/components/ProcessDetailShell.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -18,55 +18,54 @@ const router = useRouter();
 const loading = ref(false);
 const leaveData = ref<LeaveEntity>();
 const routeParam = computed(() => String(route.params.id ?? 'undefined'));
-const businessKey = computed(() => routeParam.value.split(':')[0]);
-const taskId = computed(() => routeParam.value.split(':')[2]);
-const readonly = computed(
-  () =>
-    !!leaveData.value?.processInstanceId ||
-    routeParam.value.split(':')[1] === '2',
-);
+const routeParts = computed(() => routeParam.value.split(':'));
+const businessKey = computed(() => routeParts.value[0] ?? 'undefined');
+const mode = computed(() => (routeParts.value[1] === '1' ? '1' : '2'));
+const taskId = computed(() => routeParts.value[2] ?? '');
+const instanceId = computed(() => leaveData.value?.processInstanceId ?? '');
+const readonly = computed(() => !!instanceId.value || mode.value === '2');
 
 const schema: VbenFormSchema[] = [
   {
     component: 'DatePicker',
+    componentProps: {
+      class: 'w-full',
+      showTime: true,
+      valueFormat: 'YYYY-MM-DD HH:mm:ss',
+    },
     fieldName: 'startTime',
     label: '开始时间',
     rules: 'required',
-    componentProps: {
-      class: 'w-full',
-      showTime: true,
-      valueFormat: 'YYYY-MM-DD HH:mm:ss',
-    },
   },
   {
     component: 'DatePicker',
-    fieldName: 'endTime',
-    label: '结束时间',
-    rules: 'required',
     componentProps: {
       class: 'w-full',
       showTime: true,
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
     },
+    fieldName: 'endTime',
+    label: '结束时间',
+    rules: 'required',
   },
   {
     component: 'InputNumber',
-    controlClass: 'w-full',
-    fieldName: 'day',
-    label: '天数',
-    rules: 'required',
     componentProps: {
       min: 0.5,
       precision: 1,
     },
+    controlClass: 'w-full',
+    fieldName: 'day',
+    label: '天数',
+    rules: 'required',
   },
   {
     component: 'Textarea',
-    fieldName: 'memo',
-    label: '备注',
     componentProps: {
       rows: 4,
     },
+    fieldName: 'memo',
+    label: '备注',
   },
 ];
 
@@ -81,6 +80,17 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
+function setReadonlyForm() {
+  formApi.updateSchema(
+    schema.map((item) => ({
+      componentProps: {
+        disabled: true,
+      },
+      fieldName: item.fieldName,
+    })),
+  );
+}
+
 async function init() {
   if (!businessKey.value || businessKey.value === 'undefined') {
     return;
@@ -93,14 +103,7 @@ async function init() {
   leaveData.value = data;
   formApi.setValues(data);
   if (readonly.value) {
-    formApi.updateSchema(
-      schema.map((item) => ({
-        fieldName: item.fieldName,
-        componentProps: {
-          disabled: true,
-        },
-      })),
-    );
+    setReadonlyForm();
   }
 }
 
@@ -119,13 +122,19 @@ async function onSubmit() {
   }
 }
 
-async function onDelete() {
+function onDelete() {
   if (!businessKey.value || businessKey.value === 'undefined') {
     return;
   }
-  await doDeleteLeave({ id: businessKey.value });
-  message.success('请假申请已删除');
-  router.back();
+  Modal.confirm({
+    async onOk() {
+      await doDeleteLeave({ id: businessKey.value });
+      message.success('请假申请已删除');
+      router.back();
+    },
+    content: '确定删除该请假申请？',
+    title: '删除请假申请',
+  });
 }
 
 onMounted(() => {
@@ -134,32 +143,33 @@ onMounted(() => {
 </script>
 
 <template>
-  <Page auto-content-height title="请假申请">
-    <Card class="mx-auto max-w-[760px]">
-      <Form />
-      <div class="mt-6 flex justify-center">
-        <Space>
-          <Button @click="router.back()">返回</Button>
-          <Button
-            v-if="businessKey !== 'undefined' && !readonly"
-            danger
-            @click="onDelete"
-          >
-            删除
-          </Button>
-          <Button
-            v-if="!readonly"
-            :loading="loading"
-            type="primary"
-            @click="onSubmit"
-          >
-            提交
-          </Button>
-        </Space>
+  <ProcessDetailShell
+    :instance-id="instanceId"
+    :loading="loading"
+    :mode="mode"
+    :task-id="taskId"
+    title="请假申请"
+    @save="onSubmit"
+  >
+    <template #content>
+      <div class="mx-auto max-w-[760px]">
+        <Form />
+        <div
+          v-if="taskId"
+          class="mt-4 text-center text-xs text-muted-foreground"
+        >
+          当前任务：{{ taskId }}
+        </div>
       </div>
-      <div v-if="taskId" class="mt-4 text-center text-xs text-muted-foreground">
-        当前任务：{{ taskId }}
-      </div>
-    </Card>
-  </Page>
+    </template>
+    <template #footer-extra>
+      <Button
+        v-if="businessKey !== 'undefined' && !readonly"
+        danger
+        @click="onDelete"
+      >
+        删除
+      </Button>
+    </template>
+  </ProcessDetailShell>
 </template>

@@ -35,6 +35,7 @@ export interface ActivitiUserNeedEntity extends Recordable<any> {
 export interface ActivitiUserAlreadyEntity extends Recordable<any> {
   businessKey?: string;
   endTime?: string;
+  historicInstanceId?: string;
   instanceComment?: Recordable<any>;
   instanceId?: string;
   instanceName?: string;

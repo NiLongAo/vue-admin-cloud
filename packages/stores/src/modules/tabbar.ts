@@ -573,10 +573,21 @@ export const useTabbarStore = defineStore('core-tabbar', {
       if (this.cachedRoutes.has(key)) {
         return;
       }
+      const rawRoute = toRaw(route);
+      const routeSnapshot = markRaw({
+        ...rawRoute,
+        fullPath: rawRoute.fullPath,
+        hash: rawRoute.hash,
+        matched: [...rawRoute.matched],
+        meta: { ...rawRoute.meta },
+        params: { ...rawRoute.params },
+        path: rawRoute.path,
+        query: { ...rawRoute.query },
+      } as RouteLocationNormalizedLoadedGeneric);
       this.cachedRoutes.set(key, {
         key,
         component: markRaw(component),
-        route: markRaw(route),
+        route: routeSnapshot,
       });
     },
     removeCachedRoute(key: string) {
