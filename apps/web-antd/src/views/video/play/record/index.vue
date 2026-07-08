@@ -9,7 +9,6 @@ import { computed, onMounted, onUnmounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { Page } from '@vben/common-ui';
-import { useAccessStore } from '@vben/stores';
 
 import {
   Button,
@@ -37,6 +36,8 @@ import {
 } from '#/api/video/record';
 import { VideoJessibucaPlay } from '#/components/Video';
 
+import { buildVideoPlayUrl } from '../../modules/video-play-url';
+
 const DATE_FORMAT = 'YYYY-MM-DD';
 const TIME_FORMAT = 'HH:mm:ss';
 const DAY_START = 0;
@@ -44,7 +45,6 @@ const DAY_END = 86_399;
 
 const route = useRoute();
 const router = useRouter();
-const accessStore = useAccessStore();
 
 const state = reactive({
   channelId: String(route.params.channelId ?? ''),
@@ -97,15 +97,7 @@ function getPlayUrl(result: Record<string, any>) {
     result.sslStatus === 0
       ? result.wsFlv?.url || result.flv?.url
       : result.wssFlv?.url || result.httpsFlv?.url;
-  if (!url) {
-    return '';
-  }
-  const token = accessStore.accessToken;
-  if (!token) {
-    return url;
-  }
-  const separator = url.includes('?') ? '&' : '?';
-  return `${url}${separator}token=${encodeURIComponent(token)}`;
+  return buildVideoPlayUrl(url, result.auth || result.token);
 }
 
 function setTimeRange(startSeconds: number, endSeconds: number) {

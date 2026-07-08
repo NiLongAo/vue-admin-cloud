@@ -4,23 +4,12 @@ import type { VideoPlayResult } from '#/api/video/play';
 import { computed, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
-import { useAccessStore } from '@vben/stores';
 
 import { VideoJessibucaPlay } from '#/components/Video';
 
-const accessStore = useAccessStore();
-const playData = ref<VideoPlayResult>();
+import { buildVideoPlayUrl } from './video-play-url';
 
-function withToken(url?: string) {
-  if (!url) {
-    return '';
-  }
-  const token = accessStore.accessToken;
-  if (!token) {
-    return url;
-  }
-  return `${url}${url.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`;
-}
+const playData = ref<VideoPlayResult>();
 
 const videoUrl = computed(() => {
   const data = playData.value;
@@ -28,7 +17,7 @@ const videoUrl = computed(() => {
     data?.sslStatus === 0
       ? data?.wsFlv?.url || data?.flv?.url
       : data?.wssFlv?.url || data?.httpsFlv?.url;
-  return withToken(url);
+  return buildVideoPlayUrl(url, data?.auth || data?.token);
 });
 
 const [Modal, modalApi] = useVbenModal({

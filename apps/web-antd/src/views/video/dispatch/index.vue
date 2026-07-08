@@ -4,13 +4,14 @@ import type { TreeProps } from 'ant-design-vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
-import { useAccessStore } from '@vben/stores';
 
 import { Button, Empty, InputSearch, message, Tree } from 'ant-design-vue';
 
 import { doTreeDeviceChannel } from '#/api/video/deviceChannel';
 import { doPlayStart } from '#/api/video/play';
 import { VideoJessibucaPlay } from '#/components/Video';
+
+import { buildVideoPlayUrl } from '../modules/video-play-url';
 
 interface ChannelTreeNode {
   channelId?: string;
@@ -25,8 +26,6 @@ interface ChannelTreeNode {
   type?: number;
 }
 
-const accessStore = useAccessStore();
-
 const treeData = ref<ChannelTreeNode[]>([]);
 const expandedKeys = ref<string[]>([]);
 const searchKeyword = ref('');
@@ -40,9 +39,9 @@ const state = reactive({
 const gridClass = computed(() =>
   state.gridNum === 1
     ? 'grid-cols-1'
-    : (state.gridNum === 4
+    : state.gridNum === 4
       ? 'grid-cols-2'
-      : 'grid-cols-3'),
+      : 'grid-cols-3',
 );
 
 const filteredTreeData = computed<TreeProps['treeData']>(() => {
@@ -89,17 +88,6 @@ function collectKeys(nodes: ChannelTreeNode[]): string[] {
   ]);
 }
 
-function withToken(url?: string) {
-  if (!url) {
-    return '';
-  }
-  const token = accessStore.accessToken;
-  if (!token) {
-    return url;
-  }
-  return `${url}${url.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`;
-}
-
 async function loadTree() {
   const data = normalizeTree(await doTreeDeviceChannel());
   treeData.value = data;
@@ -134,10 +122,11 @@ async function onSelect(
     channelId,
     deviceId: node.deviceId,
   });
-  const playUrl = withToken(
+  const playUrl = buildVideoPlayUrl(
     data.sslStatus === 0
       ? data.wsFlv?.url || data.flv?.url
       : data.wssFlv?.url || data.httpsFlv?.url,
+    data.auth || data.token,
   );
   if (!playUrl) {
     message.warning('未获取到播放地址');

@@ -4,6 +4,7 @@ import { requestClient } from '#/api/request';
 
 export interface VideoPlayResult {
   app?: string;
+  auth?: string;
   deviceId?: string;
   channelId?: string;
   stream?: string;
@@ -16,6 +17,7 @@ export interface VideoPlayResult {
   httpsFlv?: { url?: string };
   rtsp?: { url?: string };
   rtmp?: { url?: string };
+  token?: string;
 }
 
 enum Api {

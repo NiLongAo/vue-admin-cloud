@@ -23,10 +23,16 @@ export interface JessibucaProps {
 }
 
 const publicPath = import.meta.env.VITE_PUBLIC_PATH || '/';
+const jessibucaAssetVersion = '20250711';
 let scriptPromise: Promise<void> | undefined;
 
-function loadJessibucaScript() {
-  if ((window as any).Jessibuca) {
+function getJessibucaConstructor() {
+  const constructor = (window as any).Jessibuca || (window as any).jessibuca;
+  return typeof constructor === 'function' ? constructor : undefined;
+}
+
+export function loadJessibucaScript() {
+  if (getJessibucaConstructor()) {
     return Promise.resolve();
   }
   if (scriptPromise) {
@@ -34,12 +40,20 @@ function loadJessibucaScript() {
   }
   scriptPromise = new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = `${publicPath}script/jessibuca/jessibuca.js`;
+    script.src = `${publicPath}script/jessibuca/jessibuca.js?v=${jessibucaAssetVersion}`;
     script.async = true;
-    script.addEventListener('load', () => resolve());
-    script.addEventListener('error', () =>
-      reject(new Error('Jessibuca 播放器加载失败')),
-    );
+    script.addEventListener('load', () => {
+      if (getJessibucaConstructor()) {
+        resolve();
+        return;
+      }
+      scriptPromise = undefined;
+      reject(new Error('Jessibuca player failed to load'));
+    });
+    script.addEventListener('error', () => {
+      scriptPromise = undefined;
+      reject(new Error('Jessibuca player failed to load'));
+    });
     document.head.append(script);
   });
   return scriptPromise;
@@ -71,7 +85,7 @@ export function useJessibuca(
     background: '',
     controlAutoHide: false,
     debug: import.meta.env.DEV,
-    decoder: `${publicPath}script/jessibuca/decoder.js`,
+    decoder: `${publicPath}script/jessibuca/decoder.js?v=${jessibucaAssetVersion}`,
     forceNoOffscreen: false,
     hasAudio: jessibucaProps.hasAudio ?? true,
     hasVideo: true,
@@ -116,7 +130,11 @@ export function useJessibuca(
     if (!target || isBlank(jessibucaProps.videoUrl)) {
       return;
     }
-    jessibucaPlayer = new (window as any).Jessibuca({
+    const Jessibuca = getJessibucaConstructor();
+    if (!Jessibuca) {
+      return;
+    }
+    jessibucaPlayer = new Jessibuca({
       container: target,
       ...options,
     });
@@ -134,7 +152,7 @@ export function useJessibuca(
     });
     jessibucaPlayer?.on?.('performance', (performance: number) => {
       stats.performance =
-        performance === 2 ? '非常流畅' : (performance === 1 ? '流畅' : '卡顿');
+        performance === 2 ? '非常流畅' : performance === 1 ? '流畅' : '卡顿';
     });
     jessibucaPlayer?.on?.('kBps', (kBps: number) => {
       stats.kBps = Math.round(kBps);
