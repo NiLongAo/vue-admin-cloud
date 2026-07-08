@@ -316,9 +316,9 @@ onUnmounted(() => {
 
 <template>
   <Page auto-content-height>
-    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
+    <div class="call-page">
       <Card title="客服拨打">
-        <div class="mb-4 flex flex-wrap items-center gap-3">
+        <div class="call-toolbar">
           <Tag :color="hasSocket ? 'success' : 'warning'">
             {{ hasSocket ? 'Socket 已连接' : 'Socket 连接中' }}
           </Tag>
@@ -330,7 +330,7 @@ onUnmounted(() => {
           />
         </div>
 
-        <div class="mb-4 h-[320px] overflow-hidden rounded bg-black">
+        <div class="call-player">
           <FsRtcPlay
             ref="fsRtcPlayRef"
             :muted="false"
@@ -338,9 +338,9 @@ onUnmounted(() => {
           />
         </div>
 
-        <Form layout="vertical">
-          <Row :gutter="16">
-            <Col :lg="10" :md="12" :xs="24">
+        <Form class="call-form" layout="vertical">
+          <Row :gutter="[16, 8]">
+            <Col :lg="10" :md="12" :sm="24" :xl="10" :xs="24">
               <Form.Item label="被叫号码" required>
                 <Input
                   v-model:value="callForm.mobile"
@@ -349,7 +349,7 @@ onUnmounted(() => {
                 />
               </Form.Item>
             </Col>
-            <Col :lg="8" :md="12" :xs="24">
+            <Col :lg="8" :md="12" :sm="24" :xl="8" :xs="24">
               <Form.Item label="按键号码">
                 <Input
                   v-model:value="callForm.dtmf"
@@ -361,7 +361,7 @@ onUnmounted(() => {
           </Row>
         </Form>
 
-        <Space wrap>
+        <Space class="call-actions" wrap>
           <Button type="primary" @click="startCall">拨打</Button>
           <Button danger @click="hangUp">挂断</Button>
           <Button @click="sendDtmf">发送按键</Button>
@@ -370,7 +370,7 @@ onUnmounted(() => {
       </Card>
 
       <Card title="客服状态">
-        <Descriptions :column="1" bordered size="small">
+        <Descriptions class="call-status" :column="1" bordered size="small">
           <Descriptions.Item label="客服名称">
             {{ agentState.agentName || '-' }}
           </Descriptions.Item>
@@ -394,3 +394,140 @@ onUnmounted(() => {
     </div>
   </Page>
 </template>
+
+<style scoped>
+.call-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  gap: 16px;
+  height: 100%;
+  min-height: 0;
+}
+
+.call-page :deep(.ant-card) {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.call-page :deep(.ant-card-body) {
+  min-width: 0;
+}
+
+.call-page :deep(.ant-card:first-child .ant-card-body) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.call-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+  margin-bottom: 16px;
+}
+
+.call-player {
+  width: 100%;
+  height: clamp(240px, 38vh, 420px);
+  min-height: 0;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: #000;
+  border-radius: 6px;
+}
+
+.call-form {
+  flex: none;
+}
+
+.call-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.call-actions :deep(.ant-btn) {
+  min-width: 88px;
+}
+
+.call-status {
+  min-width: 0;
+}
+
+.call-status :deep(.ant-descriptions-view) {
+  overflow: hidden;
+}
+
+.call-status :deep(.ant-descriptions-item-label) {
+  width: 96px;
+  white-space: nowrap;
+}
+
+.call-status :deep(.ant-descriptions-item-content) {
+  min-width: 0;
+  word-break: break-all;
+}
+
+@media (max-width: 1279px) {
+  .call-page {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+  }
+
+  .call-player {
+    height: clamp(220px, 34vh, 360px);
+  }
+}
+
+@media (max-width: 991px) {
+  .call-page {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+
+  .call-player {
+    height: auto;
+    min-height: 220px;
+    max-height: 360px;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 575px) {
+  .call-page {
+    gap: 12px;
+  }
+
+  .call-toolbar {
+    align-items: flex-start;
+  }
+
+  .call-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .call-actions :deep(.ant-space-item),
+  .call-actions :deep(.ant-btn) {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .call-player {
+    min-height: 180px;
+    border-radius: 4px;
+  }
+
+  .call-status :deep(.ant-descriptions-item-label) {
+    width: 84px;
+  }
+}
+
+@media (max-width: 380px) {
+  .call-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+</style>
