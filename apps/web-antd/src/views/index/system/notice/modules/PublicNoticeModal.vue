@@ -5,6 +5,8 @@ import { computed, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
+import { message } from 'ant-design-vue';
+
 import { useVbenForm } from '#/adapter/form';
 import {
   doPublicNoticeDetail,
@@ -25,10 +27,12 @@ const [Form, formApi] = useVbenForm({
     componentProps: {
       class: 'w-full',
     },
+    formItemClass: 'col-span-1 lg:col-span-1',
   },
   layout: 'horizontal',
   schema: useFormSchema(),
   showDefaultActions: false,
+  wrapperClass: 'grid-cols-1 gap-x-4 lg:grid-cols-2',
 });
 
 const [Modal, modalApi] = useVbenModal({
@@ -61,13 +65,21 @@ const [Modal, modalApi] = useVbenModal({
 
     const data = modalApi.getData<PublicNoticeEntity>();
     if (data?.id) {
-      formData.value = await doPublicNoticeDetail({ id: data.id });
-      formApi.setValues(formData.value);
+      formData.value = data;
+      formApi.setValues(data);
+      try {
+        const detail = await doPublicNoticeDetail({ id: data.id });
+        formData.value = { ...data, ...detail };
+        formApi.setValues(formData.value);
+      } catch {
+        message.warning('详情接口暂不可用，已使用列表数据打开编辑');
+      }
       return;
     }
-
+    formData.value = undefined;
     formApi.setValues({
       noticeType: 1,
+      status: 1,
     });
   },
 });
@@ -78,7 +90,7 @@ const getTitle = computed(() =>
 </script>
 
 <template>
-  <Modal class="w-[760px]" :title="getTitle">
-    <Form class="mx-4" />
+  <Modal class="w-full max-w-[860px]" :title="getTitle">
+    <Form class="px-1 sm:px-4" />
   </Modal>
 </template>

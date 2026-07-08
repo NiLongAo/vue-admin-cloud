@@ -4,6 +4,8 @@ import type {
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
 
+import { ref } from 'vue';
+
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 import { $t } from '@vben/locales';
@@ -23,6 +25,39 @@ const [FormDrawer, formDrawerApi] = useVbenDrawer({
   destroyOnClose: true,
 });
 
+const menuStats = ref({
+  button: 0,
+  catalog: 0,
+  embedded: 0,
+  link: 0,
+  menu: 0,
+  total: 0,
+});
+
+function collectMenuStats(items: SystemMenuApi.SystemMenu[]) {
+  const stats = {
+    button: 0,
+    catalog: 0,
+    embedded: 0,
+    link: 0,
+    menu: 0,
+    total: 0,
+  };
+
+  function walk(nodes: SystemMenuApi.SystemMenu[] = []) {
+    nodes.forEach((node) => {
+      stats.total += 1;
+      if (node.type in stats) {
+        stats[node.type as keyof typeof stats] += 1;
+      }
+      walk(node.children ?? []);
+    });
+  }
+
+  walk(items);
+  return stats;
+}
+
 const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions: {
     columns: useColumns(onActionClick),
@@ -34,7 +69,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async () => {
-          const { items } = await doMenuPage({});
+          const { items = [] } = await doMenuPage({});
+          menuStats.value = collectMenuStats(items);
           return items;
         },
       },
@@ -112,39 +148,81 @@ function onDelete(row: SystemMenuApi.SystemMenu) {
 }
 </script>
 <template>
-  <Page auto-content-height>
+  <Page
+    auto-content-height
+    content-class="flex flex-col gap-4 bg-background-deep"
+  >
     <FormDrawer @success="onRefresh" />
-    <Grid>
-      <template #toolbar-tools>
+
+    <div
+      class="flex shrink-0 flex-col gap-4 rounded-lg border border-border bg-card px-4 py-3 shadow-sm xl:flex-row xl:items-center xl:justify-between"
+    >
+      <div class="min-w-0">
+        <div class="text-base font-semibold">菜单管理</div>
+        <div class="mt-1 text-sm text-muted-foreground">
+          维护后台菜单、路由入口和按钮权限，支持树形层级管理。
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div
+          class="grid grid-cols-3 overflow-hidden rounded-md border border-border bg-background text-center"
+        >
+          <div class="min-w-20 px-3 py-2">
+            <div class="text-sm font-semibold">{{ menuStats.total }}</div>
+            <div class="text-xs text-muted-foreground">全部</div>
+          </div>
+          <div class="min-w-20 border-l border-border px-3 py-2">
+            <div class="text-sm font-semibold">{{ menuStats.menu }}</div>
+            <div class="text-xs text-muted-foreground">菜单</div>
+          </div>
+          <div class="min-w-20 border-l border-border px-3 py-2">
+            <div class="text-sm font-semibold">{{ menuStats.button }}</div>
+            <div class="text-xs text-muted-foreground">按钮</div>
+          </div>
+        </div>
+
         <Button type="primary" @click="onCreate">
           <Plus class="size-5" />
           {{ $t('ui.actionTitle.create', [$t('system.menu.name')]) }}
         </Button>
-      </template>
+      </div>
+    </div>
+
+    <Grid table-title="菜单列表">
       <template #title="{ row }">
-        <div class="flex w-full items-center gap-1">
-          <div class="size-5 flex-shrink-0">
+        <div class="relative flex w-full min-w-0 items-center gap-2 pr-8">
+          <div
+            class="flex size-8 flex-shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground"
+          >
             <IconifyIcon
               v-if="row.type === 'button'"
               icon="carbon:security"
-              class="size-full"
+              class="size-4"
             />
             <IconifyIcon
               v-else-if="row.meta?.icon"
               :icon="row.meta?.icon || 'carbon:circle-dash'"
-              class="size-full"
+              class="size-4"
             />
+            <IconifyIcon v-else icon="carbon:circle-dash" class="size-4" />
           </div>
-          <span class="flex-auto">{{ $t(row.meta?.title) }}</span>
-          <div class="items-center justify-end"></div>
+          <div class="min-w-0 flex-auto">
+            <div class="truncate font-medium">
+              {{ $t(row.meta?.title || row.name) }}
+            </div>
+            <div class="truncate text-xs text-muted-foreground">
+              {{ row.name || row.path || row.authCode }}
+            </div>
+          </div>
+          <MenuBadge
+            v-if="row.meta?.badgeType"
+            class="menu-badge"
+            :badge="row.meta.badge"
+            :badge-type="row.meta.badgeType"
+            :badge-variants="row.meta.badgeVariants"
+          />
         </div>
-        <MenuBadge
-          v-if="row.meta?.badgeType"
-          class="menu-badge"
-          :badge="row.meta.badge"
-          :badge-type="row.meta.badgeType"
-          :badge-variants="row.meta.badgeVariants"
-        />
       </template>
     </Grid>
   </Page>

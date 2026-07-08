@@ -29,30 +29,31 @@ export function useColumns(
       align: 'left',
       field: 'meta.title',
       fixed: 'left',
+      minWidth: 320,
       slots: { default: 'title' },
       title: $t('system.menu.menuTitle'),
       treeNode: true,
-      width: 250,
     },
     {
       align: 'center',
       cellRender: { name: 'CellTag', options: getMenuTypeOptions() },
       field: 'type',
       title: $t('system.menu.type'),
-      width: 100,
+      width: 110,
     },
     {
       field: 'authCode',
+      showOverflow: true,
       title: $t('system.menu.authCode'),
-      width: 200,
+      width: 180,
     },
     {
       align: 'left',
       field: 'path',
+      minWidth: 180,
+      showOverflow: true,
       title: $t('system.menu.path'),
-      width: 200,
     },
-
     {
       align: 'left',
       field: 'component',
@@ -71,16 +72,17 @@ export function useColumns(
         }
         return '';
       },
-      minWidth: 200,
+      minWidth: 240,
+      showOverflow: true,
       title: $t('system.menu.component'),
     },
     {
+      align: 'center',
       cellRender: { name: 'CellTag' },
       field: 'status',
       title: $t('system.menu.status'),
       width: 100,
     },
-
     {
       align: 'right',
       cellRender: {
@@ -94,8 +96,8 @@ export function useColumns(
             code: 'append',
             text: '新增下级',
           },
-          'edit', // 默认的编辑按钮
-          'delete', // 默认的删除按钮
+          'edit',
+          'delete',
         ],
       },
       field: 'operation',
@@ -103,7 +105,7 @@ export function useColumns(
       headerAlign: 'center',
       showOverflow: false,
       title: $t('system.menu.operation'),
-      width: 200,
+      width: 170,
     },
   ];
 }

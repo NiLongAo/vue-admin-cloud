@@ -36,7 +36,7 @@ const schema: VbenFormSchema[] = [
     },
     defaultValue: 'menu',
     fieldName: 'type',
-    formItemClass: 'col-span-2 md:col-span-2',
+    formItemClass: 'col-span-1 lg:col-span-2',
     label: $t('system.menu.type'),
   },
   {
@@ -299,7 +299,7 @@ const schema: VbenFormSchema[] = [
       triggerFields: ['type'],
     },
     fieldName: 'divider1',
-    formItemClass: 'col-span-2 md:col-span-2 pb-0',
+    formItemClass: 'col-span-1 pb-0 lg:col-span-2',
     hideLabel: true,
     renderComponentContent() {
       return {
@@ -405,11 +405,11 @@ const isHorizontal = computed(() => breakpoints.greaterOrEqual('md').value);
 const [Form, formApi] = useVbenForm({
   commonConfig: {
     colon: true,
-    formItemClass: 'col-span-2 md:col-span-1',
+    formItemClass: 'col-span-1 lg:col-span-1',
   },
   schema,
   showDefaultActions: false,
-  wrapperClass: 'grid-cols-2 gap-x-4',
+  wrapperClass: 'grid-cols-1 gap-x-4 lg:grid-cols-2',
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -468,7 +468,10 @@ const getDrawerTitle = computed(() =>
 );
 </script>
 <template>
-  <Drawer class="w-full max-w-[800px]" :title="getDrawerTitle">
-    <Form class="mx-4" :layout="isHorizontal ? 'horizontal' : 'vertical'" />
+  <Drawer class="w-full max-w-[920px]" :title="getDrawerTitle">
+    <Form
+      class="px-1 sm:px-4"
+      :layout="isHorizontal ? 'horizontal' : 'vertical'"
+    />
   </Drawer>
 </template>
