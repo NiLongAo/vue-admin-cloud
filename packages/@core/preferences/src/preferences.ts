@@ -28,6 +28,7 @@ const STORAGE_KEYS = {
   LOCALE: 'preferences-locale',
   THEME: 'preferences-theme',
 } as const;
+const DEFAULT_STORAGE_NAMESPACE = 'vben-preferences';
 
 class PreferenceManager {
   private cache: StorageManager;
@@ -40,7 +41,7 @@ class PreferenceManager {
   private state: Preferences;
 
   constructor() {
-    this.cache = new StorageManager();
+    this.cache = new StorageManager({ prefix: DEFAULT_STORAGE_NAMESPACE });
     // 构造函数不再同步读取缓存，使用默认值初始化
     // 真正的缓存加载在 initPreferences 中完成（已经是 async）
     this.state = reactive<Preferences>({ ...defaultPreferences });
