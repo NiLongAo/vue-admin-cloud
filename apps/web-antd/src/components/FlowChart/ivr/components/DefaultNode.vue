@@ -100,9 +100,11 @@ function handleMenuClick({ key }: MenuInfo) {
 <style scoped>
 .ivr-default-node {
   min-width: 300px;
-  border: 1px solid #e5e7eb;
+  color: hsl(var(--foreground));
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: 6px;
-  box-shadow: 0 4px 14px rgb(15 23 42 / 8%);
+  box-shadow: 0 4px 14px hsl(var(--foreground) / 8%);
 }
 
 .ivr-default-node__meta {
@@ -124,6 +126,7 @@ function handleMenuClick({ key }: MenuInfo) {
   flex: 1;
   align-items: center;
   min-width: 0;
+  color: hsl(var(--foreground));
 }
 
 .ivr-default-node__operate {
@@ -153,5 +156,9 @@ function handleMenuClick({ key }: MenuInfo) {
   align-items: center;
   justify-content: center;
   margin-bottom: 0 !important;
+}
+
+:deep(.ant-card-body) {
+  background: transparent;
 }
 </style>

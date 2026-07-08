@@ -35,6 +35,6 @@ const props = defineProps<{
   align-items: center;
   min-height: 32px;
   font-size: 13px;
-  color: #667085;
+  color: hsl(var(--muted-foreground));
 }
 </style>

@@ -63,12 +63,12 @@ function handleDelete(event: MouseEvent) {
   width: 22px !important;
   height: 22px !important;
   padding: 0 !important;
-  color: #6b7280;
+  color: hsl(var(--muted-foreground));
   cursor: pointer;
-  background: #fff;
-  border: 1px solid #d9d9d9;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: 50% !important;
-  box-shadow: 0 2px 6px rgb(15 23 42 / 12%);
+  box-shadow: 0 2px 6px hsl(var(--foreground) / 12%);
 }
 
 .ivr-button-marker__button:hover {

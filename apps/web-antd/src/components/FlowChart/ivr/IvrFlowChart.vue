@@ -134,7 +134,7 @@ function handlePreview() {
       delete-key-code="Delete"
       fit-view-on-init
     >
-      <Background color="#aab0bb" :gap="16" />
+      <Background color="hsl(var(--border))" :gap="16" />
       <Panel :position="PanelPosition.TopLeft">
         <div class="ivr-flow-chart__stats">
           <span>节点数: {{ graphData.nodes.length }}</span>
@@ -194,15 +194,25 @@ function handlePreview() {
   flex: 1;
 }
 
+.ivr-flow-chart :deep(.vue-flow__edge-path) {
+  stroke: hsl(var(--muted-foreground));
+}
+
+.ivr-flow-chart :deep(.vue-flow__handle) {
+  background: hsl(var(--primary));
+  border: 2px solid hsl(var(--background));
+}
+
 .ivr-flow-chart__stats {
   display: flex;
   gap: 12px;
   padding: 4px 8px;
   font-size: 12px;
-  color: #667085;
-  background: rgb(255 255 255 / 86%);
-  border: 1px solid #e5e7eb;
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--card) / 86%);
+  border: 1px solid hsl(var(--border));
   border-radius: 4px;
+  box-shadow: 0 4px 12px hsl(var(--foreground) / 8%);
 }
 
 .ivr-flow-chart__json {

@@ -79,11 +79,13 @@ const emit = defineEmits<{
   display: flex;
   flex: 1;
   align-items: center;
+  color: hsl(var(--foreground));
 }
 
 .ivr-node-context__content {
   padding: 8px 12px;
-  background: #f5f6f7;
+  color: hsl(var(--foreground));
+  background: hsl(var(--muted));
   border-radius: 4px;
 }
 </style>
