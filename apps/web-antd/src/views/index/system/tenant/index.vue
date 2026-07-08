@@ -5,7 +5,7 @@ import type {
 } from '#/adapter/vxe-table';
 import type { TenantModel } from '#/api/sys/tenant';
 
-import { Page, useVbenModal } from '@vben/common-ui';
+import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, Modal } from 'ant-design-vue';
@@ -16,17 +16,17 @@ import { doTenantRemove, getTenantPage } from '#/api/sys/tenant';
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
 
-const [FormModal, formModalApi] = useVbenModal({
+const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
   destroyOnClose: true,
 });
 
 function onEdit(row: TenantModel) {
-  formModalApi.setData({ id: row.id }).open();
+  formDrawerApi.setData({ id: row.id }).open();
 }
 
 function onCreate() {
-  formModalApi.setData({}).open();
+  formDrawerApi.setData({}).open();
 }
 
 function onDelete(row: TenantModel) {
@@ -93,7 +93,7 @@ function refreshGrid() {
 
 <template>
   <Page auto-content-height>
-    <FormModal @success="refreshGrid" />
+    <FormDrawer @success="refreshGrid" />
     <Grid table-title="租户列表">
       <template #toolbar-tools>
         <Button

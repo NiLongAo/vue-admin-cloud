@@ -114,6 +114,15 @@ export function useFormSchema(
 ): VbenFormSchema[] {
   return [
     {
+      component: 'Input',
+      dependencies: {
+        if: () => false,
+        triggerFields: ['id'],
+      },
+      fieldName: 'id',
+      label: '租户编号',
+    },
+    {
       component: 'Divider',
       fieldName: 'tenantDivider',
       formItemClass: 'col-span-1 lg:col-span-2 pb-0',
@@ -150,18 +159,15 @@ export function useFormSchema(
       },
     },
     {
-      component: 'RadioGroup',
+      component: 'Switch',
       controlClass: 'w-full',
       defaultValue: 1,
       fieldName: 'status',
-      label: '状态',
+      label: '租户状态',
       componentProps: {
-        buttonStyle: 'solid',
-        optionType: 'button',
-        options: [
-          { label: '启用', value: 1 },
-          { label: '禁用', value: 0 },
-        ],
+        checkedValue: 1,
+        class: 'w-auto',
+        unCheckedValue: 0,
       },
     },
     {

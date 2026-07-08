@@ -3,7 +3,7 @@ import type { TenantModel } from '#/api/sys/tenant';
 
 import { computed, ref } from 'vue';
 
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { doMenuPrivilegeTree } from '#/api/sys/menu';
@@ -50,12 +50,12 @@ function filterPrivilegeCodes(privilegeList: string[] = []) {
   return privilegeList.filter((item) => item.includes(':'));
 }
 
-const [Modal, modalApi] = useVbenModal({
+const [Drawer, drawerApi] = useVbenDrawer({
   async onConfirm() {
     const { valid } = await formApi.validate();
     if (!valid) return;
 
-    modalApi.lock();
+    drawerApi.lock();
     try {
       const data = await formApi.getValues();
       if (data?.id) {
@@ -93,10 +93,10 @@ const [Modal, modalApi] = useVbenModal({
           },
         });
       }
-      modalApi.close();
+      drawerApi.close();
       emit('success');
     } finally {
-      modalApi.lock(false);
+      drawerApi.unlock();
     }
   },
   async onOpenChange(isOpen) {
@@ -107,7 +107,7 @@ const [Modal, modalApi] = useVbenModal({
       return;
     }
 
-    const data = modalApi.getData<TenantModel>();
+    const data = drawerApi.getData<TenantModel>();
     if (data?.id) {
       formApi.setValues({ id: data.id });
       privilegeTree.value = await doMenuPrivilegeTree();
@@ -137,11 +137,11 @@ const getTitle = computed(() => (formData.value?.id ? '编辑租户' : '新增�
 </script>
 
 <template>
-  <Modal class="w-1/2" :title="getTitle">
+  <Drawer class="w-full max-w-[720px]" :title="getTitle">
     <Form class="mx-4">
       <template #privilegeList="slotProps">
         <PrivilegeCheckbox :tree-data="privilegeTree" v-bind="slotProps" />
       </template>
     </Form>
-  </Modal>
+  </Drawer>
 </template>

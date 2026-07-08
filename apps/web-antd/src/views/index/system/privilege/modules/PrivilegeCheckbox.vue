@@ -5,7 +5,7 @@ import { ref, unref, watch } from 'vue';
 
 import { cloneDeep } from '@vben/utils';
 
-import { Button, Radio } from 'ant-design-vue';
+import { Button } from 'ant-design-vue';
 
 import MyCheckBox from './MyCheckBox.vue';
 
@@ -26,7 +26,6 @@ const emit = defineEmits<{
 
 const checkedList = defineModel<string[]>('checkedList', { default: () => [] });
 const dataTree = ref<CheckboxGroupEntity[]>([]);
-const mode = ref('partial');
 const tree = ref<CheckboxGroupEntity[]>([]);
 const last = ref<string[]>([]);
 const isInternal = ref(false);
@@ -43,12 +42,17 @@ function onInit() {
     parentKey: string | undefined,
   ) {
     nodes.forEach((node) => {
-      const { children, id } = node;
+      const children = node.children ?? [];
+      const id = String(node.id);
+
+      node.id = id;
+      node.children = children;
       node.parentId = parentKey;
       node.indeterminate = false;
       node.checked = false;
       map.set(id, node);
-      if (children?.length > 0) {
+
+      if (children.length > 0) {
         addParentKey(children, id);
       } else {
         lastIds.push(id);
@@ -67,11 +71,12 @@ watch(
   () => checkedList.value,
   (list) => {
     if (isInternal.value) return;
+
     isInternal.value = true;
-    selected.value = new Set(list);
+    selected.value = new Set(list.map(String));
     onInit();
     list.forEach((id) => {
-      loops(true, id);
+      loops(true, String(id));
     });
     tree.value = unref(dataTree);
     isInternal.value = false;
@@ -85,7 +90,7 @@ watch(
 watch(
   () => props.treeData,
   () => {
-    selected.value = new Set(unref(checkedList));
+    selected.value = new Set(unref(checkedList).map(String));
     onInit();
   },
   {
@@ -95,7 +100,7 @@ watch(
 );
 
 async function handleSubsetChange({ flag, id }: any) {
-  await loops(flag, id);
+  loops(flag, String(id));
   tree.value = unref(dataTree);
   isInternal.value = true;
   checkedList.value = [...selected.value];
@@ -106,29 +111,7 @@ function loops(flag: boolean, id: string) {
   const item = unref(idMap).get(id);
   if (!item) return;
 
-  switch (mode.value) {
-    case 'cascade': {
-      handleCascade(item, flag);
-      break;
-    }
-    case 'independent': {
-      handleIndependent(item, flag);
-      break;
-    }
-    default: {
-      handlePartial(item, flag);
-      break;
-    }
-  }
-}
-
-function hasCheckedChildren(item: CheckboxGroupEntity): boolean {
-  if (item.children?.length > 0) {
-    return item.children.some(
-      (child) => child.checked || hasCheckedChildren(child),
-    );
-  }
-  return false;
+  handleCascade(item, flag);
 }
 
 function selectAllChildren(item: CheckboxGroupEntity, flag: boolean) {
@@ -146,9 +129,11 @@ function handleCascade(item: CheckboxGroupEntity, flag: boolean) {
   item.checked = flag;
   item.indeterminate = false;
   updateSelected(flag, item.id);
+
   if (item.children?.length > 0) {
     selectAllChildren(item, flag);
   }
+
   if (item.parentId) {
     updateCascadeParentOnly(item.parentId);
   }
@@ -182,61 +167,6 @@ function updateCascadeParentOnly(parentId: string) {
   }
 }
 
-function handleIndependent(item: CheckboxGroupEntity, flag: boolean) {
-  item.checked = flag;
-  updateSelected(flag, item.id);
-}
-
-function handlePartial(item: CheckboxGroupEntity, flag: boolean) {
-  if (flag) {
-    item.checked = true;
-    updateSelected(true, item.id);
-    if (item.parentId) {
-      updateParentState(item.parentId);
-    }
-    return;
-  }
-
-  if (item.children?.length > 0 && hasCheckedChildren(item)) {
-    item.checked = true;
-    return;
-  }
-
-  item.checked = false;
-  updateSelected(false, item.id);
-  if (item.parentId) {
-    updateParentState(item.parentId);
-  }
-}
-
-function updateParentState(parentId: string) {
-  const parent = getItem(parentId);
-  if (!parent?.children?.length) return;
-
-  const all = parent.children.every((child) => child.checked);
-  const some = parent.children.some(
-    (child) => child.checked || child.indeterminate,
-  );
-
-  if (all) {
-    parent.checked = true;
-    parent.indeterminate = false;
-    updateSelected(true, parent.id);
-  } else if (some) {
-    parent.checked = false;
-    parent.indeterminate = true;
-    updateSelected(false, parent.id);
-  } else {
-    parent.checked = false;
-    parent.indeterminate = false;
-    updateSelected(false, parent.id);
-  }
-
-  if (parent.parentId) {
-    updateParentState(parent.parentId);
-  }
-}
-
 function getItem(id: string) {
   return unref(idMap).get(id);
 }
@@ -250,9 +180,9 @@ function updateSelected(flag: boolean, id: string) {
 }
 
 function handleSave() {
-  const resultArray = unref(checkedList).filter((item) =>
-    unref(last).includes(item),
-  );
+  const resultArray = unref(checkedList)
+    .map(String)
+    .filter((item) => unref(last).includes(item));
   emit('save', resultArray);
 }
 
@@ -261,13 +191,8 @@ defineExpose({ onInit });
 
 <template>
   <div class="flex h-full flex-col">
-    <div class="flex items-center justify-between border-b p-4">
-      <Radio.Group v-model:value="mode" button-style="solid">
-        <Radio.Button value="cascade">父子联动</Radio.Button>
-        <Radio.Button value="independent">父子不联动</Radio.Button>
-        <Radio.Button value="partial">部分联动</Radio.Button>
-      </Radio.Group>
-      <Button v-if="showSave" type="primary" @click="handleSave"> 保存 </Button>
+    <div v-if="showSave" class="flex items-center justify-end border-b p-4">
+      <Button type="primary" @click="handleSave">保存</Button>
     </div>
 
     <div class="flex-1 overflow-auto p-4">
