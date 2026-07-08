@@ -83,8 +83,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
       {
         field: 'menuName',
         title: '绑定账号信息',
+        minWidth: 240,
         slots: { default: 'menuName' },
-        width: 150,
       },
       {
         field: 'image',
@@ -92,7 +92,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
           name: 'CellImage',
         },
         title: '头像',
-        width: 100,
+        minWidth: 160,
       },
       {
         field: 'isBind',
@@ -112,7 +112,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
           ],
         },
         title: '是否绑定',
-        width: 150,
+        minWidth: 160,
       },
       {
         align: 'center',
@@ -135,12 +135,11 @@ const [Grid, gridApi] = useVbenVxeGrid({
           ],
         },
         field: 'operation',
-        fixed: 'right',
+        minWidth: 160,
         title: '操作',
-        width: 150,
       },
     ],
-    height: 500,
+    height: 'auto',
     keepSource: true,
     proxyConfig: {
       ajax: {
@@ -150,7 +149,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       },
     },
     rowConfig: {
-      keyField: 'id',
+      keyField: 'loginType',
     },
     pagerConfig: {
       enabled: false,
@@ -166,21 +165,23 @@ function refreshGrid() {
 }
 </script>
 <template>
-  <div class="relative h-[500px] w-full">
-    <div class="absolute bottom-0 left-0 right-0 top-0">
-      <Grid grid-class="p-0">
-        <template #menuName="{ row }">
-          <div class="flex w-full items-center justify-center gap-1">
-            <div class="size-5 flex-shrink-0">
-              <IconifyIcon
-                :icon="getBindIcon(row.loginType)"
-                class="size-full"
-              />
-            </div>
+  <div class="account-bind-panel">
+    <Grid grid-class="p-0" table-title="账号绑定">
+      <template #menuName="{ row }">
+        <div class="flex w-full items-center justify-center gap-1">
+          <div class="size-5 flex-shrink-0">
+            <IconifyIcon :icon="getBindIcon(row.loginType)" class="size-full" />
           </div>
-        </template>
-      </Grid>
-    </div>
+        </div>
+      </template>
+    </Grid>
     <QrCodeModal @success="refreshGrid" />
   </div>
 </template>
+
+<style scoped>
+.account-bind-panel {
+  width: 100%;
+  min-height: 0;
+}
+</style>

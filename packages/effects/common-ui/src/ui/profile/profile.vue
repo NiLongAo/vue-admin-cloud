@@ -48,6 +48,7 @@ const tabsValue = defineModel<string>('modelValue');
               :key="tab.value"
               :value="tab.value"
               class="h-12 justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              @click="tabsValue = tab.value"
             >
               {{ tab.label }}
             </TabsTrigger>

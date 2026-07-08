@@ -9,6 +9,8 @@ import { ProfileBaseSetting } from '@vben/common-ui';
 
 import { getUserInfoApi } from '#/api';
 
+import { normalizeProfileUserInfo } from './profile-user';
+
 const profileBaseSettingRef = ref();
 
 const MOCK_ROLES_OPTIONS: BasicOption[] = [
@@ -57,7 +59,9 @@ const formSchema = computed((): VbenFormSchema[] => {
 
 onMounted(async () => {
   const data = await getUserInfoApi();
-  profileBaseSettingRef.value.getFormApi().setValues(data);
+  profileBaseSettingRef.value
+    .getFormApi()
+    .setValues(normalizeProfileUserInfo(data));
 });
 </script>
 <template>

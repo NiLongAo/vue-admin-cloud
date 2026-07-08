@@ -13,6 +13,7 @@ import { SvgAntdvNextLogoIcon, SvgTDesignIcon } from '@vben/icons';
 
 import { IFrameView } from '#/layouts';
 import { $t } from '#/locales';
+import { PERSONAL_CENTER_PATH } from '#/router/personal-center';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -104,7 +105,7 @@ const routes: RouteRecordRaw[] = [
   {
     name: 'Profile',
     path: '/profile',
-    component: () => import('#/views/_core/profile/index.vue'),
+    redirect: PERSONAL_CENTER_PATH,
     meta: {
       icon: 'lucide:user',
       hideInMenu: true,

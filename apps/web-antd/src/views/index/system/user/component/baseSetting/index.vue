@@ -14,7 +14,7 @@ const props = defineProps({
     default: undefined,
   },
 });
-const emit = defineEmits(['update:form-api']);
+const emit = defineEmits(['update:formApi']);
 const systemStore = useSystemStore();
 const staticPath = systemStore.getSystemConfigMap[SystemEnum.SYSTEM_PATH];
 const imageUrlData = ref({});
@@ -25,6 +25,7 @@ const headerImageChange = async ({ file }: any) => {
     formApi.setValues({
       imageUrl: [
         {
+          uid: file.uid ?? file.response.path ?? file.response.fullPath,
           status: 'done',
           url: file.response.fullPath,
           path: file.response.path,
@@ -57,7 +58,7 @@ const init = async () => {
     }
     formApi.setValues({ ...userInfo, areaList: [provinceId, cityId, areaId] });
   }
-  emit('update:form-api', formApi);
+  emit('update:formApi', formApi);
 };
 onMounted(() => {
   init();

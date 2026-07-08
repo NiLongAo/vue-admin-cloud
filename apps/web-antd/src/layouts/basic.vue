@@ -20,6 +20,7 @@ import { openWindow } from '@vben/utils';
 
 import { sysTenantId } from '#/api/sys/tenant';
 import { $t } from '#/locales';
+import { PERSONAL_CENTER_PATH } from '#/router/personal-center';
 import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
@@ -98,7 +99,7 @@ const [TenantSwitchModalInstance, tenantSwitchModalApi] = useVbenModal({
 const menus = computed(() => [
   {
     handler: () => {
-      router.push({ name: 'Profile' });
+      router.push(PERSONAL_CENTER_PATH);
     },
     icon: 'lucide:user',
     text: $t('page.auth.profile'),
