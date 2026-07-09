@@ -1,45 +1,45 @@
+import type { Ref } from 'vue';
+
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { DeviceEntity } from '#/api/video/device';
 
 import { useAccess } from '@vben/access';
 
+import {
+  CHARSET_TYPE_ENUM,
+  GEO_COORD_SYS_TYPE_ENUM,
+  STREAM_MODE_TYPE_ENUM,
+  TRANSPORT_TYPE_ENUM,
+  TREE_TYPE_ENUM,
+} from '#/enums';
+import { useSystemStore } from '#/store';
+
 const { hasAccessByCodes } = useAccess();
+const systemStore = useSystemStore();
 
-export const transportOptions = [
-  { label: 'UDP', value: 1 },
-  { label: 'TCP', value: 2 },
-];
-
-export const charsetOptions = [
-  { label: 'utf8', value: 1 },
-  { label: 'GB2312', value: 2 },
-];
-
-export const treeTypeOptions = [
-  { label: '业务分组', value: 215 },
-  { label: '行政区划', value: 216 },
-];
-
-export const geoCoordSysOptions = [
-  { label: 'WGS84', value: 1 },
-  { label: 'GCJ02', value: 2 },
-  { label: 'BD09', value: 3 },
-];
-
-export const streamModeOptions = [
-  { label: 'UDP', value: 1 },
-  { label: 'TCP 被动', value: 2 },
-  { label: 'TCP 主动', value: 3 },
-];
-
-function getOptionLabel(
-  options: Array<{ label: string; value: number }>,
-  value?: number,
-) {
-  return String(
-    options.find((item) => item.value === value)?.label ?? value ?? '',
+function getDictTemplate(dictKey: string) {
+  return (
+    (
+      systemStore.getDictMap as unknown as Record<
+        string,
+        Record<string, string>
+      >
+    )[dictKey] ?? {}
   );
+}
+
+function getDictOptions(dictKey: string) {
+  const template = getDictTemplate(dictKey);
+  return Object.keys(template).map((key) => ({
+    key: Number(key),
+    label: template[key],
+    value: Number(key),
+  }));
+}
+
+function getDictLabel(dictKey: string, value?: number | string) {
+  return String(getDictTemplate(dictKey)[String(value)] ?? value ?? '');
 }
 
 function numberSchema(
@@ -149,7 +149,7 @@ export function useColumns<T = DeviceEntity>(
       field: 'treeType',
       minWidth: 120,
       slots: {
-        default: ({ row }) => getOptionLabel(treeTypeOptions, row.treeType),
+        default: ({ row }) => getDictLabel(TREE_TYPE_ENUM, row.treeType),
       },
       title: '设备分组',
     },
@@ -169,7 +169,7 @@ export function useColumns<T = DeviceEntity>(
       field: 'transport',
       minWidth: 120,
       slots: {
-        default: ({ row }) => getOptionLabel(transportOptions, row.transport),
+        default: ({ row }) => getDictLabel(TRANSPORT_TYPE_ENUM, row.transport),
       },
       title: '传输协议',
     },
@@ -177,7 +177,8 @@ export function useColumns<T = DeviceEntity>(
       field: 'streamMode',
       minWidth: 140,
       slots: {
-        default: ({ row }) => getOptionLabel(streamModeOptions, row.streamMode),
+        default: ({ row }) =>
+          getDictLabel(STREAM_MODE_TYPE_ENUM, row.streamMode),
       },
       title: '数据流传输模式',
     },
@@ -220,7 +221,7 @@ export function useColumns<T = DeviceEntity>(
 }
 
 export function useFormSchema(
-  mediaOptions: Array<{ label: string; value: string }>,
+  mediaOptions: Ref<Array<{ label: string; value: string }>>,
 ): VbenFormSchema[] {
   return [
     {
@@ -253,12 +254,12 @@ export function useFormSchema(
       component: 'Select',
       fieldName: 'mediaServerId',
       label: '流媒体',
-      componentProps: {
+      componentProps: () => ({
         allowClear: true,
-        options: mediaOptions,
+        options: mediaOptions.value,
         placeholder: '请选择流媒体',
         showSearch: true,
-      },
+      }),
     },
     {
       component: 'Select',
@@ -267,7 +268,7 @@ export function useFormSchema(
       label: '传输协议',
       rules: 'selectRequired',
       componentProps: {
-        options: transportOptions,
+        options: getDictOptions(TRANSPORT_TYPE_ENUM),
         placeholder: '请选择传输协议',
       },
     },
@@ -294,7 +295,7 @@ export function useFormSchema(
       label: '字符集',
       rules: 'selectRequired',
       componentProps: {
-        options: charsetOptions,
+        options: getDictOptions(CHARSET_TYPE_ENUM),
         placeholder: '请选择字符集',
       },
     },
@@ -305,7 +306,7 @@ export function useFormSchema(
       label: '设备类型',
       rules: 'selectRequired',
       componentProps: {
-        options: treeTypeOptions,
+        options: getDictOptions(TREE_TYPE_ENUM),
         placeholder: '请选择设备类型',
       },
     },
@@ -316,7 +317,7 @@ export function useFormSchema(
       label: '地理坐标系',
       rules: 'selectRequired',
       componentProps: {
-        options: geoCoordSysOptions,
+        options: getDictOptions(GEO_COORD_SYS_TYPE_ENUM),
         placeholder: '请选择地理坐标系',
       },
     },
@@ -327,7 +328,7 @@ export function useFormSchema(
       label: '数据流传输模式',
       rules: 'selectRequired',
       componentProps: {
-        options: streamModeOptions,
+        options: getDictOptions(STREAM_MODE_TYPE_ENUM),
         placeholder: '请选择数据流传输模式',
       },
     },

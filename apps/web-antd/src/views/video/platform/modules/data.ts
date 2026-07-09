@@ -4,30 +4,38 @@ import type { PlatformEntity } from '#/api/video/platform';
 
 import { useAccess } from '@vben/access';
 
+import {
+  CHARSET_TYPE_ENUM,
+  TRANSPORT_TYPE_ENUM,
+  TREE_TYPE_ENUM,
+} from '#/enums';
+import { useSystemStore } from '#/store';
+
 const { hasAccessByCodes } = useAccess();
+const systemStore = useSystemStore();
 
-export const transportOptions = [
-  { label: 'UDP', value: 1 },
-  { label: 'TCP', value: 2 },
-];
-
-export const charsetOptions = [
-  { label: 'utf8', value: 1 },
-  { label: 'GB2312', value: 2 },
-];
-
-export const treeTypeOptions = [
-  { label: '业务分组', value: 215 },
-  { label: '行政区划', value: 216 },
-];
-
-function getOptionLabel(
-  options: Array<{ label: string; value: number }>,
-  value?: number,
-) {
-  return String(
-    options.find((item) => item.value === value)?.label ?? value ?? '',
+function getDictTemplate(dictKey: string) {
+  return (
+    (
+      systemStore.getDictMap as unknown as Record<
+        string,
+        Record<string, string>
+      >
+    )[dictKey] ?? {}
   );
+}
+
+function getDictOptions(dictKey: string) {
+  const template = getDictTemplate(dictKey);
+  return Object.keys(template).map((key) => ({
+    key: Number(key),
+    label: template[key],
+    value: Number(key),
+  }));
+}
+
+function getDictLabel(dictKey: string, value?: number | string) {
+  return String(getDictTemplate(dictKey)[String(value)] ?? value ?? '');
 }
 
 function numberSchema(
@@ -182,7 +190,7 @@ export function useColumns<T = PlatformEntity>(
       field: 'transport',
       minWidth: 120,
       slots: {
-        default: ({ row }) => getOptionLabel(transportOptions, row.transport),
+        default: ({ row }) => getDictLabel(TRANSPORT_TYPE_ENUM, row.transport),
       },
       title: '传输协议',
     },
@@ -190,7 +198,7 @@ export function useColumns<T = PlatformEntity>(
       field: 'characterSet',
       minWidth: 120,
       slots: {
-        default: ({ row }) => getOptionLabel(charsetOptions, row.characterSet),
+        default: ({ row }) => getDictLabel(CHARSET_TYPE_ENUM, row.characterSet),
       },
       title: '字符集',
     },
@@ -198,7 +206,7 @@ export function useColumns<T = PlatformEntity>(
       field: 'treeType',
       minWidth: 120,
       slots: {
-        default: ({ row }) => getOptionLabel(treeTypeOptions, row.treeType),
+        default: ({ row }) => getDictLabel(TREE_TYPE_ENUM, row.treeType),
       },
       title: '树类型',
     },
@@ -408,7 +416,7 @@ export function useFormSchema(
       label: '树类型',
       rules: 'selectRequired',
       componentProps: {
-        options: treeTypeOptions,
+        options: getDictOptions(TREE_TYPE_ENUM),
         placeholder: '请选择树类型',
       },
     },
@@ -419,7 +427,7 @@ export function useFormSchema(
       label: '传输协议',
       rules: 'selectRequired',
       componentProps: {
-        options: transportOptions,
+        options: getDictOptions(TRANSPORT_TYPE_ENUM),
         placeholder: '请选择传输协议',
       },
     },
@@ -430,7 +438,7 @@ export function useFormSchema(
       label: '字符集',
       rules: 'selectRequired',
       componentProps: {
-        options: charsetOptions,
+        options: getDictOptions(CHARSET_TYPE_ENUM),
         placeholder: '请选择字符集',
       },
     },

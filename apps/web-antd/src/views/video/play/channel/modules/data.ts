@@ -4,28 +4,39 @@ import type { DeviceChannelEntity } from '#/api/video/deviceChannel';
 
 import { useAccess } from '@vben/access';
 
+import { PTZ_TYPE_ENUM } from '#/enums';
+import { useSystemStore } from '#/store';
+
 const { hasAccessByCodes } = useAccess();
+const systemStore = useSystemStore();
 
 export const channelStatusOptions = [
   { label: '在线', value: 1 },
   { label: '离线', value: 0 },
 ];
 
-export const ptzTypeOptions = [
-  { label: '未知', value: 0 },
-  { label: '球机', value: 1 },
-  { label: '半球', value: 2 },
-  { label: '固定枪机', value: 3 },
-  { label: '遥控枪机', value: 4 },
-];
-
-function getOptionLabel(
-  options: Array<{ label: string; value: number }>,
-  value?: number,
-) {
-  return String(
-    options.find((item) => item.value === value)?.label ?? value ?? '',
+function getDictTemplate(dictKey: string) {
+  return (
+    (
+      systemStore.getDictMap as unknown as Record<
+        string,
+        Record<string, string>
+      >
+    )[dictKey] ?? {}
   );
+}
+
+function getDictOptions(dictKey: string) {
+  const template = getDictTemplate(dictKey);
+  return Object.keys(template).map((key) => ({
+    key: Number(key),
+    label: template[key],
+    value: Number(key),
+  }));
+}
+
+function getDictLabel(dictKey: string, value?: number | string) {
+  return String(getDictTemplate(dictKey)[String(value)] ?? value ?? '');
 }
 
 function switchSchema(
@@ -133,7 +144,7 @@ export function useColumns<T = DeviceChannelEntity>(
       field: 'ptzType',
       minWidth: 120,
       slots: {
-        default: ({ row }) => getOptionLabel(ptzTypeOptions, row.ptzType),
+        default: ({ row }) => getDictLabel(PTZ_TYPE_ENUM, row.ptzType),
       },
       title: '云台类型',
     },
@@ -282,7 +293,7 @@ export function useFormSchema(): VbenFormSchema[] {
       label: '云台类型',
       rules: 'selectRequired',
       componentProps: {
-        options: ptzTypeOptions,
+        options: getDictOptions(PTZ_TYPE_ENUM),
         placeholder: '请选择云台类型',
       },
     },

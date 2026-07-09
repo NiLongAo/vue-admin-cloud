@@ -21,12 +21,15 @@ import {
 import { doPlayStart, doPlayStop } from '#/api/video/play';
 
 import VideoPlayModal from '../../modules/VideoPlayModal.vue';
+import { normalizeDeviceChannelPageResult } from './modules/channel-page';
 import { useColumns, useGridFormSchema } from './modules/data';
 import DeviceChannelModal from './modules/DeviceChannelModal.vue';
 
 const route = useRoute();
 const router = useRouter();
-const deviceId = computed(() => String(route.params.id ?? ''));
+const deviceId = computed(() =>
+  String(route.params.id ?? route.params.deviceId ?? ''),
+);
 
 const [FormModal, formModalApi] = useVbenModal({
   connectedComponent: DeviceChannelModal,
@@ -136,15 +139,12 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (_params, formValues) => {
-          return await doDeviceChannelPage({
+          const result = await doDeviceChannelPage({
             deviceId: deviceId.value,
             ...formValues,
           });
+          return normalizeDeviceChannelPageResult(result);
         },
-      },
-      response: {
-        list: 'data',
-        result: 'data',
       },
     },
     rowConfig: {

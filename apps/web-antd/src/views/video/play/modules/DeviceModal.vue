@@ -28,7 +28,7 @@ const [Form, formApi] = useVbenForm({
     formItemClass: 'col-span-2 md:col-span-1',
   },
   layout: 'horizontal',
-  schema: useFormSchema(mediaOptions.value),
+  schema: useFormSchema(mediaOptions),
   showDefaultActions: false,
   wrapperClass: 'grid-cols-2 gap-x-4',
 });
@@ -45,6 +45,9 @@ async function loadMediaOptions() {
       label: item.ip ?? item.id ?? '',
       value: item.id ?? '',
     }));
+  formApi.setState({
+    schema: useFormSchema(mediaOptions),
+  });
 }
 
 const [Modal, modalApi] = useVbenModal({
