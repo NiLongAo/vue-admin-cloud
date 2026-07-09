@@ -47,19 +47,31 @@ async function onDelete(row: ProxyEntity) {
 }
 
 async function onEnable(row: ProxyEntity) {
-  if (row.status === 1) {
-    await doProxyStop({ id: row.id });
-    message.success('已停用拉流代理');
-  } else {
-    await doProxyStart({ id: row.id });
-    message.success('已启用拉流代理');
+  try {
+    if (row.status === 1) {
+      await doProxyStop({ id: row.id });
+      message.success('已停用拉流代理');
+    } else {
+      await doProxyStart({ id: row.id });
+      message.success('已启用拉流代理');
+    }
+    refreshGrid();
+  } catch (error) {
+    message.warning(
+      error instanceof Error ? error.message : '拉流代理状态切换失败',
+    );
   }
-  refreshGrid();
 }
 
 async function onPlay(row: ProxyEntity) {
-  const data = await doProxyGetPlayUrl({ id: row.id });
-  playModalApi.setData(data).open();
+  try {
+    const data = await doProxyGetPlayUrl({ id: row.id });
+    playModalApi.setData(data).open();
+  } catch (error) {
+    message.warning(
+      error instanceof Error ? error.message : '获取播放地址失败',
+    );
+  }
 }
 
 function onActionClick({ code, row }: OnActionClickParams<ProxyEntity>) {

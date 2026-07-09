@@ -15,9 +15,15 @@ export interface VideoPlayResult {
   wssFlv?: { url?: string };
   flv?: { url?: string };
   httpsFlv?: { url?: string };
+  httpsTs?: { url?: string };
   rtsp?: { url?: string };
   rtmp?: { url?: string };
+  rtc?: { url?: string };
+  rtcs?: { url?: string };
+  ts?: { url?: string };
   token?: string;
+  wsTs?: { url?: string };
+  wssTs?: { url?: string };
 }
 
 enum Api {
