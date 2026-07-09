@@ -11,6 +11,7 @@ export interface VideoPlayResult {
   streamId?: string;
   mediaServerId?: string;
   sslStatus?: number;
+  tracks?: Recordable<any>[];
   wsFlv?: { url?: string };
   wssFlv?: { url?: string };
   flv?: { url?: string };

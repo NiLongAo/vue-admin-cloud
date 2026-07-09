@@ -4,6 +4,7 @@ import type { TreeProps } from 'ant-design-vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
+import { useAccessStore } from '@vben/stores';
 
 import { Button, Empty, InputSearch, message, Tree } from 'ant-design-vue';
 
@@ -11,7 +12,10 @@ import { doTreeDeviceChannel } from '#/api/video/deviceChannel';
 import { doPlayStart } from '#/api/video/play';
 import { VideoJessibucaPlay } from '#/components/Video';
 
-import { buildVideoPlayUrl } from '../modules/video-play-url';
+import {
+  buildVideoPlayOptions,
+  getDefaultStreamPlayType,
+} from '../modules/video-play-url';
 
 interface ChannelTreeNode {
   channelId?: string;
@@ -29,6 +33,7 @@ interface ChannelTreeNode {
 const treeData = ref<ChannelTreeNode[]>([]);
 const expandedKeys = ref<string[]>([]);
 const searchKeyword = ref('');
+const accessStore = useAccessStore();
 
 const state = reactive({
   checkIndex: 1,
@@ -122,12 +127,9 @@ async function onSelect(
     channelId,
     deviceId: node.deviceId,
   });
-  const playUrl = buildVideoPlayUrl(
-    data.sslStatus === 0
-      ? data.wsFlv?.url || data.flv?.url
-      : data.wssFlv?.url || data.httpsFlv?.url,
-    data.auth || data.token,
-  );
+  const playOptions = buildVideoPlayOptions(data, accessStore.accessToken);
+  const playType = getDefaultStreamPlayType(playOptions.streamMap);
+  const playUrl = playType ? playOptions.streamMap[playType]?.value : '';
   if (!playUrl) {
     message.warning('未获取到播放地址');
     return;

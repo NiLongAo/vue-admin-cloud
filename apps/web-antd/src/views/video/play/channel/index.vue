@@ -20,6 +20,7 @@ import {
 } from '#/api/video/deviceChannel';
 import { doPlayStart, doPlayStop } from '#/api/video/play';
 
+import VideoPlayModal from '../../modules/VideoPlayModal.vue';
 import { useColumns, useGridFormSchema } from './modules/data';
 import DeviceChannelModal from './modules/DeviceChannelModal.vue';
 
@@ -29,6 +30,11 @@ const deviceId = computed(() => String(route.params.id ?? ''));
 
 const [FormModal, formModalApi] = useVbenModal({
   connectedComponent: DeviceChannelModal,
+  destroyOnClose: true,
+});
+
+const [PlayModal, playModalApi] = useVbenModal({
+  connectedComponent: VideoPlayModal,
   destroyOnClose: true,
 });
 
@@ -52,12 +58,18 @@ function onEdit(row: DeviceChannelEntity) {
 }
 
 async function onPlay(row: DeviceChannelEntity) {
-  await doPlayStart({
-    channelId: row.channelId,
-    deviceId: row.deviceId,
-  });
-  message.success(`播放通道：${row.channelId}`);
-  refreshGrid();
+  try {
+    const data = await doPlayStart({
+      channelId: row.channelId,
+      deviceId: row.deviceId,
+    });
+    playModalApi.setData(data).open();
+    refreshGrid();
+  } catch (error) {
+    message.warning(
+      error instanceof Error ? error.message : '获取播放地址失败',
+    );
+  }
 }
 
 async function onStop(row: DeviceChannelEntity) {
@@ -65,7 +77,7 @@ async function onStop(row: DeviceChannelEntity) {
     channelId: row.channelId,
     deviceId: row.deviceId,
   });
-  message.success(`暂停通道：${row.channelId}`);
+  message.success(`已暂停通道：${row.channelId}`);
   refreshGrid();
 }
 
@@ -170,6 +182,7 @@ function goBack() {
       <Button @click="goBack">返回</Button>
     </template>
     <FormModal @success="refreshGrid" />
+    <PlayModal />
     <Grid>
       <template #toolbar-tools>
         <Button

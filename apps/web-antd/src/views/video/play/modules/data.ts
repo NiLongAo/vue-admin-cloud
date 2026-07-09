@@ -198,7 +198,7 @@ export function useColumns<T = DeviceEntity>(
           },
           {
             code: 'channel',
-            show: () => hasAccessByCodes(['video.play:channel']),
+            show: () => hasAccessByCodes(['video.play:device_channel']),
             text: '设备通道',
           },
           {
